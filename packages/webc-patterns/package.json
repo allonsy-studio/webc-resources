@@ -1,0 +1,43 @@
+{
+	"name": "@allons-y/webc-patterns",
+	"version": "0.1.0-beta.0",
+	"description": "Generic WebC page and docs patterns for Eleventy sites: head, header, footer, hero, card, side nav, docs shell, and pager.",
+	"license": "MPL-2.0",
+	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
+	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-patterns#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/allonsy-studio/webc-resources.git",
+		"directory": "packages/webc-patterns"
+	},
+	"bugs": {
+		"url": "https://github.com/allonsy-studio/webc-resources/issues"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"components/",
+		"index.js",
+		"LICENSE",
+		"README.md"
+	],
+	"peerDependencies": {
+		"@11ty/eleventy": "^3.0.0",
+		"@11ty/eleventy-plugin-webc": "^0.11.0"
+	},
+	"keywords": [
+		"webc",
+		"eleventy",
+		"11ty"
+	],
+	"engines": {
+		"node": ">=24"
+	}
+}

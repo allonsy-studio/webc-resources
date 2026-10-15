@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+( npx --no-install opx hook post-commit >/dev/null 2>&1 & ) || true
+npx --no-install opx lint || true
+exit 0

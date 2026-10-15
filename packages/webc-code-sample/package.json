@@ -1,0 +1,46 @@
+{
+	"name": "@allons-y/webc-code-sample",
+	"version": "0.1.0-beta.0",
+	"description": "WebC code sample component with build-time syntax highlighting and no highlighter shipped to the browser.",
+	"license": "MPL-2.0",
+	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
+	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-code-sample#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/allonsy-studio/webc-resources.git",
+		"directory": "packages/webc-code-sample"
+	},
+	"bugs": {
+		"url": "https://github.com/allonsy-studio/webc-resources/issues"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"type": "module",
+	"exports": {
+		".": "./index.js",
+		"./package.json": "./package.json"
+	},
+	"files": [
+		"components/",
+		"index.js",
+		"LICENSE",
+		"README.md"
+	],
+	"dependencies": {
+		"prismjs": "^1.30.0"
+	},
+	"peerDependencies": {
+		"@11ty/eleventy": "^3.0.0",
+		"@11ty/eleventy-plugin-webc": "^0.11.0"
+	},
+	"keywords": [
+		"webc",
+		"eleventy",
+		"11ty"
+	],
+	"engines": {
+		"node": ">=24"
+	}
+}
