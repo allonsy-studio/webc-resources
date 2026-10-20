@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-cNtdC"><span data-label="" id="norn-header-webc-cNtdC"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-e-fwW"><span data-label="" id="norn-header-webc-e-fwW"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -65,10 +65,7 @@
 		<summary>Layout</summary>
 		<ul role="list">
 			<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-sidebar-layout/">norn-sidebar-layout</a>
 			</li>
 		</ul>
 	</details>
@@ -85,13 +82,13 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-pager/">norn-pager</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-toc/">norn-toc</a>
 			</li>
 		</ul>
 	</details>
@@ -105,6 +102,9 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
 			</li>
 <li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
 			</li>
 <li>
@@ -114,16 +114,16 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-hero/">norn-hero</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-notice/">norn-notice</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-section/">norn-section</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
@@ -198,7 +198,7 @@
 		<summary>Document</summary>
 		<ul role="list">
 			<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-head/">norn-head</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
@@ -209,7 +209,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-base</h1>
-<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own <code>layout</code> and <code>page.inputPath</code>, which a layout chain leaves alone. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-page-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
+<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own <code>layout</code> and <code>page.inputPath</code>, which a layout chain leaves alone. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
 <p class="meta">
 	<code>layout: norn-base.webc</code>
 	a <span>template</span>, from
@@ -345,10 +345,10 @@ title: Default
 order: 1
 layout: norn-base.webc
 ---
-<norn-page-section>
+<norn-section>
 	<h1>A page on the base layout</h1>
 	<p>The header, the footer, and the hooks around a page body of its own.</p>
-</norn-page-section>" data-strings="norn-code-block-webc-NgQhm"><norn-svg-icon>
+</norn-section>" data-strings="norn-code-block-webc-twwde"><norn-svg-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -359,17 +359,17 @@ layout: norn-base.webc
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,55,56],[&quot;keyword&quot;,56,73],[&quot;punctuation&quot;,73,74],[&quot;punctuation&quot;,76,77],[&quot;keyword&quot;,77,79],[&quot;punctuation&quot;,79,80],[&quot;punctuation&quot;,105,107],[&quot;keyword&quot;,107,109],[&quot;punctuation&quot;,109,110],[&quot;punctuation&quot;,112,113],[&quot;keyword&quot;,113,114],[&quot;punctuation&quot;,114,115],[&quot;punctuation&quot;,183,185],[&quot;keyword&quot;,185,186],[&quot;punctuation&quot;,186,187],[&quot;punctuation&quot;,188,190],[&quot;keyword&quot;,190,207],[&quot;punctuation&quot;,207,208]]">---
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,55,56],[&quot;keyword&quot;,56,68],[&quot;punctuation&quot;,68,69],[&quot;punctuation&quot;,71,72],[&quot;keyword&quot;,72,74],[&quot;punctuation&quot;,74,75],[&quot;punctuation&quot;,100,102],[&quot;keyword&quot;,102,104],[&quot;punctuation&quot;,104,105],[&quot;punctuation&quot;,107,108],[&quot;keyword&quot;,108,109],[&quot;punctuation&quot;,109,110],[&quot;punctuation&quot;,178,180],[&quot;keyword&quot;,180,181],[&quot;punctuation&quot;,181,182],[&quot;punctuation&quot;,183,185],[&quot;keyword&quot;,185,197],[&quot;punctuation&quot;,197,198]]">---
 title: Default
 order: 1
 layout: norn-base.webc
 ---
-&lt;norn-page-section&gt;
+&lt;norn-section&gt;
 	&lt;h1&gt;A page on the base layout&lt;/h1&gt;
 	&lt;p&gt;The header, the footer, and the hooks around a page body of its own.&lt;/p&gt;
-&lt;/norn-page-section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-NgQhm">
-		<span data-string="label" id="norn-code-block-webc-NgQhm-copy">Copy {name} to clipboard</span>
+&lt;/norn-section&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-twwde">
+		<span data-string="label" id="norn-code-block-webc-twwde-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -435,7 +435,7 @@ layout: norn-base.webc
 <tr>
 				<th scope="row"><code>ogImage</code></th>
 				<td><code>{ src: string, alt?: string }</code></td>
-				<td>The share image, or its URL: <code>og:image</code>, <code>og:image:alt</code>, and <code>twitter:card</code> (<code>summary_large_image</code>). A relative <code>src</code> resolves against <code>url</code>, which must then be absolute: with no absolute <code>url</code>, the build logs a <code>norn-page-head:</code> warning and <code>og:image</code> and <code>og:image:alt</code> are left out. Without an image, no image tag renders. Either way the card is <code>summary</code>.</td>
+				<td>The share image, or its URL: <code>og:image</code>, <code>og:image:alt</code>, and <code>twitter:card</code> (<code>summary_large_image</code>). A relative <code>src</code> resolves against <code>url</code>, which must then be absolute: with no absolute <code>url</code>, the build logs a <code>norn-head:</code> warning and <code>og:image</code> and <code>og:image:alt</code> are left out. Without an image, no image tag renders. Either way the card is <code>summary</code>.</td>
 			</tr>
 <tr>
 				<th scope="row"><code>locale</code></th>

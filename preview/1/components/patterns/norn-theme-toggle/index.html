@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-AiXRQ"><span data-label="" id="norn-header-webc-AiXRQ"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-KvTXU"><span data-label="" id="norn-header-webc-KvTXU"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -65,10 +65,7 @@
 		<summary>Layout</summary>
 		<ul role="list">
 			<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-sidebar-layout/">norn-sidebar-layout</a>
 			</li>
 		</ul>
 	</details>
@@ -85,13 +82,13 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-pager/">norn-pager</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-toc/">norn-toc</a>
 			</li>
 		</ul>
 	</details>
@@ -105,6 +102,9 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
 			</li>
 <li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
 			</li>
 <li>
@@ -114,16 +114,16 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-hero/">norn-hero</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-notice/">norn-notice</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-section/">norn-section</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
@@ -198,7 +198,7 @@
 		<summary>Document</summary>
 		<ul role="list">
 			<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-head/">norn-head</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
@@ -209,7 +209,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-theme-toggle</h1>
-<p class="lead">Light, system, or dark: a <code>norn-segmented-control</code> that sets the page's <code>color-scheme</code> and remembers the choice in <code>localStorage</code> under <code>color-scheme</code>. System clears the choice, so the visitor's setting decides. Every toggle on the page, and in other tabs, follows the same choice. Without a script it stays hidden and the page follows the system. Pass <code>:@theme-toggle="true"</code> to <code>norn-page-head</code> so a saved choice applies before the first paint. The names are in the page, hidden, and the script shows them, since the toggle only exists with a script. Each falls back to the site's <code>componentStrings</code>, then English.</p>
+<p class="lead">Light, system, or dark: a <code>norn-segmented-control</code> that sets the page's <code>color-scheme</code> and remembers the choice in <code>localStorage</code> under <code>color-scheme</code>. System clears the choice, so the visitor's setting decides. Every toggle on the page, and in other tabs, follows the same choice. Without a script it stays hidden and the page follows the system. Pass <code>:@theme-toggle="true"</code> to <code>norn-head</code> so a saved choice applies before the first paint. The names are in the page, hidden, and the script shows them, since the toggle only exists with a script. Each falls back to the site's <code>componentStrings</code>, then English.</p>
 <p class="meta">
 	<code>&lt;norn-theme-toggle&gt;</code>
 	a <span>component</span>, from
@@ -341,7 +341,7 @@
 	
 	<norn-copy-button>
 <button type="button" hidden="" data-value="<norn-theme-toggle></norn-theme-toggle>
-<p>The choice is saved in this browser and applies to every page that calls <code>norn-page-head</code> with <code>:@theme-toggle=&quot;true&quot;</code>.</p>" data-strings="norn-code-block-webc-ax7SN"><norn-svg-icon>
+<p>The choice is saved in this browser and applies to every page that calls <code>norn-head</code> with <code>:@theme-toggle=&quot;true&quot;</code>.</p>" data-strings="norn-code-block-webc-9WzZ_"><norn-svg-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -352,10 +352,10 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,19,21],[&quot;keyword&quot;,21,38],[&quot;punctuation&quot;,38,39],[&quot;punctuation&quot;,40,41],[&quot;keyword&quot;,41,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,116,117],[&quot;keyword&quot;,117,121],[&quot;punctuation&quot;,121,122],[&quot;punctuation&quot;,136,138],[&quot;keyword&quot;,138,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,149,150],[&quot;keyword&quot;,150,154],[&quot;punctuation&quot;,154,155],[&quot;punctuation&quot;,176,178],[&quot;keyword&quot;,178,182],[&quot;punctuation&quot;,182,183],[&quot;punctuation&quot;,184,186],[&quot;keyword&quot;,186,187],[&quot;punctuation&quot;,187,188]]">&lt;norn-theme-toggle&gt;&lt;/norn-theme-toggle&gt;
-&lt;p&gt;The choice is saved in this browser and applies to every page that calls &lt;code&gt;norn-page-head&lt;/code&gt; with &lt;code&gt;:@theme-toggle="true"&lt;/code&gt;.&lt;/p&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-ax7SN">
-		<span data-string="label" id="norn-code-block-webc-ax7SN-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,19,21],[&quot;keyword&quot;,21,38],[&quot;punctuation&quot;,38,39],[&quot;punctuation&quot;,40,41],[&quot;keyword&quot;,41,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,116,117],[&quot;keyword&quot;,117,121],[&quot;punctuation&quot;,121,122],[&quot;punctuation&quot;,131,133],[&quot;keyword&quot;,133,137],[&quot;punctuation&quot;,137,138],[&quot;punctuation&quot;,144,145],[&quot;keyword&quot;,145,149],[&quot;punctuation&quot;,149,150],[&quot;punctuation&quot;,171,173],[&quot;keyword&quot;,173,177],[&quot;punctuation&quot;,177,178],[&quot;punctuation&quot;,179,181],[&quot;keyword&quot;,181,182],[&quot;punctuation&quot;,182,183]]">&lt;norn-theme-toggle&gt;&lt;/norn-theme-toggle&gt;
+&lt;p&gt;The choice is saved in this browser and applies to every page that calls &lt;code&gt;norn-head&lt;/code&gt; with &lt;code&gt;:@theme-toggle="true"&lt;/code&gt;.&lt;/p&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-9WzZ_">
+		<span data-string="label" id="norn-code-block-webc-9WzZ_-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
