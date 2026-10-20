@@ -12,10 +12,10 @@ title: Containers
 <norn-card-grid id="grid">
 	<li><div><ul id="grid-ul"><li id="grid-li"><span id="grid-span">One</span></li><li>Two</li></ul></div></li>
 </norn-card-grid>
-<norn-page-section id="section">
+<norn-section id="section">
 	<h2>A section</h2>
 	<section id="section-section"><p>A section.</p></section>
-</norn-page-section>
+</norn-section>
 <norn-content-card id="card">
 	<h3>A card</h3>
 	<article id="card-article"><p>An article.</p></article>

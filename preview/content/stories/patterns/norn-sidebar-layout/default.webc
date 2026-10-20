@@ -4,11 +4,11 @@ order: 1
 ownH1: true
 bleed: true
 ---
-<norn-page-layout>
+<norn-sidebar-layout>
 	<norn-side-nav
 		slot="nav"
 		:@items="[
-			{ url: '/frames/patterns/norn-page-layout/default/', title: 'Getting started', icon: 'book' },
+			{ url: '/frames/patterns/norn-sidebar-layout/default/', title: 'Getting started', icon: 'book' },
 			{ url: '#usage', title: 'Usage' },
 			{ url: '#reference', title: 'Reference' }
 		]"
@@ -21,4 +21,4 @@ bleed: true
 		<h2>Install</h2>
 		<p>Prose styles come from <code>norn-rich-text</code>.</p>
 	</norn-rich-text>
-</norn-page-layout>
+</norn-sidebar-layout>

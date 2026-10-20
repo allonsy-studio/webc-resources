@@ -30,7 +30,7 @@ describe("landing fixture with the OSS site layer", () => {
 
 	test("the hero renders the name, tagline, lede, actions, chips, and the usage sample", () => {
 		const html = pages["/"];
-		const hero = between(html, "<norn-page-hero>", "</norn-page-hero>");
+		const hero = between(html, "<norn-hero>", "</norn-hero>");
 		assert.ok(hero.includes("<span>fixture-landing</span>"));
 		assert.ok(hero.includes("<span>A fixture landing site for the OSS WebC packages</span>"));
 		assert.ok(hero.includes("A fixture landing site that exercises every section of the OSS site page bodies."));
@@ -43,12 +43,12 @@ describe("landing fixture with the OSS site layer", () => {
 
 	test("the install, features, and packages sections follow, each under its own heading", () => {
 		const html = pages["/"];
-		assert.ok(html.includes('<norn-page-section id="install">') && html.includes("<h2>Install</h2>"));
+		assert.ok(html.includes('<norn-section id="install">') && html.includes("<h2>Install</h2>"));
 		assert.ok(html.includes("npm install @allons-y/fixture-landing"));
-		assert.ok(html.includes('<norn-page-section id="features">'));
-		assert.ok(!/<(section|norn-page-section)\b[^>]*aria-labelledby/.test(html), "a section takes no name");
-		assert.equal((between(html, '<norn-page-section id="features"', "</norn-page-section>").match(/<norn-content-card>/g) ?? []).length, 4);
-		const packages = between(html, '<norn-page-section id="packages"', "</norn-page-section>");
+		assert.ok(html.includes('<norn-section id="features">'));
+		assert.ok(!/<(section|norn-section)\b[^>]*aria-labelledby/.test(html), "a section takes no name");
+		assert.equal((between(html, '<norn-section id="features"', "</norn-section>").match(/<norn-content-card>/g) ?? []).length, 4);
+		const packages = between(html, '<norn-section id="packages"', "</norn-section>");
 		assert.equal((packages.match(/<norn-content-card>/g) ?? []).length, 2);
 		assert.ok(packages.includes('style="--norn-content-card-title-face: mono"'));
 		assert.ok(packages.includes('<a href="https://example.com/core">@example/core</a>'));
@@ -132,7 +132,7 @@ describe("landing fixture with the OSS site layer off", () => {
 
 	test("the page keeps its frame, and the theme color follows the page surface", () => {
 		const html = pages["/"];
-		assert.ok(html.includes("<norn-header>") && html.includes("<norn-footer>") && html.includes("<norn-page-hero>"));
+		assert.ok(html.includes("<norn-header>") && html.includes("<norn-footer>") && html.includes("<norn-hero>"));
 		const head = headOf(html);
 		assert.ok(head.includes('<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">'));
 		assert.ok(head.includes('<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">'));

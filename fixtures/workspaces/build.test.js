@@ -32,9 +32,9 @@ describe("workspaces fixture", () => {
 
 	test("the home page indexes the workspaces in the mono face", () => {
 		const html = pages["/"];
-		const hero = between(html, "<norn-page-hero>", "</norn-page-hero>");
+		const hero = between(html, "<norn-hero>", "</norn-hero>");
 		assert.ok(hero.includes('<a href="#packages" data-variant="primary">Browse packages</a>') && hero.includes('<norn-code-block id="install">'));
-		const index = between(html, '<norn-page-section id="packages"', "</norn-page-section>");
+		const index = between(html, '<norn-section id="packages"', "</norn-section>");
 		assert.ok(index.includes('style="--norn-content-card-title-face: mono"'));
 		assert.deepEqual([...index.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map((match) => [match[1], match[2]]), [
 			["/plugin-a/", "@example/plugin-a"],

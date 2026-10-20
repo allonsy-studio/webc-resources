@@ -4,12 +4,12 @@ order: 3
 ownH1: true
 bleed: true
 ---
-<norn-page-layout>
+<norn-sidebar-layout>
 	<norn-side-nav
 		slot="nav"
 		@label="Documentation"
 		:@items="[
-			{ url: '/frames/patterns/norn-page-layout/sections/', title: 'Overview' },
+			{ url: '/frames/patterns/norn-sidebar-layout/sections/', title: 'Overview' },
 			{ url: '#details', title: 'Details' }
 		]"
 	></norn-side-nav>
@@ -22,4 +22,4 @@ bleed: true
 		<h2>An article</h2>
 		<p>The gap is the same between a section and an article.</p>
 	</article>
-</norn-page-layout>
+</norn-sidebar-layout>

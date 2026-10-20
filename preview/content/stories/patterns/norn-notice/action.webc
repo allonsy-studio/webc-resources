@@ -2,7 +2,7 @@
 title: With an action
 order: 2
 ---
-<norn-page-notice @severity="warning">
+<norn-notice @severity="warning">
 	<p>This page describes version 1, and version 2 is out.</p>
 	<norn-link-button slot="action" @href="#v2" @variant="quiet">Read the version 2 docs</norn-link-button>
-</norn-page-notice>
+</norn-notice>

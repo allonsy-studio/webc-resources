@@ -11,15 +11,15 @@
  * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-tag-list`.
  * Sets `--norn-chrome: terminal` so a code sample inside takes the window-bar frame.
  * @slot - The h1, lede, actions, facts, and extras, in that order.
- * @cssprop --norn-page-hero-width - Content width. Falls back to 64rem.
- * @cssprop --norn-page-hero-link - Tagline color. Falls back to --norn-text-accent.
+ * @cssprop --norn-hero-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-hero-link - Tagline color. Falls back to --norn-text-accent.
  * @category container
  */
 --->
 <header><slot></slot></header>
 <style>
 	@layer norn.components {
-		norn-page-hero {
+		norn-hero {
 			--norn-chrome: terminal;
 			display: block;
 
@@ -28,7 +28,7 @@
 				grid-auto-flow: row;
 				align-content: start;
 				gap: var(--norn-space-m, t('space.m'));
-				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-page-hero-width, 64rem));
+				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-hero-width, 64rem));
 				margin-inline: auto;
 				padding-block: var(--norn-space-xl, t('space.xl')) var(--norn-space-l, t('space.l'));
 			}
@@ -50,7 +50,7 @@
 			}
 
 			& > header > h1 > :last-child:not(:first-child) {
-				color: var(--norn-page-hero-link, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-hero-link, var(--norn-text-accent, t('text.accent')));
 				font-weight: 400;
 			}
 

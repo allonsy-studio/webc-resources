@@ -6,7 +6,7 @@ description: The small components, one of each.
 <h1>Component kit</h1>
 <norn-breadcrumb-nav :@items="[{ url: '/', title: 'Home' }, { url: '/docs/one/', title: 'Docs' }, { url: '/kit/', title: 'Component kit' }]"></norn-breadcrumb-nav>
 <norn-search @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
-<norn-page-toc :@items="[{ id: 'anchors', text: 'Anchors', level: 2 }, { id: 'deeper', text: 'Deeper', level: 3 }]"></norn-page-toc>
+<norn-toc :@items="[{ id: 'anchors', text: 'Anchors', level: 2 }, { id: 'deeper', text: 'Deeper', level: 3 }]"></norn-toc>
 <norn-heading-anchor @slug="anchors">Anchors</norn-heading-anchor>
 <norn-heading-anchor @slug="deeper" :@level="3">Deeper</norn-heading-anchor>
 <h2>Color scheme</h2>
@@ -32,13 +32,13 @@ description: The small components, one of each.
 	<span slot="label">Guides</span>
 </norn-side-nav>
 <h2>Notices</h2>
-<norn-page-notice @severity="success">
+<norn-notice @severity="success">
 	<p>Saved. The changes apply on the next build.</p>
 	<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Open the docs</norn-link-button>
-</norn-page-notice>
-<norn-page-notice @severity="error" :@live="true">
+</norn-notice>
+<norn-notice @severity="error" :@live="true">
 	<p>The build failed.</p>
-</norn-page-notice>
+</norn-notice>
 <h2>Call-outs</h2>
 <norn-call-out>
 	<p>A note, with the default title.</p>

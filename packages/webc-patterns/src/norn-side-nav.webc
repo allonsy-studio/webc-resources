@@ -9,7 +9,7 @@
 /**
  * Sidebar navigation from a list of pages. Marks the current page with `aria-current="page"`, and a page holding it with `aria-current="true"`.
  * An item may carry a `norn-svg-icon` name and child pages, which list under it with a rule down the start edge.
- * In a sticky `norn-page-layout` column only the list scrolls, so a search field in the `search` slot stays put.
+ * In a sticky `norn-sidebar-layout` column only the list scrolls, so a search field in the `search` slot stays put.
  * @prop {{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]} items
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
  * @slot search - A search field above the list, as one element.

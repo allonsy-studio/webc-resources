@@ -7,7 +7,7 @@
 
 import { bundles, headOf, read, sheets, tagNames, between } from "./build.js";
 
-/** The cascade layer order, which norn-page-head declares inline. */
+/** The cascade layer order, which norn-head declares inline. */
 const ORDER = "@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;";
 
 const ALLOWED_HEAD = ["link", "meta", "script", "style", "title"];

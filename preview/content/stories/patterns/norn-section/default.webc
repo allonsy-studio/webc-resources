@@ -3,7 +3,7 @@ title: Default
 order: 1
 bleed: true
 ---
-<norn-page-section id="install">
+<norn-section id="install">
 	<h2>Install</h2>
 	<p>The section is reachable at <code>#install</code>, from the id on the host, and its heading carries the outline.</p>
-</norn-page-section>
+</norn-section>

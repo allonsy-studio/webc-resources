@@ -109,7 +109,7 @@ export function headingAnchors(md, { levels = [2, 3] } = {}) {
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", apos: "'" };
 
 /**
- * The headings in rendered HTML that carry an id, for `norn-page-toc`.
+ * The headings in rendered HTML that carry an id, for `norn-toc`.
  *
  * @param {string} html
  * @param {{ levels?: number[] }} [options] - Heading levels to list. Defaults to 2 and 3.

@@ -4,6 +4,6 @@ order: 2
 ownH1: true
 bleed: true
 ---
-<norn-page-hero>
+<norn-hero>
 	<h1><span>Example project</span></h1>
-</norn-page-hero>
+</norn-hero>

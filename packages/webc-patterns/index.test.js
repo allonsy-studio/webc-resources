@@ -34,7 +34,7 @@ test("patterns: an unknown name throws and lists the available ones", () => {
 });
 
 test("patterns: ships the content components and the page frame, and no foundation stylesheet component", () => {
-	for (const name of ["norn-content-card", "norn-card-grid", "norn-side-nav", "norn-page-layout", "norn-rich-text", "norn-page-pager", "norn-page-head", "norn-skip-link", "norn-header", "norn-footer", "norn-page-hero", "norn-page-section", "norn-svg-icon", "norn-link-button", "norn-tag-list", "norn-segmented-control", "norn-copy-button", "norn-data-table", "norn-theme-toggle", "norn-accordion-group", "norn-call-out", "norn-page-notice", "norn-heading-anchor", "norn-page-toc", "norn-breadcrumb-nav"]) {
+	for (const name of ["norn-content-card", "norn-card-grid", "norn-side-nav", "norn-sidebar-layout", "norn-rich-text", "norn-pager", "norn-head", "norn-skip-link", "norn-header", "norn-footer", "norn-hero", "norn-section", "norn-svg-icon", "norn-link-button", "norn-tag-list", "norn-segmented-control", "norn-copy-button", "norn-data-table", "norn-theme-toggle", "norn-accordion-group", "norn-call-out", "norn-notice", "norn-heading-anchor", "norn-toc", "norn-breadcrumb-nav"]) {
 		assert.ok(components.includes(name), name);
 	}
 	assert.ok(!components.includes("norn-page-styles"), "the base styles are files, embedded by norn-base");
@@ -77,21 +77,21 @@ test("dropEmptyBundleTags: passes non-strings through", () => {
 });
 
 test("componentStrings: a page's language table wins, then the shared one, matching tags without regard to case or region", () => {
-	const lookup = componentStrings({ "norn-page-toc": { label: "Contents" }, fr: { "norn-page-toc": { label: "Sur cette page" } }, "pt-BR": { "norn-skip-link": { label: "Pular" } } });
-	assert.equal(lookup("norn-page-toc", "label"), "Contents");
-	assert.equal(lookup("norn-page-toc", "label", { lang: "fr" }), "Sur cette page");
-	assert.equal(lookup("norn-page-toc", "label", { lang: "fr-CA" }), "Sur cette page");
+	const lookup = componentStrings({ "norn-toc": { label: "Contents" }, fr: { "norn-toc": { label: "Sur cette page" } }, "pt-BR": { "norn-skip-link": { label: "Pular" } } });
+	assert.equal(lookup("norn-toc", "label"), "Contents");
+	assert.equal(lookup("norn-toc", "label", { lang: "fr" }), "Sur cette page");
+	assert.equal(lookup("norn-toc", "label", { lang: "fr-CA" }), "Sur cette page");
 	assert.equal(lookup("norn-skip-link", "label", { lang: "pt-br" }), "Pular");
 	assert.equal(lookup("norn-skip-link", "label", { lang: "de" }), undefined);
 	assert.equal(lookup("norn-skip-link", "label", { lang: "not a tag" }), undefined);
 });
 
 test("componentStrings: an unknown component, key, or language, or a value that is not a string, throws and names the choices", () => {
-	assert.throws(() => componentStrings({ "page-tok": {} }), /"page-tok" is neither a component nor a language tag. Components: .*norn-page-toc/);
-	assert.throws(() => componentStrings({ "norn-page-toc": { lable: "x" } }), /norn-page-toc has no string "lable". Available: label/);
+	assert.throws(() => componentStrings({ "page-tok": {} }), /"page-tok" is neither a component nor a language tag. Components: .*norn-toc/);
+	assert.throws(() => componentStrings({ "norn-toc": { lable: "x" } }), /norn-toc has no string "lable". Available: label/);
 	assert.throws(() => componentStrings({ fr: { "norn-search": { resultsone: "x" } } }), /norn-search has no string "resultsone" \(in "fr"\). Available: .*results-one/);
 	assert.throws(() => componentStrings({ "norn-search": { resultsOne: "x" } }), /no string "resultsOne"; keys are slot names, as "results-one"/);
-	assert.throws(() => componentStrings({ fr: { "norn-page-toc": { label: 3 } } }), /norn-page-toc.label \(in "fr"\) must be a string/);
+	assert.throws(() => componentStrings({ fr: { "norn-toc": { label: 3 } } }), /norn-toc.label \(in "fr"\) must be a string/);
 });
 
 test("defaultStrings is frozen, so a project can read it but not change the defaults", () => {

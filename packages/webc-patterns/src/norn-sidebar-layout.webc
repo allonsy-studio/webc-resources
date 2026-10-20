@@ -13,9 +13,9 @@
  * Sections and articles inside the body stack with a small gap.
  * @slot nav - The navigation, as one element.
  * @slot - The page body, starting with its h1.
- * @cssprop --norn-page-layout-nav - Navigation column width. Falls back to 14rem.
- * @cssprop --norn-page-layout-width - Overall width. Falls back to 64rem.
- * @cssprop --norn-page-layout-gap - Space between the navigation and the body. Falls back to --norn-space-l.
+ * @cssprop --norn-sidebar-layout-nav - Navigation column width. Falls back to 14rem.
+ * @cssprop --norn-sidebar-layout-width - Overall width. Falls back to 64rem.
+ * @cssprop --norn-sidebar-layout-gap - Space between the navigation and the body. Falls back to --norn-space-l.
  * @category layout
  */
 --->
@@ -25,19 +25,19 @@
 </div>
 <style>
 	@layer norn.components {
-		norn-page-layout {
+		norn-sidebar-layout {
 			--norn-rich-text-measure: none;
 			display: block;
 			container-type: inline-size;
-			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-page-layout-width, 64rem));
+			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-sidebar-layout-width, 64rem));
 			margin-inline: auto;
 			padding-block: var(--norn-space-l, t('space.l'));
 
 			& > div {
 				display: grid;
-				grid-template-columns: var(--norn-page-layout-nav, 14rem) minmax(0, 1fr);
+				grid-template-columns: var(--norn-sidebar-layout-nav, 14rem) minmax(0, 1fr);
 				align-items: start;
-				gap: var(--norn-page-layout-gap, var(--norn-space-l, t('space.l')));
+				gap: var(--norn-sidebar-layout-gap, var(--norn-space-l, t('space.l')));
 			}
 
 			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. */

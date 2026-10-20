@@ -33,7 +33,7 @@ body:
     id: name
     attributes:
       label: Proposed or affected component or layout
-      placeholder: "e.g. `norn-tabs`, `norn-page-toc`, `norn-landing.webc`"
+      placeholder: "e.g. `norn-tabs`, `norn-toc`, `norn-landing.webc`"
     validations:
       required: false
 

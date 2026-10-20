@@ -73,7 +73,7 @@ describe("neutral fixture build", () => {
 		assert.ok(pages.index.includes("<span>Plain card</span>"));
 		assert.ok(pages.one.includes("<h1>First page</h1>"));
 		for (const html of Object.values(pages)) {
-			assert.ok(!/<(norn-content-card|norn-card-grid|norn-side-nav|norn-page-layout|norn-page-pager|norn-page-hero|norn-header|norn-footer|norn-skip-link|norn-link-button|norn-tag-list|norn-svg-icon)[^>]*\s(@|items|title|body|href|heading|prev|next|brand|name|variant|label)[=\s>]/.test(html), "no props left on a kept tag");
+			assert.ok(!/<(norn-content-card|norn-card-grid|norn-side-nav|norn-sidebar-layout|norn-pager|norn-hero|norn-header|norn-footer|norn-skip-link|norn-link-button|norn-tag-list|norn-svg-icon)[^>]*\s(@|items|title|body|href|heading|prev|next|brand|name|variant|label)[=\s>]/.test(html), "no props left on a kept tag");
 		}
 	});
 
@@ -95,20 +95,20 @@ describe("neutral fixture build", () => {
 	});
 
 	test("a WebC page on norn-base is not compiled twice", () => {
-		assert.equal((pages.index.match(/<norn-page-hero>/g) ?? []).length, 1);
-		assert.equal((pages.index.match(/<header>/g) ?? []).length, 2, "the page hero's header and the frame's");
+		assert.equal((pages.index.match(/<norn-hero>/g) ?? []).length, 1);
+		assert.equal((pages.index.match(/<header>/g) ?? []).length, 2, "the hero's header and the frame's");
 		assert.equal((pages.plain.match(/<h1>Plain page<\/h1>/g) ?? []).length, 1);
 	});
 
-	test("norn-page-layout shows the default norn-side-nav, or the navigation passed in the nav slot", () => {
+	test("norn-sidebar-layout shows the default norn-side-nav, or the navigation passed in the nav slot", () => {
 		assert.ok(pages.one.includes("<norn-side-nav>") && labelledBy(pages.one, "nav", "Documentation") !== -1);
 		assert.ok(pages.customNav.includes('<nav aria-label="Section">') && !pages.customNav.includes("<norn-side-nav") && !/\sslot=/.test(pages.customNav));
 	});
 
-	test("the prose styles come from norn-rich-text, not norn-page-layout", () => {
+	test("the prose styles come from norn-rich-text, not norn-sidebar-layout", () => {
 		const [css] = bundles(output, pages.customNav);
-		assert.ok(css.includes("@scope (norn-rich-text) to (") && css.includes("blockquote {") && /norn-page-layout \{[\s\S]*?& > div \{/.test(css));
-		const [layout] = css.match(/^(\s*)norn-page-layout \{[\s\S]*?^\1\}/m);
+		assert.ok(css.includes("@scope (norn-rich-text) to (") && css.includes("blockquote {") && /norn-sidebar-layout \{[\s\S]*?& > div \{/.test(css));
+		const [layout] = css.match(/^(\s*)norn-sidebar-layout \{[\s\S]*?^\1\}/m);
 		assert.ok(!/\b(blockquote|table|hr|code)\b/.test(layout));
 	});
 
@@ -119,7 +119,7 @@ describe("neutral fixture build", () => {
 		}
 	});
 
-	test("norn-page-pager links the neighbors and omits missing ones", () => {
+	test("norn-pager links the neighbors and omits missing ones", () => {
 		assert.ok(pages.one.includes('rel="next" href="/docs/two/"') && !pages.one.includes('rel="prev"'));
 		assert.ok(pages.two.includes('rel="prev" href="/docs/one/"') && pages.two.includes('rel="next" href="/docs/three/"'));
 		assert.ok(pages.three.includes('rel="prev" href="/docs/two/"') && !pages.three.includes('rel="next"'));
@@ -145,13 +145,13 @@ describe("neutral fixture build", () => {
 
 	test("each page's own CSS holds only the components on it, each once", () => {
 		const [cards] = bundles(output, pages.index);
-		for (const name of ["norn-page-hero", "norn-link-button", "norn-tag-list", "norn-content-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
-		assert.ok(!/norn-page-layout|norn-page-pager|norn-side-nav/.test(cards));
+		for (const name of ["norn-hero", "norn-link-button", "norn-tag-list", "norn-content-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
+		assert.ok(!/norn-sidebar-layout|norn-pager|norn-side-nav/.test(cards));
 		assert.equal((cards.match(/norn-content-card \{/g) ?? []).length, 1);
 		assert.ok(cards.includes("--norn-chrome: terminal"));
 		const [docs] = bundles(output, pages.one);
-		for (const name of ["norn-page-layout", "norn-side-nav", "norn-page-pager", "norn-header"]) assert.ok(docs.includes(`${name} {`), name);
-		assert.ok(!/norn-content-card|norn-card-grid|norn-page-hero/.test(docs));
+		for (const name of ["norn-sidebar-layout", "norn-side-nav", "norn-pager", "norn-header"]) assert.ok(docs.includes(`${name} {`), name);
+		assert.ok(!/norn-content-card|norn-card-grid|norn-hero/.test(docs));
 	});
 
 	test("the project stylesheet follows the bundles and sits outside every layer", () => {
@@ -163,7 +163,7 @@ describe("neutral fixture build", () => {
 		assert.ok(!read(output, "assets", "project.css").includes("@layer"));
 	});
 
-	test("norn-page-head emits the document metadata and Open Graph tags", () => {
+	test("norn-head emits the document metadata and Open Graph tags", () => {
 		const [, head] = pages.index.match(/<head>([\s\S]*?)<\/head>/);
 		assert.equal((head.match(/<title>/g) ?? []).length, 1);
 		for (const expected of ['<meta charset="utf-8">', '<link rel="canonical" href="https://example.com/">', '<meta name="description" content="A fixture site built from the generic patterns.">', '<meta name="color-scheme" content="light dark">', '<meta property="og:title" content="Neutral fixture">', '<meta property="og:url" content="https://example.com/">']) {
@@ -222,8 +222,8 @@ describe("neutral fixture build", () => {
 		assert.ok(nav.includes('<a href="/"><span>Home</span></a>'));
 	});
 
-	test("norn-page-section takes its anchor from the host id, and the heading from the slot", () => {
-		assert.match(pages.index, /<norn-page-section id="features">\s*<section>\s*<h2>Features<\/h2>/);
+	test("norn-section takes its anchor from the host id, and the heading from the slot", () => {
+		assert.match(pages.index, /<norn-section id="features">\s*<section>\s*<h2>Features<\/h2>/);
 	});
 
 	test("norn-footer fills its slots and leaves no slot markup behind", () => {
@@ -233,7 +233,7 @@ describe("neutral fixture build", () => {
 		for (const html of Object.values(pages)) assert.ok(!/<template|\sslot=/.test(html));
 	});
 
-	test("norn-page-hero renders one h1, the actions, and the chips", () => {
+	test("norn-hero renders one h1, the actions, and the chips", () => {
 		assert.equal((pages.index.match(/<h1>/g) ?? []).length, 1);
 		const [, actions] = pages.index.match(/<nav aria-label="Get started">([\s\S]*?)<\/nav>/);
 		assert.equal((actions.match(/<a /g) ?? []).length, 2);
@@ -267,7 +267,7 @@ describe("neutral fixture build", () => {
 		}
 	});
 
-	test("Markdown headings link to themselves, and norn-page-toc lists them", () => {
+	test("Markdown headings link to themselves, and norn-toc lists them", () => {
 		assert.ok(pages.one.includes('<h2 id="a-second-level-heading"><a href="#a-second-level-heading">A second-level heading</a></h2>'));
 		const toc = pages.one.slice(labelledBy(pages.one, "nav", "On this page"));
 		assert.ok(toc.includes('<li><a href="#a-second-level-heading">A second-level heading</a><ol><li><a href="#a-third-level-heading">A third-level heading</a></li></ol></li>'), "the h3 sits in a list inside its h2");
@@ -348,7 +348,7 @@ describe("neutral fixture in a browser", () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/");
 		assert.equal(await page.$eval("norn-content-card article", (element) => getComputedStyle(element).borderTopLeftRadius), "2px", "unlayered project rule wins");
-		const action = page.locator("norn-page-hero norn-link-button a").first();
+		const action = page.locator("norn-hero norn-link-button a").first();
 		assert.equal(await action.evaluate((element) => getComputedStyle(element).textDecorationLine), "none", "components outrank base");
 		assert.equal(await action.evaluate((element) => getComputedStyle(element).color), await resolveColor(page, token("text.on-accent")));
 		assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), await resolveColor(page, token("surface.base"), "background-color"), "base applies the token");
@@ -389,7 +389,7 @@ describe("neutral fixture in a browser", () => {
 		for (const [width, position] of [[1280, "sticky"], [400, "static"]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			await page.goto(server.url + "/docs/one/");
-			assert.equal(await page.$eval("norn-page-layout norn-side-nav", (nav) => getComputedStyle(nav).position), position, `${width}px`);
+			assert.equal(await page.$eval("norn-sidebar-layout norn-side-nav", (nav) => getComputedStyle(nav).position), position, `${width}px`);
 			await page.close();
 		}
 	});
@@ -438,10 +438,10 @@ describe("neutral fixture in a browser", () => {
 		await context.close();
 	});
 
-	test("norn-page-notice names its severity before the message, and only a live one takes a live role", async () => {
+	test("norn-notice names its severity before the message, and only a live one takes a live role", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/kit/");
-		const [saved, failed] = [page.locator("norn-page-notice").nth(0), page.locator("norn-page-notice").nth(1)];
+		const [saved, failed] = [page.locator("norn-notice").nth(0), page.locator("norn-notice").nth(1)];
 		assert.match(await saved.locator("[data-severity]").innerText(), /Open the docs/);
 		assert.equal(await saved.locator("[data-severity]").getAttribute("role"), null);
 		assert.equal(await failed.locator("[data-severity]").getAttribute("role"), "alert");
@@ -489,13 +489,13 @@ describe("neutral fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("norn-page-toc marks the section in view", async () => {
+	test("norn-toc marks the section in view", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 500 } });
 		await page.goto(server.url + "/docs/one/");
-		const current = () => page.locator('norn-page-toc a[aria-current="location"]').textContent();
+		const current = () => page.locator('norn-toc a[aria-current="location"]').textContent();
 		assert.equal(await current(), "A second-level heading");
 		await page.evaluate(() => document.getElementById("a-third-level-heading").scrollIntoView({ block: "start" }));
-		await page.waitForFunction(() => document.querySelector('norn-page-toc a[aria-current="location"]')?.textContent === "A third-level heading");
+		await page.waitForFunction(() => document.querySelector('norn-toc a[aria-current="location"]')?.textContent === "A third-level heading");
 		await page.close();
 	});
 
@@ -509,11 +509,11 @@ describe("neutral fixture in a browser", () => {
 		}
 	});
 
-	test("norn-page-layout stacks its columns when the frame is narrow, not by the viewport", async () => {
+	test("norn-sidebar-layout stacks its columns when the frame is narrow, not by the viewport", async () => {
 		for (const [width, columns] of [[1280, 2], [600, 1]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			await page.goto(server.url + "/docs/one/");
-			const count = await page.$eval("norn-page-layout > div", (grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
+			const count = await page.$eval("norn-sidebar-layout > div", (grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
 			assert.equal(count, columns, `${width}px wide viewport`);
 			await page.close();
 		}
@@ -560,10 +560,10 @@ describe("neutral fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("norn-page-pager's arrows point the other way in right-to-left text", async () => {
+	test("norn-pager's arrows point the other way in right-to-left text", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/translated/");
-		const arrow = (rel, pseudo) => page.$eval(`norn-page-pager a[rel="${rel}"]`, (link, which) => getComputedStyle(link, which).content, pseudo);
+		const arrow = (rel, pseudo) => page.$eval(`norn-pager a[rel="${rel}"]`, (link, which) => getComputedStyle(link, which).content, pseudo);
 		assert.match(await arrow("prev", "::before"), /→/);
 		assert.match(await arrow("next", "::after"), /←/);
 		await page.goto(server.url + "/docs/two/");
@@ -605,7 +605,7 @@ describe("overriding a packaged component", () => {
 				.map(([key, [form]]) =>
 					[
 						`<norn-card-grid id="grid-${key}" ${form.replace("X", "mono")}><li>Card</li></norn-card-grid>`,
-						`<norn-page-notice id="notice-${key}" ${form.replace("X", "live")}><p>Note</p></norn-page-notice>`,
+						`<norn-notice id="notice-${key}" ${form.replace("X", "live")}><p>Note</p></norn-notice>`,
 						`<norn-segmented-control id="control-${key}" ${form.replace("X", "icon-only")} @legend="Pick" @name="pick-${key}" :@options="[{ value: 'a', label: 'A' }]"></norn-segmented-control>`,
 					].join("\n"),
 				)
@@ -616,7 +616,7 @@ describe("overriding a packaged component", () => {
 			const element = (tag, id) => html.match(new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`))[0];
 			for (const [key, [form, on]] of Object.entries(forms)) {
 				assert.equal(element("norn-card-grid", `grid-${key}`).includes("title-face: mono"), on, `norn-card-grid ${form}`);
-				assert.equal(/role="(status|alert)"/.test(element("norn-page-notice", `notice-${key}`)), on, `norn-page-notice ${form}`);
+				assert.equal(/role="(status|alert)"/.test(element("norn-notice", `notice-${key}`)), on, `norn-notice ${form}`);
 				assert.equal(element("norn-segmented-control", `control-${key}`).includes("data-icon-only"), on, `norn-segmented-control ${form}`);
 			}
 		} finally {

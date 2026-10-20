@@ -18,7 +18,7 @@
  * @cssprop --norn-card-grid-accent-2 - Second accent. Falls back to --norn-feature-2, then ActiveText.
  * @cssprop --norn-card-grid-accent-3 - Third accent. Falls back to --norn-feature-3, then VisitedText.
  * @cssprop --norn-card-grid-accent-4 - Fourth accent. Falls back to --norn-feature-4, then GrayText.
- * @category layout
+ * @category container
  */
 --->
 <ul role="list" :style="mono === true || mono === '' || mono === 'true' ? '--norn-content-card-title-face: mono' : ''"><slot></slot></ul>

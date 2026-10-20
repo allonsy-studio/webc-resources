@@ -16,14 +16,14 @@ export const STRINGS = {
 	fr: {
 		"norn-skip-link": { label: "Aller au contenu" },
 		"norn-header": { label: "Principal" },
-		"norn-page-toc": { label: "Sur cette page" },
+		"norn-toc": { label: "Sur cette page" },
 		"norn-search": { label: "Rechercher", none: "Aucun résultat", "results-one": "{count} résultat", "results-other": "{count} résultats" },
 		"norn-call-out": { tip: "Astuce" },
-		"norn-page-notice": { warning: "Attention : " },
+		"norn-notice": { warning: "Attention : " },
 		"norn-copy-button": { copy: "Copier", copied: "Copié", failed: "Échec de la copie" },
 		"norn-code-block": { label: "code {language}", "copy-label": "Copier le {name}" },
 		"norn-theme-toggle": { label: "Thème", light: "Clair", system: "Système", dark: "Sombre" },
-		"norn-page-pager": { label: "Pages voisines" },
+		"norn-pager": { label: "Pages voisines" },
 		"norn-base": { footer: "Pied de page" },
 	},
 };

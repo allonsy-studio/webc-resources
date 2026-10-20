@@ -36,7 +36,7 @@ export function patterns({ exclude = [] } = {}) {
 }
 
 /**
- * The pages before and after one in a collection, for `norn-page-pager`.
+ * The pages before and after one in a collection, for `norn-pager`.
  *
  * @param {{ url: string }[]} pages - A collection, in order
  * @param {{ url: string }} page - The current page
@@ -52,7 +52,7 @@ export function adjacent(pages, page) {
 const EMPTY_BUNDLE_TAGS = /[\t ]*<link rel="stylesheet" href="[./]*">\n?|[\t ]*<script src="[./]*"[^>]*><\/script>\n?/g;
 
 /**
- * Eleventy transform: drop the empty bundle `<link>` and `<script>` that `norn-page-head` leaves on a page with no bundles.
+ * Eleventy transform: drop the empty bundle `<link>` and `<script>` that `norn-head` leaves on a page with no bundles.
  * `webc:if` can't guard them, because the bundle URL resolves after render. The Norn plugin registers it; without the plugin,
  * register it yourself: `config.addTransform("empty-bundle-tags", dropEmptyBundleTags)`.
  *
@@ -87,9 +87,9 @@ const STRINGS = {
 	"norn-code-tabs": { label: "Code samples", sample: "Sample {n}" },
 	"norn-copy-button": { copy: "Copy", copied: "Copied", failed: "Copy failed" },
 	"norn-header": { label: "Primary" },
-	"norn-page-notice": { info: "Note: ", success: "Success: ", warning: "Warning: ", error: "Error: " },
-	"norn-page-pager": { label: "Pager" },
-	"norn-page-toc": { label: "On this page" },
+	"norn-notice": { info: "Note: ", success: "Success: ", warning: "Warning: ", error: "Error: " },
+	"norn-pager": { label: "Pager" },
+	"norn-toc": { label: "On this page" },
 	"norn-search": {
 		label: "Search",
 		none: "No results",
@@ -107,7 +107,7 @@ const STRINGS = {
 
 /**
  * Every string the components and layouts show or read, with its English default, by component or layout and key.
- * A component's key is the slot it fills when the page leaves that slot empty, or for `norn-call-out` and `norn-page-notice` the variant or severity whose `heading` or `prefix` it is.
+ * A component's key is the slot it fills when the page leaves that slot empty, or for `norn-call-out` and `norn-notice` the variant or severity whose `heading` or `prefix` it is.
  * A layout's key names a text it writes itself, such as `norn-landing`'s `license`, a template with `{license}` for the value.
  * `norn-code-block` takes its button texts from the `norn-copy-button` keys.
  * A `null` default means the component has none and falls back to another key.
@@ -131,7 +131,7 @@ function checkStrings(table, where) {
 /**
  * Site-wide strings for every component and layout, so a page in another language needs no slot on each tag.
  * The Norn plugin registers the result of its `strings` option. Without the plugin, register it once:
- * `config.addJavaScriptFunction("nornComponentStrings", componentStrings({ "norn-page-toc": { label: "Sur cette page" } }))`.
+ * `config.addJavaScriptFunction("nornComponentStrings", componentStrings({ "norn-toc": { label: "Sur cette page" } }))`.
  * Keys are the slot names, as `label` or `results-one`. For several languages, key the tables by language tag, as `{ fr: { … }, de: { … } }`:
  * a page picks its table by `page.lang`, which Eleventy's i18n plugin sets.
  * A slot filled on the tag still wins, a missing string keeps the English default, and an unknown component or key throws.

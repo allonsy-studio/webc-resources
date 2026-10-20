@@ -17,7 +17,7 @@
  * The Norn plugin ships it as an Eleventy layout; use it as `layout: norn-base.webc` for a WebC page, or extend it from a layout of the project's own.
  * A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own `layout` and `page.inputPath`, which a layout chain leaves alone.
  * Props are `$data.norn`: the plugin's `props` mapping, or the same-named page data. Every list defaults to `[]`.
- * The head calls `norn-page-head`, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from `css/base.css` and `css/print.css`. A copy of this file pastes their text in.
+ * The head calls `norn-head`, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from `css/base.css` and `css/print.css`. A copy of this file pastes their text in.
  * Four hooks take markup from `fillHooks`: `head` at the end of the head, `banner` before the header, `cta` at the end of `main`, and `credit` as the footer's last column.
  * The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from `componentStrings` under `norn-base`, then English.
  * @prop {string} [lang] - The page language. Falls back to `page.lang`, then `en`.
@@ -28,7 +28,7 @@
  * @prop {string} [description]
  * @prop {string} [url] - The canonical URL.
  * @prop {string} [ogTitle] - Falls back to the document title.
- * @prop {{ src: string, alt?: string }} [ogImage] - The share image, or its URL: `og:image`, `og:image:alt`, and `twitter:card` (`summary_large_image`). A relative `src` resolves against `url`, which must then be absolute: with no absolute `url`, the build logs a `norn-page-head:` warning and `og:image` and `og:image:alt` are left out. Without an image, no image tag renders. Either way the card is `summary`.
+ * @prop {{ src: string, alt?: string }} [ogImage] - The share image, or its URL: `og:image`, `og:image:alt`, and `twitter:card` (`summary_large_image`). A relative `src` resolves against `url`, which must then be absolute: with no absolute `url`, the build logs a `norn-head:` warning and `og:image` and `og:image:alt` are left out. Without an image, no image tag renders. Either way the card is `summary`.
  * @prop {string} [locale] - `og:locale`, such as `en_US`.
  * @prop {string} [themeColor] - One color for both schemes. Without it, the page surface in each scheme.
  * @prop {boolean} [themeToggle] - Apply the scheme a `norn-theme-toggle` saved, before the first paint.
@@ -41,7 +41,7 @@
  */
 --->
 		<meta
-			webc:is="norn-page-head"
+			webc:is="norn-head"
 			webc:nokeep
 			:@title="$data.norn.title ? ($data.norn.name && $data.norn.title !== $data.norn.name ? $data.norn.title + ': ' + $data.norn.name : $data.norn.title) : $data.norn.tagline ? $data.norn.name + ': ' + $data.norn.tagline : $data.norn.name || ''"
 			:@description="$data.norn.description || ''"

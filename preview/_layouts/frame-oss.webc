@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta webc:is="norn-page-head" webc:nokeep :@title="title" />
+		<meta webc:is="norn-head" webc:nokeep :@title="title" />
 		<link rel="stylesheet" href="/assets/norn/reset.css" webc:keep />
 		<link rel="stylesheet" href="/assets/norn/base.css" webc:keep />
 		<link rel="stylesheet" href="/assets/norn/print.css" webc:keep />

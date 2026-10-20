@@ -24,7 +24,7 @@ layout: norn-base.webc
  * @category template
  */
 --->
-<norn-page-hero>
+<norn-hero>
 	<h1 webc:if="$data.norn.name">
 		<span @text="$data.norn.name"></span>
 		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
@@ -54,13 +54,13 @@ layout: norn-base.webc
 		<norn-code-block webc:elseif="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
 		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
 	</template>
-</norn-page-hero>
-<norn-page-section webc:if="$data.norn.usage && $data.norn.install" id="install">
+</norn-hero>
+<norn-section webc:if="$data.norn.usage && $data.norn.install" id="install">
 	<h2 @text="nornComponentStrings?.('norn-landing', 'install', $data.page) || 'Install'"></h2>
 	<norn-code-block webc:if="typeof nornTokenRanges === 'function'" @language="sh" :@code="$data.norn.install"></norn-code-block>
 	<pre webc:else><code @text="$data.norn.install"></code></pre>
-</norn-page-section>
-<norn-page-section webc:if="$data.norn.features.length" id="features">
+</norn-section>
+<norn-section webc:if="$data.norn.features.length" id="features">
 	<h2 @text="nornComponentStrings?.('norn-landing', 'features', $data.page) || 'Features'"></h2>
 	<norn-card-grid>
 		<li webc:for="feature of $data.norn.features">
@@ -73,8 +73,8 @@ layout: norn-base.webc
 			</norn-content-card>
 		</li>
 	</norn-card-grid>
-</norn-page-section>
-<norn-page-section webc:if="$data.norn.packages.length" id="packages">
+</norn-section>
+<norn-section webc:if="$data.norn.packages.length" id="packages">
 	<h2 @text="nornComponentStrings?.('norn-landing', 'packages', $data.page) || 'Packages'"></h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="pkg of $data.norn.packages">
@@ -87,4 +87,4 @@ layout: norn-base.webc
 			</norn-content-card>
 		</li>
 	</norn-card-grid>
-</norn-page-section>
+</norn-section>

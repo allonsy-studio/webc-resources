@@ -8,7 +8,7 @@
 
 /**
  * Head metadata, the cascade layer order, and the page's bundle links. `norn-base` calls it; a layout of the project's own can too.
- * Call it in the head as `<meta webc:is="norn-page-head" webc:nokeep … />`: a custom tag in the head would close it early.
+ * Call it in the head as `<meta webc:is="norn-head" webc:nokeep … />`: a custom tag in the head would close it early.
  * Emits Open Graph tags and `twitter:card`: `summary_large_image` when an image is set, else `summary`. Write extra head tags right after the call: they land after the bundle links.
  * Declares the layer order in an inline style before the bundle links, so it comes first whatever order the page's styles bundle in:
  * `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. A project's unlayered CSS beats every layer without `!important`.
@@ -41,7 +41,7 @@ function absoluteImage(src, base) {
 	try {
 		return new URL(src, typeof base === "string" && base ? base : undefined).href;
 	} catch {
-		console.warn(`norn-page-head: og-image "${src}" is relative, so the canonical url must be absolute to resolve it against. The og:image and og:image:alt tags are left out. Pass an absolute og-image or url.`);
+		console.warn(`norn-head: og-image "${src}" is relative, so the canonical url must be absolute to resolve it against. The og:image and og:image:alt tags are left out. Pass an absolute og-image or url.`);
 		return "";
 	}
 }

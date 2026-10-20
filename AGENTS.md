@@ -62,7 +62,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is
    the fallback, not the first choice. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
-   `norn.oss` for the OSS components and tokens. `norn-page-head` declares the order once, in an inline style ahead of the
+   `norn.oss` for the OSS components and tokens. `norn-head` declares the order once, in an inline style ahead of the
    bundle links: `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. One outer layer lets a project
    order the whole package against its own layers or a framework's, and keeps common names such as `base` and `components`
    from merging with theirs. A page renders its content before its layout, so the bundle order can't carry the layer order.
@@ -77,7 +77,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    `@property` for one. A project overrides a token with its own `tokens.css` (`:root { --norn-ui-accent: #1f6f8b; }`) and every
    component follows. Derived tokens (`text.accent`, `text.on-accent`, `font.heading`) write the token they derive from as
    `var(--norn-ui-accent, {ui.accent})`, so a project value still drives them. A value in `tokens.json` may use `{path}` to
-   name another token's default. A component's own custom properties (`--norn-page-toc-link`) keep their names and may register
+   name another token's default. A component's own custom properties (`--norn-toc-link`) keep their names and may register
    with `@property`, typed as the component likes. `components.test.js` checks the paths, the names, and the compiled values.
 5. Print rules live in the component's own `@media print` block.
    The reset (`css/reset.css`) is optional, and nothing in Norn relies on it: a component that sets a size with padding or a
@@ -119,8 +119,8 @@ preview/           the component preview: an Eleventy site with a page and stori
 12. Spec links point to the section anchor, never a spec's home page.
 13. Every `.js` file starts with the MPL-2.0 SPDX block comment (see `eslint.config.js`). Every `.webc` file carries the same
     block as the first lines of its `<!--- … --->` comment (rule 7), never in a `webc:setup` block. The lint rule covers `.js`; `components.test.js` checks the `.webc` files.
-14. Every component names its category in its JSDoc with `@category`: `layout` (arranges other things: grids and
-    page frames), `landmark` (renders a page region with a role and a name), `container` (a bounded surface that holds
+14. Every component names its category in its JSDoc with `@category`: `layout` (arranges other things: page
+    frames), `landmark` (renders a page region with a role and a name), `container` (a bounded surface that holds
     content), `component` (a self-contained element), `template` (an Eleventy layout: a whole page, filled from props;
     only the `norn-*` layouts), or `document` (head components).
     `components.test.js` checks it, and the preview groups its navigation by it.
@@ -139,12 +139,12 @@ preview/           the component preview: an Eleventy site with a page and stori
     `<slot webc:else>` (`norn-segmented-control`'s `options`). Named slot fallbacks are safe.
 17. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
     names and script-shown text included. The slot's fallback looks the string up site-wide, then gives the English
-    default: `<slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot>`.
+    default: `<slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot>`.
     The key is the slot name; list it and its default in `defaultStrings` in `webc-patterns/index.js` (`norn-call-out`'s
-    `heading` and `norn-page-notice`'s `prefix` key by variant). A layout has no caller to fill a slot: it looks its texts up
+    `heading` and `norn-notice`'s `prefix` key by variant). A layout has no caller to fill a slot: it looks its texts up
     under its own name (`nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}'`), and
     names a landmark with `aria-labelledby` pointing at a hidden span. An accessible name points `aria-labelledby` at the
-    rendered text, with an id built from WebC's `uid` (`:id="'norn-page-toc-' + uid"`). WebC hands a component the
+    rendered text, with an id built from WebC's `uid` (`:id="'norn-toc-' + uid"`). WebC hands a component the
     uid of each component it meets, slotted ones included, so read `uid` only between the same two slots or component
     tags. A landmark without a visible title renders its name as visually hidden text, styled in the component. Text
     only a script shows sits in the page as hidden elements (`<span hidden><span data-string="copied">…</span></span>`)

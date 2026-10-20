@@ -11,13 +11,13 @@ import path from "node:path";
 import { readTokens as readTokensFile } from "../../scripts/build-components.js";
 
 /** Components that live in the document head: they have no canvas, since every frame renders them. */
-export const HEAD_COMPONENTS = new Set(["norn-page-head", "oss-head"]);
+export const HEAD_COMPONENTS = new Set(["norn-head", "oss-head"]);
 
 /** The kinds of component, in the order the preview shows them. Each component names its own in its JSDoc with `@category`. */
 export const CATEGORIES = [
-	{ id: "layout", title: "Layout", description: "Arranges other things: grids and page frames." },
+	{ id: "layout", title: "Layout", description: "Arranges other things: page frames." },
 	{ id: "landmark", title: "Landmark", description: "A page region with a role and a name: header, navigation, footer." },
-	{ id: "container", title: "Container", description: "A bounded surface that holds content: a card, a section, a hero." },
+	{ id: "container", title: "Container", description: "A bounded surface that holds content: a card, a card grid, a section, a hero." },
 	{ id: "component", title: "Component", description: "A self-contained element: a link, a code block, a lockup." },
 	{ id: "template", title: "Template", description: "An Eleventy layout: a whole page, filled from props." },
 	{ id: "document", title: "Document", description: "The head and the foundation styles, with no body markup." },

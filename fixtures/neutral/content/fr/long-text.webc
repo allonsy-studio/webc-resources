@@ -20,7 +20,7 @@ frame:
             title: Journal des modifications publiées
     colophon: Une très longue ligne de clôture, avec des accents, des œuvres, des cœurs et des àéîõü pour tester la césure des mots.
 ---
-<norn-page-layout>
+<norn-sidebar-layout>
 	<norn-side-nav
 		slot="nav"
 		:@items="[
@@ -47,20 +47,20 @@ frame:
 	>
 		<span slot="label">Fil d’Ariane montrant le chemin complet jusqu’à la page courante</span>
 	</norn-breadcrumb-nav>
-	<norn-page-toc :@items="[{ id: 'avis', text: 'Des avis et des encadrés dont les titres sont particulièrement longs', level: 2 }, { id: 'onglets', text: 'Onglets de code aux noms interminables', level: 2 }, { id: 'sous-titre', text: 'Un sous-titre tout aussi long que les autres entrées', level: 3 }, { id: 'cartes', text: 'Cartes', level: 2 }]">
+	<norn-toc :@items="[{ id: 'avis', text: 'Des avis et des encadrés dont les titres sont particulièrement longs', level: 2 }, { id: 'onglets', text: 'Onglets de code aux noms interminables', level: 2 }, { id: 'sous-titre', text: 'Un sous-titre tout aussi long que les autres entrées', level: 3 }, { id: 'cartes', text: 'Cartes', level: 2 }]">
 		<span slot="label">Sommaire de la page, avec un titre qui occupe plusieurs lignes</span>
-	</norn-page-toc>
-	<norn-page-section id="avis">
+	</norn-toc>
+	<norn-section id="avis">
 		<h2 id="avis">Avis et encadrés</h2>
 		<norn-call-out @variant="warning">
 			<span slot="heading">Un titre d’encadré volontairement très long qui doit s’étendre sur trois lignes au moins, même sur un grand écran, pour vérifier la mise en page</span>
 			<p>Le corps de l’encadré contient aussi un mot sans espace : Donaudampfschifffahrtsgesellschaftskapitänsmützenverschlusssicherung, et une adresse https://example.com/une/adresse/tres/longue/qui/ne/contient/aucune/espace/ni/tiret/du/tout.</p>
 		</norn-call-out>
-		<norn-page-notice @severity="warning">
+		<norn-notice @severity="warning">
 			<span slot="prefix">Attention, avis important pour toutes les équipes : </span>
 			<p>Le message de l’avis est lui aussi bien plus long que d’habitude, et contient un mot interminable comme anticonstitutionnellement ou électroencéphalographiquement.</p>
 			<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Ouvrir la documentation complète et détaillée</norn-link-button>
-		</norn-page-notice>
+		</norn-notice>
 		<norn-accordion-group>
 			<details name="faq">
 				<summary>Une question très longue, posée avec beaucoup de détails, qui doit passer à la ligne sans déborder de son cadre</summary>
@@ -71,8 +71,8 @@ frame:
 			<li>Compatible avec toutes les versions récentes de Node</li>
 			<li>Aucune dépendance à l’exécution, ni directe ni indirecte</li>
 		</norn-tag-list>
-	</norn-page-section>
-	<norn-page-section id="onglets">
+	</norn-section>
+	<norn-section id="onglets">
 		<h2 id="onglets">Onglets de code</h2>
 		<norn-code-tabs @group="long-text">
 			<span slot="label">Commandes d’installation pour chaque gestionnaire de paquets</span>
@@ -100,8 +100,8 @@ frame:
 			<span slot="copied">La commande a bien été copiée dans le presse-papiers</span>
 			<span slot="failed">La copie a échoué, copiez la commande à la main</span>
 		</norn-copy-button>
-	</norn-page-section>
-	<norn-page-section id="cartes">
+	</norn-section>
+	<norn-section id="cartes">
 		<h2 id="cartes">Cartes</h2>
 		<norn-card-grid>
 			<li>
@@ -136,11 +136,11 @@ frame:
 			<span slot="system">Thème du système</span>
 			<span slot="dark">Thème sombre</span>
 		</norn-theme-toggle>
-	</norn-page-section>
-	<norn-page-pager
+	</norn-section>
+	<norn-pager
 		:@prev="({ url: '/docs/one/', title: 'Une page précédente dont le titre est vraiment très long, avec des accents' })"
 		:@next="({ url: '/docs/two/', title: 'Une page suivante dont le titre est lui aussi beaucoup trop long pour une ligne' })"
 	>
 		<span slot="label">Pages voisines dans la documentation, précédente et suivante</span>
-	</norn-page-pager>
-</norn-page-layout>
+	</norn-pager>
+</norn-sidebar-layout>

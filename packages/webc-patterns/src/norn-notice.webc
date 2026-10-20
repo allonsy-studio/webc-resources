@@ -15,8 +15,8 @@
  * @slot prefix - The severity word read before the message, with its punctuation, as one element, such as `<span slot="prefix">Remarque : </span>`. Falls back to the site's `componentStrings` for the severity, then "Note: ", "Success: ", "Warning: ", or "Error: ".
  * @slot - The message.
  * @slot action - One action, such as a link.
- * @cssprop --norn-page-notice-color - The rule and icon color. Falls back to one per severity.
- * @cssprop --norn-page-notice-bg - Background. Falls back to a tint of the color.
+ * @cssprop --norn-notice-color - The rule and icon color. Falls back to one per severity.
+ * @cssprop --norn-notice-bg - Background. Falls back to a tint of the color.
  * @category container
  */
 --->
@@ -32,27 +32,27 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 <div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
 	<norn-svg-icon :@name="SEVERITIES[level(severity)][1]"></norn-svg-icon>
 	<div>
-		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-page-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
+		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
 		<slot></slot>
 	</div>
 	<div><slot name="action"></slot></div>
 </div>
 <style>
 	@layer norn.components {
-		norn-page-notice {
-			--_color: var(--norn-page-notice-color, light-dark(#1b4fc4, #8fb0ff));
+		norn-notice {
+			--_color: var(--norn-notice-color, light-dark(#1b4fc4, #8fb0ff));
 			display: block;
 
 			&:has(> [data-severity="success"]) {
-				--_color: var(--norn-page-notice-color, light-dark(#0b6b3a, #7ed6a1));
+				--_color: var(--norn-notice-color, light-dark(#0b6b3a, #7ed6a1));
 			}
 
 			&:has(> [data-severity="warning"]) {
-				--_color: var(--norn-page-notice-color, light-dark(#9a4a00, #ffb36b));
+				--_color: var(--norn-notice-color, light-dark(#9a4a00, #ffb36b));
 			}
 
 			&:has(> [data-severity="error"]) {
-				--_color: var(--norn-page-notice-color, light-dark(#b42318, #ff8a80));
+				--_color: var(--norn-notice-color, light-dark(#b42318, #ff8a80));
 			}
 
 			& > div {
@@ -65,7 +65,7 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 				border: 1px solid var(--_color);
 				border-inline-start-width: 4px;
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-page-notice-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
+				background: var(--norn-notice-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
 			}
 
 			& > div > norn-svg-icon {

@@ -3,7 +3,7 @@ layout: norn-base.webc
 title: Custom navigation
 description: A docs shell with its own navigation.
 ---
-<norn-page-layout>
+<norn-sidebar-layout>
 	<nav slot="nav" aria-label="Section"><a href="/">Home</a></nav>
 	<h1>Custom navigation</h1>
 	<norn-rich-text>
@@ -13,4 +13,4 @@ description: A docs shell with its own navigation.
 			<li>An item</li>
 		</ul>
 	</norn-rich-text>
-</norn-page-layout>
+</norn-sidebar-layout>

@@ -11,8 +11,8 @@
  * Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing.
  * @prop {{ id: string, text: string, level: number }[]} items
  * @slot label - The landmark name and visible title, as one element. Falls back to the site's `componentStrings`, then "On this page".
- * @cssprop --norn-page-toc-link - Link color. Falls back to --norn-text-muted.
- * @cssprop --norn-page-toc-current - The current section's color and marker. Falls back to --norn-text-accent.
+ * @cssprop --norn-toc-link - Link color. Falls back to --norn-text-muted.
+ * @cssprop --norn-toc-current - The current section's color and marker. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
@@ -33,13 +33,13 @@ function outline(items) {
 	return list(root.nodes);
 }
 </script>
-<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-page-toc-' + uid">
-	<p :id="'norn-page-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot></p>
+<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-toc-' + uid">
+	<p :id="'norn-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot></p>
 	<template webc:nokeep @raw="outline(items)"></template>
 </nav>
 <style>
 	@layer norn.components {
-		norn-page-toc {
+		norn-toc {
 			display: block;
 			font-size: 0.92rem;
 
@@ -79,7 +79,7 @@ function outline(items) {
 				margin-inline-start: -1px;
 				padding: 0.2rem 0.75rem;
 				border-inline-start: 2px solid transparent;
-				color: var(--norn-page-toc-link, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-toc-link, var(--norn-text-muted, t('text.muted')));
 				text-decoration: none;
 
 				&:hover {
@@ -87,8 +87,8 @@ function outline(items) {
 				}
 
 				&[aria-current] {
-					border-inline-start-color: var(--norn-page-toc-current, var(--norn-text-accent, t('text.accent')));
-					color: var(--norn-page-toc-current, var(--norn-text-accent, t('text.accent')));
+					border-inline-start-color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
+					color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
 					font-weight: 600;
 				}
 			}
@@ -102,7 +102,7 @@ function outline(items) {
 <script>
 	{
 		/** Marks the link to the last section heading scrolled past, or the first one. */
-		class PageToc extends HTMLElement {
+		class Toc extends HTMLElement {
 			#observer;
 			#onScroll;
 
@@ -136,6 +136,6 @@ function outline(items) {
 			}
 		}
 
-		if (!customElements.get("norn-page-toc")) customElements.define("norn-page-toc", PageToc);
+		if (!customElements.get("norn-toc")) customElements.define("norn-toc", Toc);
 	}
 </script>

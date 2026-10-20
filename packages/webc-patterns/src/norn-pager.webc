@@ -13,19 +13,19 @@
  * @prop {{ url: string, title: string }} [prev]
  * @prop {{ url: string, title: string }} [next]
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pager".
- * @cssprop --norn-page-pager-border - Rule above the links. Falls back to --norn-ui-border-color.
- * @cssprop --norn-page-pager-link - Link color. Falls back to --norn-text-accent.
+ * @cssprop --norn-pager-border - Rule above the links. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-pager-link - Link color. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
-<nav :aria-labelledby="'norn-page-pager-' + uid" webc:if="prev || next">
+<nav :aria-labelledby="'norn-pager-' + uid" webc:if="prev || next">
 	<a webc:if="prev" rel="prev" :href="prev.url" @text="prev.title"></a>
 	<a webc:if="next" rel="next" :href="next.url" @text="next.title"></a>
-	<span data-label :id="'norn-page-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-pager', 'label', $data.page) || 'Pager'"></span></slot></span>
+	<span data-label :id="'norn-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-pager', 'label', $data.page) || 'Pager'"></span></slot></span>
 </nav>
 <style>
 	@layer norn.components {
-		norn-page-pager {
+		norn-pager {
 			display: block;
 
 			& nav {
@@ -33,7 +33,7 @@
 				justify-content: space-between;
 				gap: var(--norn-space-m, t('space.m'));
 				padding-block-start: var(--norn-space-m, t('space.m'));
-				border-block-start: 1px solid var(--norn-page-pager-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-start: 1px solid var(--norn-pager-border, var(--norn-ui-border-color, t('ui.border.color')));
 			}
 
 			& nav > [data-label] {
@@ -46,7 +46,7 @@
 			}
 
 			& nav > a {
-				color: var(--norn-page-pager-link, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-pager-link, var(--norn-text-accent, t('text.accent')));
 				text-decoration: underline dotted;
 				text-decoration-thickness: 1px;
 				text-underline-offset: 0.2em;

@@ -30,7 +30,7 @@ facts:
   - Free & open source
   - "License: MPL-2.0"
 ---
-<norn-page-hero>
+<norn-hero>
 	<h1><span>Neutral fixture</span> <span>Generic patterns only</span></h1>
 	<p>A page frame and content components.</p>
 	<nav aria-label="Get started">
@@ -41,8 +41,8 @@ facts:
 	<norn-tag-list>
 		<li webc:for="fact of facts" @text="fact"></li>
 	</norn-tag-list>
-</norn-page-hero>
-<norn-page-section id="features">
+</norn-hero>
+<norn-section id="features">
 	<h2>Features</h2>
 	<norn-card-grid>
 		<li webc:for="item of features">
@@ -55,8 +55,8 @@ facts:
 			</norn-content-card>
 		</li>
 	</norn-card-grid>
-</norn-page-section>
-<norn-page-section id="packages">
+</norn-section>
+<norn-section id="packages">
 	<h2>Packages</h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="item of packages">
@@ -66,4 +66,4 @@ facts:
 			</norn-content-card>
 		</li>
 	</norn-card-grid>
-</norn-page-section>
+</norn-section>

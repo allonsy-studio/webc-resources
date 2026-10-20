@@ -63,10 +63,10 @@ describe("the catalog", () => {
 		const where = Object.fromEntries(catalog.categories.flatMap((category) => category.components.map((component) => [component.name, category.id])));
 		assert.equal(Object.keys(where).length, catalog.components.length, "each component in exactly one category");
 		assert.deepEqual(catalog.categories.map(({ id }) => id), ["layout", "landmark", "container", "component", "template", "document"]);
-		assert.equal(where["norn-card-grid"], "layout");
+		assert.equal(where["norn-card-grid"], "container");
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.equal(where[name], "landmark", name);
-		for (const name of ["norn-content-card", "norn-page-section"]) assert.equal(where[name], "container", name);
-		for (const name of ["norn-page-head", "oss-head"]) assert.equal(where[name], "document", name);
+		for (const name of ["norn-content-card", "norn-section"]) assert.equal(where[name], "container", name);
+		for (const name of ["norn-head", "oss-head"]) assert.equal(where[name], "document", name);
 		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces", "norn-workspace"]) assert.equal(where[name], "template", name);
 		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces"], "the layouts, and nothing else");
 	});
@@ -121,7 +121,7 @@ describe("the preview build", () => {
 	});
 
 	test("a head component says where it renders, and has no canvas", () => {
-		const html = pageFor(output, "/components/patterns/norn-page-head/");
+		const html = pageFor(output, "/components/patterns/norn-head/");
 		assert.ok(html.includes("Where it renders") && !html.includes("<preview-canvas"));
 	});
 

@@ -137,15 +137,15 @@ test("a compiled fallback is the default in tokens.json, resolved", () => {
 		}
 	}
 	assert.ok(checked > 100, "a real sweep");
-	const toc = compiled.get("webc-patterns/components/norn-page-toc.webc");
+	const toc = compiled.get("webc-patterns/components/norn-toc.webc");
 	assert.ok(toc.includes("gap: var(--norn-space-xs, 0.5rem);"), "a spacing step");
-	assert.ok(toc.includes("color: var(--norn-page-toc-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));"), "a component token falls back to the shared one");
+	assert.ok(toc.includes("color: var(--norn-toc-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));"), "a component token falls back to the shared one");
 });
 
-test("the base styles define no token: base.css sets color-scheme, norn-page-head declares the layer order, and the components carry the defaults", () => {
+test("the base styles define no token: base.css sets color-scheme, norn-head declares the layer order, and the components carry the defaults", () => {
 	const base = stylesheets.find(({ file }) => file === "webc-patterns/css/base.css").text;
 	assert.ok(/^@layer norn\.base \{\s*:root \{\s*color-scheme: light dark;/m.test(base));
-	const head = components.find(({ file }) => file === "webc-patterns/components/norn-page-head.webc").text;
+	const head = components.find(({ file }) => file === "webc-patterns/components/norn-head.webc").text;
 	assert.ok(head.includes("<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>"), "the order, inline");
 	assert.ok(head.indexOf("@layer norn.reset,") < head.indexOf("getBundleFileUrl('css')"), "ahead of the bundle link");
 	assert.ok(!head.includes("norn-foundation"), "no foundation bucket");
@@ -326,8 +326,8 @@ test("the leak check flags a descendant step from the host to the component's ow
 	for (const [name, selector, step] of [
 		["norn-card-grid", "norn-card-grid ul", "ul"],
 		["norn-card-grid", "norn-card-grid ul > li > *", "ul"],
-		["norn-page-section", "norn-page-section section", "section"],
-		["norn-page-section", "norn-page-section section > h2", "section"],
+		["norn-section", "norn-section section", "section"],
+		["norn-section", "norn-section section > h2", "section"],
 		["norn-content-card", "norn-content-card article", "article"],
 		["norn-content-card", "norn-content-card article > :is(h2, h3, h4, h5, h6) a", "article"],
 		["norn-footer", "norn-footer footer > div:first-child > * > ul", "footer"],
@@ -336,7 +336,7 @@ test("the leak check flags a descendant step from the host to the component's ow
 	}
 	for (const [name, selector] of [
 		["norn-card-grid", "norn-card-grid > ul > li > *"],
-		["norn-page-section", "norn-page-section > section > h2"],
+		["norn-section", "norn-section > section > h2"],
 		["norn-content-card", "norn-content-card > article > :is(h2, h3, h4, h5, h6) a"],
 		["norn-footer", "norn-footer > footer > div:first-child > :is(div, nav) > ul"],
 		["norn-footer", "norn-footer :where(p)"],
@@ -424,13 +424,13 @@ test("defaultStrings lists every string a component or layout looks up, with the
 		assert.ok(text?.includes(`nornComponentStrings?.('${component}', `), `${component} never looks up its strings`);
 		for (const [key, value] of Object.entries(keys)) {
 			if (value !== null) assert.ok(text.includes(value.replace(/: $/, "")), `${component}.${key}: the component's own default is not "${value}"`);
-			if (!["norn-call-out", "norn-page-notice"].includes(component)) assert.ok(looked.has(`${component}.${key}`), `${component}.${key} is never looked up`);
+			if (!["norn-call-out", "norn-notice"].includes(component)) assert.ok(looked.has(`${component}.${key}`), `${component}.${key} is never looked up`);
 		}
 	}
 });
 
 test("every component string is a named slot with the registry as its fallback, and none is a prop", () => {
-	const SLOT_OF = { "norn-call-out": "heading", "norn-page-notice": "prefix" };
+	const SLOT_OF = { "norn-call-out": "heading", "norn-notice": "prefix" };
 	for (const [component, keys] of Object.entries(defaultStrings).filter(([name]) => !LAYOUTS.includes(name))) {
 		const text = components.find(({ file }) => path.basename(file, ".webc") === component).text;
 		const slots = slotsOf(text);
@@ -457,10 +457,10 @@ test("no component writes a string into an aria-label or a data attribute for it
 });
 
 const FRENCH = {
-	"norn-page-toc": { label: "Sur cette page" },
+	"norn-toc": { label: "Sur cette page" },
 	"norn-search": { label: "Rechercher", none: "Aucun résultat", "results-one": "{count} résultat", "results-other": "{count} résultats" },
 	"norn-call-out": { tip: "Astuce" },
-	"norn-page-notice": { warning: "Attention : " },
+	"norn-notice": { warning: "Attention : " },
 	"norn-code-block": { label: "code {language}", "copy-label": "Copier le {name}" },
 	"norn-copy-button": { copy: "Copier", copied: "Copié", failed: "Échec" },
 	"norn-theme-toggle": { label: "Thème", light: "Clair", system: "Système", dark: "Sombre" },
@@ -471,14 +471,14 @@ const FRENCH = {
 test("componentStrings fills every component's slot fallbacks from one table", async () => {
 	const strings = FRENCH;
 	const items = "[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]";
-	const toc = await render(`<norn-page-toc :@items="${items}"></norn-page-toc>`, { strings });
+	const toc = await render(`<norn-toc :@items="${items}"></norn-toc>`, { strings });
 	const [, tocId] = toc.match(/<nav aria-labelledby="([^"]+)">/);
 	assert.ok(toc.includes(`<p id="${tocId}">Sur cette page</p>`), "the title names the landmark");
 	const search = unid(await render("<norn-search></norn-search>", { strings }));
 	assert.ok(search.includes("<span>Rechercher</span>") && search.includes('<span data-string="none">Aucun résultat</span>'));
 	assert.ok(search.includes('<span data-string="results-one">{count} résultat</span>') && search.includes('<span data-string="results-other">{count} résultats</span>'));
 	assert.match(await render('<norn-call-out @variant="tip"><p>x</p></norn-call-out>', { strings }), /<span>Astuce<\/span>/);
-	assert.ok((await render('<norn-page-notice @severity="warning"><p>x</p></norn-page-notice>', { strings })).includes("<span data-prefix>Attention : </span>"));
+	assert.ok((await render('<norn-notice @severity="warning"><p>x</p></norn-notice>', { strings })).includes("<span data-prefix>Attention : </span>"));
 	const code = unid(await render('<norn-code-block @language="js" @code="x"></norn-code-block>', { strings }));
 	assert.ok(code.includes("<span data-default>code js</span>") && code.includes('<span data-string="label">Copier le {name}</span>'));
 	assert.ok(code.includes('<span data-string="copy">Copier</span>') && code.includes('<span data-string="copied">Copié</span>') && code.includes('<span data-string="failed">Échec</span>'));
@@ -494,7 +494,7 @@ test("a string comes from the slot, else the registry, else the English default"
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings: FRENCH })).includes(">Aller au contenu</a>"), "the registry fills an empty slot");
 	assert.ok((await render("<norn-skip-link></norn-skip-link>")).includes(">Skip to content</a>"), "no helper registered");
 	assert.ok(unid(await render("<norn-breadcrumb-nav :@items=\"[{ url: '/', title: 'Accueil' }]\"></norn-breadcrumb-nav>", { strings: FRENCH })).includes("<span data-label>Breadcrumb</span>"), "a string the table leaves out keeps the English default");
-	const notice = await render('<norn-page-notice @severity="error"><span slot="prefix">Erreur : </span><p>x</p></norn-page-notice>', { strings: FRENCH });
+	const notice = await render('<norn-notice @severity="error"><span slot="prefix">Erreur : </span><p>x</p></norn-notice>', { strings: FRENCH });
 	assert.ok(notice.includes("<span data-prefix><span>Erreur : </span></span>"));
 	const callout = await render('<norn-call-out @variant="tip"><span slot="heading">Conseil</span><p>x</p></norn-call-out>', { strings: FRENCH });
 	assert.ok(callout.includes("<span>Conseil</span></p>") && !callout.includes("Astuce"));
@@ -610,7 +610,7 @@ test("norn-base places the four hooks through the nornHook helper, in page order
 test("norn-base embeds the base and print styles, and no layout reads site or project data", () => {
 	const base = layoutText("norn-base");
 	assert.ok(base.includes("<style>/* norn: css/base.css */</style>") && base.includes("<style>/* norn: css/print.css */</style>"), "the plugin fills both");
-	assert.ok(base.includes('<meta\n\t\t\twebc:is="norn-page-head"'), "the head, with the layer order first");
+	assert.ok(base.includes('<meta\n\t\t\twebc:is="norn-head"'), "the head, with the layer order first");
 	for (const { file, text } of layouts) {
 		const reads = new Set([...text.matchAll(/\$data\.(\w+)/g)].map(([, key]) => key));
 		const allowed = file.endsWith("norn-base.webc") ? ["norn", "page", "content", "layout"] : ["norn", "page", "content"];
@@ -639,51 +639,51 @@ test("a layout takes its texts from componentStrings under its own name, then En
 	assert.ok(!/View on GitHub|License:/.test(french));
 });
 
-/** Helpers a page head needs: the bundle links resolve after the render, so a test stands in for them. */
+/** Helpers `norn-head` needs: the bundle links resolve after the render, so a test stands in for them. */
 const HEAD_HELPERS = { getBundleFileUrl: () => "/bundle/x" };
 
-test("norn-page-head renders og:image, og:image:alt, and a large twitter:card when an image is set", async () => {
-	const html = await render('<meta webc:is="norn-page-head" webc:nokeep @title="Docs" @url="https://example.com/docs/" @og-image="https://cdn.example.com/card.png" @og-image-alt="A widget on a desk" />', { helpers: HEAD_HELPERS });
+test("norn-head renders og:image, og:image:alt, and a large twitter:card when an image is set", async () => {
+	const html = await render('<meta webc:is="norn-head" webc:nokeep @title="Docs" @url="https://example.com/docs/" @og-image="https://cdn.example.com/card.png" @og-image-alt="A widget on a desk" />', { helpers: HEAD_HELPERS });
 	assert.ok(html.includes('<meta property="og:image" content="https://cdn.example.com/card.png">'));
 	assert.ok(html.includes('<meta property="og:image:alt" content="A widget on a desk">'));
 	assert.ok(html.includes('<meta name="twitter:card" content="summary_large_image">'));
 	assert.equal(html.split('name="twitter:card"').length - 1, 1, "one card");
 });
 
-test("norn-page-head without an image renders no image tags and a summary twitter:card", async () => {
+test("norn-head without an image renders no image tags and a summary twitter:card", async () => {
 	for (const attrs of ['@url="https://example.com/docs/"', '@url="https://example.com/docs/" @og-image=""', '@url="https://example.com/docs/" @og-image-alt="Orphan alt"']) {
-		const html = await render(`<meta webc:is="norn-page-head" webc:nokeep @title="Docs" ${attrs} />`, { helpers: HEAD_HELPERS });
+		const html = await render(`<meta webc:is="norn-head" webc:nokeep @title="Docs" ${attrs} />`, { helpers: HEAD_HELPERS });
 		assert.ok(!html.includes("og:image"), `no og:image: ${attrs}`);
 		assert.ok(html.includes('<meta name="twitter:card" content="summary">'), `summary: ${attrs}`);
 	}
-	const page = await render('<meta webc:is="norn-page-head" webc:nokeep @title="Docs" />', { helpers: HEAD_HELPERS, data: { ogImage: { src: "/leak.png" } } });
+	const page = await render('<meta webc:is="norn-head" webc:nokeep @title="Docs" />', { helpers: HEAD_HELPERS, data: { ogImage: { src: "/leak.png" } } });
 	assert.ok(!page.includes("og:image"), "page data named ogImage is not read");
 });
 
-test("norn-page-head resolves a relative og-image against the canonical url", async () => {
-	const head = (image, url = "") => render(`<meta webc:is="norn-page-head" webc:nokeep @title="Docs" ${url ? `@url="${url}"` : ""} @og-image="${image}" />`, { helpers: HEAD_HELPERS });
+test("norn-head resolves a relative og-image against the canonical url", async () => {
+	const head = (image, url = "") => render(`<meta webc:is="norn-head" webc:nokeep @title="Docs" ${url ? `@url="${url}"` : ""} @og-image="${image}" />`, { helpers: HEAD_HELPERS });
 	assert.ok((await head("assets/card.png", "https://example.com/project/docs/")).includes('property="og:image" content="https://example.com/project/docs/assets/card.png"'), "relative to the page");
 	assert.ok((await head("/assets/card.png", "https://example.com/project/docs/")).includes('property="og:image" content="https://example.com/assets/card.png"'), "root-relative to the origin");
 	assert.ok((await head("../card.png", "https://example.com/project/docs/")).includes('property="og:image" content="https://example.com/project/card.png"'), "up a folder");
 	assert.ok((await head("https://cdn.example.com/card.png")).includes('content="https://cdn.example.com/card.png"'), "an absolute image needs no url");
 });
 
-test("norn-page-head warns and leaves out the image tags when a relative og-image has no absolute canonical url", async (t) => {
+test("norn-head warns and leaves out the image tags when a relative og-image has no absolute canonical url", async (t) => {
 	const warn = t.mock.method(console, "warn", () => {});
-	const head = (url = "") => render(`<meta webc:is="norn-page-head" webc:nokeep @title="Docs" ${url ? `@url="${url}"` : ""} @og-image="assets/card.png" @og-image-alt="A card" />`, { helpers: HEAD_HELPERS });
+	const head = (url = "") => render(`<meta webc:is="norn-head" webc:nokeep @title="Docs" ${url ? `@url="${url}"` : ""} @og-image="assets/card.png" @og-image-alt="A card" />`, { helpers: HEAD_HELPERS });
 	for (const [label, url] of [["no url", ""], ["a relative url", "/docs/"]]) {
 		warn.mock.resetCalls();
 		const html = await head(url);
 		assert.equal(warn.mock.callCount(), 1, `one warning: ${label}`);
 		const [message] = warn.mock.calls[0].arguments;
-		assert.match(message, /^norn-page-head: og-image "assets\/card.png" is relative/, label);
+		assert.match(message, /^norn-head: og-image "assets\/card.png" is relative/, label);
 		assert.match(message, /Pass an absolute og-image or url/, label);
 		assert.ok(!html.includes("og:image"), `no og:image or og:image:alt: ${label}`);
 		assert.ok(html.includes('<meta name="twitter:card" content="summary">'), `a summary card: ${label}`);
 		assert.ok(html.includes("<title>Docs</title>"), `the rest of the head renders: ${label}`);
 	}
 	warn.mock.resetCalls();
-	await render('<meta webc:is="norn-page-head" webc:nokeep @title="Docs" @url="https://example.com/" @og-image="card.png" />', { helpers: HEAD_HELPERS });
+	await render('<meta webc:is="norn-head" webc:nokeep @title="Docs" @url="https://example.com/" @og-image="card.png" />', { helpers: HEAD_HELPERS });
 	assert.equal(warn.mock.callCount(), 0, "no warning when the url is absolute");
 });
 
@@ -787,14 +787,14 @@ test("norn-svg-icon builds its whole svg in one expression, and the markup stays
 	assert.match(await render('<norn-svg-icon @name="check"><span slot="label">Done</span></norn-svg-icon>'), /<\/svg>\s*<span>Done<\/span>/, "the label follows the drawing");
 });
 
-test("norn-page-toc emits its escaped outline as it is, and heading text with markup stays text", async () => {
-	const markup = withoutDocs(components.find(({ file }) => file === "webc-patterns/components/norn-page-toc.webc").text).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
+test("norn-toc emits its escaped outline as it is, and heading text with markup stays text", async () => {
+	const markup = withoutDocs(components.find(({ file }) => file === "webc-patterns/components/norn-toc.webc").text).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
 	assert.ok(!/\s@html=/.test(markup) && /\s@raw="outline\(items\)"/.test(markup), "@raw, not @html, which would compile the escaped text again");
 	const items = JSON.stringify([
 		{ id: "a", text: "Use <b>bold</b> & <script>alert(1)</script>", level: 2 },
 		{ id: "b", text: 'The "quoted" part', level: 3 },
 	]);
-	const html = await render(`<norn-page-toc :@items='${items.replaceAll("'", "&#39;")}'></norn-page-toc>`);
+	const html = await render(`<norn-toc :@items='${items.replaceAll("'", "&#39;")}'></norn-toc>`);
 	assert.ok(html.includes("Use &lt;b&gt;bold&lt;/b&gt; &amp; &lt;script&gt;alert(1)&lt;/script&gt;"), "escaped text");
 	assert.ok(!html.includes("<b>") && !html.includes("<script"), "no element from heading text");
 	assert.match(html, /<li><a href="#a">[^]*<ol><li><a href="#b">The (?:"|&quot;)quoted(?:"|&quot;) part<\/a><\/li><\/ol><\/li>/, "nested by level");

@@ -7,17 +7,17 @@
  */
 
 /**
- * Page section, centered at a readable width. Start the slot with its heading, as in `<norn-page-section id="install"><h2>Install</h2>…</norn-page-section>`.
+ * Section, centered at a readable width. Start the slot with its heading, as in `<norn-section id="install"><h2>Install</h2>…</norn-section>`.
  * An `id` on the host is the anchor. The section is not a landmark: the heading carries the outline, and a labelled section would add a region landmark per section.
  * @slot - The heading, then the content.
- * @cssprop --norn-page-section-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-section-width - Content width. Falls back to 64rem.
  * @category container
  */
 --->
 <section><slot></slot></section>
 <style>
 	@layer norn.components {
-		norn-page-section {
+		norn-section {
 			display: block;
 			scroll-margin-block-start: var(--norn-space-m, t('space.m'));
 
@@ -27,7 +27,7 @@
 				grid-template-columns: minmax(0, 1fr);
 				align-content: start;
 				gap: var(--norn-space-m, t('space.m'));
-				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-page-section-width, 64rem));
+				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-section-width, 64rem));
 				margin-inline: auto;
 				padding-block: var(--norn-space-l, t('space.l'));
 			}

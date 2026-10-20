@@ -10,7 +10,7 @@ description: Every string a visitor sees or hears, in another language.
 	<span slot="results-one">{count} résultat</span>
 	<span slot="results-other">{count} résultats</span>
 </norn-search>
-<norn-page-notice lang="fr"><span slot="prefix">Remarque : </span><p>Le site change bientôt.</p></norn-page-notice>
+<norn-notice lang="fr"><span slot="prefix">Remarque : </span><p>Le site change bientôt.</p></norn-notice>
 <norn-data-table id="headed" lang="fr">
 	<table>
 		<thead><tr><th>Nom</th><th>Valeur</th><th>Description</th></tr></thead>
@@ -18,5 +18,5 @@ description: Every string a visitor sees or hears, in another language.
 	</table>
 </norn-data-table>
 <div dir="rtl" lang="ar">
-	<norn-page-pager :@prev="({ url: '/docs/one/', title: 'السابق' })" :@next="({ url: '/docs/two/', title: 'التالي' })"><span slot="label">الصفحات</span></norn-page-pager>
+	<norn-pager :@prev="({ url: '/docs/one/', title: 'السابق' })" :@next="({ url: '/docs/two/', title: 'التالي' })"><span slot="label">الصفحات</span></norn-pager>
 </div>

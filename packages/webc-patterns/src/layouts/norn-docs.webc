@@ -21,7 +21,7 @@ layout: norn-base.webc
  * @category template
  */
 --->
-<norn-page-layout>
+<norn-sidebar-layout>
 	<norn-side-nav slot="nav" :@items="$data.norn.docs">
 		<span slot="label" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
 		<norn-search
@@ -33,10 +33,10 @@ layout: norn-base.webc
 		></norn-search>
 	</norn-side-nav>
 	<h1 @text="$data.norn.title || ''"></h1>
-	<norn-page-toc :@items="nornHeadings($data.content)"></norn-page-toc>
+	<norn-toc :@items="nornHeadings($data.content)"></norn-toc>
 	<norn-rich-text data-pagefind-body><template webc:nokeep @html="$data.content"></template></norn-rich-text>
-	<norn-page-pager
+	<norn-pager
 		:@prev="$data.norn.prev !== undefined ? $data.norn.prev : nornAdjacent($data.norn.docs, $data.page).prev"
 		:@next="$data.norn.next !== undefined ? $data.norn.next : nornAdjacent($data.norn.docs, $data.page).next"
-	></norn-page-pager>
-</norn-page-layout>
+	></norn-pager>
+</norn-sidebar-layout>

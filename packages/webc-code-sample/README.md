@@ -70,7 +70,7 @@ An empty slot falls back to the site's strings from the patterns package's `comp
 
 The Norn layouts meet these. A layout of the project's own:
 
-- Links the page's bundles from the layout head, with `webc:keep` on both tags. WebC removes `<link>` and `<script src>` without it. `norn-page-head` does this.
+- Links the page's bundles from the layout head, with `webc:keep` on both tags. WebC removes `<link>` and `<script src>` without it. `norn-head` does this.
 
   ```html
   <link rel="stylesheet" :href="getBundleFileUrl('css')" webc:keep />
