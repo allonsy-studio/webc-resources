@@ -1,0 +1,336 @@
+@layer norn.components {
+		norn-content-card {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			grid-template-rows: var(--norn-content-card-rows, none);
+			block-size: 100%;
+
+			/* In a norn-card-grid the card spans three rows, one each for the heading, the body, and a footer, so they line up across a row. */
+			& > article {
+				box-sizing: border-box;
+				position: relative;
+				display: grid;
+				grid-row: 1 / -1;
+				grid-template-columns: minmax(0, 1fr);
+				grid-template-rows: var(--norn-content-card-rows, none);
+				align-content: start;
+				row-gap: 0;
+				block-size: 100%;
+				padding: var(--norn-content-card-padding, var(--norn-space-m, 1.25rem));
+				border: 1px solid var(--norn-content-card-border, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				border-radius: var(--norn-content-card-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-content-card-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%))));
+
+				/* A fourth child has no row to take, so a card with more than a heading, a body, and a footer lays out on its own. */
+				&:has(> :nth-child(4)) {
+					grid-template-rows: none;
+				}
+
+				&::before {
+					content: "";
+					position: absolute;
+					inset: -1px;
+					inline-size: calc(100% + 2px);
+					block-size: 0.6em;
+					border-radius: var(--norn-content-card-radius, var(--norn-ui-border-radius, 6px)) var(--norn-content-card-radius, var(--norn-ui-border-radius, 6px)) 0 0;
+					background: var(--norn-content-card-accent, var(--norn-card-accent, var(--norn-ui-accent, #2346d4)));
+				}
+			}
+
+			& > article > * {
+				margin: 0;
+			}
+
+			& > article > :not(:last-child) {
+				margin-block-end: var(--norn-space-s, 0.75rem);
+			}
+
+			& > article > :is(h2, h3, h4, h5, h6),
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: 1.2rem;
+				line-height: 1.15;
+				text-wrap: balance;
+			}
+
+			& > article > :is(h2, h3, h4, h5, h6) a,
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) a {
+				color: var(--norn-content-card-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				text-decoration: underline dotted;
+				text-decoration-thickness: 1px;
+				text-underline-offset: 0.2em;
+				overflow-wrap: anywhere;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration-style: solid;
+				}
+			}
+
+			& > article > p {
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				text-wrap: pretty;
+			}
+
+			@container style(--norn-content-card-title-face: mono) {
+				& > article > :is(h2, h3, h4, h5, h6),
+				& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
+					font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+					font-size: 1rem;
+					font-weight: 700;
+				}
+			}
+
+			@media print {
+				break-inside: avoid;
+			}
+		}
+	}
+@layer norn.components {
+		norn-card-grid {
+			display: block;
+
+			& > ul {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--norn-card-grid-min, 17rem)), 1fr));
+				gap: var(--norn-card-grid-gap, var(--norn-space-m, 1.25rem));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& > ul > li {
+				--norn-card-accent: var(--norn-card-grid-accent-1, var(--norn-feature-1, var(--norn-ui-accent, #2346d4)));
+
+				&:nth-child(4n + 2) {
+					--norn-card-accent: var(--norn-card-grid-accent-2, var(--norn-feature-2, ActiveText));
+				}
+
+				&:nth-child(4n + 3) {
+					--norn-card-accent: var(--norn-card-grid-accent-3, var(--norn-feature-3, VisitedText));
+				}
+
+				&:nth-child(4n + 4) {
+					--norn-card-accent: var(--norn-card-grid-accent-4, var(--norn-feature-4, GrayText));
+				}
+			}
+		}
+
+		/* Each card spans three rows, and its heading, body, and footer take one each, so they line up across a row. The rows have no gap, so a card with no footer leaves no blank space; the space between cards is a margin on each, taken back from the end of the list. */
+		@supports (grid-template-rows: subgrid) {
+			norn-card-grid {
+				& > ul {
+					row-gap: 0;
+					margin-block-end: calc(-1 * var(--norn-card-grid-gap, var(--norn-space-m, 1.25rem)));
+				}
+
+				& > ul > li {
+					display: grid;
+					grid-row: span 3;
+					grid-template-rows: subgrid;
+					--norn-content-card-rows: subgrid;
+					margin-block-end: var(--norn-card-grid-gap, var(--norn-space-m, 1.25rem));
+				}
+
+				& > ul > li > * {
+					grid-row: 1 / -1;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-skip-link {
+			display: block;
+
+			& a {
+				position: absolute;
+				inset-block-start: -5rem;
+				inset-inline-start: var(--norn-space-m, 1.25rem);
+				z-index: 10;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border: 1px solid var(--norn-skip-link-border, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				border-radius: var(--norn-skip-link-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-skip-link-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%))));
+				color: var(--norn-skip-link-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+
+				&:focus {
+					inset-block-start: var(--norn-space-xs, 0.5rem);
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		norn-header {
+			display: block;
+
+			& > header {
+				position: relative;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				border-block-end: 1px solid var(--norn-header-border, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				background: var(--norn-header-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%))));
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: auto 0 -1px;
+					block-size: var(--norn-header-stripe-size, 3px);
+					background: var(--norn-header-stripe, none);
+				}
+			}
+
+			& > header > a[rel="home"] {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-header-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: 1.2rem;
+				font-weight: 700;
+				text-decoration: none;
+			}
+
+			& > header > [rel="home"] img {
+				display: block;
+				inline-size: auto;
+				max-inline-size: 100%;
+				block-size: var(--norn-header-logo, 2rem);
+			}
+
+			& > header > nav:not(:has(a)) {
+				display: none;
+			}
+
+			& > header > nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem);
+				font-size: 0.95rem;
+			}
+
+			& > header > nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& > header > nav > a {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				color: var(--norn-header-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				text-decoration: underline dotted;
+				text-decoration-thickness: 1px;
+				text-underline-offset: 0.2em;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration-style: solid;
+				}
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		preview-overrides {
+			display: block;
+		}
+
+		preview-overrides:not(:defined) [data-js] {
+			display: none;
+		}
+
+		preview-overrides p {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: var(--norn-space-xs) var(--norn-space-m);
+			margin: 0;
+			padding: var(--norn-space-xs) var(--norn-space-m);
+			border-block-end: 1px solid var(--norn-ui-border-color);
+			background: var(--norn-surface-raised);
+			font-size: 0.9rem;
+		}
+
+		preview-overrides [hidden] {
+			display: none;
+		}
+
+		preview-overrides button {
+			padding: 0.15rem 0.6rem;
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-base);
+			color: var(--norn-text-base);
+			font: inherit;
+			cursor: pointer;
+		}
+
+		@media print {
+			preview-overrides {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		preview-nav {
+			display: block;
+			font-size: 0.95rem;
+		}
+
+		preview-nav details + details {
+			margin-block-start: var(--norn-space-s);
+		}
+
+		preview-nav summary {
+			padding-block: 0.25rem;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		preview-nav ul {
+			display: grid;
+			gap: 0.1rem;
+			margin-block: 0.25rem 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		preview-nav a {
+			display: block;
+			padding: 0.2rem var(--norn-space-s);
+			border-radius: var(--norn-ui-border-radius);
+			color: var(--norn-text-accent);
+			text-decoration: none;
+		}
+
+		preview-nav a:is(:hover, :focus-visible) {
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav a[aria-current="page"] {
+			background: var(--norn-surface-raised);
+			color: var(--norn-text-base);
+			font-weight: 700;
+		}
+
+		@media print {
+			preview-nav {
+				display: none;
+			}
+		}
+	}

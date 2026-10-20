@@ -1,0 +1,24 @@
+@layer norn.components {
+		norn-heading-anchor {
+			display: block;
+
+			& > :is(h2, h3, h4, h5, h6) {
+				margin: 0;
+				scroll-margin-block-start: var(--norn-space-m, 1.25rem);
+
+				&::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				}
+			}
+
+			/* At least 24px tall, the WCAG 2.2 target size, even for a short heading. */
+			& a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-underline-offset: 0.1em;
+			}
+		}
+	}

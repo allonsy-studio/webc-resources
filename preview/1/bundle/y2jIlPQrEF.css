@@ -1,0 +1,43 @@
+@layer norn.components {
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& a[data-variant] {
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5em;
+				min-block-size: 2.75rem;
+				padding: 0.6rem 1.1rem;
+				border: var(--norn-link-button-border-width, 1px) solid var(--norn-link-button-border, var(--norn-ui-accent, #2346d4));
+				border-radius: var(--norn-link-button-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-link-button-accent, var(--norn-ui-accent, #2346d4));
+				color: var(--norn-link-button-on-accent, var(--norn-text-on-accent, color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1)))));
+				font-weight: 700;
+				line-height: 1.3;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline-width: 2px;
+				}
+			}
+
+			& a[data-variant="quiet"] {
+				background: transparent;
+				color: var(--norn-link-button-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+			}
+
+			@media (forced-colors: active) {
+				& a[data-variant] {
+					border-color: LinkText;
+					color: LinkText;
+				}
+			}
+		}
+	}

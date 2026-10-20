@@ -1,0 +1,827 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-rich-text: Norn</title>
+<meta name="description" content="Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-rich-text: Norn">
+<meta property="og:description" content="Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/Il1HKpSs24.css">
+<script src="/webc-resources/preview/1/bundle/UakS5G-m4v.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/1/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/1/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/1/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<nav aria-labelledby="norn-header-webc-V43Ga"><span data-label="" id="norn-header-webc-V43Ga"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/1/">Components</a>
+			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
+		</nav>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/1/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details open="">
+		<summary>Layout</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Landmark</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Container</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-accordion-group/">norn-accordion-group</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-content-card/">norn-content-card</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/" aria-current="page">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Component</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/code-sample/norn-code-block/">norn-code-block</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/">norn-copy-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-search/">norn-search</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-segmented-control/">norn-segmented-control</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-svg-icon/">norn-svg-icon</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-tag-list/">norn-tag-list</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Template</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-base/">norn-base</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs/">norn-docs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs-home/">norn-docs-home</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-landing/">norn-landing</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces/">norn-workspaces</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Document</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
+			</li>
+		</ul>
+	</details>
+</nav>
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-rich-text</h1>
+<p class="lead">Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code. Wrap the content in it: <code>&lt;norn-rich-text&gt;&lt;template webc:nokeep @html="content"&gt;&lt;/template&gt;&lt;/norn-rich-text&gt;</code>.</p>
+<p class="meta">
+	<code>&lt;norn-rich-text&gt;</code>
+	a <span>container</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<h3>Every element</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-rich-text/default/" title="Every element preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-rich-text/default/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-rich-text>
+	<p>Prose styles cover what Markdown produces. A paragraph with <code>inline code</code> and a <a href=&quot;https://example.com/&quot;>link</a>.</p>
+	<h2>A second-level heading</h2>
+	<ul>
+		<li>A list item</li>
+		<li>Another, with enough text that it wraps in a narrow frame, to show the line length and the wrapping</li>
+	</ul>
+	<ol>
+		<li>First</li>
+		<li>Second</li>
+	</ol>
+	<h3>A third-level heading</h3>
+	<blockquote>A quotation, set off with a bar.</blockquote>
+	<table>
+		<thead><tr><th>Option</th><th>Default</th></tr></thead>
+		<tbody>
+			<tr><td><code>exclude</code></td><td><code>[]</code></td></tr>
+			<tr><td><code>prefix</code></td><td><code>&quot;/&quot;</code></td></tr>
+		</tbody>
+	</table>
+	<hr />
+	<p>After the rule.</p>
+</norn-rich-text>" data-strings="norn-code-block-webc-1Ghbk"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,15],[&quot;punctuation&quot;,15,16],[&quot;punctuation&quot;,18,19],[&quot;keyword&quot;,19,20],[&quot;punctuation&quot;,20,21],[&quot;punctuation&quot;,81,82],[&quot;keyword&quot;,82,86],[&quot;punctuation&quot;,86,87],[&quot;punctuation&quot;,98,100],[&quot;keyword&quot;,100,104],[&quot;punctuation&quot;,104,105],[&quot;punctuation&quot;,112,113],[&quot;keyword&quot;,113,114],[&quot;keyword&quot;,114,115],[&quot;function&quot;,115,119],[&quot;punctuation&quot;,119,120],[&quot;punctuation&quot;,120,121],[&quot;string&quot;,121,141],[&quot;punctuation&quot;,141,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,147,149],[&quot;keyword&quot;,149,150],[&quot;punctuation&quot;,150,151],[&quot;punctuation&quot;,152,154],[&quot;keyword&quot;,154,155],[&quot;punctuation&quot;,155,156],[&quot;punctuation&quot;,158,159],[&quot;keyword&quot;,159,161],[&quot;punctuation&quot;,161,162],[&quot;punctuation&quot;,184,186],[&quot;keyword&quot;,186,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,191,192],[&quot;keyword&quot;,192,194],[&quot;punctuation&quot;,194,195],[&quot;punctuation&quot;,198,199],[&quot;keyword&quot;,199,201],[&quot;punctuation&quot;,201,202],[&quot;punctuation&quot;,213,215],[&quot;keyword&quot;,215,217],[&quot;punctuation&quot;,217,218],[&quot;punctuation&quot;,221,222],[&quot;keyword&quot;,222,224],[&quot;punctuation&quot;,224,225],[&quot;punctuation&quot;,324,326],[&quot;keyword&quot;,326,328],[&quot;punctuation&quot;,328,329],[&quot;punctuation&quot;,331,333],[&quot;keyword&quot;,333,335],[&quot;punctuation&quot;,335,336],[&quot;punctuation&quot;,338,339],[&quot;keyword&quot;,339,341],[&quot;punctuation&quot;,341,342],[&quot;punctuation&quot;,345,346],[&quot;keyword&quot;,346,348],[&quot;punctuation&quot;,348,349],[&quot;punctuation&quot;,354,356],[&quot;keyword&quot;,356,358],[&quot;punctuation&quot;,358,359],[&quot;punctuation&quot;,362,363],[&quot;keyword&quot;,363,365],[&quot;punctuation&quot;,365,366],[&quot;punctuation&quot;,372,374],[&quot;keyword&quot;,374,376],[&quot;punctuation&quot;,376,377],[&quot;punctuation&quot;,379,381],[&quot;keyword&quot;,381,383],[&quot;punctuation&quot;,383,384],[&quot;punctuation&quot;,386,387],[&quot;keyword&quot;,387,389],[&quot;punctuation&quot;,389,390],[&quot;punctuation&quot;,411,413],[&quot;keyword&quot;,413,415],[&quot;punctuation&quot;,415,416],[&quot;punctuation&quot;,418,419],[&quot;keyword&quot;,419,429],[&quot;punctuation&quot;,429,430],[&quot;punctuation&quot;,462,464],[&quot;keyword&quot;,464,474],[&quot;punctuation&quot;,474,475],[&quot;punctuation&quot;,477,478],[&quot;keyword&quot;,478,483],[&quot;punctuation&quot;,483,484],[&quot;punctuation&quot;,487,488],[&quot;keyword&quot;,488,493],[&quot;punctuation&quot;,493,494],[&quot;punctuation&quot;,494,495],[&quot;keyword&quot;,495,497],[&quot;punctuation&quot;,497,498],[&quot;punctuation&quot;,498,499],[&quot;keyword&quot;,499,501],[&quot;punctuation&quot;,501,502],[&quot;punctuation&quot;,508,510],[&quot;keyword&quot;,510,512],[&quot;punctuation&quot;,512,513],[&quot;punctuation&quot;,513,514],[&quot;keyword&quot;,514,516],[&quot;punctuation&quot;,516,517],[&quot;punctuation&quot;,524,526],[&quot;keyword&quot;,526,528],[&quot;punctuation&quot;,528,529],[&quot;punctuation&quot;,529,531],[&quot;keyword&quot;,531,533],[&quot;punctuation&quot;,533,534],[&quot;punctuation&quot;,534,536],[&quot;keyword&quot;,536,541],[&quot;punctuation&quot;,541,542],[&quot;punctuation&quot;,545,546],[&quot;keyword&quot;,546,551],[&quot;punctuation&quot;,551,552],[&quot;punctuation&quot;,556,557],[&quot;keyword&quot;,557,559],[&quot;punctuation&quot;,559,560],[&quot;punctuation&quot;,560,561],[&quot;keyword&quot;,561,563],[&quot;punctuation&quot;,563,564],[&quot;punctuation&quot;,564,565],[&quot;keyword&quot;,565,569],[&quot;punctuation&quot;,569,570],[&quot;punctuation&quot;,577,579],[&quot;keyword&quot;,579,583],[&quot;punctuation&quot;,583,584],[&quot;punctuation&quot;,584,586],[&quot;keyword&quot;,586,588],[&quot;punctuation&quot;,588,589],[&quot;punctuation&quot;,589,590],[&quot;keyword&quot;,590,592],[&quot;punctuation&quot;,592,593],[&quot;punctuation&quot;,593,594],[&quot;keyword&quot;,594,598],[&quot;punctuation&quot;,598,599],[&quot;punctuation&quot;,601,603],[&quot;keyword&quot;,603,607],[&quot;punctuation&quot;,607,608],[&quot;punctuation&quot;,608,610],[&quot;keyword&quot;,610,612],[&quot;punctuation&quot;,612,613],[&quot;punctuation&quot;,613,615],[&quot;keyword&quot;,615,617],[&quot;punctuation&quot;,617,618],[&quot;punctuation&quot;,622,623],[&quot;keyword&quot;,623,625],[&quot;punctuation&quot;,625,626],[&quot;punctuation&quot;,626,627],[&quot;keyword&quot;,627,629],[&quot;punctuation&quot;,629,630],[&quot;punctuation&quot;,630,631],[&quot;keyword&quot;,631,635],[&quot;punctuation&quot;,635,636],[&quot;punctuation&quot;,642,644],[&quot;keyword&quot;,644,648],[&quot;punctuation&quot;,648,649],[&quot;punctuation&quot;,649,651],[&quot;keyword&quot;,651,653],[&quot;punctuation&quot;,653,654],[&quot;punctuation&quot;,654,655],[&quot;keyword&quot;,655,657],[&quot;punctuation&quot;,657,658],[&quot;punctuation&quot;,658,659],[&quot;keyword&quot;,659,663],[&quot;punctuation&quot;,663,664],[&quot;punctuation&quot;,667,669],[&quot;keyword&quot;,669,673],[&quot;punctuation&quot;,673,674],[&quot;punctuation&quot;,674,676],[&quot;keyword&quot;,676,678],[&quot;punctuation&quot;,678,679],[&quot;punctuation&quot;,679,681],[&quot;keyword&quot;,681,683],[&quot;punctuation&quot;,683,684],[&quot;punctuation&quot;,687,689],[&quot;keyword&quot;,689,694],[&quot;punctuation&quot;,694,695],[&quot;punctuation&quot;,697,699],[&quot;keyword&quot;,699,704],[&quot;punctuation&quot;,704,705],[&quot;punctuation&quot;,707,708],[&quot;keyword&quot;,708,710],[&quot;keyword&quot;,710,711],[&quot;punctuation&quot;,711,713],[&quot;punctuation&quot;,715,716],[&quot;keyword&quot;,716,717],[&quot;punctuation&quot;,717,718],[&quot;punctuation&quot;,733,735],[&quot;keyword&quot;,735,736],[&quot;punctuation&quot;,736,737],[&quot;punctuation&quot;,738,740],[&quot;keyword&quot;,740,754],[&quot;punctuation&quot;,754,755]]">&lt;norn-rich-text&gt;
+	&lt;p&gt;Prose styles cover what Markdown produces. A paragraph with &lt;code&gt;inline code&lt;/code&gt; and a &lt;a href="https://example.com/"&gt;link&lt;/a&gt;.&lt;/p&gt;
+	&lt;h2&gt;A second-level heading&lt;/h2&gt;
+	&lt;ul&gt;
+		&lt;li&gt;A list item&lt;/li&gt;
+		&lt;li&gt;Another, with enough text that it wraps in a narrow frame, to show the line length and the wrapping&lt;/li&gt;
+	&lt;/ul&gt;
+	&lt;ol&gt;
+		&lt;li&gt;First&lt;/li&gt;
+		&lt;li&gt;Second&lt;/li&gt;
+	&lt;/ol&gt;
+	&lt;h3&gt;A third-level heading&lt;/h3&gt;
+	&lt;blockquote&gt;A quotation, set off with a bar.&lt;/blockquote&gt;
+	&lt;table&gt;
+		&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Option&lt;/th&gt;&lt;th&gt;Default&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;exclude&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;[]&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;prefix&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"/"&lt;/code&gt;&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+	&lt;hr /&gt;
+	&lt;p&gt;After the rule.&lt;/p&gt;
+&lt;/norn-rich-text&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-1Ghbk">
+		<span data-string="label" id="norn-code-block-webc-1Ghbk-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Heading anchors</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-rich-text/headings/" title="Heading anchors preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-rich-text/headings/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-rich-text>
+	<norn-heading-anchor @slug=&quot;first&quot;>A linked second-level heading</norn-heading-anchor>
+	<p>The heading anchor gives its own space above, and prose after it keeps the rhythm.</p>
+	<norn-heading-anchor @slug=&quot;second&quot; :@level=&quot;3&quot;>A linked third-level heading</norn-heading-anchor>
+	<p>The same space applies to the third level.</p>
+</norn-rich-text>" data-strings="norn-code-block-webc-tJ4r8"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,15],[&quot;punctuation&quot;,15,16],[&quot;punctuation&quot;,18,19],[&quot;keyword&quot;,19,38],[&quot;keyword&quot;,38,39],[&quot;function&quot;,39,44],[&quot;punctuation&quot;,44,45],[&quot;punctuation&quot;,45,46],[&quot;string&quot;,46,51],[&quot;punctuation&quot;,51,52],[&quot;punctuation&quot;,52,53],[&quot;punctuation&quot;,82,84],[&quot;keyword&quot;,84,103],[&quot;punctuation&quot;,103,104],[&quot;punctuation&quot;,106,107],[&quot;keyword&quot;,107,108],[&quot;punctuation&quot;,108,109],[&quot;punctuation&quot;,191,193],[&quot;keyword&quot;,193,194],[&quot;punctuation&quot;,194,195],[&quot;punctuation&quot;,197,198],[&quot;keyword&quot;,198,217],[&quot;keyword&quot;,217,218],[&quot;function&quot;,218,223],[&quot;punctuation&quot;,223,224],[&quot;punctuation&quot;,224,225],[&quot;string&quot;,225,231],[&quot;punctuation&quot;,231,232],[&quot;keyword&quot;,232,233],[&quot;function&quot;,233,240],[&quot;punctuation&quot;,240,241],[&quot;punctuation&quot;,241,242],[&quot;string&quot;,242,243],[&quot;punctuation&quot;,243,244],[&quot;punctuation&quot;,244,245],[&quot;punctuation&quot;,273,275],[&quot;keyword&quot;,275,294],[&quot;punctuation&quot;,294,295],[&quot;punctuation&quot;,297,298],[&quot;keyword&quot;,298,299],[&quot;punctuation&quot;,299,300],[&quot;punctuation&quot;,342,344],[&quot;keyword&quot;,344,345],[&quot;punctuation&quot;,345,346],[&quot;punctuation&quot;,347,349],[&quot;keyword&quot;,349,363],[&quot;punctuation&quot;,363,364]]">&lt;norn-rich-text&gt;
+	&lt;norn-heading-anchor @slug="first"&gt;A linked second-level heading&lt;/norn-heading-anchor&gt;
+	&lt;p&gt;The heading anchor gives its own space above, and prose after it keeps the rhythm.&lt;/p&gt;
+	&lt;norn-heading-anchor @slug="second" :@level="3"&gt;A linked third-level heading&lt;/norn-heading-anchor&gt;
+	&lt;p&gt;The same space applies to the third level.&lt;/p&gt;
+&lt;/norn-rich-text&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-tJ4r8">
+		<span data-string="label" id="norn-code-block-webc-tJ4r8-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Images and pictures</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-rich-text/images/" title="Images and pictures preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-rich-text/images/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-rich-text>
+	<p>A picture never overflows the column.</p>
+	<picture>
+		<source media=&quot;(min-width: 600px)&quot; srcset=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
+		<img alt=&quot;A wide gray bar&quot; src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
+	</picture>
+</norn-rich-text>" data-strings="norn-code-block-webc-QpW5M"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,15],[&quot;punctuation&quot;,15,16],[&quot;punctuation&quot;,18,19],[&quot;keyword&quot;,19,20],[&quot;punctuation&quot;,20,21],[&quot;punctuation&quot;,58,60],[&quot;keyword&quot;,60,61],[&quot;punctuation&quot;,61,62],[&quot;punctuation&quot;,64,65],[&quot;keyword&quot;,65,72],[&quot;punctuation&quot;,72,73],[&quot;punctuation&quot;,76,77],[&quot;keyword&quot;,77,83],[&quot;keyword&quot;,83,84],[&quot;function&quot;,84,89],[&quot;punctuation&quot;,89,90],[&quot;punctuation&quot;,90,91],[&quot;string&quot;,91,109],[&quot;punctuation&quot;,109,110],[&quot;keyword&quot;,110,111],[&quot;function&quot;,111,117],[&quot;punctuation&quot;,117,118],[&quot;punctuation&quot;,118,119],[&quot;string&quot;,119,269],[&quot;punctuation&quot;,269,270],[&quot;keyword&quot;,270,271],[&quot;punctuation&quot;,271,273],[&quot;punctuation&quot;,276,277],[&quot;keyword&quot;,277,280],[&quot;keyword&quot;,280,281],[&quot;function&quot;,281,284],[&quot;punctuation&quot;,284,285],[&quot;punctuation&quot;,285,286],[&quot;string&quot;,286,301],[&quot;punctuation&quot;,301,302],[&quot;keyword&quot;,302,303],[&quot;function&quot;,303,306],[&quot;punctuation&quot;,306,307],[&quot;punctuation&quot;,307,308],[&quot;string&quot;,308,458],[&quot;punctuation&quot;,458,459],[&quot;keyword&quot;,459,460],[&quot;punctuation&quot;,460,462],[&quot;punctuation&quot;,464,466],[&quot;keyword&quot;,466,473],[&quot;punctuation&quot;,473,474],[&quot;punctuation&quot;,475,477],[&quot;keyword&quot;,477,491],[&quot;punctuation&quot;,491,492]]">&lt;norn-rich-text&gt;
+	&lt;p&gt;A picture never overflows the column.&lt;/p&gt;
+	&lt;picture&gt;
+		&lt;source media="(min-width: 600px)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" /&gt;
+		&lt;img alt="A wide gray bar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" /&gt;
+	&lt;/picture&gt;
+&lt;/norn-rich-text&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-QpW5M">
+		<span data-string="label" id="norn-code-block-webc-QpW5M-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+
+
+	<h2>Slots</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>default</code></th>
+				<td>The prose, as rendered HTML.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Custom properties</h2>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Property</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td><code>#2346d4</code></td>
+			<td>
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-rich-text-measure</code><small>Line length.</small></th>
+			<td data-col="type"><code>&lt;length&gt;</code></td>
+			<td>
+				
+					<code>--norn-text-measure</code>
+					<small>40em</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-rich-text-measure" aria-label="Override --norn-rich-text-measure" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-rich-text-measure" aria-label="Reset --norn-rich-text-measure" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-rich-text-rule</code><small>Rules in tables and dividers, and the quote bar.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-ui-border-color</code>
+					<small>light-dark(#d3d8e2, #2d323e)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-rich-text-rule" aria-label="Override --norn-rich-text-rule" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-rich-text-rule" aria-label="Reset --norn-rich-text-rule" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-rich-text-code-bg</code><small>Inline code background.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-surface-code</code>
+					<small>light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%))</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-rich-text-code-bg" aria-label="Override --norn-rich-text-code-bg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-rich-text-code-bg" aria-label="Reset --norn-rich-text-code-bg" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>

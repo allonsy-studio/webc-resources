@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-segmented-control: Norn</title>
+<meta name="description" content="A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-segmented-control: Norn">
+<meta property="og:description" content="A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/Il1HKpSs24.css">
+<script src="/webc-resources/preview/1/bundle/UakS5G-m4v.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/1/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/1/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/1/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<nav aria-labelledby="norn-header-webc-fsFyK"><span data-label="" id="norn-header-webc-fsFyK"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/1/">Components</a>
+			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
+		</nav>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/1/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details open="">
+		<summary>Layout</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Landmark</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Container</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-accordion-group/">norn-accordion-group</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-content-card/">norn-content-card</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Component</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/code-sample/norn-code-block/">norn-code-block</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/">norn-copy-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-search/">norn-search</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-segmented-control/" aria-current="page">norn-segmented-control</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-svg-icon/">norn-svg-icon</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-tag-list/">norn-tag-list</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Template</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-base/">norn-base</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs/">norn-docs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs-home/">norn-docs-home</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-landing/">norn-landing</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces/">norn-workspaces</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Document</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
+			</li>
+		</ul>
+	</details>
+</nav>
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-segmented-control</h1>
+<p class="lead">A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value. Each option is a <code>&lt;label&gt;</code> holding an <code>&lt;input type="radio"&gt;</code>, an optional <code>norn-svg-icon</code>, and its text in a <code>&lt;span&gt;</code>. Give the radios one <code>name</code>, and the labels a <code>title</code> when the text is hidden. A thumb slides to the checked option, unless motion is reduced. Up to eight options, drawn at equal widths. A component that builds one from its own props passes <code>@legend</code>, <code>@name</code>, and <code>:@options</code> instead, since its props don't reach slot content.</p>
+<p class="meta">
+	<code>&lt;norn-segmented-control&gt;</code>
+	a <span>component</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<h3>Text options</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-segmented-control/text/" title="Text options preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-segmented-control/text/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-segmented-control>
+	<span slot=&quot;legend&quot;>View</span>
+	<label><input type=&quot;radio&quot; name=&quot;view&quot; value=&quot;list&quot; checked /><span>List</span></label>
+	<label><input type=&quot;radio&quot; name=&quot;view&quot; value=&quot;grid&quot; /><span>Grid</span></label>
+	<label><input type=&quot;radio&quot; name=&quot;view&quot; value=&quot;table&quot; /><span>Table</span></label>
+</norn-segmented-control>" data-strings="norn-code-block-webc-GMJWQ"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,23],[&quot;punctuation&quot;,23,24],[&quot;punctuation&quot;,26,27],[&quot;keyword&quot;,27,31],[&quot;keyword&quot;,31,32],[&quot;function&quot;,32,36],[&quot;punctuation&quot;,36,37],[&quot;punctuation&quot;,37,38],[&quot;string&quot;,38,44],[&quot;punctuation&quot;,44,45],[&quot;punctuation&quot;,45,46],[&quot;punctuation&quot;,50,52],[&quot;keyword&quot;,52,56],[&quot;punctuation&quot;,56,57],[&quot;punctuation&quot;,59,60],[&quot;keyword&quot;,60,65],[&quot;punctuation&quot;,65,66],[&quot;punctuation&quot;,66,67],[&quot;keyword&quot;,67,72],[&quot;keyword&quot;,72,73],[&quot;function&quot;,73,77],[&quot;punctuation&quot;,77,78],[&quot;punctuation&quot;,78,79],[&quot;string&quot;,79,84],[&quot;punctuation&quot;,84,85],[&quot;keyword&quot;,85,86],[&quot;function&quot;,86,90],[&quot;punctuation&quot;,90,91],[&quot;punctuation&quot;,91,92],[&quot;string&quot;,92,96],[&quot;punctuation&quot;,96,97],[&quot;keyword&quot;,97,98],[&quot;function&quot;,98,103],[&quot;punctuation&quot;,103,104],[&quot;punctuation&quot;,104,105],[&quot;string&quot;,105,109],[&quot;punctuation&quot;,109,110],[&quot;keyword&quot;,110,111],[&quot;function&quot;,111,118],[&quot;keyword&quot;,118,119],[&quot;punctuation&quot;,119,121],[&quot;punctuation&quot;,121,122],[&quot;keyword&quot;,122,126],[&quot;punctuation&quot;,126,127],[&quot;punctuation&quot;,131,133],[&quot;keyword&quot;,133,137],[&quot;punctuation&quot;,137,138],[&quot;punctuation&quot;,138,140],[&quot;keyword&quot;,140,145],[&quot;punctuation&quot;,145,146],[&quot;punctuation&quot;,148,149],[&quot;keyword&quot;,149,154],[&quot;punctuation&quot;,154,155],[&quot;punctuation&quot;,155,156],[&quot;keyword&quot;,156,161],[&quot;keyword&quot;,161,162],[&quot;function&quot;,162,166],[&quot;punctuation&quot;,166,167],[&quot;punctuation&quot;,167,168],[&quot;string&quot;,168,173],[&quot;punctuation&quot;,173,174],[&quot;keyword&quot;,174,175],[&quot;function&quot;,175,179],[&quot;punctuation&quot;,179,180],[&quot;punctuation&quot;,180,181],[&quot;string&quot;,181,185],[&quot;punctuation&quot;,185,186],[&quot;keyword&quot;,186,187],[&quot;function&quot;,187,192],[&quot;punctuation&quot;,192,193],[&quot;punctuation&quot;,193,194],[&quot;string&quot;,194,198],[&quot;punctuation&quot;,198,199],[&quot;keyword&quot;,199,200],[&quot;punctuation&quot;,200,202],[&quot;punctuation&quot;,202,203],[&quot;keyword&quot;,203,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,212,214],[&quot;keyword&quot;,214,218],[&quot;punctuation&quot;,218,219],[&quot;punctuation&quot;,219,221],[&quot;keyword&quot;,221,226],[&quot;punctuation&quot;,226,227],[&quot;punctuation&quot;,229,230],[&quot;keyword&quot;,230,235],[&quot;punctuation&quot;,235,236],[&quot;punctuation&quot;,236,237],[&quot;keyword&quot;,237,242],[&quot;keyword&quot;,242,243],[&quot;function&quot;,243,247],[&quot;punctuation&quot;,247,248],[&quot;punctuation&quot;,248,249],[&quot;string&quot;,249,254],[&quot;punctuation&quot;,254,255],[&quot;keyword&quot;,255,256],[&quot;function&quot;,256,260],[&quot;punctuation&quot;,260,261],[&quot;punctuation&quot;,261,262],[&quot;string&quot;,262,266],[&quot;punctuation&quot;,266,267],[&quot;keyword&quot;,267,268],[&quot;function&quot;,268,273],[&quot;punctuation&quot;,273,274],[&quot;punctuation&quot;,274,275],[&quot;string&quot;,275,280],[&quot;punctuation&quot;,280,281],[&quot;keyword&quot;,281,282],[&quot;punctuation&quot;,282,284],[&quot;punctuation&quot;,284,285],[&quot;keyword&quot;,285,289],[&quot;punctuation&quot;,289,290],[&quot;punctuation&quot;,295,297],[&quot;keyword&quot;,297,301],[&quot;punctuation&quot;,301,302],[&quot;punctuation&quot;,302,304],[&quot;keyword&quot;,304,309],[&quot;punctuation&quot;,309,310],[&quot;punctuation&quot;,311,313],[&quot;keyword&quot;,313,335],[&quot;punctuation&quot;,335,336]]">&lt;norn-segmented-control&gt;
+	&lt;span slot="legend"&gt;View&lt;/span&gt;
+	&lt;label&gt;&lt;input type="radio" name="view" value="list" checked /&gt;&lt;span&gt;List&lt;/span&gt;&lt;/label&gt;
+	&lt;label&gt;&lt;input type="radio" name="view" value="grid" /&gt;&lt;span&gt;Grid&lt;/span&gt;&lt;/label&gt;
+	&lt;label&gt;&lt;input type="radio" name="view" value="table" /&gt;&lt;span&gt;Table&lt;/span&gt;&lt;/label&gt;
+&lt;/norn-segmented-control&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-GMJWQ">
+		<span data-string="label" id="norn-code-block-webc-GMJWQ-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Icon options</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-segmented-control/icons/" title="Icon options preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-segmented-control/icons/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-segmented-control :@icon-only=&quot;true&quot;>
+	<span slot=&quot;legend&quot;>Color scheme</span>
+	<label title=&quot;Light&quot;><input type=&quot;radio&quot; name=&quot;scheme&quot; value=&quot;light&quot; /><norn-svg-icon @name=&quot;sun&quot;></norn-svg-icon><span>Light</span></label>
+	<label title=&quot;System&quot;><input type=&quot;radio&quot; name=&quot;scheme&quot; value=&quot;&quot; checked /><norn-svg-icon @name=&quot;system&quot;></norn-svg-icon><span>System</span></label>
+	<label title=&quot;Dark&quot;><input type=&quot;radio&quot; name=&quot;scheme&quot; value=&quot;dark&quot; /><norn-svg-icon @name=&quot;moon&quot;></norn-svg-icon><span>Dark</span></label>
+</norn-segmented-control>" data-strings="norn-code-block-webc-eze5F"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,23],[&quot;keyword&quot;,23,24],[&quot;function&quot;,24,35],[&quot;punctuation&quot;,35,36],[&quot;punctuation&quot;,36,37],[&quot;string&quot;,37,41],[&quot;punctuation&quot;,41,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,45,46],[&quot;keyword&quot;,46,50],[&quot;keyword&quot;,50,51],[&quot;function&quot;,51,55],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;string&quot;,57,63],[&quot;punctuation&quot;,63,64],[&quot;punctuation&quot;,64,65],[&quot;punctuation&quot;,77,79],[&quot;keyword&quot;,79,83],[&quot;punctuation&quot;,83,84],[&quot;punctuation&quot;,86,87],[&quot;keyword&quot;,87,92],[&quot;keyword&quot;,92,93],[&quot;function&quot;,93,98],[&quot;punctuation&quot;,98,99],[&quot;punctuation&quot;,99,100],[&quot;string&quot;,100,105],[&quot;punctuation&quot;,105,106],[&quot;punctuation&quot;,106,107],[&quot;punctuation&quot;,107,108],[&quot;keyword&quot;,108,113],[&quot;keyword&quot;,113,114],[&quot;function&quot;,114,118],[&quot;punctuation&quot;,118,119],[&quot;punctuation&quot;,119,120],[&quot;string&quot;,120,125],[&quot;punctuation&quot;,125,126],[&quot;keyword&quot;,126,127],[&quot;function&quot;,127,131],[&quot;punctuation&quot;,131,132],[&quot;punctuation&quot;,132,133],[&quot;string&quot;,133,139],[&quot;punctuation&quot;,139,140],[&quot;keyword&quot;,140,141],[&quot;function&quot;,141,146],[&quot;punctuation&quot;,146,147],[&quot;punctuation&quot;,147,148],[&quot;string&quot;,148,153],[&quot;punctuation&quot;,153,154],[&quot;keyword&quot;,154,155],[&quot;punctuation&quot;,155,157],[&quot;punctuation&quot;,157,158],[&quot;keyword&quot;,158,171],[&quot;keyword&quot;,171,172],[&quot;function&quot;,172,177],[&quot;punctuation&quot;,177,178],[&quot;punctuation&quot;,178,179],[&quot;string&quot;,179,182],[&quot;punctuation&quot;,182,183],[&quot;punctuation&quot;,183,184],[&quot;punctuation&quot;,184,186],[&quot;keyword&quot;,186,199],[&quot;punctuation&quot;,199,200],[&quot;punctuation&quot;,200,201],[&quot;keyword&quot;,201,205],[&quot;punctuation&quot;,205,206],[&quot;punctuation&quot;,211,213],[&quot;keyword&quot;,213,217],[&quot;punctuation&quot;,217,218],[&quot;punctuation&quot;,218,220],[&quot;keyword&quot;,220,225],[&quot;punctuation&quot;,225,226],[&quot;punctuation&quot;,228,229],[&quot;keyword&quot;,229,234],[&quot;keyword&quot;,234,235],[&quot;function&quot;,235,240],[&quot;punctuation&quot;,240,241],[&quot;punctuation&quot;,241,242],[&quot;string&quot;,242,248],[&quot;punctuation&quot;,248,249],[&quot;punctuation&quot;,249,250],[&quot;punctuation&quot;,250,251],[&quot;keyword&quot;,251,256],[&quot;keyword&quot;,256,257],[&quot;function&quot;,257,261],[&quot;punctuation&quot;,261,262],[&quot;punctuation&quot;,262,263],[&quot;string&quot;,263,268],[&quot;punctuation&quot;,268,269],[&quot;keyword&quot;,269,270],[&quot;function&quot;,270,274],[&quot;punctuation&quot;,274,275],[&quot;punctuation&quot;,275,276],[&quot;string&quot;,276,282],[&quot;punctuation&quot;,282,283],[&quot;keyword&quot;,283,284],[&quot;function&quot;,284,289],[&quot;punctuation&quot;,289,290],[&quot;punctuation&quot;,290,291],[&quot;punctuation&quot;,291,292],[&quot;keyword&quot;,292,293],[&quot;function&quot;,293,300],[&quot;keyword&quot;,300,301],[&quot;punctuation&quot;,301,303],[&quot;punctuation&quot;,303,304],[&quot;keyword&quot;,304,317],[&quot;keyword&quot;,317,318],[&quot;function&quot;,318,323],[&quot;punctuation&quot;,323,324],[&quot;punctuation&quot;,324,325],[&quot;string&quot;,325,331],[&quot;punctuation&quot;,331,332],[&quot;punctuation&quot;,332,333],[&quot;punctuation&quot;,333,335],[&quot;keyword&quot;,335,348],[&quot;punctuation&quot;,348,349],[&quot;punctuation&quot;,349,350],[&quot;keyword&quot;,350,354],[&quot;punctuation&quot;,354,355],[&quot;punctuation&quot;,361,363],[&quot;keyword&quot;,363,367],[&quot;punctuation&quot;,367,368],[&quot;punctuation&quot;,368,370],[&quot;keyword&quot;,370,375],[&quot;punctuation&quot;,375,376],[&quot;punctuation&quot;,378,379],[&quot;keyword&quot;,379,384],[&quot;keyword&quot;,384,385],[&quot;function&quot;,385,390],[&quot;punctuation&quot;,390,391],[&quot;punctuation&quot;,391,392],[&quot;string&quot;,392,396],[&quot;punctuation&quot;,396,397],[&quot;punctuation&quot;,397,398],[&quot;punctuation&quot;,398,399],[&quot;keyword&quot;,399,404],[&quot;keyword&quot;,404,405],[&quot;function&quot;,405,409],[&quot;punctuation&quot;,409,410],[&quot;punctuation&quot;,410,411],[&quot;string&quot;,411,416],[&quot;punctuation&quot;,416,417],[&quot;keyword&quot;,417,418],[&quot;function&quot;,418,422],[&quot;punctuation&quot;,422,423],[&quot;punctuation&quot;,423,424],[&quot;string&quot;,424,430],[&quot;punctuation&quot;,430,431],[&quot;keyword&quot;,431,432],[&quot;function&quot;,432,437],[&quot;punctuation&quot;,437,438],[&quot;punctuation&quot;,438,439],[&quot;string&quot;,439,443],[&quot;punctuation&quot;,443,444],[&quot;keyword&quot;,444,445],[&quot;punctuation&quot;,445,447],[&quot;punctuation&quot;,447,448],[&quot;keyword&quot;,448,461],[&quot;keyword&quot;,461,462],[&quot;function&quot;,462,467],[&quot;punctuation&quot;,467,468],[&quot;punctuation&quot;,468,469],[&quot;string&quot;,469,473],[&quot;punctuation&quot;,473,474],[&quot;punctuation&quot;,474,475],[&quot;punctuation&quot;,475,477],[&quot;keyword&quot;,477,490],[&quot;punctuation&quot;,490,491],[&quot;punctuation&quot;,491,492],[&quot;keyword&quot;,492,496],[&quot;punctuation&quot;,496,497],[&quot;punctuation&quot;,501,503],[&quot;keyword&quot;,503,507],[&quot;punctuation&quot;,507,508],[&quot;punctuation&quot;,508,510],[&quot;keyword&quot;,510,515],[&quot;punctuation&quot;,515,516],[&quot;punctuation&quot;,517,519],[&quot;keyword&quot;,519,541],[&quot;punctuation&quot;,541,542]]">&lt;norn-segmented-control :@icon-only="true"&gt;
+	&lt;span slot="legend"&gt;Color scheme&lt;/span&gt;
+	&lt;label title="Light"&gt;&lt;input type="radio" name="scheme" value="light" /&gt;&lt;norn-svg-icon @name="sun"&gt;&lt;/norn-svg-icon&gt;&lt;span&gt;Light&lt;/span&gt;&lt;/label&gt;
+	&lt;label title="System"&gt;&lt;input type="radio" name="scheme" value="" checked /&gt;&lt;norn-svg-icon @name="system"&gt;&lt;/norn-svg-icon&gt;&lt;span&gt;System&lt;/span&gt;&lt;/label&gt;
+	&lt;label title="Dark"&gt;&lt;input type="radio" name="scheme" value="dark" /&gt;&lt;norn-svg-icon @name="moon"&gt;&lt;/norn-svg-icon&gt;&lt;span&gt;Dark&lt;/span&gt;&lt;/label&gt;
+&lt;/norn-segmented-control&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-eze5F">
+		<span data-string="label" id="norn-code-block-webc-eze5F-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Three to eight options</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-segmented-control/option-counts/" title="Three to eight options preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-segmented-control/option-counts/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-segmented-control
+	webc:for=&quot;count of [3, 4, 5, 6, 7, 8]&quot;
+	:@legend=&quot;count + ' options'&quot;
+	:@name=&quot;'count-' + count&quot;
+	:@options=&quot;Array.from({ length: count }, (item, index) => ({ value: 'option-' + index, label: String(index + 1), checked: index === count - 1 }))&quot;
+></norn-segmented-control>" data-strings="norn-code-block-webc-fTiYF"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,23],[&quot;keyword&quot;,23,25],[&quot;function&quot;,25,30],[&quot;function&quot;,30,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,34,35],[&quot;string&quot;,35,62],[&quot;punctuation&quot;,62,63],[&quot;keyword&quot;,63,65],[&quot;function&quot;,65,73],[&quot;punctuation&quot;,73,74],[&quot;punctuation&quot;,74,75],[&quot;string&quot;,75,93],[&quot;punctuation&quot;,93,94],[&quot;keyword&quot;,94,96],[&quot;function&quot;,96,102],[&quot;punctuation&quot;,102,103],[&quot;punctuation&quot;,103,104],[&quot;punctuation&quot;,104,105],[&quot;string&quot;,105,120],[&quot;punctuation&quot;,120,121],[&quot;keyword&quot;,121,123],[&quot;function&quot;,123,132],[&quot;punctuation&quot;,132,133],[&quot;punctuation&quot;,133,134],[&quot;string&quot;,134,268],[&quot;punctuation&quot;,268,269],[&quot;keyword&quot;,269,270],[&quot;punctuation&quot;,270,271],[&quot;punctuation&quot;,271,273],[&quot;keyword&quot;,273,295],[&quot;punctuation&quot;,295,296]]">&lt;norn-segmented-control
+	webc:for="count of [3, 4, 5, 6, 7, 8]"
+	:@legend="count + ' options'"
+	:@name="'count-' + count"
+	:@options="Array.from({ length: count }, (item, index) =&gt; ({ value: 'option-' + index, label: String(index + 1), checked: index === count - 1 }))"
+&gt;&lt;/norn-segmented-control&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-fTiYF">
+		<span data-string="label" id="norn-code-block-webc-fTiYF-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Right to left</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-segmented-control/rtl/" title="Right to left preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-segmented-control/rtl/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<div dir=&quot;rtl&quot; lang=&quot;ar&quot;>
+	<norn-segmented-control>
+		<span slot=&quot;legend&quot;>العرض</span>
+		<label><input type=&quot;radio&quot; name=&quot;rtl-view&quot; value=&quot;list&quot; /><span>قائمة</span></label>
+		<label><input type=&quot;radio&quot; name=&quot;rtl-view&quot; value=&quot;grid&quot; checked /><span>شبكة</span></label>
+		<label><input type=&quot;radio&quot; name=&quot;rtl-view&quot; value=&quot;table&quot; /><span>جدول</span></label>
+	</norn-segmented-control>
+</div>" data-strings="norn-code-block-webc-46--s"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,4],[&quot;keyword&quot;,4,5],[&quot;function&quot;,5,8],[&quot;punctuation&quot;,8,9],[&quot;punctuation&quot;,9,10],[&quot;string&quot;,10,13],[&quot;punctuation&quot;,13,14],[&quot;keyword&quot;,14,15],[&quot;function&quot;,15,19],[&quot;punctuation&quot;,19,20],[&quot;punctuation&quot;,20,21],[&quot;string&quot;,21,23],[&quot;punctuation&quot;,23,24],[&quot;punctuation&quot;,24,25],[&quot;punctuation&quot;,27,28],[&quot;keyword&quot;,28,50],[&quot;punctuation&quot;,50,51],[&quot;punctuation&quot;,54,55],[&quot;keyword&quot;,55,59],[&quot;keyword&quot;,59,60],[&quot;function&quot;,60,64],[&quot;punctuation&quot;,64,65],[&quot;punctuation&quot;,65,66],[&quot;string&quot;,66,72],[&quot;punctuation&quot;,72,73],[&quot;punctuation&quot;,73,74],[&quot;punctuation&quot;,79,81],[&quot;keyword&quot;,81,85],[&quot;punctuation&quot;,85,86],[&quot;punctuation&quot;,89,90],[&quot;keyword&quot;,90,95],[&quot;punctuation&quot;,95,96],[&quot;punctuation&quot;,96,97],[&quot;keyword&quot;,97,102],[&quot;keyword&quot;,102,103],[&quot;function&quot;,103,107],[&quot;punctuation&quot;,107,108],[&quot;punctuation&quot;,108,109],[&quot;string&quot;,109,114],[&quot;punctuation&quot;,114,115],[&quot;keyword&quot;,115,116],[&quot;function&quot;,116,120],[&quot;punctuation&quot;,120,121],[&quot;punctuation&quot;,121,122],[&quot;string&quot;,122,130],[&quot;punctuation&quot;,130,131],[&quot;keyword&quot;,131,132],[&quot;function&quot;,132,137],[&quot;punctuation&quot;,137,138],[&quot;punctuation&quot;,138,139],[&quot;string&quot;,139,143],[&quot;punctuation&quot;,143,144],[&quot;keyword&quot;,144,145],[&quot;punctuation&quot;,145,147],[&quot;punctuation&quot;,147,148],[&quot;keyword&quot;,148,152],[&quot;punctuation&quot;,152,153],[&quot;punctuation&quot;,158,160],[&quot;keyword&quot;,160,164],[&quot;punctuation&quot;,164,165],[&quot;punctuation&quot;,165,167],[&quot;keyword&quot;,167,172],[&quot;punctuation&quot;,172,173],[&quot;punctuation&quot;,176,177],[&quot;keyword&quot;,177,182],[&quot;punctuation&quot;,182,183],[&quot;punctuation&quot;,183,184],[&quot;keyword&quot;,184,189],[&quot;keyword&quot;,189,190],[&quot;function&quot;,190,194],[&quot;punctuation&quot;,194,195],[&quot;punctuation&quot;,195,196],[&quot;string&quot;,196,201],[&quot;punctuation&quot;,201,202],[&quot;keyword&quot;,202,203],[&quot;function&quot;,203,207],[&quot;punctuation&quot;,207,208],[&quot;punctuation&quot;,208,209],[&quot;string&quot;,209,217],[&quot;punctuation&quot;,217,218],[&quot;keyword&quot;,218,219],[&quot;function&quot;,219,224],[&quot;punctuation&quot;,224,225],[&quot;punctuation&quot;,225,226],[&quot;string&quot;,226,230],[&quot;punctuation&quot;,230,231],[&quot;keyword&quot;,231,232],[&quot;function&quot;,232,239],[&quot;keyword&quot;,239,240],[&quot;punctuation&quot;,240,242],[&quot;punctuation&quot;,242,243],[&quot;keyword&quot;,243,247],[&quot;punctuation&quot;,247,248],[&quot;punctuation&quot;,252,254],[&quot;keyword&quot;,254,258],[&quot;punctuation&quot;,258,259],[&quot;punctuation&quot;,259,261],[&quot;keyword&quot;,261,266],[&quot;punctuation&quot;,266,267],[&quot;punctuation&quot;,270,271],[&quot;keyword&quot;,271,276],[&quot;punctuation&quot;,276,277],[&quot;punctuation&quot;,277,278],[&quot;keyword&quot;,278,283],[&quot;keyword&quot;,283,284],[&quot;function&quot;,284,288],[&quot;punctuation&quot;,288,289],[&quot;punctuation&quot;,289,290],[&quot;string&quot;,290,295],[&quot;punctuation&quot;,295,296],[&quot;keyword&quot;,296,297],[&quot;function&quot;,297,301],[&quot;punctuation&quot;,301,302],[&quot;punctuation&quot;,302,303],[&quot;string&quot;,303,311],[&quot;punctuation&quot;,311,312],[&quot;keyword&quot;,312,313],[&quot;function&quot;,313,318],[&quot;punctuation&quot;,318,319],[&quot;punctuation&quot;,319,320],[&quot;string&quot;,320,325],[&quot;punctuation&quot;,325,326],[&quot;keyword&quot;,326,327],[&quot;punctuation&quot;,327,329],[&quot;punctuation&quot;,329,330],[&quot;keyword&quot;,330,334],[&quot;punctuation&quot;,334,335],[&quot;punctuation&quot;,339,341],[&quot;keyword&quot;,341,345],[&quot;punctuation&quot;,345,346],[&quot;punctuation&quot;,346,348],[&quot;keyword&quot;,348,353],[&quot;punctuation&quot;,353,354],[&quot;punctuation&quot;,356,358],[&quot;keyword&quot;,358,380],[&quot;punctuation&quot;,380,381],[&quot;punctuation&quot;,382,384],[&quot;keyword&quot;,384,387],[&quot;punctuation&quot;,387,388]]">&lt;div dir="rtl" lang="ar"&gt;
+	&lt;norn-segmented-control&gt;
+		&lt;span slot="legend"&gt;العرض&lt;/span&gt;
+		&lt;label&gt;&lt;input type="radio" name="rtl-view" value="list" /&gt;&lt;span&gt;قائمة&lt;/span&gt;&lt;/label&gt;
+		&lt;label&gt;&lt;input type="radio" name="rtl-view" value="grid" checked /&gt;&lt;span&gt;شبكة&lt;/span&gt;&lt;/label&gt;
+		&lt;label&gt;&lt;input type="radio" name="rtl-view" value="table" /&gt;&lt;span&gt;جدول&lt;/span&gt;&lt;/label&gt;
+	&lt;/norn-segmented-control&gt;
+&lt;/div&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-46--s">
+		<span data-string="label" id="norn-code-block-webc-46--s-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+	<h2>Props</h2>
+	
+	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>@icon-only</code></th>
+				<td><code>boolean</code></td>
+				<td>Hides the option text visually; it stays the radio's name. On for <code>@icon-only</code>, <code>@icon-only="true"</code>, or <code>:@icon-only="true"</code>.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>@legend</code></th>
+				<td><code>string</code></td>
+				<td>The group's name, when the <code>legend</code> slot is empty.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>@name</code></th>
+				<td><code>string</code></td>
+				<td>The radios' shared name. Required with <code>options</code>: the build fails without it.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>@options</code></th>
+				<td><code>{ value: string, label: string, icon?: string, checked?: boolean }[]</code></td>
+				<td>The options, in place of the default slot. Each label is also its <code>title</code>.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Slots</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>legend</code></th>
+				<td>The group's name, as one element, such as <code>&lt;span slot="legend"&gt;Color scheme&lt;/span&gt;</code>. Visually hidden.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>default</code></th>
+				<td>The option labels, when there are no <code>options</code>.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Custom properties</h2>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Property</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td><code>#2346d4</code></td>
+			<td>
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-segmented-control-thumb</code><small>Checked option background.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-text-accent</code>
+					<small>light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-segmented-control-thumb" aria-label="Override --norn-segmented-control-thumb" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-segmented-control-thumb" aria-label="Reset --norn-segmented-control-thumb" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-segmented-control-on-thumb</code><small>Checked option text.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-surface-base</code>
+					<small>light-dark(#ffffff, #101216)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-segmented-control-on-thumb" aria-label="Override --norn-segmented-control-on-thumb" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-segmented-control-on-thumb" aria-label="Reset --norn-segmented-control-on-thumb" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-segmented-control-border</code><small>Outline.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-ui-border-color</code>
+					<small>light-dark(#d3d8e2, #2d323e)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-segmented-control-border" aria-label="Override --norn-segmented-control-border" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-segmented-control-border" aria-label="Reset --norn-segmented-control-border" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-segmented-control-radius</code><small>Corner radius.</small></th>
+			<td data-col="type"><code>&lt;length&gt;</code></td>
+			<td>
+				
+					<code>--norn-ui-border-radius</code>
+					<small>6px</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-segmented-control-radius" aria-label="Override --norn-segmented-control-radius" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-segmented-control-radius" aria-label="Reset --norn-segmented-control-radius" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-segmented-control-duration</code><small>Thumb slide time.</small></th>
+			<td data-col="type"><span>none</span></td>
+			<td>
+				
+					<code>180ms</code>
+					
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-segmented-control-duration" aria-label="Override --norn-segmented-control-duration" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-segmented-control-duration" aria-label="Reset --norn-segmented-control-duration" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>

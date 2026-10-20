@@ -1,0 +1,84 @@
+@layer norn.components {
+		norn-page-toc {
+			display: block;
+			font-size: 0.92rem;
+
+			& nav {
+				display: grid;
+				gap: var(--norn-space-xs, 0.5rem);
+			}
+
+			& nav > p {
+				margin: 0;
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				font-weight: 700;
+			}
+
+			& nav > ol,
+			& nav > ol ol {
+				display: grid;
+				gap: 0.15rem;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& nav > ol {
+				border-inline-start: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+			}
+
+			& nav > ol ol {
+				padding-inline-start: 0.75rem;
+			}
+
+			& nav > ol li > a {
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				min-block-size: 1.5rem;
+				margin-inline-start: -1px;
+				padding: 0.2rem 0.75rem;
+				border-inline-start: 2px solid transparent;
+				color: var(--norn-page-toc-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				text-decoration: none;
+
+				&:hover {
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+
+				&[aria-current] {
+					border-inline-start-color: var(--norn-page-toc-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					color: var(--norn-page-toc-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					font-weight: 600;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		norn-heading-anchor {
+			display: block;
+
+			& > :is(h2, h3, h4, h5, h6) {
+				margin: 0;
+				scroll-margin-block-start: var(--norn-space-m, 1.25rem);
+
+				&::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				}
+			}
+
+			/* At least 24px tall, the WCAG 2.2 target size, even for a short heading. */
+			& a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-underline-offset: 0.1em;
+			}
+		}
+	}

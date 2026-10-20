@@ -1,0 +1,69 @@
+@layer norn.components {
+		norn-page-hero {
+			--norn-chrome: terminal;
+			display: block;
+
+			& > header {
+				display: grid;
+				grid-auto-flow: row;
+				align-content: start;
+				gap: var(--norn-space-m, 1.25rem);
+				inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), var(--norn-page-hero-width, 64rem));
+				margin-inline: auto;
+				padding-block: var(--norn-space-xl, 4rem) var(--norn-space-l, 2rem);
+			}
+
+			& > header > h1 {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: clamp(2rem, 5vw, 3.25rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			& > header > h1 > :first-child {
+				font-size: 1.15em;
+			}
+
+			& > header > h1 > :last-child:not(:first-child) {
+				color: var(--norn-page-hero-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				font-weight: 400;
+			}
+
+			& > header > p {
+				max-inline-size: var(--norn-text-measure, 40em);
+				margin: 0;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-size: 1.2rem;
+				text-wrap: pretty;
+			}
+
+			& > header > norn-tag-list {
+				--norn-tag-list-gap: var(--norn-space-l, 2rem) var(--norn-space-m, 1.25rem);
+			}
+
+			& > header > nav ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, 0.75rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+
+				& > header {
+					gap: var(--norn-space-s, 0.75rem);
+					padding-block: var(--norn-space-m, 1.25rem);
+				}
+			}
+		}
+	}

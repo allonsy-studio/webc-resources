@@ -1,0 +1,204 @@
+@layer norn.components {
+		norn-heading-anchor {
+			display: block;
+
+			& > :is(h2, h3, h4, h5, h6) {
+				margin: 0;
+				scroll-margin-block-start: var(--norn-space-m, 1.25rem);
+
+				&::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				}
+			}
+
+			/* At least 24px tall, the WCAG 2.2 target size, even for a short heading. */
+			& a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-underline-offset: 0.1em;
+			}
+		}
+	}
+@layer norn.components {
+		norn-rich-text {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			align-content: start;
+			gap: var(--norn-space-m, 1.25rem);
+			max-inline-size: var(--norn-rich-text-measure, var(--norn-text-measure, 40em));
+		}
+
+		/* Prose styles stop at the components that style all their own markup. A call-out, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
+		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-tag-list) {
+			h2,
+			h3 {
+				margin: var(--norn-space-s, 0.75rem) 0 0;
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				line-height: 1.15;
+				text-wrap: balance;
+			}
+
+			/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
+			norn-heading-anchor:has(> :is(h2, h3)) {
+				margin-block-start: var(--norn-space-s, 0.75rem);
+			}
+
+			:is(h1, h2, h3, h4, h5, h6) {
+				/* A heading that links to itself is marked with a #, and its link takes the text color. */
+				&:has(> a)::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+				}
+
+				& > a {
+					display: inline-block;
+					min-block-size: 1.5rem;
+					color: inherit;
+					text-underline-offset: 0.1em;
+				}
+			}
+
+			h2 {
+				font-size: 1.5rem;
+			}
+
+			h3 {
+				font-size: 1.2rem;
+			}
+
+			p {
+				margin: 0;
+				text-wrap: pretty;
+			}
+
+			ul,
+			ol {
+				display: grid;
+				gap: 0.4rem;
+				margin: 0;
+				padding-inline-start: 1.25rem;
+				list-style: revert;
+			}
+
+			blockquote {
+				margin: 0;
+				padding-inline-start: var(--norn-space-m, 1.25rem);
+				border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+
+			table {
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+			}
+
+			th,
+			td {
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				text-align: start;
+			}
+
+			hr {
+				box-sizing: border-box;
+				width: 100%;
+				border: 0;
+				border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+			}
+
+			:not(pre) > code {
+				padding: 0.1em 0.35em;
+				border-radius: 0.25rem;
+				background: var(--norn-rich-text-code-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%))));
+				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+				font-size: 0.9em;
+			}
+		}
+
+		/* Without @scope the same rules reach every descendant at zero specificity, and a slotted component's own styles win where they set the property. */
+		@supports not at-rule(@scope) {
+			norn-rich-text {
+				& :where(h2, h3) {
+					margin: var(--norn-space-s, 0.75rem) 0 0;
+					font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+					line-height: 1.15;
+					text-wrap: balance;
+				}
+
+				/* A heading that links to itself is marked with a #, and its link takes the text color. */
+				& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+				}
+
+				& :where(:is(h1, h2, h3, h4, h5, h6) > a) {
+					display: inline-block;
+					min-block-size: 1.5rem;
+					color: inherit;
+					text-underline-offset: 0.1em;
+				}
+
+				& :where(h2) {
+					font-size: 1.5rem;
+				}
+
+				& :where(h3) {
+					font-size: 1.2rem;
+				}
+
+				& :where(p) {
+					margin: 0;
+					text-wrap: pretty;
+				}
+
+				& :where(ul, ol) {
+					display: grid;
+					gap: 0.4rem;
+					margin: 0;
+					padding-inline-start: 1.25rem;
+					list-style: revert;
+				}
+
+				& :where(blockquote) {
+					margin: 0;
+					padding-inline-start: var(--norn-space-m, 1.25rem);
+					border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				}
+
+				& :where(table) {
+					border-collapse: collapse;
+					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				}
+
+				& :where(th, td) {
+					padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+					text-align: start;
+				}
+
+				& :where(hr) {
+					box-sizing: border-box;
+					width: 100%;
+					border: 0;
+					border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				}
+
+				& :where(:not(pre) > code) {
+					padding: 0.1em 0.35em;
+					border-radius: 0.25rem;
+					background: var(--norn-rich-text-code-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%))));
+					font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+					font-size: 0.9em;
+				}
+
+				/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
+				& :where(norn-heading-anchor:has(> :is(h2, h3))) {
+					margin-block-start: var(--norn-space-s, 0.75rem);
+				}
+			}
+		}
+	}

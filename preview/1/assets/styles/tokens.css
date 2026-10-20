@@ -1,0 +1,28 @@
+/* Generated from tokens.json. */
+:root {
+	--norn-ui-accent: #2346d4;
+	--norn-ui-border-color: light-dark(#d3d8e2, #2d323e);
+	--norn-ui-border-radius: 6px;
+	--norn-ui-shadow: 0 6px 20px light-dark(rgb(22 24 29 / 0.08), rgb(0 0 0 / 0.4));
+	--norn-surface-base: light-dark(#ffffff, #101216);
+	--norn-surface-raised: light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%));
+	--norn-surface-code: light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%));
+	--norn-text-base: light-dark(#16181d, #eceef3);
+	--norn-text-muted: light-dark(#4b5160, #a4abba);
+	--norn-text-accent: light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h));
+	--norn-text-on-accent: color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1)));
+	--norn-text-measure: 40em;
+	--norn-font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+	--norn-font-heading: var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+	--norn-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--norn-code-comment: light-dark(#566070, #9aa3b5);
+	--norn-code-string: light-dark(#0b6b3a, #7ed6a1);
+	--norn-code-keyword: light-dark(#6b2fc2, #c4a3ff);
+	--norn-code-function: light-dark(#1b4fc4, #8fb0ff);
+	--norn-code-number: light-dark(#9a4a00, #ffb36b);
+	--norn-space-xs: 0.5rem;
+	--norn-space-s: 0.75rem;
+	--norn-space-m: 1.25rem;
+	--norn-space-l: 2rem;
+	--norn-space-xl: 4rem;
+}

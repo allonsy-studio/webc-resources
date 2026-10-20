@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-call-out: Norn</title>
+<meta name="description" content="An aside within prose: a note, tip, important point, warning, or caution, with an icon and a title, and the body in the default slot.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-call-out: Norn">
+<meta property="og:description" content="An aside within prose: a note, tip, important point, warning, or caution, with an icon and a title, and the body in the default slot.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/Il1HKpSs24.css">
+<script src="/webc-resources/preview/1/bundle/UakS5G-m4v.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/1/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/1/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/1/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<nav aria-labelledby="norn-header-webc-sGdaK"><span data-label="" id="norn-header-webc-sGdaK"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/1/">Components</a>
+			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
+		</nav>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/1/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details open="">
+		<summary>Layout</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Landmark</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Container</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-accordion-group/">norn-accordion-group</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/" aria-current="page">norn-call-out</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-content-card/">norn-content-card</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Component</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/code-sample/norn-code-block/">norn-code-block</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/">norn-copy-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-search/">norn-search</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-segmented-control/">norn-segmented-control</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-svg-icon/">norn-svg-icon</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-tag-list/">norn-tag-list</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Template</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-base/">norn-base</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs/">norn-docs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs-home/">norn-docs-home</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-landing/">norn-landing</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces/">norn-workspaces</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Document</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
+			</li>
+		</ul>
+	</details>
+</nav>
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-call-out</h1>
+<p class="lead">An aside within prose: a note, tip, important point, warning, or caution, with an icon and a title, and the body in the default slot. The kinds match GitHub's alerts. <code>callouts</code> in <code>@allons-y/webc-patterns/markdown</code> writes the same markup for a Markdown <code>&gt; [!NOTE]</code> blockquote. Its role is <code>note</code>: it is not a landmark.</p>
+<p class="meta">
+	<code>&lt;norn-call-out&gt;</code>
+	a <span>container</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<h3>Variants</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-call-out/variants/" title="Variants preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-call-out/variants/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<div style=&quot;display: grid; gap: 0.75rem&quot;>
+	<norn-call-out><p>Useful information to keep in mind.</p></norn-call-out>
+	<norn-call-out @variant=&quot;tip&quot;><p>A faster way to do the same thing.</p></norn-call-out>
+	<norn-call-out @variant=&quot;important&quot;><p>Something a reader needs to succeed.</p></norn-call-out>
+	<norn-call-out @variant=&quot;warning&quot;><p>Needs attention right away.</p></norn-call-out>
+	<norn-call-out @variant=&quot;caution&quot;><p>Can cause a problem you can't undo.</p></norn-call-out>
+</div>" data-strings="norn-code-block-webc-Luj7M"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,4],[&quot;keyword&quot;,4,5],[&quot;function&quot;,5,10],[&quot;punctuation&quot;,10,11],[&quot;punctuation&quot;,11,12],[&quot;function&quot;,12,19],[&quot;punctuation&quot;,19,20],[&quot;string&quot;,20,25],[&quot;punctuation&quot;,25,26],[&quot;string&quot;,26,27],[&quot;function&quot;,27,30],[&quot;punctuation&quot;,30,31],[&quot;string&quot;,31,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;punctuation&quot;,43,44],[&quot;keyword&quot;,44,57],[&quot;punctuation&quot;,57,58],[&quot;punctuation&quot;,58,59],[&quot;keyword&quot;,59,60],[&quot;punctuation&quot;,60,61],[&quot;punctuation&quot;,96,98],[&quot;keyword&quot;,98,99],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,100,102],[&quot;keyword&quot;,102,115],[&quot;punctuation&quot;,115,116],[&quot;punctuation&quot;,118,119],[&quot;keyword&quot;,119,132],[&quot;keyword&quot;,132,133],[&quot;function&quot;,133,141],[&quot;punctuation&quot;,141,142],[&quot;punctuation&quot;,142,143],[&quot;string&quot;,143,146],[&quot;punctuation&quot;,146,147],[&quot;punctuation&quot;,147,148],[&quot;punctuation&quot;,148,149],[&quot;keyword&quot;,149,150],[&quot;punctuation&quot;,150,151],[&quot;punctuation&quot;,185,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,189,191],[&quot;keyword&quot;,191,204],[&quot;punctuation&quot;,204,205],[&quot;punctuation&quot;,207,208],[&quot;keyword&quot;,208,221],[&quot;keyword&quot;,221,222],[&quot;function&quot;,222,230],[&quot;punctuation&quot;,230,231],[&quot;punctuation&quot;,231,232],[&quot;string&quot;,232,241],[&quot;punctuation&quot;,241,242],[&quot;punctuation&quot;,242,243],[&quot;punctuation&quot;,243,244],[&quot;keyword&quot;,244,245],[&quot;punctuation&quot;,245,246],[&quot;punctuation&quot;,282,284],[&quot;keyword&quot;,284,285],[&quot;punctuation&quot;,285,286],[&quot;punctuation&quot;,286,288],[&quot;keyword&quot;,288,301],[&quot;punctuation&quot;,301,302],[&quot;punctuation&quot;,304,305],[&quot;keyword&quot;,305,318],[&quot;keyword&quot;,318,319],[&quot;function&quot;,319,327],[&quot;punctuation&quot;,327,328],[&quot;punctuation&quot;,328,329],[&quot;string&quot;,329,336],[&quot;punctuation&quot;,336,337],[&quot;punctuation&quot;,337,338],[&quot;punctuation&quot;,338,339],[&quot;keyword&quot;,339,340],[&quot;punctuation&quot;,340,341],[&quot;punctuation&quot;,368,370],[&quot;keyword&quot;,370,371],[&quot;punctuation&quot;,371,372],[&quot;punctuation&quot;,372,374],[&quot;keyword&quot;,374,387],[&quot;punctuation&quot;,387,388],[&quot;punctuation&quot;,390,391],[&quot;keyword&quot;,391,404],[&quot;keyword&quot;,404,405],[&quot;function&quot;,405,413],[&quot;punctuation&quot;,413,414],[&quot;punctuation&quot;,414,415],[&quot;string&quot;,415,422],[&quot;punctuation&quot;,422,423],[&quot;punctuation&quot;,423,424],[&quot;punctuation&quot;,424,425],[&quot;keyword&quot;,425,426],[&quot;punctuation&quot;,426,427],[&quot;punctuation&quot;,462,464],[&quot;keyword&quot;,464,465],[&quot;punctuation&quot;,465,466],[&quot;punctuation&quot;,466,468],[&quot;keyword&quot;,468,481],[&quot;punctuation&quot;,481,482],[&quot;punctuation&quot;,483,485],[&quot;keyword&quot;,485,488],[&quot;punctuation&quot;,488,489]]">&lt;div style="display: grid; gap: 0.75rem"&gt;
+	&lt;norn-call-out&gt;&lt;p&gt;Useful information to keep in mind.&lt;/p&gt;&lt;/norn-call-out&gt;
+	&lt;norn-call-out @variant="tip"&gt;&lt;p&gt;A faster way to do the same thing.&lt;/p&gt;&lt;/norn-call-out&gt;
+	&lt;norn-call-out @variant="important"&gt;&lt;p&gt;Something a reader needs to succeed.&lt;/p&gt;&lt;/norn-call-out&gt;
+	&lt;norn-call-out @variant="warning"&gt;&lt;p&gt;Needs attention right away.&lt;/p&gt;&lt;/norn-call-out&gt;
+	&lt;norn-call-out @variant="caution"&gt;&lt;p&gt;Can cause a problem you can't undo.&lt;/p&gt;&lt;/norn-call-out&gt;
+&lt;/div&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-Luj7M">
+		<span data-string="label" id="norn-code-block-webc-Luj7M-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>From Markdown</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-call-out/markdown/" title="From Markdown preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-call-out/markdown/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="With `callouts` from `@allons-y/webc-patterns/markdown` registered, a GitHub alert in Markdown renders as a call-out:
+
+> [!TIP]
+> Run the build once before you change anything." data-strings="norn-code-block-webc-WuFn3"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="markdown"><code>With `callouts` from `@allons-y/webc-patterns/markdown` registered, a GitHub alert in Markdown renders as a call-out:
+
+&gt; [!TIP]
+&gt; Run the build once before you change anything.</code></pre>
+	<span hidden="" id="norn-code-block-webc-WuFn3">
+		<span data-string="label" id="norn-code-block-webc-WuFn3-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">markdown code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+	<h2>Props</h2>
+	
+	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>@variant</code></th>
+				<td><code>string</code></td>
+				<td><code>note</code>, <code>tip</code>, <code>important</code>, <code>warning</code>, or <code>caution</code>. Falls back to <code>note</code>.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Slots</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>heading</code></th>
+				<td>The title, as one element, such as <code>&lt;span slot="heading"&gt;Careful&lt;/span&gt;</code>. Falls back to the site's <code>componentStrings</code> for the variant, then the variant's name, such as "Note".</td>
+			</tr>
+<tr>
+				<th scope="row"><code>default</code></th>
+				<td>The body.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Custom properties</h2>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Property</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td><code>#2346d4</code></td>
+			<td>
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-call-out-color</code><small>The rule, icon, and title color.</small></th>
+			<td data-col="type"><span>none</span></td>
+			<td>
+				
+					<code>one per variant</code>
+					
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-call-out-color" aria-label="Override --norn-call-out-color" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-call-out-color" aria-label="Reset --norn-call-out-color" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-call-out-bg</code><small>Background.</small></th>
+			<td data-col="type"><span>none</span></td>
+			<td>
+				
+					<code>a tint of the color</code>
+					
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-call-out-bg" aria-label="Override --norn-call-out-bg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-call-out-bg" aria-label="Reset --norn-call-out-bg" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>

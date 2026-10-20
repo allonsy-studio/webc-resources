@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-copy-button: Norn</title>
+<meta name="description" content="A button that copies text to the clipboard: @value, or the text of the element whose id is @source.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-copy-button: Norn">
+<meta property="og:description" content="A button that copies text to the clipboard: @value, or the text of the element whose id is @source.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/Il1HKpSs24.css">
+<script src="/webc-resources/preview/1/bundle/UakS5G-m4v.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/1/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/1/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/1/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<nav aria-labelledby="norn-header-webc-NeLoX"><span data-label="" id="norn-header-webc-NeLoX"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/1/">Components</a>
+			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
+		</nav>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/1/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details open="">
+		<summary>Layout</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-layout/">norn-page-layout</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Landmark</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-pager/">norn-page-pager</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-toc/">norn-page-toc</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Container</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-accordion-group/">norn-accordion-group</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-content-card/">norn-content-card</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-hero/">norn-page-hero</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-notice/">norn-page-notice</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-section/">norn-page-section</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Component</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/code-sample/norn-code-block/">norn-code-block</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/" aria-current="page">norn-copy-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-search/">norn-search</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-segmented-control/">norn-segmented-control</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-svg-icon/">norn-svg-icon</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-tag-list/">norn-tag-list</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Template</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-base/">norn-base</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs/">norn-docs</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-docs-home/">norn-docs-home</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-landing/">norn-landing</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces/">norn-workspaces</a>
+			</li>
+		</ul>
+	</details>
+<details open="">
+		<summary>Document</summary>
+		<ul role="list">
+			<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-page-head/">norn-page-head</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
+			</li>
+		</ul>
+	</details>
+</nav>
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-copy-button</h1>
+<p class="lead">A button that copies text to the clipboard: <code>@value</code>, or the text of the element whose id is <code>@source</code>. It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do. After a click its label reads the <code>copied</code> or <code>failed</code> text for two seconds, and a status message says the same to a screen reader. The texts are in the page, hidden, and the script shows them: the button only exists with a script.</p>
+<p class="meta">
+	<code>&lt;norn-copy-button&gt;</code>
+	a <span>component</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<h3>A value</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-copy-button/value/" title="A value preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-copy-button/value/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<p>
+	<code>npm install @example/project</code>
+	<norn-copy-button @value=&quot;npm install @example/project&quot;><span slot=&quot;label&quot;>Copy the install command</span></norn-copy-button>
+</p>" data-strings="norn-code-block-webc-ctXmz"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,2],[&quot;punctuation&quot;,2,3],[&quot;punctuation&quot;,5,6],[&quot;keyword&quot;,6,10],[&quot;punctuation&quot;,10,11],[&quot;punctuation&quot;,39,41],[&quot;keyword&quot;,41,45],[&quot;punctuation&quot;,45,46],[&quot;punctuation&quot;,48,49],[&quot;keyword&quot;,49,65],[&quot;keyword&quot;,65,66],[&quot;function&quot;,66,72],[&quot;punctuation&quot;,72,73],[&quot;punctuation&quot;,73,74],[&quot;string&quot;,74,102],[&quot;punctuation&quot;,102,103],[&quot;punctuation&quot;,103,104],[&quot;punctuation&quot;,104,105],[&quot;keyword&quot;,105,109],[&quot;keyword&quot;,109,110],[&quot;function&quot;,110,114],[&quot;punctuation&quot;,114,115],[&quot;punctuation&quot;,115,116],[&quot;string&quot;,116,121],[&quot;punctuation&quot;,121,122],[&quot;punctuation&quot;,122,123],[&quot;punctuation&quot;,147,149],[&quot;keyword&quot;,149,153],[&quot;punctuation&quot;,153,154],[&quot;punctuation&quot;,154,156],[&quot;keyword&quot;,156,172],[&quot;punctuation&quot;,172,173],[&quot;punctuation&quot;,174,176],[&quot;keyword&quot;,176,177],[&quot;punctuation&quot;,177,178]]">&lt;p&gt;
+	&lt;code&gt;npm install @example/project&lt;/code&gt;
+	&lt;norn-copy-button @value="npm install @example/project"&gt;&lt;span slot="label"&gt;Copy the install command&lt;/span&gt;&lt;/norn-copy-button&gt;
+&lt;/p&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-ctXmz">
+		<span data-string="label" id="norn-code-block-webc-ctXmz-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<h3>Another element's text</h3>
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-svg-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-svg-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-svg-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-svg-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-svg-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		<norn-svg-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-svg-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-copy-button/source/" title="Another element's text preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-copy-button/source/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<p id=&quot;token&quot;>sk_test_4eC39HqLyjWDarjtT1zdp7dc</p>
+<norn-copy-button @source=&quot;token&quot;>
+	<span slot=&quot;copy&quot;>Copy token</span>
+	<span slot=&quot;copied&quot;>Token copied</span>
+</norn-copy-button>" data-strings="norn-code-block-webc-UC_U4"><norn-svg-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-svg-icon><span></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,2],[&quot;keyword&quot;,2,3],[&quot;function&quot;,3,5],[&quot;punctuation&quot;,5,6],[&quot;punctuation&quot;,6,7],[&quot;string&quot;,7,12],[&quot;punctuation&quot;,12,13],[&quot;punctuation&quot;,13,14],[&quot;punctuation&quot;,46,48],[&quot;keyword&quot;,48,49],[&quot;punctuation&quot;,49,50],[&quot;punctuation&quot;,51,52],[&quot;keyword&quot;,52,68],[&quot;keyword&quot;,68,69],[&quot;function&quot;,69,76],[&quot;punctuation&quot;,76,77],[&quot;punctuation&quot;,77,78],[&quot;string&quot;,78,83],[&quot;punctuation&quot;,83,84],[&quot;punctuation&quot;,84,85],[&quot;punctuation&quot;,87,88],[&quot;keyword&quot;,88,92],[&quot;keyword&quot;,92,93],[&quot;function&quot;,93,97],[&quot;punctuation&quot;,97,98],[&quot;punctuation&quot;,98,99],[&quot;string&quot;,99,103],[&quot;punctuation&quot;,103,104],[&quot;punctuation&quot;,104,105],[&quot;punctuation&quot;,115,117],[&quot;keyword&quot;,117,121],[&quot;punctuation&quot;,121,122],[&quot;punctuation&quot;,124,125],[&quot;keyword&quot;,125,129],[&quot;keyword&quot;,129,130],[&quot;function&quot;,130,134],[&quot;punctuation&quot;,134,135],[&quot;punctuation&quot;,135,136],[&quot;string&quot;,136,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,143,144],[&quot;punctuation&quot;,156,158],[&quot;keyword&quot;,158,162],[&quot;punctuation&quot;,162,163],[&quot;punctuation&quot;,164,166],[&quot;keyword&quot;,166,182],[&quot;punctuation&quot;,182,183]]">&lt;p id="token"&gt;sk_test_4eC39HqLyjWDarjtT1zdp7dc&lt;/p&gt;
+&lt;norn-copy-button @source="token"&gt;
+	&lt;span slot="copy"&gt;Copy token&lt;/span&gt;
+	&lt;span slot="copied"&gt;Token copied&lt;/span&gt;
+&lt;/norn-copy-button&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-UC_U4">
+		<span data-string="label" id="norn-code-block-webc-UC_U4-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+	<h2>Props</h2>
+	
+	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>@value</code></th>
+				<td><code>string</code></td>
+				<td>The text to copy.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>@source</code></th>
+				<td><code>string</code></td>
+				<td>The id of the element whose text to copy, when there is no <code>value</code>.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>@strings</code></th>
+				<td><code>string</code></td>
+				<td>The id of an element that holds the texts in place of the slots, for a component that wraps the button, as <code>norn-code-block</code> does. It holds one element per slot, marked <code>data-string="label"</code>, <code>"copy"</code>, <code>"copied"</code>, and <code>"failed"</code>; the <code>label</code> one needs an id.</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Slots</h2>
+	<table>
+		<thead>
+			<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th scope="row"><code>label</code></th>
+				<td>The button's accessible name, such as "Copy the install command", as one element. Without it, the visible text names the button.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>copy</code></th>
+				<td>The visible text, as one element. Falls back to the site's <code>componentStrings</code>, then "Copy".</td>
+			</tr>
+<tr>
+				<th scope="row"><code>copied</code></th>
+				<td>The text after a copy. Falls back to the site's <code>componentStrings</code>, then "Copied".</td>
+			</tr>
+<tr>
+				<th scope="row"><code>failed</code></th>
+				<td>The text when the copy fails. Falls back to the site's <code>componentStrings</code>, then "Copy failed".</td>
+			</tr>
+		</tbody>
+	</table>
+
+
+
+	<h2>Custom properties</h2>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Property</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td><code>#2346d4</code></td>
+			<td>
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-copy-button-bg</code><small>Background.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-surface-base</code>
+					<small>light-dark(#ffffff, #101216)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-copy-button-bg" aria-label="Override --norn-copy-button-bg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-copy-button-bg" aria-label="Reset --norn-copy-button-bg" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-copy-button-fg</code><small>Text color.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-text-base</code>
+					<small>light-dark(#16181d, #eceef3)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-copy-button-fg" aria-label="Override --norn-copy-button-fg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-copy-button-fg" aria-label="Reset --norn-copy-button-fg" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-copy-button-border</code><small>Border color.</small></th>
+			<td data-col="type"><code>&lt;color&gt;</code></td>
+			<td>
+				
+					<code>--norn-ui-border-color</code>
+					<small>light-dark(#d3d8e2, #2d323e)</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-copy-button-border" aria-label="Override --norn-copy-button-border" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-copy-button-border" aria-label="Reset --norn-copy-button-border" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-copy-button-radius</code><small>Corner radius.</small></th>
+			<td data-col="type"><code>&lt;length&gt;</code></td>
+			<td>
+				
+					<code>--norn-ui-border-radius</code>
+					<small>6px</small>
+				
+				
+			</td>
+			<td>
+				<span data-field="">
+					<input type="text" data-prop="--norn-copy-button-radius" aria-label="Override --norn-copy-button-radius" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-copy-button-radius" aria-label="Reset --norn-copy-button-radius" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>
