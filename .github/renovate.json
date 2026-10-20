@@ -1,18 +1,39 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"baseBranchPatterns": ["main"],
-	"extends": ["config:recommended", ":widenPeerDependencies", "group:githubArtifactActions"],
-	"labels": [],
+	"extends": ["config:best-practices", ":widenPeerDependencies", "group:githubArtifactActions"],
+	"labels": ["dependencies", "renovate"],
+	"lockFileMaintenance": {
+		"enabled": true,
+		"extends": ["schedule:monthly"]
+	},
 	"packageRules": [
 		{
 			"matchDatasources": ["npm"],
 			"minimumReleaseAge": "1 month"
+		},
+		{
+			"groupName": "11ty ecosystem",
+			"matchPackageNames": ["@11ty/*"]
+		},
+		{
+			"groupName": "opx ecosystem",
+			"matchPackageNames": ["@allons-y/opx-*"]
+		},
+		{
+			"groupName": "eslint ecosystem",
+			"matchPackageNames": ["eslint", "@eslint/*", "eslint-plugin-*"]
+		},
+		{
+			"groupName": "postcss ecosystem",
+			"matchPackageNames": ["postcss", "postcss-*", "@csstools/*"]
+		},
+		{
+			"groupName": "playwright ecosystem",
+			"matchPackageNames": ["playwright", "playwright-core", "@playwright/*", "axe-core"]
 		}
 	],
+	"postUpdateOptions": ["yarnDedupeHighest"],
 	"rebaseWhen": "behind-base-branch",
-	"reviewers": ["castastrophe"],
-	"lockFileMaintenance": {
-		"enabled": true,
-		"extends": ["schedule:monthly"]
-	}
+	"reviewers": ["castastrophe"]
 }
