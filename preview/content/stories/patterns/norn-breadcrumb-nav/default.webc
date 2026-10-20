@@ -1,0 +1,11 @@
+---
+title: Default
+order: 1
+---
+<norn-breadcrumb-nav
+	:@items="[
+		{ url: '#home', title: 'Home' },
+		{ url: '#docs', title: 'Docs' },
+		{ url: '/frames/patterns/norn-breadcrumb-nav/default/', title: 'Configuration' }
+	]"
+></norn-breadcrumb-nav>

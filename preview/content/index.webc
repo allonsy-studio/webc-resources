@@ -1,0 +1,27 @@
+---
+layout: shell.webc
+title: Components
+description: Norn's WebC components for Eleventy, rendered from the packages themselves.
+---
+<h1>Components</h1>
+<p class="lead">
+	Norn is a set of un-opinionated WebC components and helpers for Eleventy. Every component in the three packages is rendered here by
+	Eleventy from the packages themselves. Pick one for its examples, props, slots, and custom properties.
+</p>
+<template webc:for="category of $data.catalog.categories" webc:nokeep>
+	<h2 @text="category.title"></h2>
+	<p @text="category.description"></p>
+	<norn-card-grid :@mono="true">
+		<li webc:for="component of category.components">
+			<norn-content-card>
+				<h3><a :href="component.url" @text="component.name"></a></h3>
+				<p @text="component.summaryText"></p>
+			</norn-content-card>
+		</li>
+	</norn-card-grid>
+</template>
+<h2>Packages</h2>
+<p>Each component ships in one of three packages.</p>
+<ul>
+	<li webc:for="pkg of $data.catalog.packages"><code @text="pkg.name"></code> <span @text="pkg.version"></span>: <span @text="pkg.description"></span></li>
+</ul>

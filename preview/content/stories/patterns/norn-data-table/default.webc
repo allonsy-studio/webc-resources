@@ -1,0 +1,18 @@
+---
+title: Wide table
+order: 1
+---
+<norn-data-table>
+	<table>
+		<caption>Options</caption>
+		<thead>
+			<tr><th scope="col">Option</th><th scope="col">Type</th><th scope="col">Default</th><th scope="col">Description</th></tr>
+		</thead>
+		<tbody>
+			<tr><td><code>outputDirectory</code></td><td><code>string</code></td><td><code>"_site"</code></td><td>Where the build writes its pages.</td></tr>
+			<tr><td><code>pathPrefix</code></td><td><code>string</code></td><td><code>"/"</code></td><td>A path every URL starts with, for a site in a subfolder.</td></tr>
+			<tr><td><code>dropEmptyBundleTags</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes a link or script whose bundle came out empty.</td></tr>
+		</tbody>
+	</table>
+</norn-data-table>
+<p>Pick the phone width: the table scrolls in its own box, which becomes a tab stop named by the caption.</p>

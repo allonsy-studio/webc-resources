@@ -1,0 +1,10 @@
+---
+title: Severities
+order: 1
+---
+<div style="display: grid; gap: 0.75rem">
+	<norn-page-notice><p>A new version is out.</p></norn-page-notice>
+	<norn-page-notice @severity="success"><p>Saved. The changes apply on the next build.</p></norn-page-notice>
+	<norn-page-notice @severity="warning"><p>This page describes the beta.</p></norn-page-notice>
+	<norn-page-notice @severity="error"><p>The build failed.</p></norn-page-notice>
+</div>

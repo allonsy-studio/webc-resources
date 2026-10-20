@@ -1,0 +1,8 @@
+---
+title: Both neighbors
+order: 1
+---
+<norn-page-pager
+	:@prev="({ url: '#previous', title: 'Getting started' })"
+	:@next="({ url: '#next', title: 'Reference' })"
+></norn-page-pager>

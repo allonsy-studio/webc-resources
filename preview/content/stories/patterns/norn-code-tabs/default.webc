@@ -1,0 +1,10 @@
+---
+title: Package managers
+order: 1
+---
+<norn-code-tabs @group="package-manager">
+	<span slot="label">Install commands</span>
+	<norn-code-block data-tab="npm" @language="sh" @code="npm install @example/project"></norn-code-block>
+	<norn-code-block data-tab="yarn" @language="sh" @code="yarn add @example/project"></norn-code-block>
+	<norn-code-block data-tab="pnpm" @language="sh" @code="pnpm add @example/project"></norn-code-block>
+</norn-code-tabs>

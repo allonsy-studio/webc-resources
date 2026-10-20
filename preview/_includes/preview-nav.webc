@@ -1,0 +1,74 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+
+/**
+ * The component list, grouped by category. Marks the page being shown with aria-current.
+ * @prop {{ id: string, title: string, components: { name: string, url: string }[] }[]} categories
+ */
+--->
+<nav aria-label="Components">
+	<details webc:for="category of categories" open>
+		<summary @text="category.title"></summary>
+		<ul role="list">
+			<li webc:for="component of category.components">
+				<a :href="component.url" :aria-current="component.url === $data.page.url ? 'page' : undefined" @text="component.name"></a>
+			</li>
+		</ul>
+	</details>
+</nav>
+<style>
+	@layer norn.components {
+		preview-nav {
+			display: block;
+			font-size: 0.95rem;
+		}
+
+		preview-nav details + details {
+			margin-block-start: var(--norn-space-s);
+		}
+
+		preview-nav summary {
+			padding-block: 0.25rem;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		preview-nav ul {
+			display: grid;
+			gap: 0.1rem;
+			margin-block: 0.25rem 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		preview-nav a {
+			display: block;
+			padding: 0.2rem var(--norn-space-s);
+			border-radius: var(--norn-ui-border-radius);
+			color: var(--norn-text-accent);
+			text-decoration: none;
+		}
+
+		preview-nav a:is(:hover, :focus-visible) {
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav a[aria-current="page"] {
+			background: var(--norn-surface-raised);
+			color: var(--norn-text-base);
+			font-weight: 700;
+		}
+
+		@media print {
+			preview-nav {
+				display: none;
+			}
+		}
+	}
+</style>

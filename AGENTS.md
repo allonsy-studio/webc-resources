@@ -28,6 +28,7 @@ packages/<name>/   src/*.webc, src/layouts/*.webc, src/css/*.css (the sources); 
 tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
 scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json
 fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
+preview/           the component preview: an Eleventy site with a page and stories per component (private)
 ```
 
 ## Commands
@@ -39,9 +40,11 @@ fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each
 | `yarn format` | Same, with fixes applied |
 | `yarn test` | Unit tests with `node --test` |
 | `yarn pack:check` | Dry-run pack of every publishable package |
+| `yarn docs:start` | Serve the component preview, rebuilt as the component sources or `tokens.json` change |
+| `yarn docs:build` | Build the preview into `preview/_site` |
 | `yarn opx release add` | Record a changeset |
 
-`yarn test` and `yarn pack:check` run `yarn build` first. A test file run on its own with `node --test` reads the compiled `components/`, so run `yarn build` before it. Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint` through the Husky `post-commit` hook.
+`yarn test`, `yarn pack:check`, `yarn docs:start`, and `yarn docs:build` run `yarn build` first. A test file run on its own with `node --test` reads the compiled `components/`, so run `yarn build` before it. Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint` through the Husky `post-commit` hook.
 
 ## Component conventions
 
@@ -83,7 +86,8 @@ fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each
 7. No HTML comments in components: they ship to every page. The one exception is the three-dash server-only
    comment, `<!--- … --->`, which WebC drops from the output. A file has exactly one. It sits at the top, after any front matter,
    and holds the license header (rule 13) and the JSDoc for the component's props, slots, custom properties, and category.
-   `norn-base` holds it in `<head>`: a comment ahead of the doctype makes WebC render the page without its doctype and shell. Keep the `/** … */` and ` * ` line format: `components.test.js` reads it. The comment ends at the first `-->` or `--!>`, so its text never contains either. Close it with `--->`. A `--`, a brace, a backtick, or a tag name such as `<slot>` is safe. A `<script webc:setup>` holds code,
+   `norn-base` holds it in `<head>`: a comment ahead of the doctype makes WebC render the page without its doctype and shell. Keep the `/** … */` and ` * ` line format: the preview
+   and `components.test.js` read it. The comment ends at the first `-->` or `--!>`, so its text never contains either. Close it with `--->`. A `--`, a brace, a backtick, or a tag name such as `<slot>` is safe. A `<script webc:setup>` holds code,
    never only comments. It can't import npm modules, and in a layout or page it runs once per template: compute per-page values
    in the attribute expressions, not in the setup block.
    A component's `webc:setup` helpers and its own props are not visible in slot content passed to other components:
@@ -119,8 +123,12 @@ fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each
     page frames), `landmark` (renders a page region with a role and a name), `container` (a bounded surface that holds
     content), `component` (a self-contained element), `template` (an Eleventy layout: a whole page, filled from props;
     only the `norn-*` layouts), or `document` (head components).
-    `components.test.js` checks it.
-15. Content goes in slots, not attributes, wherever it can: always for layouts, landmarks, and containers.
+    `components.test.js` checks it, and the preview groups its navigation by it.
+15. Every component outside the document head, and every layout, has at least one story in
+    `preview/content/stories/<package>/<name>/`. A story is a WebC page rendered in a frame, with its
+    source shown on the component's page. A layout's story is a whole page on that layout (`layout: norn-landing.webc`). The page's props, slots, and custom properties are read from the
+    component's JSDoc, in its `<!--- … --->` comment, so keep that accurate.
+16. Content goes in slots, not attributes, wherever it can: always for layouts, landmarks, and containers.
     Headings, text, links, and lists are the caller's markup, so the caller picks heading levels and adds icons.
     A list component takes `<li>` children in its default slot. Props are for settings (`@variant`, `@href`),
     and for data a component must compute from, such as `norn-side-nav` marking the current page. Document an
@@ -129,7 +137,7 @@ fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each
     Never put a fallback in a default slot: any child, a line break included, replaces it. A short label with a
     default is a named slot (`norn-skip-link`'s `label`), and a data-driven alternative to the slot uses `webc:if` with
     `<slot webc:else>` (`norn-segmented-control`'s `options`). Named slot fallbacks are safe.
-16. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
+17. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
     names and script-shown text included. The slot's fallback looks the string up site-wide, then gives the English
     default: `<slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot>`.
     The key is the slot name; list it and its default in `defaultStrings` in `webc-patterns/index.js` (`norn-call-out`'s
@@ -146,7 +154,7 @@ fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each
     (`{count}`, `{name}`). Counts use `Intl.PluralRules` and `Intl.NumberFormat` for the nearest `lang`. The Markdown
     add-on (`@allons-y/webc-patterns/markdown`, `@allons-y/webc-code-sample/markdown`) writes no string and fills no slot: it writes the tag an author would write, and the registry supplies the texts.
     `components.test.js` checks that the registry, the slots, and the JSDoc agree.
-17. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
+18. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
 
 ## The plugin, the layouts, and themes
 

@@ -30,8 +30,12 @@ export default [
 	// Fixture pages are test input: fences without a language are deliberate.
 	{ files: ["fixtures/**/*.md"], rules: { "markdown/fenced-code-language": "off" } },
 	{
-		files: ["fixtures/*/build.test.js"],
+		files: ["fixtures/*/build.test.js", "preview/build.test.js"],
 		languageOptions: { globals: { CSS: "readonly", customElements: "readonly", document: "readonly", getComputedStyle: "readonly", localStorage: "readonly", navigator: "readonly", window: "readonly" } },
+	},
+	{
+		files: ["preview/content/assets/*.js"],
+		languageOptions: { globals: { CSSStyleSheet: "readonly", CustomEvent: "readonly", document: "readonly", localStorage: "readonly", window: "readonly" } },
 	},
 	{
 		files: ["fixtures/lib/browser.js"],

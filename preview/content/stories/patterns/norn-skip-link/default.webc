@@ -1,0 +1,6 @@
+---
+title: Default
+order: 1
+---
+<norn-skip-link></norn-skip-link>
+<p>Click in this frame, then press Tab. The link appears at the top, and following it moves focus to the main content.</p>

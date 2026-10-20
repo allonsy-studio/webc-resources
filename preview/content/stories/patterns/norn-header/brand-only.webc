@@ -1,0 +1,8 @@
+---
+title: Brand only
+order: 2
+bleed: true
+---
+<norn-header>
+	<a slot="brand" rel="home" href="#">Example project</a>
+</norn-header>

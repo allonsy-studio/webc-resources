@@ -1,0 +1,685 @@
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
+import fs from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { after, before, describe, test } from "node:test";
+
+import { audit, launch, listsNeedingRole, pagesOf, serve } from "../fixtures/lib/browser.js";
+import { readTokens } from "../scripts/build-components.js";
+import { buildCatalog } from "./lib/catalog.js";
+
+const here = import.meta.dirname;
+const eleventy = path.resolve(path.dirname(createRequire(import.meta.url).resolve("@11ty/eleventy")), "..", "cmd.cjs");
+const catalog = buildCatalog({ packagesDir: path.join(here, "..", "packages"), storiesDir: path.join(here, "content", "stories") });
+
+const read = (output, ...parts) => fs.readFileSync(path.join(output, ...parts), "utf8");
+const pageFor = (output, url) => read(output, ...url.split("/").filter(Boolean), "index.html");
+
+/** Build in its own process, which Eleventy needs for a clean bundle state. */
+function build(output = "_site", env = {}) {
+	fs.rmSync(path.join(here, output), { recursive: true, force: true });
+	execFileSync(process.execPath, [eleventy, "--config=eleventy.config.js", "--quiet"], { cwd: here, env: { ...process.env, SITE_OUTPUT: output, ...env }, stdio: "pipe" });
+	return path.join(here, output);
+}
+
+describe("the catalog", () => {
+	test("finds every component and layout in every package, from the files on disk", () => {
+		for (const pkg of catalog.packages) {
+			const onDisk = (folder) => {
+				const dir = path.join(here, "..", "packages", `webc-${pkg.id}`, folder);
+				return fs.existsSync(dir) ? fs.readdirSync(dir).filter((file) => file.endsWith(".webc")).map((file) => file.slice(0, -".webc".length)).sort() : [];
+			};
+			assert.deepEqual(pkg.components.filter(({ layout }) => !layout).map(({ name }) => name).sort(), onDisk("components"), pkg.id);
+			assert.deepEqual(pkg.components.filter(({ layout }) => layout).map(({ name }) => name).sort(), onDisk("layouts"), `${pkg.id} layouts`);
+		}
+		assert.equal(catalog.components.filter(({ layout }) => layout).length, 6, "the six layouts");
+	});
+
+	test("parses props, slots, and custom properties out of the JSDoc", () => {
+		const button = catalog.components.find(({ name }) => name === "norn-link-button");
+		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent, or <code>quiet</code>, an outline. Falls back to <code>primary</code>." });
+		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
+		assert.ok(button.cssprops.some(({ name }) => name === "--norn-link-button-accent"));
+		const footer = catalog.components.find(({ name }) => name === "norn-footer");
+		assert.deepEqual(footer.slots.map(({ name }) => name), ["default", "colophon"], "an unnamed slot is the default one");
+	});
+
+	test("every component outside the head has a story, and the head components have none", () => {
+		for (const component of catalog.components) {
+			if (component.head) assert.equal(component.stories.length, 0, `${component.slug} renders in every frame`);
+			else assert.ok(component.stories.length > 0, `${component.slug} needs a story in content/stories/${component.packageId}/${component.name}/`);
+		}
+	});
+
+	test("every component has a category, and the examples sit where they were asked for", () => {
+		const where = Object.fromEntries(catalog.categories.flatMap((category) => category.components.map((component) => [component.name, category.id])));
+		assert.equal(Object.keys(where).length, catalog.components.length, "each component in exactly one category");
+		assert.deepEqual(catalog.categories.map(({ id }) => id), ["layout", "landmark", "container", "component", "template", "document"]);
+		assert.equal(where["norn-card-grid"], "layout");
+		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.equal(where[name], "landmark", name);
+		for (const name of ["norn-content-card", "norn-page-section"]) assert.equal(where[name], "container", name);
+		for (const name of ["norn-page-head", "studio-head"]) assert.equal(where[name], "document", name);
+		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces", "norn-workspace"]) assert.equal(where[name], "template", name);
+		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces"], "the layouts, and nothing else");
+	});
+
+	test("no story is left without a component", () => {
+		const known = new Set(catalog.components.map(({ slug }) => slug));
+		const root = path.join(here, "content", "stories");
+		for (const pkg of fs.readdirSync(root, { withFileTypes: true }).filter((entry) => entry.isDirectory())) {
+			for (const dir of fs.readdirSync(path.join(root, pkg.name), { withFileTypes: true }).filter((entry) => entry.isDirectory())) {
+				assert.ok(known.has(`${pkg.name}/${dir.name}`), `stories/${pkg.name}/${dir.name} has no component`);
+			}
+		}
+	});
+});
+
+describe("the preview build", () => {
+	let output;
+
+	before(() => {
+		output = build();
+	});
+
+	test("one page per component, and one frame per story", () => {
+		for (const component of catalog.components) {
+			assert.ok(fs.existsSync(path.join(output, "components", component.packageId, component.name, "index.html")), component.slug);
+			for (const story of component.stories) assert.ok(fs.existsSync(path.join(output, ...story.frameUrl.split("/").filter(Boolean), "index.html")), story.frameUrl);
+		}
+		assert.ok(fs.existsSync(path.join(output, "index.html")) && fs.existsSync(path.join(output, "foundations", "index.html")));
+	});
+
+	test("the nav groups the components by category, in order", () => {
+		const html = pageFor(output, "/");
+		const groups = [...html.matchAll(/<summary>([^<]+)<\/summary>/g)].map(([, title]) => title);
+		assert.deepEqual(groups, ["Layout", "Landmark", "Container", "Component", "Template", "Document"]);
+		const landmark = html.slice(html.indexOf("<summary>Landmark</summary>"), html.indexOf("<summary>Container</summary>"));
+		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.ok(landmark.includes(`>${name}</a>`), name);
+	});
+
+	test("the nav lists every component once, and marks the current page", () => {
+		const html = pageFor(output, "/components/patterns/norn-content-card/");
+		for (const component of catalog.components) assert.equal(html.split(`href="${component.url}"`).length - 1, 1, component.slug);
+		assert.ok(html.includes('<a href="/components/patterns/norn-content-card/" aria-current="page">norn-content-card</a>'));
+	});
+
+	test("a component page shows its docs, each from the JSDoc", () => {
+		const html = pageFor(output, "/components/patterns/norn-link-button/");
+		assert.ok(html.includes("<code>@variant</code>") && html.includes("a filled accent, or <code>quiet</code>, an outline."));
+		assert.ok(html.includes("<code>--norn-link-button-accent</code>"));
+		assert.ok(pageFor(output, "/components/patterns/norn-footer/").includes("<code>colophon</code>"));
+		assert.ok(html.includes("<norn-code-block"), "the source is shown with norn-code-block");
+		assert.equal((html.match(/<preview-canvas>/g) ?? []).length, catalog.components.find(({ name }) => name === "norn-link-button").stories.length);
+	});
+
+	test("a head component says where it renders, and has no canvas", () => {
+		const html = pageFor(output, "/components/patterns/norn-page-head/");
+		assert.ok(html.includes("Where it renders") && !html.includes("<preview-canvas"));
+	});
+
+	test("each frame renders its real component, or a whole page on its layout, with no template or slot markup left", () => {
+		for (const component of catalog.components) {
+			for (const story of component.stories) {
+				const html = pageFor(output, story.frameUrl);
+				const styled = fs.readFileSync(component.file, "utf8").includes("<style>");
+				if (component.layout) assert.ok(html.includes("<norn-header>") && html.includes("<norn-footer>"), `${story.frameUrl} is a whole page on ${component.name}`);
+				else if (styled) assert.ok(html.includes(`<${component.name}`), `${story.frameUrl} renders <${component.name}>`);
+				assert.ok(html.includes("<main"), `${story.frameUrl} has its page`);
+				assert.ok(!/<template|\sslot=|webc:/.test(html), `${story.frameUrl} has no leftover markup`);
+				assert.ok(!html.includes("undefined"), `${story.frameUrl} has no undefined`);
+			}
+		}
+	});
+
+	test("the layout stories read the sample data through the props mapping, without the studio theme", () => {
+		assert.ok(pageFor(output, "/frames/patterns/norn-landing/default/").includes("A sample project, so the studio page bodies have something to show."));
+		assert.ok(pageFor(output, "/frames/patterns/norn-workspace/default/").includes("<h1>@example/plugin-a</h1>"));
+		const docs = pageFor(output, "/frames/patterns/norn-docs/usage/");
+		assert.ok(docs.includes('rel="prev"') && docs.includes('rel="next"'), "the pager reads the docs collection");
+		for (const url of ["/frames/patterns/norn-base/default/", "/frames/patterns/norn-docs-home/default/", "/frames/patterns/norn-workspaces/default/"]) {
+			assert.ok(!/<studio-(bar|cta|credit)/.test(pageFor(output, url)), `${url} has no studio part`);
+		}
+		const story = catalog.components.find(({ name }) => name === "norn-landing").stories[0];
+		assert.ok(story.source.startsWith("---\ntitle: Default") && story.source.includes("layout: norn-landing.webc"), "a layout story's source shows its front matter");
+	});
+
+	test("the foundations page lists every token in tokens.json, with its group, default, and comment", () => {
+		const html = pageFor(output, "/foundations/");
+		const tokens = readTokens();
+		assert.ok(tokens.length > 20);
+		for (const { name, group, resolved, comment } of tokens) {
+			const row = html.match(new RegExp(`<th scope="row"><code>${name}</code></th>([\\s\\S]*?)</tr>`))?.[1];
+			assert.ok(row, name);
+			assert.ok(row.includes(`<td>${group}</td>`), `${name}: group`);
+			assert.ok(row.includes(`<code>${resolved.replace(/&/g, "&amp;").replace(/"/g, "&quot;")}</code>`) || row.includes(`<code>${resolved}</code>`), `${name}: default`);
+			assert.ok(row.includes(comment.replace(/`([^`]+)`/g, "<code>$1</code>")), `${name}: comment`);
+		}
+		assert.ok(!html.includes("sans-stack"));
+	});
+
+	test("every page loads the token overrides in its head", () => {
+		for (const url of pagesOf(output)) {
+			const head = pageFor(output, url).match(/<head>([\s\S]*?)<\/head>/)[1];
+			assert.ok(head.includes('<script src="/assets/tokens.js">'), url);
+		}
+	});
+
+	test("the output has no HTML comments and no empty bundle tags", () => {
+		for (const url of [...catalog.components.map(({ url }) => url), "/", "/foundations/"]) {
+			const html = pageFor(output, url);
+			assert.ok(!html.includes("<!--") && !/\ssrc=""|\shref=""/.test(html), url);
+		}
+	});
+});
+
+describe("the preview under a path prefix", () => {
+	const prefix = "/webc-resources/";
+	let output;
+
+	before(() => {
+		output = build("_site-prefixed", { PATH_PREFIX: prefix });
+	});
+
+	/** Whether a URL path under the prefix names a built file or page. */
+	const exists = (pathname) => {
+		const file = path.join(output, decodeURIComponent(pathname.slice(prefix.length)));
+		return fs.existsSync(file) && (fs.statSync(file).isFile() || fs.existsSync(path.join(file, "index.html")));
+	};
+
+	test("every root-relative link, asset, and stylesheet URL stays under the prefix and names a file in the build", () => {
+		const escaped = [];
+		const missing = [];
+		const check = (page, value) => {
+			if (!value.startsWith("/") || value.startsWith("//")) return;
+			const pathname = value.split(/[?#]/)[0];
+			if (!pathname.startsWith(prefix)) escaped.push(`${page}: ${value}`);
+			else if (!exists(pathname)) missing.push(`${page}: ${value}`);
+		};
+		for (const url of pagesOf(output)) {
+			const html = pageFor(output, url);
+			for (const [tag] of html.matchAll(/<[a-z][^>]*>/g)) {
+				for (const [, name, value] of tag.matchAll(/\s(href|src|poster|action|data-axe|data-bundle|srcset)="([^"]*)"/g)) {
+					if (name !== "srcset") check(url, value);
+					else if (!value.startsWith("data:")) for (const candidate of value.split(",")) check(url, candidate.trim().split(/\s+/)[0]);
+				}
+			}
+		}
+		for (const file of fs.readdirSync(path.join(output, "assets", "styles"))) {
+			for (const [, , value] of read(output, "assets", "styles", file).matchAll(/url\(\s*(["']?)([^"')]+)\1\s*\)/g)) assert.ok(!value.startsWith("/"), `${file}: ${value} is relative to the stylesheet`);
+		}
+		assert.deepEqual(escaped, [], "URLs that leave the prefix");
+		assert.deepEqual(missing, [], "URLs with no file behind them");
+	});
+
+	test("a frame, a layout, and the shell link their assets under the prefix", () => {
+		for (const url of ["/frames/patterns/norn-content-card/default/", "/frames/patterns/norn-landing/default/", "/"]) {
+			const html = pageFor(output, url);
+			assert.ok(html.includes(`<script src="${prefix}assets/tokens.js">`), `${url} loads the token overrides`);
+			assert.ok(html.includes(`href="${prefix}assets/norn/reset.css"`), `${url} links the reset`);
+		}
+		const canvas = pageFor(output, "/components/patterns/norn-content-card/");
+		assert.ok(canvas.includes(`src="${prefix}frames/patterns/norn-content-card/default/"`) && canvas.includes(`data-axe="${prefix}assets/axe.min.js"`));
+		assert.ok(pageFor(output, "/frames/patterns/norn-docs/default/").includes(`data-bundle="${prefix}assets/no-index.js"`), "the search bundle follows the prefix");
+	});
+});
+
+describe("the preview in a browser", () => {
+	let output;
+	let server;
+	let browser;
+
+	before(async () => {
+		output = build();
+		server = await serve(output);
+		browser = await launch();
+	});
+
+	after(async () => {
+		await browser?.close();
+		await server?.close();
+	});
+
+	/** Wait for a canvas's frame to load, and return it. */
+	async function frameOf(page, index = 0) {
+		const handle = await page.locator("preview-canvas iframe").nth(index).elementHandle();
+		await (await handle.contentFrame()).waitForLoadState("load");
+		return handle.contentFrame();
+	}
+
+	test("every page passes axe in light, dark, and forced colors, and keeps its list semantics", async () => {
+		assert.deepEqual(await audit(browser, server.url, pagesOf(output)), []);
+		const page = await browser.newPage();
+		for (const url of ["/", "/foundations/", "/frames/patterns/norn-card-grid/default/", "/frames/patterns/norn-landing/default/"]) {
+			await page.goto(server.url + url);
+			assert.deepEqual(await listsNeedingRole(page), [], url);
+		}
+		await page.close();
+	});
+
+	test("no preview page scrolls sideways on a phone: the foundations table scrolls in its own box", async () => {
+		const page = await browser.newPage({ viewport: { width: 390, height: 800 } });
+		for (const url of pagesOf(output).filter((entry) => !entry.startsWith("/frames/"))) {
+			await page.goto(server.url + url);
+			assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390), url);
+		}
+		await page.goto(server.url + "/foundations/");
+		assert.ok(await page.$eval("preview-tokens norn-data-table > div", (box) => box.scrollWidth > box.clientWidth), "the table scrolls instead");
+		await page.close();
+	});
+
+	test("no page logs an error to the console", async () => {
+		const page = await browser.newPage();
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
+		for (const url of ["/", "/foundations/", "/components/patterns/norn-content-card/", "/components/code-sample/norn-code-block/"]) {
+			await page.goto(server.url + url);
+			await page.waitForLoadState("networkidle");
+		}
+		assert.deepEqual(errors, []);
+		await page.close();
+	});
+
+	/** A radio in a canvas's group, by group and accessible name. */
+	const radio = (canvas, group, name) => canvas.locator(`[data-group="${group}"]`).getByRole("radio", { name, exact: true });
+	/** Pick one the way a person does: through its icon. */
+	const pick = (canvas, group, name) => canvas.locator(`[data-group="${group}"] label`).filter({ hasText: new RegExp(`^\\s*${name}\\s*$`) }).click();
+
+	test("the scheme control is a sun, a system mark, and a moon, in that order, with System selected", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const canvas = page.locator("preview-canvas").first();
+		const labels = canvas.locator('[data-group="scheme"] label');
+		assert.deepEqual(await labels.locator("span").allTextContents(), ["Light", "System", "Dark"]);
+		assert.deepEqual(await labels.evaluateAll((all) => all.map((label) => label.querySelectorAll("svg[aria-hidden='true']").length)), [1, 1, 1], "an icon each, hidden from assistive tech");
+		assert.equal(await radio(canvas, "scheme", "System").isChecked(), true);
+		assert.equal((await canvas.locator('[data-group="scheme"] legend').textContent()).trim(), "Color scheme");
+		await page.close();
+	});
+
+	test("every icon option has a title, for a description on hover", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const titles = await page.locator("preview-canvas").first().locator("norn-segmented-control label").evaluateAll((labels) => labels.map((label) => label.title));
+		assert.deepEqual(titles, ["Light", "System", "Dark", "Fill", "Phone, 320px", "Tablet, 768px", "Desktop, 1024px"]);
+		await page.close();
+	});
+
+	test("the scheme thumb slides to the selection, and holds still when motion is reduced", async () => {
+		for (const [reducedMotion, transition] of [["no-preference", "translate"], ["reduce", "all"]]) {
+			const context = await browser.newContext({ reducedMotion, viewport: { width: 1280, height: 900 } });
+			const page = await context.newPage();
+			await page.goto(server.url + "/components/patterns/norn-content-card/");
+			const canvas = page.locator("preview-canvas").first();
+			const thumb = () => canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => getComputedStyle(fieldset, "::before"));
+			assert.equal((await thumb()).transitionProperty, transition, reducedMotion);
+			const offset = () => canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => Number(getComputedStyle(fieldset).getPropertyValue("--_index")));
+			const system = await offset();
+			await pick(canvas, "scheme", "Dark");
+			await page.waitForTimeout(300);
+			const dark = await offset();
+			await pick(canvas, "scheme", "Light");
+			await page.waitForTimeout(300);
+			const light = await offset();
+			assert.deepEqual([light, system, dark], [0, 1, 2], "the thumb's slot follows the checked option");
+			await context.close();
+		}
+	});
+
+	test("the scheme control sets the frame's color scheme, and System clears it", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		const canvas = page.locator("preview-canvas").first();
+		await pick(canvas, "scheme", "Dark");
+		assert.equal(await frame.evaluate(() => document.documentElement.style.colorScheme), "dark");
+		assert.equal(await frame.evaluate(() => getComputedStyle(document.body).backgroundColor), "rgb(16, 18, 22)");
+		assert.deepEqual([await radio(canvas, "scheme", "Light").isChecked(), await radio(canvas, "scheme", "System").isChecked(), await radio(canvas, "scheme", "Dark").isChecked()], [false, false, true], "one at a time");
+		await pick(canvas, "scheme", "Light");
+		assert.equal(await frame.evaluate(() => document.documentElement.style.colorScheme), "light");
+		await pick(canvas, "scheme", "System");
+		assert.equal(await frame.evaluate(() => document.documentElement.style.colorScheme), "");
+		await page.close();
+	});
+
+	test("the width control is a set of device icons that work as radio buttons", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const canvas = page.locator("preview-canvas").first();
+		const names = ["Fill", "Phone, 320px", "Tablet, 768px", "Desktop, 1024px"];
+		assert.deepEqual(await canvas.locator('[data-group="width"] label span').allTextContents(), names);
+		assert.equal(await canvas.locator('[data-group="width"] input[type="radio"]').count(), 4);
+		const frameWidth = () => page.locator("preview-canvas iframe").first().evaluate((element) => Math.round(element.getBoundingClientRect().width));
+		const fill = await frameWidth();
+		for (const [name, width] of [["Phone, 320px", 320], ["Tablet, 768px", 768], ["Desktop, 1024px", 1024]]) {
+			await pick(canvas, "width", name);
+			assert.equal(await frameWidth(), width, name);
+			const checked = await canvas.locator('[data-group="width"] input').evaluateAll((inputs) => inputs.filter((input) => input.checked).length);
+			assert.equal(checked, 1, `${name}: the others are off`);
+		}
+		await pick(canvas, "width", "Fill");
+		assert.equal(await frameWidth(), fill);
+		await page.close();
+	});
+
+	test("each canvas keeps its own selection", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const [first, second] = [page.locator("preview-canvas").nth(0), page.locator("preview-canvas").nth(1)];
+		await pick(first, "scheme", "Dark");
+		await pick(first, "width", "Phone, 320px");
+		assert.equal(await radio(second, "scheme", "System").isChecked(), true);
+		assert.equal(await radio(second, "width", "Fill").isChecked(), true);
+		const groups = await page.locator("preview-canvas [data-group] input[type='radio']").evaluateAll((inputs) => new Set(inputs.map((input) => input.name)).size);
+		assert.equal(groups, 2 * (await page.locator("preview-canvas").count()), "a radio group per control per canvas");
+		await page.close();
+	});
+
+	test("the frame grows to its content", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		await page.waitForFunction(() => document.querySelector("preview-canvas iframe").style.blockSize !== "");
+		const [frameHeight, contentHeight] = [await page.locator("preview-canvas iframe").first().evaluate((element) => element.getBoundingClientRect().height), await frame.evaluate(() => document.documentElement.scrollHeight)];
+		assert.ok(Math.abs(frameHeight - contentHeight) <= 1, `${frameHeight} vs ${contentHeight}`);
+		await page.close();
+	});
+
+	test("the custom properties table holds the overrides: name, type, default, and the field with its reset", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		assert.equal(await page.locator("preview-canvas details").count(), 0, "no panel in the canvas");
+		const table = page.locator("preview-props");
+		assert.deepEqual(await table.locator("thead th").allTextContents(), ["Property", "Type", "Default", "Override"]);
+		const row = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-content-card-radius"]') });
+		assert.equal(await row.locator("th code").textContent(), "--norn-content-card-radius");
+		assert.equal(await row.locator('[data-col="type"]').textContent(), "<length>");
+		assert.match(await row.locator("td").nth(1).textContent(), /--norn-ui-border-radius\s+6px/);
+		assert.equal(await row.locator("input").getAttribute("aria-label"), "Override --norn-content-card-radius");
+		assert.equal(await row.getByRole("button", { name: "Reset --norn-content-card-radius" }).isDisabled(), true, "nothing to reset yet");
+		const color = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-content-card-bg"]') });
+		assert.equal(await color.locator('[data-col="type"]').textContent(), "<color>");
+		assert.match(await color.locator("td").nth(1).textContent(), /--norn-surface-raised\s+light-dark\(hsl\(40, 14%, 96%\), hsl\(0, 0%, 11%\)\)/);
+		assert.equal(await table.locator("tbody tr").count(), 1 + 7, "the shared accent, then the component's seven");
+		await page.close();
+	});
+
+	test("a page with no examples lists its properties without override fields", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/studio/studio-head/");
+		assert.deepEqual(await page.locator("preview-props thead th").allTextContents(), ["Property", "Type", "Default"]);
+		assert.equal(await page.locator("preview-props input").count(), 0);
+		await page.close();
+	});
+
+	test("the accessibility check has no explanation beside it, and its icon shows idle, running, then the result", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		await frameOf(page);
+		const canvas = page.locator("preview-canvas").first();
+		const button = canvas.locator('[data-action="axe"]');
+		assert.equal(await canvas.locator("[data-hint]").count(), 0);
+		assert.equal(await button.getAttribute("aria-describedby"), null);
+		const shown = () => button.locator("norn-svg-icon").evaluateAll((icons) => icons.filter((icon) => getComputedStyle(icon).display !== "none").map((icon) => icon.dataset.for));
+		assert.deepEqual(await shown(), ["idle"]);
+		assert.equal((await button.textContent()).trim(), "Check accessibility");
+		await button.click();
+		await canvas.locator("[data-results]").getByText("No accessibility violations found.").waitFor();
+		assert.deepEqual(await shown(), ["pass"]);
+		assert.equal(await button.locator('[data-for="pass"]').evaluate((icon) => getComputedStyle(icon).color), "rgb(11, 107, 58)");
+		await page.close();
+	});
+
+	test("a failing check shows the red mark", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		await frame.evaluate(() => document.body.append(Object.assign(document.createElement("img"), { src: "data:," })));
+		const button = page.locator('preview-canvas [data-action="axe"]').first();
+		await button.click();
+		await page.locator("preview-canvas [data-results] strong").first().waitFor();
+		assert.equal(await button.getAttribute("data-state"), "fail");
+		assert.equal(await button.locator('[data-for="fail"]').evaluate((icon) => getComputedStyle(icon).color), "rgb(180, 35, 24)");
+		await page.close();
+	});
+
+	test("an override typed in the table reaches every example, and its reset puts the default back", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frames = await Promise.all([0, 1].map((index) => frameOf(page, index)));
+		const radius = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-content-card article")).borderTopLeftRadius);
+		const before = await radius(frames[0]);
+		await page.locator('preview-props input[data-prop="--norn-content-card-radius"]').fill("1px");
+		for (const frame of frames) assert.equal(await radius(frame), "1px");
+		const reset = page.getByRole("button", { name: "Reset --norn-content-card-radius" });
+		assert.equal(await reset.isEnabled(), true);
+		await reset.click();
+		assert.equal(await radius(frames[0]), before);
+		assert.equal(await page.locator('preview-props input[data-prop="--norn-content-card-radius"]').inputValue(), "");
+		assert.equal(await reset.isDisabled(), true);
+		await page.close();
+	});
+
+	test("the accent picker changes the frame's accent, and its reset undoes it", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		await page.locator('preview-props input[data-prop="--norn-ui-accent"]').evaluate((input) => {
+			input.value = "#ff0000";
+			input.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		assert.equal(await frame.evaluate(() => document.documentElement.style.getPropertyValue("--norn-ui-accent")), "#ff0000");
+		await page.getByRole("button", { name: "Reset --norn-ui-accent" }).click();
+		assert.equal(await frame.evaluate(() => document.documentElement.style.getPropertyValue("--norn-ui-accent")), "");
+		await page.close();
+	});
+
+	/** Type a value into a token's text field on the Foundations page. */
+	const override = (page, token, value) => page.locator(`preview-tokens input[type="text"][data-token="${token}"]`).fill(value);
+	/** Set a color token's light and dark pickers on the Foundations page. */
+	const overrideColor = (page, token, light, dark) =>
+		page.locator("preview-tokens [data-pair]", { has: page.locator(`[data-token="${token}"]`) }).evaluate(
+			(pair, [lightValue, darkValue]) => {
+				for (const [scheme, value] of [["light", lightValue], ["dark", darkValue]]) {
+					const input = pair.querySelector(`[data-scheme="${scheme}"]`);
+					input.value = value;
+					input.dispatchEvent(new Event("input", { bubbles: true }));
+				}
+			},
+			[light, dark],
+		);
+	const band = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-content-card article"), "::before").backgroundColor);
+	const rootToken = (page, token) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), token);
+
+	test("an override set on Foundations is saved, and every kind of preview page applies it", async () => {
+		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/foundations/");
+		await overrideColor(page, "--norn-ui-accent", "#c2185b", "#00897b");
+		assert.deepEqual(JSON.parse(await page.evaluate(() => localStorage.getItem("norn-preview-tokens"))), { "--norn-ui-accent": "light-dark(#c2185b, #00897b)" });
+		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "this page, at once");
+
+		await page.goto(server.url + "/frames/patterns/norn-content-card/default/");
+		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a plain frame");
+		assert.equal(await band(page), "rgb(194, 24, 91)", "the light value, in a light scheme");
+
+		await page.goto(server.url + "/frames/studio/studio-cta/default/");
+		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a studio frame");
+
+		await page.goto(server.url + "/frames/patterns/norn-landing/default/");
+		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a layout frame");
+
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		assert.equal(await frame.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim()), "light-dark(#c2185b, #00897b)", "a frame inside a component page");
+		await context.close();
+	});
+
+	test("the dark value applies in a dark scheme", async () => {
+		const context = await browser.newContext({ colorScheme: "dark" });
+		const page = await context.newPage();
+		await page.addInitScript(() => localStorage.setItem("norn-preview-tokens", JSON.stringify({ "--norn-ui-accent": "light-dark(#c2185b, #00897b)" })));
+		await page.goto(server.url + "/frames/patterns/norn-content-card/default/");
+		assert.equal(await band(page), "rgb(0, 137, 123)");
+		await context.close();
+	});
+
+	test("the fields show what is saved when the page loads, and an override survives a reload", async () => {
+		const context = await browser.newContext();
+		const page = await context.newPage();
+		await page.goto(server.url + "/foundations/");
+		await override(page, "--norn-ui-border-radius", "1rem");
+		await page.reload();
+		assert.equal(await page.locator('preview-tokens input[type="text"][data-token="--norn-ui-border-radius"]').inputValue(), "1rem");
+		assert.match(await page.locator("preview-tokens [data-status]").textContent(), /1 override saved/);
+		await context.close();
+	});
+
+	test("a change in one tab reaches a page that is already open, with no reload", async () => {
+		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+		const editor = await context.newPage();
+		const demo = await context.newPage();
+		await demo.goto(server.url + "/frames/patterns/norn-content-card/default/");
+		await editor.goto(server.url + "/foundations/");
+		await overrideColor(editor, "--norn-ui-accent", "#00897b", "#00897b");
+		await demo.waitForFunction(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim() === "light-dark(#00897b, #00897b)");
+		await editor.locator('preview-tokens [data-action="clear"][data-token="--norn-ui-accent"]').click();
+		await demo.waitForFunction(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim() === "", "a frame defines no token of its own");
+		await context.close();
+	});
+
+	test("the shell says when overrides apply, and its reset clears them everywhere", async () => {
+		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/");
+		assert.equal(await page.locator("preview-overrides p").isHidden(), true);
+		await page.goto(server.url + "/foundations/");
+		await override(page, "--norn-space-m", "2rem");
+		await override(page, "--norn-ui-border-radius", "0");
+		await page.goto(server.url + "/components/patterns/norn-card-grid/");
+		await page.locator("preview-overrides p").waitFor();
+		assert.match(await page.locator("preview-overrides [data-count]").textContent(), /2 token overrides apply to every preview/);
+		await page.locator('preview-overrides [data-action="reset"]').click();
+		assert.equal(await page.evaluate(() => localStorage.getItem("norn-preview-tokens")), null);
+		assert.equal(await page.locator("preview-overrides p").isHidden(), true);
+		assert.equal(await rootToken(page, "--norn-space-m"), "1.25rem");
+		await context.close();
+	});
+
+	test("a color token has a light and a dark picker that start at what it resolves to, and a reset", async () => {
+		const context = await browser.newContext();
+		const page = await context.newPage();
+		await page.goto(server.url + "/foundations/");
+		const pair = (token) => page.locator("preview-tokens [data-pair]", { has: page.locator(`[data-token="${token}"]`) });
+		const value = (token, scheme) => pair(token).locator(`[data-scheme="${scheme}"]`).inputValue();
+		assert.deepEqual([await value("--norn-surface-base", "light"), await value("--norn-surface-base", "dark")], ["#ffffff", "#101216"], "from the default");
+		assert.deepEqual([await value("--norn-ui-accent", "light"), await value("--norn-ui-accent", "dark")], ["#2346d4", "#2346d4"], "one default for both");
+		for (const scheme of ["light", "dark"]) assert.match(await value("--norn-text-accent", scheme), /^#[0-9a-f]{6}$/, "a derived token is resolved");
+		assert.equal(await pair("--norn-surface-base").locator('[data-action="clear"]').isDisabled(), true);
+
+		await pair("--norn-surface-base").locator('[data-scheme="light"]').evaluate((input) => {
+			input.value = "#ffeecc";
+			input.dispatchEvent(new Event("input", { bubbles: true }));
+		});
+		assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("norn-preview-tokens"))["--norn-surface-base"]), "light-dark(#ffeecc, #101216)", "the dark value stays where it was");
+		assert.equal(await pair("--norn-surface-base").locator('[data-action="clear"]').isEnabled(), true);
+
+		await pair("--norn-surface-base").locator('[data-action="clear"]').click();
+		assert.equal(await page.evaluate(() => localStorage.getItem("norn-preview-tokens")), null);
+		assert.deepEqual([await value("--norn-surface-base", "light"), await value("--norn-surface-base", "dark")], ["#ffffff", "#101216"], "back to the default");
+		await context.close();
+	});
+
+	test("only color tokens get color pickers, and every picker is named for its token and scheme", async () => {
+		const page = await browser.newPage();
+		await page.goto(server.url + "/foundations/");
+		assert.equal(await page.locator('preview-tokens [data-token="--norn-space-m"]').evaluate((field) => field.type), "text");
+		assert.equal(await page.locator('preview-tokens [data-token="--norn-font-mono"]').evaluate((field) => field.type), "text");
+		assert.equal(await page.locator('preview-tokens input[type="color"]').count(), 2 * (await page.locator("preview-tokens [data-pair]").count()));
+		assert.equal(await page.locator('preview-tokens input[data-token="--norn-text-base"][data-scheme="dark"]').getAttribute("aria-label"), "Override --norn-text-base, dark mode");
+		await page.close();
+	});
+
+	test("a font sample has no border, and the other samples keep theirs", async () => {
+		const page = await browser.newPage();
+		await page.goto(server.url + "/foundations/");
+		const border = (kind) => page.locator(`.sample[data-kind="${kind}"]`).first().evaluate((element) => getComputedStyle(element).borderTopWidth);
+		assert.equal(await border("font"), "0px");
+		assert.equal(await border("color"), "1px");
+		assert.equal(await border("radius"), "1px");
+		await page.close();
+	});
+
+	test("with storage blocked the page still works, and an override lasts for the page", async () => {
+		const context = await browser.newContext();
+		const page = await context.newPage();
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		await page.addInitScript(() => {
+			Object.defineProperty(window, "localStorage", {
+				get() {
+					throw new Error("blocked");
+				},
+			});
+		});
+		await page.goto(server.url + "/foundations/");
+		await override(page, "--norn-ui-border-radius", "1rem");
+		assert.equal(await rootToken(page, "--norn-ui-border-radius"), "1rem");
+		assert.deepEqual(errors, []);
+		await context.close();
+	});
+
+	test("a table override still wins over a saved one, and clearing it hands back to the saved one", async () => {
+		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/foundations/");
+		await override(page, "--norn-ui-border-radius", "1rem");
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		const frame = await frameOf(page);
+		const radius = () => frame.evaluate(() => getComputedStyle(document.querySelector("norn-content-card article")).borderTopLeftRadius);
+		assert.equal(await radius(), "16px", "the saved override");
+		await page.locator('preview-props input[data-prop="--norn-content-card-radius"]').fill("2px");
+		assert.equal(await radius(), "2px", "the table field");
+		await page.locator('preview-props input[data-prop="--norn-content-card-radius"]').fill("");
+		assert.equal(await radius(), "16px", "the saved override again");
+		await context.close();
+	});
+
+	test("a space is a rule as wide as the token, centered, with a mark at each end, in the text color", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/foundations/");
+		for (const [token, width] of [["--norn-space-xs", 8], ["--norn-space-m", 20], ["--norn-space-xl", 64]]) {
+			const row = page.locator("tr", { has: page.locator(`th code:text-is("${token}")`) });
+			const sample = row.locator(".sample");
+			const [box, cell] = [await sample.boundingBox(), await row.locator("td.preview").boundingBox()];
+			assert.equal(Math.round(box.width), width, `${token} is its own width`);
+			assert.ok(Math.abs(box.x + box.width / 2 - (cell.x + cell.width / 2)) < 1, `${token} is centered`);
+			const style = await sample.evaluate((element) => ({
+				text: getComputedStyle(element.closest("tr").querySelector("th")).color,
+				left: getComputedStyle(element).borderLeftColor,
+				right: getComputedStyle(element).borderRightColor,
+				rule: getComputedStyle(element, "::before").borderTopColor,
+				ruleWidth: getComputedStyle(element, "::before").borderTopWidth,
+			}));
+			assert.deepEqual([style.left, style.right, style.rule, style.ruleWidth], [style.text, style.text, style.text, "1px"], `${token}: marks and rule in the text color`);
+		}
+		await page.close();
+	});
+
+	test("without a script the canvas is the frame and a link to open it on its own", async () => {
+		const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/components/patterns/norn-content-card/");
+		assert.equal(await page.locator("preview-canvas [data-js]").first().isVisible(), false);
+		assert.ok(await page.locator("preview-canvas a", { hasText: "Open on its own" }).first().isVisible());
+		await context.close();
+	});
+});

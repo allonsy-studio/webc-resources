@@ -1,0 +1,9 @@
+---
+title: Another element's text
+order: 2
+---
+<p id="token">sk_test_4eC39HqLyjWDarjtT1zdp7dc</p>
+<norn-copy-button @source="token">
+	<span slot="copy">Copy token</span>
+	<span slot="copied">Token copied</span>
+</norn-copy-button>

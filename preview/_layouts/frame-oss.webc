@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta webc:is="norn-page-head" webc:nokeep :@title="title" />
+		<link rel="stylesheet" href="/assets/norn/reset.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/base.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/print.css" webc:keep />
+		<link rel="icon" href="/assets/norn-favicon.svg" type="image/svg+xml" />
+		<meta webc:is="studio-head" webc:nokeep />
+		<script src="/assets/tokens.js" webc:keep></script>
+		<link rel="stylesheet" href="/assets/styles/project.css" webc:keep />
+	</head>
+	<body>
+		<main id="main" tabindex="-1" :style="bleed ? 'padding: 0' : ''">
+			<h1 webc:if="!ownH1" class="sr-only" @text="title"></h1>
+			<template webc:nokeep @raw="content"></template>
+		</main>
+	</body>
+</html>

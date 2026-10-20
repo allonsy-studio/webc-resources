@@ -1,0 +1,25 @@
+---
+title: Sections in the body
+order: 3
+ownH1: true
+bleed: true
+---
+<norn-page-layout>
+	<norn-side-nav
+		slot="nav"
+		@label="Documentation"
+		:@items="[
+			{ url: '/frames/patterns/norn-page-layout/sections/', title: 'Overview' },
+			{ url: '#details', title: 'Details' }
+		]"
+	></norn-side-nav>
+	<h1>Overview</h1>
+	<section>
+		<h2>First section</h2>
+		<p>Sections and articles inside the body stack with a small gap.</p>
+	</section>
+	<article>
+		<h2>An article</h2>
+		<p>The gap is the same between a section and an article.</p>
+	</article>
+</norn-page-layout>

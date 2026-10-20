@@ -1,0 +1,16 @@
+---
+title: Skipped levels
+order: 3
+---
+<norn-page-toc
+	:@items="[
+		{ id: 'overview', text: 'Overview', level: 3 },
+		{ id: 'setup', text: 'Setup', level: 2 },
+		{ id: 'tokens', text: 'Design tokens', level: 4 },
+		{ id: 'usage', text: 'Usage', level: 2 }
+	]"
+></norn-page-toc>
+<p id="overview">Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
+<p id="setup">Setup: a level 2 heading.</p>
+<p id="tokens">Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
+<p id="usage">Usage: a level 2 heading.</p>

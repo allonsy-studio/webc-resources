@@ -1,0 +1,10 @@
+---
+title: Icon options
+order: 2
+---
+<norn-segmented-control :@icon-only="true">
+	<span slot="legend">Color scheme</span>
+	<label title="Light"><input type="radio" name="scheme" value="light" /><norn-svg-icon @name="sun"></norn-svg-icon><span>Light</span></label>
+	<label title="System"><input type="radio" name="scheme" value="" checked /><norn-svg-icon @name="system"></norn-svg-icon><span>System</span></label>
+	<label title="Dark"><input type="radio" name="scheme" value="dark" /><norn-svg-icon @name="moon"></norn-svg-icon><span>Dark</span></label>
+</norn-segmented-control>

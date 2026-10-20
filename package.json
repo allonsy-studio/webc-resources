@@ -11,7 +11,8 @@
 	"type": "module",
 	"workspaces": [
 		"packages/*",
-		"fixtures/*"
+		"fixtures/*",
+		"preview"
 	],
 	"scripts": {
 		"build": "node scripts/build-components.js",
@@ -19,6 +20,8 @@
 		"lint": "opx lint",
 		"pack:check": "yarn build && yarn workspaces foreach --all --no-private pack --dry-run",
 		"prepare": "husky",
+		"docs:start": "yarn build && yarn workspace webc-preview start",
+		"docs:build": "yarn build && yarn workspace webc-preview build",
 		"release": "yarn build && opx release publish",
 		"test": "yarn build && node --test",
 		"version-packages": "opx release version && yarn install --mode update-lockfile"

@@ -2,6 +2,8 @@
 
 Part of [Norn](https://github.com/allonsy-studio/webc-resources#readme). Generic page and docs patterns for Eleventy sites that use WebC: the page frame and docs shell as Eleventy layouts, and the components they are built from, such as the header, footer, hero, cards, side nav, pager, skip link, icons, link buttons, and tags. One Eleventy plugin registers all of it. Content goes in slots: a component styles the markup it's given. Each component carries its own CSS in-file, so a page ships only the styles of the components it uses.
 
+See it in the [component preview](https://allonsy-studio.github.io/webc-resources/).
+
 ## Status
 
 Beta. Versions are `0.1.0-beta.N` until 1.0.
