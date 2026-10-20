@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "@allons-y/webc-code-sample": "0.1.0-beta.0",
+    "@allons-y/webc-oss-site": "0.1.0-beta.0",
+    "@allons-y/webc-patterns": "0.1.0-beta.0"
+  },
+  "changesets": []
+}

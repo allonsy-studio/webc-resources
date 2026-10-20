@@ -21,6 +21,7 @@ const header = [
 ];
 
 export default [
+	{ ignores: ["**/_site*/**"] },
 	...js,
 	...json,
 	...md,
@@ -29,4 +30,6 @@ export default [
 		plugins: { "license-header": licenseHeader },
 		rules: { "license-header/header": ["error", header] },
 	},
+	// GitHub alerts read as link labels.
+	{ files: ["**/*.md"], rules: { "markdown/no-missing-label-refs": ["error", { allowLabels: ["!NOTE", "!TIP", "!IMPORTANT", "!WARNING", "!CAUTION"] }] } },
 ];
