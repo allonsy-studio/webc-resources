@@ -1,3 +1,5 @@
+<p><img src="preview/content/assets/norn.svg" alt="" width="64" height="64"></p>
+
 # Norn
 
 Un-opinionated WebC components, layouts, and helpers for Eleventy sites, named for the Norse weavers of fate: small threads a project weaves into its own pages. Each component carries its own CSS and JS, so a page ships only what it uses. A project adds one Eleventy plugin, with a mapping from its own data to the layout props:
@@ -18,6 +20,8 @@ export default function (config) {
 | [`@allons-y/webc-code-sample`](packages/webc-code-sample) | Code sample component with build-time syntax highlighting, used by the plugin when installed |
 | [`@allons-y/webc-studio`](packages/webc-studio) | The Allons-y Studio theme for Norn: brand tokens, fonts, and the studio banner, call to action, and credit |
 
+Try every component and layout in the [component preview](https://allonsy-studio.github.io/webc-resources/).
+
 Start with the [patterns README](packages/webc-patterns#readme): setup, the layout props, hooks, and theming.
 
 Supports evergreen browsers from about 2024. Features newer than that degrade gracefully.
@@ -36,9 +40,10 @@ yarn build       # compile packages/*/src into the components/, layouts/, and cs
 yarn lint
 yarn test        # builds first
 yarn pack:check  # builds first
+yarn docs:start  # serve the component preview (builds first)
 ```
 
-`fixtures/` holds one Eleventy site per flavor that the tests build. The components, layouts, and stylesheets are written in each package's `src/` and compiled into `components/`, `layouts/`, and `css/`, which are build output. `tokens.json` holds the shared design tokens: the build fills each `t('path')` in a source with the token's default.
+`fixtures/` holds one Eleventy site per flavor that the tests build, and [`preview/`](preview#readme) is the component preview. The components, layouts, and stylesheets are written in each package's `src/` and compiled into `components/`, `layouts/`, and `css/`, which are build output. `tokens.json` holds the shared design tokens: the build fills each `t('path')` in a source with the token's default.
 
 See [AGENTS.md](AGENTS.md) for component conventions and release flow.
 

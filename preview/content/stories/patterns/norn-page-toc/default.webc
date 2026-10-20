@@ -1,0 +1,14 @@
+---
+title: Default
+order: 1
+---
+<norn-page-toc
+	:@items="[
+		{ id: 'install', text: 'Install', level: 2 },
+		{ id: 'with-npm', text: 'With npm', level: 3 },
+		{ id: 'usage', text: 'Usage', level: 2 }
+	]"
+></norn-page-toc>
+<norn-heading-anchor @slug="install">Install</norn-heading-anchor>
+<norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
+<norn-heading-anchor @slug="usage">Usage</norn-heading-anchor>

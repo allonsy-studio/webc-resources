@@ -1,0 +1,29 @@
+---
+title: Columns and colophon
+order: 1
+bleed: true
+---
+<norn-footer>
+	<div>
+		<p><strong>Example project</strong></p>
+		<p>A short tagline.</p>
+		<p><small>Licensed under MPL-2.0</small></p>
+	</div>
+	<nav aria-label="Footer">
+		<div>
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://example.com/">GitHub</a></li>
+				<li><a href="https://example.com/changelog">Changelog</a></li>
+			</ul>
+		</div>
+		<div>
+			<p><strong>Help</strong></p>
+			<ul>
+				<li><a href="https://example.com/issues">Report an issue</a></li>
+				<li><a href="https://example.com/contributing">Contributing guide</a></li>
+			</ul>
+		</div>
+	</nav>
+	<p slot="colophon"><small>Full-width content below the columns.</small></p>
+</norn-footer>

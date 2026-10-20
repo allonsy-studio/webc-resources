@@ -1,0 +1,8 @@
+---
+title: A value
+order: 1
+---
+<p>
+	<code>npm install @example/project</code>
+	<norn-copy-button @value="npm install @example/project"><span slot="label">Copy the install command</span></norn-copy-button>
+</p>

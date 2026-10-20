@@ -2,6 +2,8 @@
 
 The Allons-y Studio theme for [Norn](https://github.com/allonsy-studio/webc-resources#readme) sites: the brand tokens, the self-hosted fonts, and the locked studio banner, call to action, and footer credit. Everything generic, the layouts and the data builders included, lives in [`@allons-y/webc-patterns`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-patterns#readme).
 
+See it in the [component preview](https://allonsy-studio.github.io/webc-resources/).
+
 ## Status
 
 Beta. Versions are `0.1.0-beta.N` until 1.0.

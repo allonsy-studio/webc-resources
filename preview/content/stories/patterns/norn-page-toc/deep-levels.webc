@@ -1,0 +1,18 @@
+---
+title: Every heading level
+order: 2
+---
+<norn-page-toc
+	:@items="[
+		{ id: 'install', text: 'Install', level: 2 },
+		{ id: 'with-npm', text: 'With npm', level: 3 },
+		{ id: 'pinned', text: 'Pinned versions', level: 4 },
+		{ id: 'ranges', text: 'Version ranges', level: 5 },
+		{ id: 'carets', text: 'Caret ranges', level: 6 }
+	]"
+></norn-page-toc>
+<norn-heading-anchor @slug="install">Install</norn-heading-anchor>
+<norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
+<norn-heading-anchor @slug="pinned" :@level="4">Pinned versions</norn-heading-anchor>
+<norn-heading-anchor @slug="ranges" :@level="5">Version ranges</norn-heading-anchor>
+<norn-heading-anchor @slug="carets" :@level="6">Caret ranges</norn-heading-anchor>

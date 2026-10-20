@@ -1,0 +1,11 @@
+---
+title: Brand and links
+order: 1
+bleed: true
+---
+<norn-header>
+	<a slot="brand" rel="home" href="#">Example project</a>
+	<a href="#install">Install</a>
+	<a href="#docs"><norn-svg-icon @name="book"></norn-svg-icon>Docs</a>
+	<a href="https://example.com/">GitHub</a>
+</norn-header>

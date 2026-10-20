@@ -1,38 +1,19 @@
-/* The preview's own page: a header, the component list, and the page. */
-.skip-link {
-	position: absolute;
-	inset-block-start: var(--preview-space-s);
-	inset-inline-start: var(--preview-space-s);
-	z-index: 1;
-	padding: var(--preview-space-s) var(--preview-space-m);
-	background: var(--preview-bg);
-	color: var(--preview-text);
-	font-weight: 700;
-	transform: translateY(-200%);
-
-	&:focus {
-		transform: none;
-	}
+/* The preview's own page: a header, the component list, and the page. Unlayered, so it beats the packaged layers. */
+.app {
+	display: grid;
+	grid-template-columns: 14rem minmax(0, 1fr);
+	gap: var(--norn-space-l);
+	inline-size: min(100% - 2 * var(--norn-space-m), 80rem);
+	margin-inline: auto;
+	padding-block: var(--norn-space-l);
 }
 
-body > header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	justify-content: space-between;
-	gap: var(--preview-space-s) var(--preview-space-l);
-	padding: var(--preview-space-m);
-	border-block-end: 1px solid var(--preview-rule);
-
-	& nav {
-		display: flex;
-		gap: var(--preview-space-m);
-	}
-
-	& nav a[aria-current="page"] {
-		color: var(--preview-text);
-		font-weight: 700;
-	}
+preview-nav {
+	position: sticky;
+	inset-block-start: var(--norn-space-m);
+	align-self: start;
+	max-block-size: calc(100dvh - 2 * var(--norn-space-m));
+	overflow-y: auto;
 }
 
 /* The brand: the Nauthiz mark, and the name in Aubrey (SIL OFL, self-hosted in assets/fonts). */
@@ -43,170 +24,164 @@ body > header {
 	font-display: swap;
 }
 
-body > header a[rel="home"] {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--preview-space-s);
-	color: var(--preview-text);
-	font: 1.6rem / 1 "Aubrey", Georgia, serif;
-	text-decoration: none;
+norn-header a[rel="home"] {
+	--norn-font-heading: "Aubrey", Georgia, serif;
+	font-size: 1.6rem;
+	font-weight: 400;
 }
 
-.mark {
+.norn-mark {
 	inline-size: auto;
 	block-size: 1.9rem;
 }
 
-.app {
-	display: grid;
-	grid-template-columns: minmax(0, 1fr);
-	gap: var(--preview-space-l);
-	inline-size: min(100% - 2 * var(--preview-space-m), 80rem);
-	margin-inline: auto;
-	padding-block: var(--preview-space-l);
-
-	&:has(> preview-nav) {
-		grid-template-columns: 14rem minmax(0, 1fr);
-	}
-}
-
-preview-nav {
-	position: sticky;
-	inset-block-start: var(--preview-space-m);
-	align-self: start;
-	max-block-size: calc(100dvh - 2 * var(--preview-space-m));
-	overflow-y: auto;
-}
-
 main {
 	display: grid;
-	gap: var(--preview-space-m);
+	gap: var(--norn-space-m);
 	align-content: start;
 	min-inline-size: 0;
+}
 
-	& > :is(h1, h2, h3, p) {
-		margin: 0;
-	}
+main > :is(h1, h2, h3, p) {
+	margin: 0;
+}
 
-	& > ul {
-		padding-inline-start: 1.25rem;
-	}
+main > ul {
+	padding-inline-start: 1.25rem;
+	list-style: revert;
+}
 
-	& > h2 {
-		margin-block-start: var(--preview-space-m);
-		font-size: 1.5rem;
-	}
+main > h2 {
+	margin-block-start: var(--norn-space-m);
+	font-size: 1.5rem;
 }
 
 .lead {
-	max-inline-size: var(--preview-measure);
+	max-inline-size: var(--norn-text-measure);
 	font-size: 1.2rem;
 }
 
 .meta {
-	color: var(--preview-muted);
-}
-
-/* A list of links with a line of summary under each. */
-ul.cards {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-	gap: var(--preview-space-m);
-	margin: 0;
-	padding: 0;
-	list-style: none;
-
-	& li {
-		padding: var(--preview-space-m);
-		border: 1px solid var(--preview-border);
-		border-radius: 0.25rem;
-		background: var(--preview-raised);
-	}
-
-	& :is(h3, p) {
-		margin: 0;
-	}
-
-	& p {
-		margin-block-start: var(--preview-space-xs);
-	}
+	color: var(--norn-text-muted);
 }
 
 .story {
 	display: grid;
-	gap: var(--preview-space-s);
-
-	& h3 {
-		margin: 0;
-	}
+	gap: var(--norn-space-s);
 }
 
-/* A table scrolls in its own box on a narrow screen. */
-.table {
-	overflow-x: auto;
+.story h3 {
+	margin: 0;
 }
 
 main table {
 	inline-size: 100%;
 	border-collapse: collapse;
-	border-block: 1px solid var(--preview-border);
+	border-block: 1px solid var(--norn-ui-border-color);
 	font-size: 0.95rem;
+}
 
-	& :is(th, td) {
-		padding: var(--preview-space-xs) var(--preview-space-s);
-		border-block-end: 1px solid var(--preview-rule);
-		text-align: start;
-		vertical-align: top;
-	}
+main :is(th, td) {
+	padding: var(--norn-space-xs) var(--norn-space-s);
+	border-block-end: 1px solid var(--norn-ui-border-color);
+	text-align: start;
+	vertical-align: top;
+}
 
-	& th[scope="row"] {
-		font-weight: 400;
+main td code {
+	overflow-wrap: anywhere;
+}
 
-		& code {
-			font-weight: 700;
-			white-space: nowrap;
-		}
-	}
+/* The tokens table scrolls in its own box on a narrow screen. On a wide one its values wrap, as in the other tables. */
+main norn-data-table td code {
+	white-space: normal;
+}
 
-	& small {
-		display: block;
-		color: var(--preview-muted);
-	}
+main [data-col="type"] code {
+	overflow-wrap: normal;
+	white-space: nowrap;
+}
 
-	& td code {
-		overflow-wrap: anywhere;
-	}
+main th[scope="row"] code {
+	white-space: nowrap;
+}
+
+main :not(pre) > code {
+	padding: 0.1em 0.35em;
+	border-radius: 0.25rem;
+	background: var(--norn-surface-code);
+	font-family: var(--norn-font-mono);
+	font-size: 0.9em;
 }
 
 main summary {
 	cursor: pointer;
 }
 
-body > footer {
-	padding: var(--preview-space-m);
-	border-block-start: 1px solid var(--preview-rule);
-	color: var(--preview-muted);
-	font-size: 0.9rem;
+.sample {
+	display: block;
+	inline-size: 3rem;
+	block-size: 1.5rem;
+	border: 1px solid var(--norn-ui-border-color);
+}
 
-	& p {
-		margin: 0;
-	}
+.sample[data-kind="color"] {
+	background: var(--sample);
+}
+
+.sample[data-kind="font"] {
+	border: 0;
+}
+
+.sample[data-kind="font"]::before {
+	content: "Aa";
+	font-family: var(--sample);
+	font-size: 1.2rem;
+}
+
+/* A space is a rule as wide as the token, with a mark at each end, in the text color. */
+.preview {
+	inline-size: 6rem;
+}
+
+.sample[data-kind="space"] {
+	position: relative;
+	inline-size: var(--sample);
+	block-size: 1rem;
+	margin-inline: auto;
+	border: 0;
+	border-inline: 1px solid var(--norn-text-base);
+}
+
+.sample[data-kind="space"]::before {
+	content: "";
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline: 0;
+	border-block-start: 1px solid var(--norn-text-base);
+}
+
+.sample[data-kind="radius"] {
+	border-radius: var(--sample);
+}
+
+.sample[data-kind="shadow"] {
+	box-shadow: var(--sample);
+}
+
+.sample[data-kind="measure"] {
+	inline-size: min(100%, var(--sample));
+	block-size: 0.5rem;
+	background: var(--norn-ui-accent);
 }
 
 @media (max-width: 48rem) {
-	.app:has(> preview-nav) {
+	.app {
 		grid-template-columns: minmax(0, 1fr);
 	}
 
 	preview-nav {
 		position: static;
 		max-block-size: none;
-	}
-}
-
-@media print {
-	.skip-link,
-	body > header nav {
-		display: none;
 	}
 }

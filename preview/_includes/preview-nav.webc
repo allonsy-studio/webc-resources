@@ -6,13 +6,14 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+
 /**
- * The component list, grouped by category. Leaves out a category with no components and marks the page being shown with aria-current.
+ * The component list, grouped by category. Marks the page being shown with aria-current.
  * @prop {{ id: string, title: string, components: { name: string, url: string }[] }[]} categories
  */
 --->
 <nav aria-label="Components">
-	<details webc:for="category of categories.filter((entry) => entry.components.length)" open>
+	<details webc:for="category of categories" open>
 		<summary @text="category.title"></summary>
 		<ul role="list">
 			<li webc:for="component of category.components">
@@ -22,21 +23,23 @@
 	</details>
 </nav>
 <style>
-	preview-nav {
-		display: block;
-		font-size: 0.95rem;
-
-		& details + details {
-			margin-block-start: var(--preview-space-s);
+	@layer norn.components {
+		preview-nav {
+			display: block;
+			font-size: 0.95rem;
 		}
 
-		& summary {
+		preview-nav details + details {
+			margin-block-start: var(--norn-space-s);
+		}
+
+		preview-nav summary {
 			padding-block: 0.25rem;
 			font-weight: 700;
 			cursor: pointer;
 		}
 
-		& ul {
+		preview-nav ul {
 			display: grid;
 			gap: 0.1rem;
 			margin-block: 0.25rem 0;
@@ -44,25 +47,28 @@
 			list-style: none;
 		}
 
-		& a {
+		preview-nav a {
 			display: block;
-			padding: 0.2rem var(--preview-space-s);
-			border-radius: 0.25rem;
-			color: var(--preview-accent);
+			padding: 0.2rem var(--norn-space-s);
+			border-radius: var(--norn-ui-border-radius);
+			color: var(--norn-text-accent);
+			text-decoration: none;
+		}
 
-			&:is(:hover, :focus-visible) {
-				background: var(--preview-raised);
-			}
+		preview-nav a:is(:hover, :focus-visible) {
+			background: var(--norn-surface-raised);
+		}
 
-			&[aria-current="page"] {
-				background: var(--preview-raised);
-				color: var(--preview-text);
-				font-weight: 700;
-			}
+		preview-nav a[aria-current="page"] {
+			background: var(--norn-surface-raised);
+			color: var(--norn-text-base);
+			font-weight: 700;
 		}
 
 		@media print {
-			display: none;
+			preview-nav {
+				display: none;
+			}
 		}
 	}
 </style>

@@ -1,0 +1,12 @@
+---
+title: Accent cycle
+order: 1
+---
+<h2>Features</h2>
+<norn-card-grid>
+	<li><norn-content-card><h3>Plain card</h3><p>A card with no link.</p></norn-content-card></li>
+	<li><norn-content-card><h3><a href="https://example.com/">Linked card</a></h3><p>A card whose heading links somewhere.</p></norn-content-card></li>
+	<li><norn-content-card><h3>Third card</h3><p>Cards take the next accent in turn.</p></norn-content-card></li>
+	<li><norn-content-card><h3>Fourth card</h3><p>The fourth accent, then the cycle repeats.</p></norn-content-card></li>
+	<li><norn-content-card><h3>Fifth card</h3><p>Back to the first accent.</p></norn-content-card></li>
+</norn-card-grid>

@@ -1,0 +1,13 @@
+---
+title: Right to left
+order: 2
+---
+<div dir="rtl" lang="ar">
+	<norn-side-nav
+		:@items="[
+			{ url: '/frames/patterns/norn-side-nav/rtl/', title: 'البدء' },
+			{ url: '#usage', title: 'الاستخدام' },
+			{ url: '#reference', title: 'المرجع' }
+		]"
+	></norn-side-nav>
+</div>

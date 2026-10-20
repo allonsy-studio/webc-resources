@@ -1,0 +1,11 @@
+---
+title: Variants
+order: 1
+---
+<div style="display: grid; gap: 0.75rem">
+	<norn-call-out><p>Useful information to keep in mind.</p></norn-call-out>
+	<norn-call-out @variant="tip"><p>A faster way to do the same thing.</p></norn-call-out>
+	<norn-call-out @variant="important"><p>Something a reader needs to succeed.</p></norn-call-out>
+	<norn-call-out @variant="warning"><p>Needs attention right away.</p></norn-call-out>
+	<norn-call-out @variant="caution"><p>Can cause a problem you can't undo.</p></norn-call-out>
+</div>

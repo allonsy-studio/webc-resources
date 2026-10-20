@@ -1,13 +1,11 @@
 # Component preview
 
-A Storybook-style preview of the components and layouts in the three packages, built with Eleventy and WebC. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
-
-The preview reads each package's components and layouts from their JSDoc and joins them to their stories. While the packages hold no components, the components page says so.
+A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the studio theme; the studio components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
 
 ## Run it
 
 ```sh
-yarn docs:start        # serve at http://localhost:8080, rebuilt as the packages or the preview change
+yarn docs:start        # compile the components, then serve at http://localhost:8080, rebuilt as `src/` or `tokens.json` change
 yarn docs:build        # build into preview/_site
 ```
 
@@ -19,34 +17,63 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 | --- | --- |
 | Description, props, slots, custom properties | The JSDoc in the `<!--- … --->` comment at the top of the component file, read at build time |
 | Examples | The stories in `content/stories/<package>/<component>/`, each rendered in its own frame |
-| Source | The story file |
+| Source | The story file, shown with `norn-code-block` |
 | Canvas controls | The `preview-canvas` component, below |
 
-The navigation and the components page group the components by the `@category` each declares in its JSDoc.
+Head components (`norn-page-head`, `studio-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
+
+The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document.
 
 ### Canvas controls
 
 | Control | Does |
 | --- | --- |
-| Color scheme | Light, System, and Dark radio buttons. System leaves the frame to the reader's setting. |
-| Width | Fill, phone (320px), tablet (768px), and desktop (1024px) radio buttons |
-| Check accessibility | Loads axe-core into the frame and runs the WCAG 2.0, 2.1, and 2.2 A and AA rules and axe's best practices on the frame as it is now. It lists each violation with its rule, impact, and how many elements fail, or says there are none. |
+| Color scheme | Three icon buttons, a sun for light, a half-filled circle for the system setting, and a moon for dark. They are radio buttons, so one is on at a time. |
+| Width | Device icons for fill, phone (320px), tablet (768px), and desktop (1024px), also radio buttons |
+| Check accessibility | Loads axe-core into the frame and runs the WCAG 2.0, 2.1, and 2.2 A and AA rules and axe's best practices on the frame as it is now: the scheme, the width, and any overrides. It lists each violation with its rule, impact, and how many elements fail, or says there are none. |
+| Custom properties | A table of the component's properties: name, type, default, and an override field in the same row |
+
+## Try the tokens
+
+The Foundations page lists every shared `--norn-` token in `tokens.json` with its group, default, comment, a preview, and an Override column. A space is drawn as a rule as wide as the token with a mark at each end.
+
+- A color token has a Light picker and a Dark picker, both `type="color"`, that start at what the token resolves to in each scheme, and a Reset. Setting either saves `light-dark(light, dark)`, so the other keeps its value. Every other token has a text field that takes any CSS value, such as `1.5rem`.
+- A value is saved in `localStorage` (key `norn-preview-tokens`) and applied to every preview page, frames and the preview's own pages alike, before the page first paints.
+- Other open tabs update when a value changes, through the `storage` event.
+- A bar under the header shows how many overrides apply, with a Reset.
+- A field in a canvas's Custom properties panel wins over a saved override, and clearing it hands the value back.
+- With storage blocked, an override lasts for the page it was set on.
+
+`assets/tokens.js` does the loading. It sets values through the CSSOM, so a stored value can't break out of its rule.
+
+The component frames define no token, so they show the defaults compiled into each component. The preview's own pages read the tokens in their CSS, so they load `assets/styles/tokens.css`, a `:root` rule the build writes from `tokens.json` (`content/tokens.11ty.js`).
 
 ## Add a story
 
 Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding or `ownH1: true` when the component renders the page's h1. The file's body is the story: write the component the way a page would.
 
-A component or layout with no story fails `yarn test`. A page can only use a component the build registers: add the packages' components to the WebC plugin in `eleventy.config.js` when the first story needs one.
+```webc
+---
+title: Linked heading
+order: 2
+---
+<h2>Cards</h2>
+<norn-content-card>
+	<h3><a href="https://example.com/">Linked card</a></h3>
+	<p>Put a link in the heading to link the card.</p>
+</norn-content-card>
+```
+
+A new component or layout with no story fails `yarn test`. For a layout, the story's front matter names it (`layout: norn-landing.webc`), and the page's props come from the sample `site` and `project` data in `_data/`, mapped in `eleventy.config.js`.
 
 ## Layout
 
 | Path | Holds |
 | --- | --- |
-| `eleventy.config.js` | The WebC plugin for the preview's own components, the path prefix, the passthrough copies, and the watch targets |
+| `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, and the watch targets |
 | `lib/catalog.js` | The JSDoc parser and the component and story catalog |
-| `lib/browser.js` | The browser test's helpers: a static server, a launcher, and the axe audit |
-| `_data/` | The catalog |
-| `_includes/` | The preview's own components: `preview-nav` and `preview-canvas` |
-| `_layouts/` | The page shell and the story frame |
-| `content/` | The components page, `stories/`, and `assets/` (the preview's CSS, brand, and font) |
+| `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
+| `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
+| `_layouts/` | The page shell, and the plain and studio story frames: layouts of the preview's own, which call `norn-page-head` and link the reset, base, and print styles |
+| `content/` | The index, foundations, and component pages, `stories/`, and `assets/` (the token loader and the preview CSS) |
 | `build.test.js` | Builds the preview and audits its pages |

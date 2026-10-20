@@ -1,0 +1,5 @@
+---
+title: Default
+order: 1
+---
+<div style="padding: 1.25rem"><studio-cta></studio-cta></div>

@@ -1,0 +1,7 @@
+---
+title: Labeled and mirrored
+order: 2
+---
+<p><norn-svg-icon @name="warning"><span slot="label">Warning</span></norn-svg-icon> An icon with a label slot carries its name as hidden text.</p>
+<p dir="rtl" lang="ar">التالي <norn-svg-icon @name="arrow-end"></norn-svg-icon></p>
+<p>The arrow above points to the end of the line, which is the left in right-to-left text.</p>

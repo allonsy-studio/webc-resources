@@ -1,0 +1,22 @@
+---
+title: Full
+order: 1
+ownH1: true
+bleed: true
+---
+<norn-page-hero>
+	<h1><span>Example project</span> <span>A short line about what it does</span></h1>
+	<p>One or two sentences on why a reader would want it, and what they get in the first minute.</p>
+	<nav aria-label="Get started">
+		<ul role="list">
+			<li><norn-link-button @href="#install">Get started</norn-link-button></li>
+			<li><norn-link-button @href="https://example.com/" @variant="quiet">View on GitHub</norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-tag-list>
+		<li><norn-svg-icon @name="check"></norn-svg-icon>Free &amp; open source</li>
+		<li><norn-svg-icon @name="check"></norn-svg-icon>License: MPL-2.0</li>
+		<li><norn-svg-icon @name="check"></norn-svg-icon>Node 24+</li>
+	</norn-tag-list>
+	<norn-code-block @language="sh" @code="$ npm install @example/project"></norn-code-block>
+</norn-page-hero>

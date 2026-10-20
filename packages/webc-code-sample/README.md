@@ -2,6 +2,8 @@
 
 Part of [Norn](https://github.com/allonsy-studio/webc-resources#readme). `norn-code-block` WebC component with build-time syntax highlighting. Prism runs at build; the browser receives token ranges for the CSS Custom Highlight API and a copy button, with no highlighter shipped.
 
+See it in the [component preview](https://allonsy-studio.github.io/webc-resources/).
+
 ## Status
 
 Beta. Versions are `0.1.0-beta.N` until 1.0.

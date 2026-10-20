@@ -1,20 +1,18 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="color-scheme" content="light dark" />
-		<title @text="title"></title>
+		<meta webc:is="norn-page-head" webc:nokeep :@title="title" />
+		<link rel="stylesheet" href="/assets/norn/reset.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/base.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/print.css" webc:keep />
 		<link rel="icon" href="/assets/norn-favicon.svg" type="image/svg+xml" />
-		<link rel="stylesheet" href="/assets/styles/base.css" webc:keep />
-		<link rel="stylesheet" href="/assets/styles/frame.css" webc:keep />
-		<style @raw="getBundle('css')" webc:keep></style>
+		<script src="/assets/tokens.js" webc:keep></script>
+		<link rel="stylesheet" href="/assets/styles/project.css" webc:keep />
 	</head>
 	<body>
 		<main id="main" tabindex="-1" :style="bleed ? 'padding: 0' : ''">
 			<h1 webc:if="!ownH1" class="sr-only" @text="title"></h1>
 			<template webc:nokeep @raw="content"></template>
 		</main>
-		<script @raw="getBundle('js')" webc:keep></script>
 	</body>
 </html>

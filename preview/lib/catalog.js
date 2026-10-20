@@ -8,7 +8,9 @@
 import fs from "node:fs";
 import path from "node:path";
 
-/** Components that live in the document head: they have no canvas of their own. */
+import { readTokens as readTokensFile } from "../../scripts/build-components.js";
+
+/** Components that live in the document head: they have no canvas, since every frame renders them. */
 export const HEAD_COMPONENTS = new Set(["norn-page-head", "studio-head"]);
 
 /** The kinds of component, in the order the preview shows them. Each component names its own in its JSDoc with `@category`. */
@@ -25,7 +27,7 @@ export const CATEGORIES = [
 const PACKAGES = [
 	["webc-patterns", "Patterns"],
 	["webc-code-sample", "Code sample"],
-	["webc-oss-site", "Studio site"],
+	["webc-studio", "Studio site"],
 ];
 
 const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -33,19 +35,44 @@ const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").r
 /** Escape text and turn `code` spans into elements: the only Markdown the JSDoc uses. */
 export const inline = (text) => escapeHtml(text).replace(/`([^`]+)`/g, "<code>$1</code>");
 
+/** What a shared token looks like, so a page can show a swatch or a sample, and a custom property that falls back to it has a type. */
+export const kindOf = (tokenPath) => {
+	if (tokenPath.startsWith("space.")) return "space";
+	if (tokenPath.startsWith("font.")) return "font";
+	if (tokenPath === "ui.border.radius") return "radius";
+	if (tokenPath === "ui.shadow") return "shadow";
+	if (tokenPath === "text.measure") return "measure";
+	return "color";
+};
+
+/** The CSS type each kind of shared token has. */
+const KIND_TYPES = { color: "<color>", space: "<length>", radius: "<length>", measure: "<length>", font: "<font-family>", shadow: "<shadow>" };
+
 /**
- * Split a custom property's note into what it is and what it falls back to, and work out its type.
- * The type comes from a literal in the fallback, such as `17rem` or `#2346d4`. Where none tells, it is left empty.
+ * The shared tokens in tokens.json, by custom property, with their defaults.
+ *
+ * @returns {Map<string, { path: string, group: string, value: string, comment: string, kind: string }>}
+ */
+export function readTokens() {
+	return new Map(readTokensFile().map(({ name, path: tokenPath, group, resolved, comment }) => [name, { path: tokenPath, group, value: resolved.replace(/\s+/g, " ").trim(), comment, kind: kindOf(tokenPath) }]));
+}
+
+/**
+ * Split a custom property's note into what it is and what it falls back to, and work out its type and default.
+ * The type comes from the shared token it falls back to, or from a literal such as `17rem`. Where neither tells, it is left empty.
  *
  * @param {string} text - The raw note, such as "Border color. Falls back to --norn-ui-border-color."
+ * @param {Map<string, { value: string, kind: string }>} tokens
  */
-function describeProp(text) {
+function describeProp(text, tokens) {
 	const [summary, rest] = text.split(/\s*Falls back to\s+/);
 	const fallback = rest?.replace(/\.$/, "") ?? "";
-	let type = "";
-	if (/\d(rem|em|px)\b/.test(fallback)) type = "<length>";
-	if (!type && /#[0-9a-f]{3,8}\b|Text\b|Canvas/i.test(fallback)) type = "<color>";
-	return { description: inline(summary.trim()), fallback, type };
+	const known = [...fallback.matchAll(/--norn-[a-z0-9-]+/g)].map(([name]) => name).find((name) => tokens.has(name));
+	let type = known ? (KIND_TYPES[tokens.get(known).kind] ?? "") : "";
+	if (!type && /\d(rem|em|px)\b/.test(fallback)) type = "<length>";
+	if (!type && /#[0-9a-f]{3,8}\b|Text\b|Canvas|studio (magenta|orange|yellow|teal)/i.test(fallback)) type = "<color>";
+	const single = /^--norn-[a-z0-9-]+$/.test(fallback) && tokens.has(fallback);
+	return { description: inline(summary.trim()), fallback, fallbackValue: single ? tokens.get(fallback).value : "", type };
 }
 
 /**
@@ -162,11 +189,11 @@ const FOLDERS = [
 
 /**
  * Every package, with its components and layouts parsed from their JSDoc and joined to their stories.
- * A package with no components, or none built yet, has an empty list; so does the catalog when no package has any.
  *
  * @param {{ packagesDir: string, storiesDir: string }} options
  */
 export function buildCatalog({ packagesDir, storiesDir }) {
+	const tokens = readTokens();
 	const packages = PACKAGES.map(([folder, title]) => {
 		const id = folder.replace(/^webc-/, "");
 		const pkg = JSON.parse(fs.readFileSync(path.join(packagesDir, folder, "package.json"), "utf8"));
@@ -196,7 +223,7 @@ export function buildCatalog({ packagesDir, storiesDir }) {
 				description: doc.description,
 				props: doc.props,
 				slots: doc.slots,
-				cssprops: doc.cssprops.map(({ name, raw }) => ({ name, ...describeProp(raw) })),
+				cssprops: doc.cssprops.map(({ name, raw }) => ({ name, ...describeProp(raw, tokens) })),
 				stories: readStories(storiesDir, id, name),
 			};
 		});

@@ -1,0 +1,17 @@
+/* Frames: the story sits in a plain page, sized by its content. */
+body {
+	min-block-size: 0;
+}
+
+main {
+	padding: 1.25rem;
+}
+
+.sr-only {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

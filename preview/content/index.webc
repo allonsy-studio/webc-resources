@@ -1,23 +1,24 @@
 ---
 layout: shell.webc
 title: Components
-description: The components and layouts in the Norn packages, rendered from the packages themselves.
+description: Norn's WebC components for Eleventy, rendered from the packages themselves.
 ---
 <h1>Components</h1>
 <p class="lead">
-	Norn is a set of WebC components and layouts for Eleventy. This preview renders each one from its package, with its examples, props,
-	slots, and custom properties.
+	Norn is a set of un-opinionated WebC components and helpers for Eleventy. Every component in the three packages is rendered here by
+	Eleventy from the packages themselves. Pick one for its examples, props, slots, and custom properties.
 </p>
-<p webc:if="!$data.catalog.components.length">The packages hold no components yet, so there is nothing to show; each one appears here as it lands.</p>
-<template webc:for="category of $data.catalog.categories.filter((entry) => entry.components.length)" webc:nokeep>
+<template webc:for="category of $data.catalog.categories" webc:nokeep>
 	<h2 @text="category.title"></h2>
 	<p @text="category.description"></p>
-	<ul role="list" class="cards">
+	<norn-card-grid :@mono="true">
 		<li webc:for="component of category.components">
-			<h3><a :href="component.url" @text="component.name"></a></h3>
-			<p @text="component.summaryText"></p>
+			<norn-content-card>
+				<h3><a :href="component.url" @text="component.name"></a></h3>
+				<p @text="component.summaryText"></p>
+			</norn-content-card>
 		</li>
-	</ul>
+	</norn-card-grid>
 </template>
 <h2>Packages</h2>
 <p>Each component ships in one of three packages.</p>

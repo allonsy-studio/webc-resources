@@ -1,0 +1,92 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+
+/**
+ * A bar under the header while token overrides are saved, since they restyle every preview and this page too. Hidden otherwise.
+ * Needs the `previewTokens` script.
+ */
+--->
+<p data-js hidden>
+	<span data-count role="status"></span>
+	<a href="/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+<style>
+	@layer norn.components {
+		preview-overrides {
+			display: block;
+		}
+
+		preview-overrides:not(:defined) [data-js] {
+			display: none;
+		}
+
+		preview-overrides p {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: var(--norn-space-xs) var(--norn-space-m);
+			margin: 0;
+			padding: var(--norn-space-xs) var(--norn-space-m);
+			border-block-end: 1px solid var(--norn-ui-border-color);
+			background: var(--norn-surface-raised);
+			font-size: 0.9rem;
+		}
+
+		preview-overrides [hidden] {
+			display: none;
+		}
+
+		preview-overrides button {
+			padding: 0.15rem 0.6rem;
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-base);
+			color: var(--norn-text-base);
+			font: inherit;
+			cursor: pointer;
+		}
+
+		@media print {
+			preview-overrides {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		class PreviewOverrides extends HTMLElement {
+			#wired = false;
+			#sync = () => this.#render();
+
+			connectedCallback() {
+				window.addEventListener("previewtokenschange", this.#sync);
+				this.#render();
+				if (this.#wired) return;
+				this.#wired = true;
+				this.addEventListener("click", (event) => {
+					if (event.target.closest('[data-action="reset"]')) window.previewTokens?.reset();
+				});
+			}
+
+			disconnectedCallback() {
+				window.removeEventListener("previewtokenschange", this.#sync);
+			}
+
+			#render() {
+				const count = Object.keys(window.previewTokens?.get() ?? {}).length;
+				this.querySelector("p").hidden = count === 0;
+				this.querySelector("[data-count]").textContent = count ? `${count} token ${count === 1 ? "override applies" : "overrides apply"} to every preview.` : "";
+			}
+		}
+
+		if (!customElements.get("preview-overrides")) customElements.define("preview-overrides", PreviewOverrides);
+	}
+</script>

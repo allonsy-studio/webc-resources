@@ -17,8 +17,10 @@
 	"devDependencies": {
 		"@11ty/eleventy": "^3.1.6",
 		"@11ty/eleventy-plugin-webc": "^0.11.2",
-		"axe-core": "^4.10.2",
-		"playwright-core": "^1.56.0"
+		"@allons-y/webc-code-sample": "workspace:*",
+		"@allons-y/webc-patterns": "workspace:*",
+		"@allons-y/webc-studio": "workspace:*",
+		"axe-core": "^4.10.2"
 	},
 	"engines": {
 		"node": ">=22"
