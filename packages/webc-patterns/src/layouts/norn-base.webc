@@ -1,5 +1,8 @@
 <!doctype html>
-<html :lang="$data.norn.lang">
+<html
+	:lang="$data.norn.lang"
+	:dir="['ltr', 'rtl', 'auto'].includes($data.norn.dir) ? $data.norn.dir : /^(ar|fa|he|iw|ur|ps|yi|ji|dv|ckb|sd|ug)$/i.test(String($data.norn.lang).split(/[-_]/)[0]) ? 'rtl' : 'ltr'"
+>
 	<head>
 		<!---
 /*
@@ -18,6 +21,7 @@
  * Four hooks take markup from `fillHooks`: `head` at the end of the head, `banner` before the header, `cta` at the end of `main`, and `credit` as the footer's last column.
  * The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from `componentStrings` under `norn-base`, then English.
  * @prop {string} [lang] - The page language. Falls back to `page.lang`, then `en`.
+ * @prop {"ltr" | "rtl" | "auto"} [dir] - The text direction, set on `<html>`. Without it, `rtl` for a right-to-left language (`ar`, `fa`, `he`, `ur`, `ps`, `yi`, `dv`, `ckb`, `sd`, `ug`, matched on the primary subtag of `lang`), else `ltr`.
  * @prop {string} [title] - The page title. The document title is the title and the name; a page without one shows the name and the tagline.
  * @prop {string} [name] - The site name: the brand link, the footer lead, `og:site_name`.
  * @prop {string} [tagline] - A short line after the name.
@@ -30,7 +34,7 @@
  * @prop {boolean} [themeToggle] - Apply the scheme a `norn-theme-toggle` saved, before the first paint.
  * @prop {{ href: string, type?: string }} [icon] - The favicon, or its URL. Without it the page links an empty icon, so browsers skip `/favicon.ico`.
  * @prop {string} [touchIcon] - A 180px PNG for home screens.
- * @prop {{ src: string, alt?: string }} [logo] - The brand image, or its URL, in place of the name.
+ * @prop {{ src: string, alt?: string }} [logo] - The brand image, or its URL, in place of the name. The brand link renders only with a logo or a name.
  * @prop {{ url: string, title: string, icon?: string }[]} [nav] - The header links. `icon` names a `norn-svg-icon`.
  * @prop {{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { url: string, title: string }[] }[], colophon?: string }} [footer] - The footer: the lead column (`name` falls back to the site name, `text` to the tagline), its badges and license, one navigation of grouped links, and a closing line.
  * @category template
@@ -46,7 +50,7 @@
 			:@og-title="$data.norn.ogTitle || ''"
 			:@og-image="$data.norn.ogImage ? $data.norn.ogImage.src : ''"
 			:@og-image-alt="$data.norn.ogImage ? $data.norn.ogImage.alt || '' : ''"
-			:@theme-toggle="$data.norn.themeToggle === true"
+			:@theme-toggle="$data.norn.themeToggle ?? false"
 		/>
 		<meta webc:if="$data.norn.name" property="og:site_name" :content="$data.norn.name" />
 		<meta webc:if="$data.norn.locale" property="og:locale" :content="$data.norn.locale" />
@@ -78,7 +82,7 @@
 		<norn-skip-link></norn-skip-link>
 		<template webc:nokeep @html="nornHook('banner')"></template>
 		<norn-header>
-			<a slot="brand" rel="home" href="/">
+			<a webc:if="$data.norn.logo || $data.norn.name" slot="brand" rel="home" href="/">
 				<img webc:if="$data.norn.logo" :src="$data.norn.logo.src" :alt="$data.norn.logo.alt || $data.norn.name || ''" />
 				<span webc:else @text="$data.norn.name || ''"></span>
 			</a>
@@ -87,7 +91,7 @@
 		<main id="main" tabindex="-1"><template webc:if="/^norn-base(\.webc)?$/.test(String($data.layout)) && !String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
 		<norn-footer>
 			<div>
-				<p><strong @text="$data.norn.footer.name || $data.norn.name || ''"></strong></p>
+				<p webc:if="$data.norn.footer.name || $data.norn.name"><strong @text="$data.norn.footer.name || $data.norn.name"></strong></p>
 				<p webc:if="$data.norn.footer.text || $data.norn.tagline" @text="$data.norn.footer.text || $data.norn.tagline"></p>
 				<p webc:if="$data.norn.footer.badges.length" data-badges>
 					<a webc:for="badge of $data.norn.footer.badges" :href="badge.href"><img :alt="badge.alt || ''" :src="badge.src" :width="badge.width || false" :height="badge.height || false" loading="lazy" /></a>

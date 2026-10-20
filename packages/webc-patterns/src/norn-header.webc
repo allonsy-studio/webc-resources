@@ -32,7 +32,7 @@
 		norn-header {
 			display: block;
 
-			& header {
+			& > header {
 				position: relative;
 				display: flex;
 				flex-wrap: wrap;
@@ -52,7 +52,7 @@
 				}
 			}
 
-			& header > a[rel="home"] {
+			& > header > a[rel="home"] {
 				display: inline-flex;
 				align-items: center;
 				gap: var(--norn-space-xs, t('space.xs'));
@@ -63,25 +63,25 @@
 				text-decoration: none;
 			}
 
-			& header > [rel="home"] img {
+			& > header > [rel="home"] img {
 				display: block;
 				inline-size: auto;
 				max-inline-size: 100%;
 				block-size: var(--norn-header-logo, 2rem);
 			}
 
-			& header > nav:not(:has(a)) {
+			& > header > nav:not(:has(a)) {
 				display: none;
 			}
 
-			& header > nav {
+			& > header > nav {
 				display: flex;
 				flex-wrap: wrap;
 				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
 				font-size: 0.95rem;
 			}
 
-			& header > nav > [data-label] {
+			& > header > nav > [data-label] {
 				position: absolute;
 				inline-size: 1px;
 				block-size: 1px;
@@ -90,7 +90,7 @@
 				white-space: nowrap;
 			}
 
-			& header > nav > a {
+			& > header > nav > a {
 				display: inline-flex;
 				align-items: center;
 				gap: 0.4em;
@@ -105,7 +105,7 @@
 			}
 
 			@media print {
-				& header > nav {
+				& > header > nav {
 					display: none;
 				}
 			}

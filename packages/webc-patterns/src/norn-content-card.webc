@@ -32,7 +32,7 @@
 			block-size: 100%;
 
 			/* In a norn-card-grid the card spans three rows, one each for the heading, the body, and a footer, so they line up across a row. */
-			& article {
+			& > article {
 				box-sizing: border-box;
 				position: relative;
 				display: grid;
@@ -63,22 +63,24 @@
 				}
 			}
 
-			& article > * {
+			& > article > * {
 				margin: 0;
 			}
 
-			& article > :not(:last-child) {
+			& > article > :not(:last-child) {
 				margin-block-end: var(--norn-space-s, t('space.s'));
 			}
 
-			& article > :is(h2, h3, h4, h5, h6) {
+			& > article > :is(h2, h3, h4, h5, h6),
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
 				font-family: var(--norn-font-heading, t('font.heading'));
 				font-size: 1.2rem;
 				line-height: 1.15;
 				text-wrap: balance;
 			}
 
-			& article > :is(h2, h3, h4, h5, h6) a {
+			& > article > :is(h2, h3, h4, h5, h6) a,
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) a {
 				color: var(--norn-content-card-link, var(--norn-text-accent, t('text.accent')));
 				text-decoration: underline dotted;
 				text-decoration-thickness: 1px;
@@ -90,13 +92,14 @@
 				}
 			}
 
-			& article > p {
+			& > article > p {
 				color: var(--norn-text-muted, t('text.muted'));
 				text-wrap: pretty;
 			}
 
 			@container style(--norn-content-card-title-face: mono) {
-				& article > :is(h2, h3, h4, h5, h6) {
+				& > article > :is(h2, h3, h4, h5, h6),
+				& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
 					font-family: var(--norn-font-mono, t('font.mono'));
 					font-size: 1rem;
 					font-weight: 700;

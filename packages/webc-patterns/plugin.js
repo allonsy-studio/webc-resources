@@ -35,6 +35,7 @@ export const LAYOUTS = Object.freeze(["norn-base", "norn-docs", "norn-docs-home"
 /** The props `norn-base` and the layouts read, looked up on the page data by name when there is no `props` mapping. */
 const PROPS = [
 	"lang",
+	"dir",
 	"title",
 	"name",
 	"tagline",

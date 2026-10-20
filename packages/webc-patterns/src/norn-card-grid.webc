@@ -27,7 +27,7 @@
 		norn-card-grid {
 			display: block;
 
-			& ul {
+			& > ul {
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--norn-card-grid-min, 17rem)), 1fr));
 				gap: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
@@ -36,7 +36,7 @@
 				list-style: none;
 			}
 
-			& ul > li {
+			& > ul > li {
 				--norn-card-accent: var(--norn-card-grid-accent-1, var(--norn-feature-1, var(--norn-ui-accent, t('ui.accent'))));
 
 				&:nth-child(4n + 2) {
@@ -56,12 +56,12 @@
 		/* Each card spans three rows, and its heading, body, and footer take one each, so they line up across a row. The rows have no gap, so a card with no footer leaves no blank space; the space between cards is a margin on each, taken back from the end of the list. */
 		@supports (grid-template-rows: subgrid) {
 			norn-card-grid {
-				& ul {
+				& > ul {
 					row-gap: 0;
 					margin-block-end: calc(-1 * var(--norn-card-grid-gap, var(--norn-space-m, t('space.m'))));
 				}
 
-				& ul > li {
+				& > ul > li {
 					display: grid;
 					grid-row: span 3;
 					grid-template-rows: subgrid;
@@ -69,7 +69,7 @@
 					margin-block-end: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
 				}
 
-				& ul > li > * {
+				& > ul > li > * {
 					grid-row: 1 / -1;
 				}
 			}

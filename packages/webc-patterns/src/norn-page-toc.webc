@@ -35,7 +35,7 @@ function outline(items) {
 </script>
 <nav webc:if="items && items.length > 1" :aria-labelledby="'norn-page-toc-' + uid">
 	<p :id="'norn-page-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot></p>
-	<template webc:nokeep @html="outline(items)"></template>
+	<template webc:nokeep @raw="outline(items)"></template>
 </nav>
 <style>
 	@layer norn.components {

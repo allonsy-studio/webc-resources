@@ -197,7 +197,7 @@ describe("neutral fixture build", () => {
 
 	test("a page under fr/ takes every component string from componentStrings, by page.lang", () => {
 		const html = pages.french;
-		assert.ok(html.includes('<html lang="fr">') && pages.index.includes('<html lang="en">'));
+		assert.ok(html.includes('<html lang="fr" dir="ltr">') && pages.index.includes('<html lang="en" dir="ltr">'));
 		for (const text of [">Aller au contenu</a>", '<span data-string="none">Aucun résultat</span>', "<span>Astuce</span>", "<span data-prefix>Attention : </span>", '<span data-string="copy">Copier</span>', '<span data-string="label">Thème</span>']) {
 			assert.ok(html.includes(text), text);
 		}
@@ -667,7 +667,7 @@ describe("the layouts without a props mapping", () => {
 
 	test("read the page's same-named data, and take anything other than a list where a list goes as empty", () => {
 		const html = read(output, "index.html");
-		assert.ok(html.includes("<title>Plain data: Plain name</title>") && html.includes('<html lang="en">'));
+		assert.ok(html.includes("<title>Plain data: Plain name</title>") && html.includes('<html lang="en" dir="ltr">'));
 		assert.ok(html.includes('<a href="/">Plain home</a>'), "the nav from front matter");
 		assert.ok(html.includes("<p><strong>Plain name</strong></p>") && html.includes("<p>Read off the page data</p>"), "the footer lead, with a footer that is not an object");
 		const docs = read(output, "docs", "index.html");

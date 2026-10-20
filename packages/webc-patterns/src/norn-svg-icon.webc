@@ -72,19 +72,22 @@ function icon(name) {
 	return { ...ICONS[name], mirror: MIRROR.includes(name) };
 }
 
-/** The attributes of a project icon's `<svg>`. WebC lowercases an attribute written in the markup, and `viewBox` needs its case. */
-function attributes(name) {
-	const { viewBox, mirror } = icon(name);
-	return { viewBox, "aria-hidden": "true", ...(mirror && { "data-mirror": "" }), "data-project": "" };
+/** An attribute value, escaped. */
+const attr = (value) => String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+/**
+ * The whole `<svg>` for a name, as markup, so the template has one expression to compile.
+ * A project icon keeps its own `viewBox` and body.
+ */
+function drawing(name) {
+	const { viewBox, mirror, body, d, fill } = icon(name);
+	const flip = mirror ? " data-mirror" : "";
+	if (body) return `<svg${viewBox ? ` viewBox="${attr(viewBox)}"` : ""} aria-hidden="true"${flip} data-project>\n\t${body}\n</svg>`;
+	const extra = fill ? `\n\t<path d="${attr(fill)}" data-fill></path>` : "";
+	return `<svg viewBox="0 0 24 24" aria-hidden="true"${flip}>\n\t<path d="${attr(d)}"></path>${extra}\n</svg>`;
 }
 </script>
-<svg webc:if="!icon(name).body" viewBox="0 0 24 24" aria-hidden="true" :data-mirror="icon(name).mirror ? '' : undefined">
-	<path :d="icon(name).d"></path>
-	<path webc:if="icon(name).fill" :d="icon(name).fill" data-fill></path>
-</svg>
-<svg webc:else @attributes="attributes(name)">
-	<template webc:nokeep @raw="icon(name).body"></template>
-</svg>
+<template webc:nokeep @raw="drawing(name)"></template>
 <slot name="label"></slot>
 <style>
 	@layer norn.components {

@@ -43,15 +43,15 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 			--_color: var(--norn-page-notice-color, light-dark(#1b4fc4, #8fb0ff));
 			display: block;
 
-			&:has([data-severity="success"]) {
+			&:has(> [data-severity="success"]) {
 				--_color: var(--norn-page-notice-color, light-dark(#0b6b3a, #7ed6a1));
 			}
 
-			&:has([data-severity="warning"]) {
+			&:has(> [data-severity="warning"]) {
 				--_color: var(--norn-page-notice-color, light-dark(#9a4a00, #ffb36b));
 			}
 
-			&:has([data-severity="error"]) {
+			&:has(> [data-severity="error"]) {
 				--_color: var(--norn-page-notice-color, light-dark(#b42318, #ff8a80));
 			}
 

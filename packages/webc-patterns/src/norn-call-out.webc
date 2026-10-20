@@ -33,19 +33,19 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 			--_color: var(--norn-call-out-color, light-dark(#1b4fc4, #8fb0ff));
 			display: block;
 
-			&:has([data-variant="tip"]) {
+			&:has(> [data-variant="tip"]) {
 				--_color: var(--norn-call-out-color, light-dark(#0b6b3a, #7ed6a1));
 			}
 
-			&:has([data-variant="important"]) {
+			&:has(> [data-variant="important"]) {
 				--_color: var(--norn-call-out-color, light-dark(#6b2fc2, #c4a3ff));
 			}
 
-			&:has([data-variant="warning"]) {
+			&:has(> [data-variant="warning"]) {
 				--_color: var(--norn-call-out-color, light-dark(#9a4a00, #ffb36b));
 			}
 
-			&:has([data-variant="caution"]) {
+			&:has(> [data-variant="caution"]) {
 				--_color: var(--norn-call-out-color, light-dark(#b42318, #ff8a80));
 			}
 

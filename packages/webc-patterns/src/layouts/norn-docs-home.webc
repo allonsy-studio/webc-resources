@@ -21,20 +21,22 @@ layout: norn-base.webc
  */
 --->
 <norn-page-hero>
-	<h1>
-		<span @text="$data.norn.name || ''"></span>
+	<h1 webc:if="$data.norn.name">
+		<span @text="$data.norn.name"></span>
 		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
 	</h1>
 	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
-	<nav aria-labelledby="norn-docs-home-actions">
+	<nav webc:if="$data.norn.docs.length || $data.norn.repo" aria-labelledby="norn-docs-home-actions">
 		<span id="norn-docs-home-actions" hidden @text="nornComponentStrings?.('norn-docs-home', 'actions', $data.page) || 'Get started'"></span>
 		<ul role="list">
 			<li webc:if="$data.norn.docs.length"><norn-link-button :@href="$data.norn.docs[0].url"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'docs', $data.page) || 'Read the docs'"></span></norn-link-button></li>
 			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.docs.length ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
-	<norn-code-block webc:if="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
-	<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+	<template webc:nokeep>
+		<norn-code-block webc:if="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+	</template>
 </norn-page-hero>
 <norn-page-section webc:if="$data.norn.docs.length" id="docs">
 	<h2 @text="nornComponentStrings?.('norn-docs-home', 'contents', $data.page) || 'Documentation'"></h2>

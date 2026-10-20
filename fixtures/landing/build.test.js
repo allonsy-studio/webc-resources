@@ -96,7 +96,7 @@ describe("landing fixture with the OSS site layer", () => {
 	test("the stripe is a brand token in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
 		const css = allCss(output, pages["/"]);
 		assert.match(css, /@layer norn\.oss \{\s*:root \{[^}]*--norn-header-stripe: linear-gradient\(/);
-		assert.ok(/norn-header \{[\s\S]*?& header \{[\s\S]*?&::after/.test(css) && !pages["/"].includes("--norn-header-stripe"), "set in the theme, not on the tag");
+		assert.ok(/norn-header \{[\s\S]*?& > header \{[\s\S]*?&::after/.test(css) && !pages["/"].includes("--norn-header-stripe"), "set in the theme, not on the tag");
 		assert.ok(css.includes('src: url("../assets/fonts/pt-mono.woff2")'));
 		assert.deepEqual(fs.readdirSync(path.join(output, "assets", "fonts")).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
 	});

@@ -25,12 +25,12 @@ layout: norn-base.webc
  */
 --->
 <norn-page-hero>
-	<h1>
-		<span @text="$data.norn.name || ''"></span>
+	<h1 webc:if="$data.norn.name">
+		<span @text="$data.norn.name"></span>
 		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
 	</h1>
 	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
-	<nav aria-labelledby="norn-landing-actions">
+	<nav webc:if="$data.norn.install || $data.norn.repo" aria-labelledby="norn-landing-actions">
 		<span id="norn-landing-actions" hidden @text="nornComponentStrings?.('norn-landing', 'actions', $data.page) || 'Get started'"></span>
 		<ul role="list">
 			<li webc:if="$data.norn.install"><norn-link-button @href="#install"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'start', $data.page) || 'Get started'"></span></norn-link-button></li>
@@ -42,16 +42,18 @@ layout: norn-base.webc
 		<li webc:if="$data.norn.license"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}').replace('{license}', $data.norn.license)"></span></li>
 		<li webc:if="$data.norn.node"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'node', $data.page) || 'Node {node}').replace('{node}', $data.norn.node)"></span></li>
 	</norn-tag-list>
-	<norn-code-block
-		webc:if="$data.norn.usage && typeof nornTokenRanges === 'function'"
-		id="usage"
-		:@language="$data.norn.usage.language"
-		:@code="$data.norn.usage.code"
-		:@caption="$data.norn.usage.caption"
-	></norn-code-block>
-	<figure webc:elseif="$data.norn.usage" id="usage"><pre><code @text="$data.norn.usage.code"></code></pre><figcaption webc:if="$data.norn.usage.caption" @text="$data.norn.usage.caption"></figcaption></figure>
-	<norn-code-block webc:elseif="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
-	<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+	<template webc:nokeep>
+		<norn-code-block
+			webc:if="$data.norn.usage && typeof nornTokenRanges === 'function'"
+			id="usage"
+			:@language="$data.norn.usage.language"
+			:@code="$data.norn.usage.code"
+			:@caption="$data.norn.usage.caption"
+		></norn-code-block>
+		<figure webc:elseif="$data.norn.usage" id="usage"><pre><code @text="$data.norn.usage.code"></code></pre><figcaption webc:if="$data.norn.usage.caption" @text="$data.norn.usage.caption"></figcaption></figure>
+		<norn-code-block webc:elseif="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+	</template>
 </norn-page-hero>
 <norn-page-section webc:if="$data.norn.usage && $data.norn.install" id="install">
 	<h2 @text="nornComponentStrings?.('norn-landing', 'install', $data.page) || 'Install'"></h2>

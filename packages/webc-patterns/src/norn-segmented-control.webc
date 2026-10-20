@@ -155,13 +155,13 @@ const grouped = (options, name) => {
 				}
 
 				& label {
-					box-sizing: border-box;
 					transition: color var(--norn-segmented-control-duration, 180ms) ease-out;
 				}
 			}
 
 			/* The radio covers its label, so a click anywhere on the option selects it, and the native control keeps the focus. */
 			& label {
+				box-sizing: border-box;
 				position: relative;
 				z-index: 0;
 				display: inline-flex;

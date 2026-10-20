@@ -105,8 +105,9 @@ config.addPlugin(norn, {
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
 | `lang` | string | `page.lang`, then `en` | `<html lang>` |
+| `dir` | `"ltr"`, `"rtl"`, or `"auto"` | `rtl` for a right-to-left `lang`, else `ltr` | `<html dir>`. Right-to-left languages are `ar`, `fa`, `he`, `ur`, `ps`, `yi`, `dv`, `ckb`, `sd`, and `ug`, matched on the primary subtag of `lang` |
 | `title` | string | none | `<title>`, as "title: name"; the `<h1>` of the docs layouts |
-| `name` | string | none | The brand link, the footer's lead, `og:site_name`, and the hero `<h1>` |
+| `name` | string | none | The brand link, the footer's lead, `og:site_name`, and the hero `<h1>`. Each is left out without one (the brand link also shows for a logo) |
 | `tagline` | string | none | After the name in the title and the hero `<h1>`; the footer's text |
 | `description` | string | none | `<meta name="description">` and `og:description`; the hero paragraph |
 | `url` | string | none | `<link rel="canonical">` and `og:url`. Absolute, for a relative `ogImage` |

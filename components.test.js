@@ -208,12 +208,12 @@ function tree(text) {
 	const root = { name: "#host", children: [] };
 	const stack = [root];
 	const markup = withoutDocs(text).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
-	for (const [, close, name, , selfClose] of markup.matchAll(/<(\/?)([a-z][a-z0-9-]*)\b([^>]*?)(\/?)>/g)) {
+	for (const [, close, name, attrs, selfClose] of markup.matchAll(/<(\/?)([a-z][a-z0-9-]*)\b([^>]*?)(\/?)>/g)) {
 		if (close) {
 			while (stack.length > 1 && stack.pop().name !== name);
 			continue;
 		}
-		const node = { name, children: [] };
+		const node = { name, attrs, children: [] };
 		stack.at(-1).children.push(node);
 		if (!selfClose && !VOID.has(name)) stack.push(node);
 	}
@@ -222,6 +222,7 @@ function tree(text) {
 
 const descendants = (node) => node.children.flatMap((child) => [child, ...descendants(child)]);
 const holdsSlot = (node) => descendants(node).some((child) => child.name === "slot");
+const holdsDefaultSlot = (node) => descendants(node).some((child) => child.name === "slot" && !/\bname=/.test(child.attrs));
 
 /** Split on a separator outside brackets and parentheses. */
 function splitTop(value, separator) {
@@ -272,7 +273,10 @@ function selectors(text) {
 	return found;
 }
 
-/** The step of `selector` that can reach slotted content without `:where()` or a child path, if any. */
+/**
+ * The step of `selector` that can reach slotted content without `:where()` or a child path, if any.
+ * With a default slot, even the first step from the host needs a child path: a descendant of the host also matches the same element in the slotted content.
+ */
 function leak(selector, root, tag) {
 	const steps = splitTop(selector.replace(/\s*([>+~])\s*/g, "$1"), /[\s>+~]/);
 	if (!steps[0].startsWith(tag)) return undefined;
@@ -288,6 +292,8 @@ function leak(selector, root, tag) {
 			nodes = nodes.flatMap((node) => node.children.filter(matches));
 		} else if (compound.startsWith(":where(")) {
 			return undefined;
+		} else if (nodes.length === 1 && nodes[0] === root && holdsDefaultSlot(root)) {
+			return compound;
 		} else if (nodes.length === 1 && nodes[0] === root && type && root.children.some((child) => child.name === type)) {
 			nodes = root.children.filter(matches);
 		} else if (nodes.some(holdsSlot)) {
@@ -313,6 +319,30 @@ test("a slot-taking layout, landmark, or container never styles slotted componen
 		}
 	}
 	assert.deepEqual(leaks, [], "wrap the step in :where(), or scope it to the component's own markup");
+});
+
+test("the leak check flags a descendant step from the host to the component's own element when it has a default slot, and passes a child path", () => {
+	const treeOf = (name) => tree(components.find(({ file }) => file.endsWith(`/${name}.webc`)).text);
+	for (const [name, selector, step] of [
+		["norn-card-grid", "norn-card-grid ul", "ul"],
+		["norn-card-grid", "norn-card-grid ul > li > *", "ul"],
+		["norn-page-section", "norn-page-section section", "section"],
+		["norn-page-section", "norn-page-section section > h2", "section"],
+		["norn-content-card", "norn-content-card article", "article"],
+		["norn-content-card", "norn-content-card article > :is(h2, h3, h4, h5, h6) a", "article"],
+		["norn-footer", "norn-footer footer > div:first-child > * > ul", "footer"],
+	]) {
+		assert.equal(leak(selector, treeOf(name), name), step, selector);
+	}
+	for (const [name, selector] of [
+		["norn-card-grid", "norn-card-grid > ul > li > *"],
+		["norn-page-section", "norn-page-section > section > h2"],
+		["norn-content-card", "norn-content-card > article > :is(h2, h3, h4, h5, h6) a"],
+		["norn-footer", "norn-footer > footer > div:first-child > :is(div, nav) > ul"],
+		["norn-footer", "norn-footer :where(p)"],
+	]) {
+		assert.equal(leak(selector, treeOf(name), name), undefined, selector);
+	}
 });
 
 /**
@@ -678,4 +708,94 @@ test("the server-only comment never reaches the output: a component, a component
 	for (const [label, html] of [["norn-skip-link", await render("<norn-skip-link></norn-skip-link>")], ["norn-svg-icon", await render('<norn-svg-icon @name="book"></norn-svg-icon>')], ["norn-base", page]]) {
 		assert.ok(html.length > 0 && !LEAK.test(html), `${label}: no trace of the comment`);
 	}
+});
+
+/** Props for norn-base with only a title: every list given, as the plugin hands them. */
+const BARE = { title: "Only a title", lang: "en", nav: [], features: [], packages: [], docs: [], workspaces: [], footer: { badges: [], groups: [] } };
+
+/** A rendered page frame. */
+const frame = (norn, helpers = {}) => render(layoutText("norn-base"), { helpers: { ...HEAD_HELPERS, nornHook: () => "", ...helpers }, data: { content: "", norn: { ...BARE, ...norn } } });
+
+test("norn-base sets dir on html: the direction given, else rtl for a right-to-left language, else ltr", async () => {
+	for (const lang of ["ar", "ar-EG", "fa", "he", "ur", "ps", "yi", "dv", "ckb", "ckb-IQ", "sd", "ug", "AR"]) {
+		assert.match(await frame({ lang }), new RegExp(`<html lang="${lang}" dir="rtl">`), lang);
+	}
+	for (const lang of ["en", "fr-CA", "de", "ja", "arn", "hex", "pt-BR"]) assert.match(await frame({ lang }), new RegExp(`<html lang="${lang}" dir="ltr">`), lang);
+	assert.match(await frame({ lang: "en", dir: "rtl" }), /<html lang="en" dir="rtl">/, "an explicit dir wins over a left-to-right language");
+	assert.match(await frame({ lang: "ar", dir: "ltr" }), /<html lang="ar" dir="ltr">/, "and over a right-to-left one");
+	assert.match(await frame({ lang: "en", dir: "auto" }), /<html lang="en" dir="auto">/);
+	assert.match(await frame({ lang: "ar", dir: "sideways" }), /<html lang="ar" dir="rtl">/, "a value that is not a direction falls back to the language");
+});
+
+test("norn-base applies the one boolean rule to themeToggle: true, an empty string, and 'true' are on, and 'false' is off", async () => {
+	const SCRIPT = 'localStorage.getItem("color-scheme")';
+	for (const themeToggle of [true, "", "true"]) assert.ok((await frame({ themeToggle })).includes(SCRIPT), `${JSON.stringify(themeToggle)} is on`);
+	for (const themeToggle of ["false", false, undefined, "yes", 1]) assert.ok(!(await frame({ themeToggle })).includes(SCRIPT), `${JSON.stringify(themeToggle)} is off`);
+});
+
+test("norn-base leaves out the brand link and the footer name without a logo or a name", async () => {
+	const bare = await frame({});
+	assert.ok(!bare.includes('rel="home"') && !bare.includes("<strong"), "no empty link and no empty name");
+	const named = await frame({ name: "Widget" });
+	assert.ok(/<a [^>]*rel="home"[^>]*>\s*<span>Widget<\/span>\s*<\/a>/.test(named) && named.includes("<p><strong>Widget</strong></p>"));
+	const logo = await frame({ logo: { src: "/logo.svg", alt: "Widget logo" } });
+	assert.ok(/<a [^>]*rel="home"[^>]*>\s*<img[^>]*alt="Widget logo"/.test(logo), "a logo alone is enough for the brand link");
+	const footer = await frame({ footer: { name: "Footer name", badges: [], groups: [] } });
+	assert.ok(footer.includes("<p><strong>Footer name</strong></p>") && !footer.includes('rel="home"'), "the footer name stands alone");
+});
+
+test("the hero layouts leave out an empty h1 and an empty action navigation when they have only a title", async () => {
+	for (const name of ["norn-landing", "norn-docs-home", "norn-workspaces"]) {
+		const bare = await render(layoutText(name), { data: { norn: BARE } });
+		assert.ok(!bare.includes("<h1") && !bare.includes("<nav") && !bare.includes(`id="${name}-actions"`), `${name}: no h1, no actions`);
+		const named = await render(layoutText(name), { data: { norn: { ...BARE, name: "Widget", tagline: "Does things" } } });
+		assert.ok(/<h1>\s*<span>Widget<\/span>\s*<span>Does things<\/span>\s*<\/h1>/.test(named) && !named.includes("<nav"), `${name}: the h1 comes with a name`);
+		const linked = await render(layoutText(name), { data: { norn: { ...BARE, repo: "https://example.com/widget" } } });
+		assert.ok(linked.includes(`<nav aria-labelledby="${name}-actions">`) && linked.includes("View on GitHub"), `${name}: the actions come with a link to show`);
+	}
+	const install = await render(layoutText("norn-landing"), { data: { norn: { ...BARE, install: "npm install widget" } } });
+	assert.ok(install.includes('<nav aria-labelledby="norn-landing-actions">'), "norn-landing: an install command is an action");
+});
+
+test("norn-heading-anchor without a slug fails the build and names the component and the prop, even when a slug helper is registered", async () => {
+	for (const helpers of [{}, { slug: (text) => String(text).toLowerCase() }]) {
+		const label = Object.keys(helpers).length ? "with a slug helper" : "without one";
+		await assert.rejects(render("<norn-heading-anchor>Title</norn-heading-anchor>", { helpers }), /norn-heading-anchor: `@slug` is required/, label);
+		await assert.rejects(render('<norn-heading-anchor @slug="" @level="3">Title</norn-heading-anchor>', { helpers }), /norn-heading-anchor: `@slug` is required/, `${label}, empty`);
+		await assert.rejects(render('<norn-heading-anchor :@slug="42" @level="4">Title</norn-heading-anchor>', { helpers }), /norn-heading-anchor: `@slug` is required/, `${label}, not a string`);
+	}
+	const html = await render('<norn-heading-anchor @slug="title" @level="3">Title</norn-heading-anchor>', { helpers: { slug: () => "wrong" } });
+	assert.ok(html.includes('<h3 id="title"><a href="#title">Title</a></h3>'), "a slug that is passed wins over the helper");
+});
+
+test("norn-svg-icon builds its whole svg in one expression, and the markup stays as it was", async () => {
+	const markup = withoutDocs(fs.readFileSync(path.join(PACKAGES, "webc-patterns/components/norn-svg-icon.webc"), "utf8")).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
+	const dynamic = [...markup.matchAll(/\s[:@][\w-]+=/g)].map(([attribute]) => attribute.trim());
+	assert.ok(dynamic.length <= 2, `the template has ${dynamic.length} dynamic attributes: ${dynamic.join(" ")}`);
+	const compact = (html) => html.replace(/\s*\n\s*/g, "").match(/<svg[\s\S]*?<\/svg>/)[0];
+	const helpers = { nornIcons: () => PROJECT_ICONS };
+	const cases = [
+		['<norn-svg-icon @name="check"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
+		['<norn-svg-icon @name="arrow-start"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true" data-mirror><path d="M19 12H5M11 6l-6 6l6 6"></path></svg>'],
+		['<norn-svg-icon @name="system"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path><path d="M12 3a9 9 0 0 1 0 18z" data-fill></path></svg>'],
+		['<norn-svg-icon @name="check"><span slot="label">Done</span></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
+		['<norn-svg-icon @name="ring"></norn-svg-icon>', `<svg viewBox="0 0 32 32" aria-hidden="true" data-project>${PROJECT_ICONS.ring.body}</svg>`],
+		['<norn-svg-icon @name="solid"></norn-svg-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-project>${PROJECT_ICONS.solid.body}</svg>`],
+		['<norn-svg-icon @name="arrow-end"></norn-svg-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-mirror data-project>${PROJECT_ICONS["arrow-end"].body}</svg>`],
+	];
+	for (const [source, expected] of cases) assert.equal(compact(await render(source, { helpers })), expected, source);
+	assert.match(await render('<norn-svg-icon @name="check"><span slot="label">Done</span></norn-svg-icon>'), /<\/svg>\s*<span>Done<\/span>/, "the label follows the drawing");
+});
+
+test("norn-page-toc emits its escaped outline as it is, and heading text with markup stays text", async () => {
+	const markup = withoutDocs(components.find(({ file }) => file === "webc-patterns/components/norn-page-toc.webc").text).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
+	assert.ok(!/\s@html=/.test(markup) && /\s@raw="outline\(items\)"/.test(markup), "@raw, not @html, which would compile the escaped text again");
+	const items = JSON.stringify([
+		{ id: "a", text: "Use <b>bold</b> & <script>alert(1)</script>", level: 2 },
+		{ id: "b", text: 'The "quoted" part', level: 3 },
+	]);
+	const html = await render(`<norn-page-toc :@items='${items.replaceAll("'", "&#39;")}'></norn-page-toc>`);
+	assert.ok(html.includes("Use &lt;b&gt;bold&lt;/b&gt; &amp; &lt;script&gt;alert(1)&lt;/script&gt;"), "escaped text");
+	assert.ok(!html.includes("<b>") && !html.includes("<script"), "no element from heading text");
+	assert.match(html, /<li><a href="#a">[^]*<ol><li><a href="#b">The (?:"|&quot;)quoted(?:"|&quot;) part<\/a><\/li><\/ol><\/li>/, "nested by level");
 });

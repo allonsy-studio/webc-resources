@@ -1,0 +1,19 @@
+---
+layout: norn-base.webc
+title: Tabs
+---
+<h1>Tabs</h1>
+<norn-code-tabs id="shells">
+	<norn-code-block @language="sh" @code="npm install one"></norn-code-block>
+	<norn-code-block @language="sh" @code="yarn add one"></norn-code-block>
+</norn-code-tabs>
+<norn-code-tabs id="three">
+	<norn-code-block @language="sh" @code="one"></norn-code-block>
+	<norn-code-block @language="js" @code="let two;"></norn-code-block>
+	<norn-code-block @language="sh" @code="three"></norn-code-block>
+	<norn-code-block @language="sh" @code="four"></norn-code-block>
+</norn-code-tabs>
+<norn-code-tabs id="named">
+	<norn-code-block @language="sh" data-tab="npm" @code="npm install one"></norn-code-block>
+	<norn-code-block @language="sh" data-tab="yarn" @code="yarn add one"></norn-code-block>
+</norn-code-tabs>

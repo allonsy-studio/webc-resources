@@ -55,8 +55,8 @@ preview/           the component preview: an Eleventy site with a page and stori
 2. Selectors start at the component's custom tag. No classes, no `webc:scoped`, no selectors
    reaching outside the component. Set `display` on the tag.
    In a layout, landmark, or container, a descendant selector also styles the components slotted inside it,
-   and the bundle order picks the winner. Reach slotted content through a child path from the slot's position
-   (`norn-footer footer > div:first-child > * > ul`). Where prose styles must reach a slot's markup, scope them with `@scope`
+   and the bundle order picks the winner. Reach the component's own markup the same way, from the host by a child path (`norn-card-grid > ul`, not `norn-card-grid ul`), so a `<ul>` in a slotted card is left alone. Reach slotted content through a child path from the slot's position
+   (`norn-footer > footer > div:first-child > :is(div, nav) > ul`). Where prose styles must reach a slot's markup, scope them with `@scope`
    and stop the scope at the components that style all their own markup (`norn-rich-text` uses
    `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-tag-list)`), with a `:where()` copy in
    `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is

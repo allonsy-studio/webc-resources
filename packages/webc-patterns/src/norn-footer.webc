@@ -36,7 +36,7 @@
 			container-type: inline-size;
 			margin-block-start: var(--norn-space-xl, t('space.xl'));
 
-			& footer {
+			& > footer {
 				display: grid;
 				gap: var(--norn-space-l, t('space.l'));
 				padding: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
@@ -45,7 +45,7 @@
 				font-size: 0.95rem;
 			}
 
-			& footer > div {
+			& > footer > div {
 				inline-size: min(100%, var(--norn-footer-width, 64rem));
 				margin-inline: auto;
 
@@ -61,7 +61,7 @@
 					gap: var(--norn-space-l, t('space.l'));
 				}
 
-				&:first-child > * {
+				&:first-child > :is(div, nav) {
 					display: grid;
 					align-content: start;
 					gap: var(--norn-space-s, t('space.s'));
@@ -88,7 +88,7 @@
 			}
 
 			@container (min-width: 60rem) {
-				& footer > div:first-child {
+				& > footer > div:first-child {
 					grid-template-columns: minmax(0, var(--norn-footer-lead, 25rem));
 					grid-auto-columns: minmax(min-content, max-content);
 					grid-auto-flow: column;
@@ -108,8 +108,8 @@
 				font-size: 0.9rem;
 			}
 
-			& footer > div:first-child > * > ul,
-			& footer > div:first-child > nav > div > ul {
+			& > footer > div:first-child > :is(div, nav) > ul,
+			& > footer > div:first-child > nav > div > ul {
 				display: flex;
 				flex-direction: column;
 				gap: 0.4rem;
@@ -133,7 +133,7 @@
 			}
 
 			@media print {
-				& footer {
+				& > footer {
 					gap: var(--norn-space-s, t('space.s'));
 				}
 			}

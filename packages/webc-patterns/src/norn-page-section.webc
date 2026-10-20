@@ -21,7 +21,7 @@
 			display: block;
 			scroll-margin-block-start: var(--norn-space-m, t('space.m'));
 
-			& section {
+			& > section {
 				display: grid;
 				grid-auto-flow: row;
 				grid-template-columns: minmax(0, 1fr);
@@ -32,7 +32,8 @@
 				padding-block: var(--norn-space-l, t('space.l'));
 			}
 
-			& section > h2 {
+			& > section > h2,
+			& > section > norn-heading-anchor > h2 {
 				margin: 0;
 				font-family: var(--norn-font-heading, t('font.heading'));
 				font-size: 1.7rem;
@@ -41,7 +42,7 @@
 			}
 
 			@media print {
-				& section {
+				& > section {
 					gap: var(--norn-space-s, t('space.s'));
 					padding-block: var(--norn-space-m, t('space.m'));
 				}

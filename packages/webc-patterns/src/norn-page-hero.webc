@@ -23,7 +23,7 @@
 			--norn-chrome: terminal;
 			display: block;
 
-			& header {
+			& > header {
 				display: grid;
 				grid-auto-flow: row;
 				align-content: start;
@@ -33,7 +33,7 @@
 				padding-block: var(--norn-space-xl, t('space.xl')) var(--norn-space-l, t('space.l'));
 			}
 
-			& header > h1 {
+			& > header > h1 {
 				display: flex;
 				flex-direction: column;
 				gap: var(--norn-space-xs, t('space.xs'));
@@ -45,16 +45,16 @@
 				text-wrap: balance;
 			}
 
-			& header > h1 > :first-child {
+			& > header > h1 > :first-child {
 				font-size: 1.15em;
 			}
 
-			& header > h1 > :last-child:not(:first-child) {
+			& > header > h1 > :last-child:not(:first-child) {
 				color: var(--norn-page-hero-link, var(--norn-text-accent, t('text.accent')));
 				font-weight: 400;
 			}
 
-			& header > p {
+			& > header > p {
 				max-inline-size: var(--norn-text-measure, t('text.measure'));
 				margin: 0;
 				color: var(--norn-text-muted, t('text.muted'));
@@ -62,11 +62,11 @@
 				text-wrap: pretty;
 			}
 
-			& header > norn-tag-list {
+			& > header > norn-tag-list {
 				--norn-tag-list-gap: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
 			}
 
-			& header > nav ul {
+			& > header > nav ul {
 				display: flex;
 				flex-wrap: wrap;
 				gap: var(--norn-space-s, t('space.s'));
@@ -76,11 +76,11 @@
 			}
 
 			@media print {
-				& header > nav {
+				& > header > nav {
 					display: none;
 				}
 
-				& header {
+				& > header {
 					gap: var(--norn-space-s, t('space.s'));
 					padding-block: var(--norn-space-m, t('space.m'));
 				}
