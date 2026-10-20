@@ -1,0 +1,83 @@
+/* The preview's own tokens and base styles, shared by the shell and the frames. Nothing here depends on a package. */
+:root {
+	color-scheme: light dark;
+	--preview-bg: light-dark(#fff, #101216);
+	--preview-raised: light-dark(#f4f1ea, #1a1d23);
+	--preview-text: light-dark(#1d1b17, #ece7dc);
+	--preview-muted: light-dark(#5b564c, #b5ae9f);
+	--preview-border: light-dark(#7a7568, #8a8578);
+	--preview-rule: light-dark(#d8d3c6, #2c3038);
+	--preview-accent: light-dark(#1f4fbf, #8fb0ff);
+	--preview-ok: light-dark(#0b6b3a, #7ed6a1);
+	--preview-bad: light-dark(#b42318, #ff8a80);
+	--preview-space-xs: 0.25rem;
+	--preview-space-s: 0.5rem;
+	--preview-space-m: 1rem;
+	--preview-space-l: 2rem;
+	--preview-measure: 65ch;
+	--preview-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+	--preview-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+*,
+::before,
+::after {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	background: var(--preview-bg);
+	color: var(--preview-text);
+	font: 1rem / 1.6 var(--preview-font);
+}
+
+h1,
+h2,
+h3 {
+	line-height: 1.2;
+}
+
+a {
+	color: var(--preview-accent);
+	text-underline-offset: 0.2em;
+}
+
+:focus-visible {
+	outline: 3px solid var(--preview-accent);
+	outline-offset: 2px;
+}
+
+img,
+svg,
+iframe {
+	max-inline-size: 100%;
+}
+
+code,
+pre {
+	font-family: var(--preview-mono);
+}
+
+pre {
+	overflow-x: auto;
+	padding: var(--preview-space-m);
+	border-radius: 0.25rem;
+	background: var(--preview-raised);
+	font-size: 0.9rem;
+	line-height: 1.5;
+}
+
+:not(pre) > code {
+	padding: 0.1em 0.35em;
+	border-radius: 0.25rem;
+	background: var(--preview-raised);
+	font-size: 0.9em;
+}
+
+@media print {
+	body {
+		background: none;
+		color: #000;
+	}
+}
