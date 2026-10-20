@@ -1,0 +1,68 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * The component list, grouped by category. Leaves out a category with no components and marks the page being shown with aria-current.
+ * @prop {{ id: string, title: string, components: { name: string, url: string }[] }[]} categories
+ */
+--->
+<nav aria-label="Components">
+	<details webc:for="category of categories.filter((entry) => entry.components.length)" open>
+		<summary @text="category.title"></summary>
+		<ul role="list">
+			<li webc:for="component of category.components">
+				<a :href="component.url" :aria-current="component.url === $data.page.url ? 'page' : undefined" @text="component.name"></a>
+			</li>
+		</ul>
+	</details>
+</nav>
+<style>
+	preview-nav {
+		display: block;
+		font-size: 0.95rem;
+
+		& details + details {
+			margin-block-start: var(--preview-space-s);
+		}
+
+		& summary {
+			padding-block: 0.25rem;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		& ul {
+			display: grid;
+			gap: 0.1rem;
+			margin-block: 0.25rem 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		& a {
+			display: block;
+			padding: 0.2rem var(--preview-space-s);
+			border-radius: 0.25rem;
+			color: var(--preview-accent);
+
+			&:is(:hover, :focus-visible) {
+				background: var(--preview-raised);
+			}
+
+			&[aria-current="page"] {
+				background: var(--preview-raised);
+				color: var(--preview-text);
+				font-weight: 700;
+			}
+		}
+
+		@media print {
+			display: none;
+		}
+	}
+</style>
