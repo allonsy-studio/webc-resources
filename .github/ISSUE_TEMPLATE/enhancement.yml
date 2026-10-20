@@ -1,0 +1,77 @@
+name: Enhancement Request
+description: Suggest a new component, layout, or plugin option, or an improvement to an existing one.
+labels: ["enhancement", "type: feature"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this template to propose something new or a behavior change for something that already exists in Norn.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: What would you like to improve?
+      options:
+        - "New component"
+        - "New layout"
+        - "Existing component"
+        - "Existing layout"
+        - "Norn plugin (options, props mapping, hooks, icons)"
+        - "Markdown add-on"
+        - "Tokens / theming"
+        - "Code sample (norn-code-block)"
+        - "Studio theme"
+        - "Accessibility"
+        - "Component preview"
+        - "Documentation"
+        - "CI / tooling"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Proposed or affected component or layout
+      placeholder: "e.g. `norn-tabs`, `norn-page-toc`, `norn-landing.webc`"
+    validations:
+      required: false
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior
+      description: What does it do today? Leave blank when proposing something new.
+    validations:
+      required: false
+
+  - type: textarea
+    id: desired
+    attributes:
+      label: Desired behavior
+      description: What should it do instead, or what should the new piece do? Include the markup an author would write, if you can.
+    validations:
+      required: true
+
+  - type: textarea
+    id: rationale
+    attributes:
+      label: Why would this be valuable?
+      description: Help us understand the use case and how many sites might benefit.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered (optional)
+      description: Workarounds you've tried, other packages that cover this, or other approaches to consider.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Contribution
+      options:
+        - label: I'm willing to implement this and open a PR.

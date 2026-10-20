@@ -1,0 +1,108 @@
+name: Bug Report
+description: Something isn't working correctly in a Norn package.
+labels: ["bug", "type: fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Fill out the sections below so the bug can be reproduced and fixed quickly.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      description: Which part of Norn is affected?
+      options:
+        - "Component"
+        - "Layout"
+        - "Norn plugin (options, props mapping, hooks, icons)"
+        - "Markdown add-on"
+        - "Tokens / theming"
+        - "Code sample (norn-code-block)"
+        - "Studio theme"
+        - "Accessibility"
+        - "Component preview"
+        - "npm package / install"
+        - "Documentation"
+        - "CI / tooling"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: name
+    attributes:
+      label: Component or layout name (if applicable)
+      placeholder: "e.g. `norn-search`, `norn-docs.webc`"
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug. Include the rendered HTML if it helps.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Minimal steps that reliably reproduce the issue. A minimal `eleventy.config.js` and page are ideal.
+      placeholder: |
+        1. `npm install @allons-y/webc-patterns`
+        2. Add the Norn plugin to `eleventy.config.js`
+        3. Build a page with `layout: norn-docs.webc`
+        4. See output ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect to happen?
+    validations:
+      required: true
+
+  - type: input
+    id: package-version
+    attributes:
+      label: Package and version
+      placeholder: "@allons-y/webc-patterns 0.1.0-beta.1"
+    validations:
+      required: false
+
+  - type: input
+    id: eleventy-version
+    attributes:
+      label: Eleventy version
+      placeholder: "3.1.6"
+    validations:
+      required: false
+
+  - type: input
+    id: node-version
+    attributes:
+      label: Node.js version
+      placeholder: "v24.0.0"
+    validations:
+      required: false
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and assistive technology
+      description: For rendering, styling, or accessibility bugs.
+      placeholder: "Safari 26 with VoiceOver / Firefox 144 / Chrome 141 with forced colors"
+    validations:
+      required: false
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Logs, screenshots, or anything else that might help.
+    validations:
+      required: false
