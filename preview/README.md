@@ -1,6 +1,6 @@
 # Component preview
 
-A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the OSS site theme; the OSS components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
+A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the OSS site theme; the OSS components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`. Each pull request from this repository gets its own preview under `preview/<number>/`, linked in a comment on the pull request and removed when it closes.
 
 ## Run it
 
