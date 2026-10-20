@@ -1,0 +1,17 @@
+{
+	"private": true,
+	"name": "fixture-neutral",
+	"version": "0.0.0",
+	"description": "Neutral fixture site for the WebC packages: patterns only, no studio layer.",
+	"license": "MPL-2.0",
+	"type": "module",
+	"scripts": {
+		"build": "eleventy --config=eleventy.config.js",
+		"start": "eleventy --config=eleventy.config.js --serve"
+	},
+	"devDependencies": {
+		"@11ty/eleventy": "^3.1.6",
+		"@11ty/eleventy-plugin-webc": "^0.11.2",
+		"@allons-y/webc-patterns": "workspace:*"
+	}
+}

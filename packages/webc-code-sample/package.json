@@ -20,20 +20,29 @@
 	"type": "module",
 	"exports": {
 		".": "./index.js",
+		"./markdown": "./markdown.js",
 		"./package.json": "./package.json"
 	},
 	"files": [
 		"components/",
 		"index.js",
+		"markdown.js",
 		"LICENSE",
 		"README.md"
 	],
+	"scripts": {
+		"prepack": "node ../../scripts/build-components.js webc-code-sample"
+	},
 	"dependencies": {
 		"prismjs": "^1.30.0"
 	},
+	"devDependencies": {
+		"markdown-it": "^15.0.2"
+	},
 	"peerDependencies": {
 		"@11ty/eleventy": "^3.0.0",
-		"@11ty/eleventy-plugin-webc": "^0.11.0"
+		"@11ty/eleventy-plugin-webc": "^0.11.0",
+		"@allons-y/webc-patterns": "^0.1.0-beta.0"
 	},
 	"keywords": [
 		"webc",

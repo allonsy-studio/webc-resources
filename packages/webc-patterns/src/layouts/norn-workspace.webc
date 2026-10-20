@@ -1,0 +1,31 @@
+---
+layout: norn-base.webc
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * One workspace's page in the docs frame: the workspaces sidebar, its name, its description, and its page, such as its SKILL.md or README.md rendered to HTML. Extends `norn-base`.
+ * The page's own content follows the workspace's, so a pagination template can leave its body empty.
+ * The sidebar's name ("Packages") comes from `componentStrings` under `norn-workspace`, then English.
+ * @prop {{ url: string, title: string }[]} [workspaces] - The workspaces, for the sidebar. `name` stands in for a missing `title`.
+ * @prop {{ name: string, description?: string, html?: string }} [workspace] - The workspace on this page. Its `html` is compiled as WebC, so it may hold components.
+ * @category template
+ */
+--->
+<norn-page-layout>
+	<norn-side-nav slot="nav" :@items="$data.norn.workspaces.map((workspace) => ({ url: workspace.url, title: workspace.title || workspace.name, icon: workspace.icon }))"
+		><span slot="label" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span
+	></norn-side-nav>
+	<h1 @text="($data.norn.workspace && $data.norn.workspace.name) || $data.norn.title || ''"></h1>
+	<norn-rich-text>
+		<p webc:if="$data.norn.workspace && $data.norn.workspace.description" @text="$data.norn.workspace.description"></p>
+		<template webc:nokeep @html="($data.norn.workspace && $data.norn.workspace.html) || ''"></template>
+		<template webc:nokeep @html="$data.content || ''"></template>
+	</norn-rich-text>
+</norn-page-layout>

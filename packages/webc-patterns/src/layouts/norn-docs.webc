@@ -1,0 +1,42 @@
+---
+layout: norn-base.webc
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A docs page: the sticky docs sidebar with site search above its list, the page title, its contents when it has two or more sections, the body in `norn-rich-text`, and the pager. Extends `norn-base`.
+ * The search is live from a Pagefind index at `pagefind/`, or a web search of the site's host without one. Only the page body is indexed.
+ * The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings.
+ * The sidebar's name ("Documentation") and the search label ("Search the docs") come from `componentStrings` under `norn-docs`, then English.
+ * @prop {{ url: string, title: string, icon?: string }[]} [docs] - The docs pages, in order. `icon` names a sidebar `norn-svg-icon`.
+ * @prop {{ url: string, title: string }} [prev] - Falls back to the page before this one in `docs`, by `nornAdjacent`.
+ * @prop {{ url: string, title: string }} [next] - Falls back to the page after this one in `docs`.
+ * @prop {{ bundle?: string, site?: string } | false} [search] - Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`). `false` leaves the search out.
+ * @category template
+ */
+--->
+<norn-page-layout>
+	<norn-side-nav slot="nav" :@items="$data.norn.docs">
+		<span slot="label" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
+		<norn-search
+			webc:if="$data.norn.search !== false"
+			slot="search"
+			:@bundle="($data.norn.search && $data.norn.search.bundle) || url('/pagefind/pagefind.js')"
+			:@site="($data.norn.search && $data.norn.search.site) || (/^https?:\/\//.test($data.norn.url || '') ? new URL($data.norn.url).host : '')"
+			><span slot="label" @text="nornComponentStrings?.('norn-docs', 'search', $data.page) || 'Search the docs'"></span
+		></norn-search>
+	</norn-side-nav>
+	<h1 @text="$data.norn.title || ''"></h1>
+	<norn-page-toc :@items="nornHeadings($data.content)"></norn-page-toc>
+	<norn-rich-text data-pagefind-body><template webc:nokeep @html="$data.content"></template></norn-rich-text>
+	<norn-page-pager
+		:@prev="$data.norn.prev !== undefined ? $data.norn.prev : nornAdjacent($data.norn.docs, $data.page).prev"
+		:@next="$data.norn.next !== undefined ? $data.norn.next : nornAdjacent($data.norn.docs, $data.page).next"
+	></norn-page-pager>
+</norn-page-layout>

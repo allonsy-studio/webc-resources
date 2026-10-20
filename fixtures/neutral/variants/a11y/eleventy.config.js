@@ -5,4 +5,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-export {};
+import { configure } from "../../site.js";
+
+/** The neutral site with its own output folder, so `a11y.test.js` can build beside the other test files. */
+export default function (config) {
+	return configure(config, { output: "_site-a11y" });
+}

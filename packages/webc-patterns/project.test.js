@@ -1,0 +1,209 @@
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { test } from "node:test";
+
+import { accentHex, buildSite, buildWorkspaces, npmRelease } from "./project.js";
+
+/** A host that serves sites at one path per repository. */
+const HOST = "https://pages.example.com";
+
+/** A temporary project directory with the given files, as `{ "path": content }`. */
+function project(files) {
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "oss-site-"));
+	for (const [file, content] of Object.entries(files)) {
+		fs.mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
+		fs.writeFileSync(path.join(root, file), typeof content === "string" ? content : JSON.stringify(content));
+	}
+	return root;
+}
+
+const PKG = { name: "@acme/widget", description: "Builds widgets. Fast, and small.", license: "MPL-2.0", repository: "git+https://github.com/acme/widget.git" };
+
+/** `buildSite` for a package.json with the given overrides; a key set to undefined is removed. */
+function site(overrides = {}, files = {}, projectJson) {
+	const pkg = { ...PKG, ...overrides };
+	for (const key of Object.keys(pkg)) if (pkg[key] === undefined) delete pkg[key];
+	const root = project({ "package.json": pkg, ...files, ...(projectJson ? { "project.json": projectJson } : {}) });
+	return buildSite({ packagePath: path.join(root, "package.json"), projectPath: projectJson ? path.join(root, "project.json") : undefined, host: HOST });
+}
+
+test("buildSite: the facts come from package.json", () => {
+	assert.deepEqual(site({ engines: { node: ">=24" } }), {
+		name: "widget",
+		packageName: "@acme/widget",
+		tagline: "Builds widgets",
+		description: "Builds widgets. Fast, and small.",
+		license: "MPL-2.0",
+		licenseUrl: "https://github.com/acme/widget/blob/main/LICENSE",
+		repo: "https://github.com/acme/widget",
+		repoName: "widget",
+		npm: "https://www.npmjs.com/package/@acme/widget",
+		node: "24+",
+		url: "https://pages.example.com/widget/",
+		issuesUrl: "https://github.com/acme/widget/issues",
+		contributingUrl: "https://github.com/acme/widget/blob/main/.github/CONTRIBUTING.md",
+		changelogUrl: "https://github.com/acme/widget/blob/main/CHANGELOG.md",
+		conductUrl: null,
+		securityUrl: null,
+	});
+});
+
+test("buildSite: a missing name, license, description, or repository throws a message naming the field", () => {
+	for (const field of ["name", "license", "description", "repository"]) {
+		assert.throws(() => site({ [field]: undefined }), (error) => error.message.includes(`\`${field}\``), field);
+	}
+});
+
+test("buildSite: a repository that is not a hosted Git URL throws", () => {
+	assert.throws(() => site({ repository: "not a url" }), /not a hosted Git URL/);
+});
+
+test("buildSite: the repository may be a string, an object, or a shorthand", () => {
+	for (const repository of ["github:acme/widget", "git+https://github.com/acme/widget.git", { type: "git", url: "git+https://github.com/acme/widget.git" }]) {
+		assert.equal(site({ repository }).repo, "https://github.com/acme/widget");
+	}
+});
+
+test("buildSite: a private package has no npm link", () => {
+	assert.equal(site({ private: true }).npm, null);
+});
+
+test("buildSite: the tagline is the first sentence unless the project sets one", () => {
+	assert.equal(site().tagline, "Builds widgets");
+	assert.equal(site({}, {}, { tagline: "Widgets, built" }).tagline, "Widgets, built");
+});
+
+test("buildSite: the url is the project's with a trailing slash, else the host's path for the repository, else none", () => {
+	assert.equal(site({}, {}, { url: "https://widget.example.com" }).url, "https://widget.example.com/");
+	assert.equal(site({}, {}, { url: "https://widget.example.com/docs/" }).url, "https://widget.example.com/docs/");
+	assert.equal(site().url, "https://pages.example.com/widget/");
+	const root = project({ "package.json": PKG });
+	assert.equal(buildSite({ packagePath: path.join(root, "package.json") }).url, null, "no host, no url");
+	assert.equal(buildSite({ packagePath: path.join(root, "package.json"), host: "https://pages.example.com/" }).url, "https://pages.example.com/widget/", "a trailing slash on the host");
+	assert.ok(!("studio" in site({ "oss-docs": { studio: false } })), "the studio setting is the studio's to read");
+});
+
+test("buildSite: the node version is the lowest major, or null when unbounded", () => {
+	assert.equal(site({ engines: { node: "^20.1 || ^22" } }).node, "20+");
+	assert.equal(site({ engines: { node: "*" } }).node, null);
+	assert.equal(site().node, null);
+});
+
+test("buildSite: the issues url honors bugs.url", () => {
+	assert.equal(site({ bugs: { url: "https://tracker.example.com/widget" } }).issuesUrl, "https://tracker.example.com/widget");
+});
+
+test("buildSite: conduct and security links point at policy files the project keeps", () => {
+	const files = { "CODE_OF_CONDUCT.md": "x", ".github/SECURITY.md": "x" };
+	const found = site({}, files);
+	assert.equal(found.conductUrl, "https://github.com/acme/widget/blob/main/CODE_OF_CONDUCT.md");
+	assert.equal(found.securityUrl, "https://github.com/acme/widget/blob/main/.github/SECURITY.md");
+	assert.equal(site({}, { "docs/SECURITY.md": "x" }).securityUrl, "https://github.com/acme/widget/blob/main/docs/SECURITY.md");
+});
+
+test("buildSite: a missing project.json is fine", () => {
+	assert.equal(buildSite({ packagePath: path.join(project({ "package.json": PKG }), "package.json"), projectPath: "/nowhere/project.json" }).name, "widget");
+});
+
+const workspace = (name, description, files = {}) => ({ [`packages/${name}/package.json`]: { name: `@acme/${name}`, description }, ...Object.fromEntries(Object.entries(files).map(([file, text]) => [`packages/${name}/${file}`, text])) });
+
+test("buildWorkspaces: one entry per workspace, sorted, with its page", () => {
+	const root = project({
+		"package.json": { workspaces: ["packages/*"] },
+		...workspace("zed", "Last.", { "README.md": "# zed\n\nZed's readme.\n" }),
+		...workspace("alpha", "First.", { "README.md": "# alpha\n\nAlpha's readme.\n" }),
+	});
+	assert.deepEqual(
+		buildWorkspaces({ root }).map(({ name, title, description, slug, url }) => ({ name, title, description, slug, url })),
+		[
+			{ name: "@acme/alpha", title: "@acme/alpha", description: "First.", slug: "alpha", url: "/alpha/" },
+			{ name: "@acme/zed", title: "@acme/zed", description: "Last.", slug: "zed", url: "/zed/" },
+		],
+	);
+});
+
+test("buildWorkspaces: negated patterns exclude workspaces", () => {
+	const root = project({ "package.json": { workspaces: ["packages/*", "!packages/internal"] }, ...workspace("public", "Yes."), ...workspace("internal", "No.") });
+	assert.deepEqual(buildWorkspaces({ root }).map((entry) => entry.slug), ["public"]);
+});
+
+test("buildWorkspaces: the workspaces field may be an object with packages", () => {
+	const root = project({ "package.json": { workspaces: { packages: ["packages/*"] } }, ...workspace("only", "Yes.") });
+	assert.deepEqual(buildWorkspaces({ root }).map((entry) => entry.slug), ["only"]);
+});
+
+test("buildWorkspaces: SKILL.md wins over README.md, and front matter and the first heading come off", () => {
+	const root = project({
+		"package.json": { workspaces: ["packages/*"] },
+		...workspace("skilled", "A skill.", { "README.md": "# readme\n\nThe readme.\n", "SKILL.md": "---\nname: skilled\n---\n# Skilled\n\nThe skill.\n\n## Later heading\n" }),
+	});
+	const [entry] = buildWorkspaces({ root });
+	assert.ok(entry.html.includes("<p>The skill.</p>") && entry.html.includes("<h2>Later heading</h2>"));
+	assert.ok(!entry.html.includes("The readme.") && !entry.html.includes("<h1>") && !entry.html.includes("name: skilled"));
+});
+
+test("buildWorkspaces: code fences render as code samples, and a workspace without a page has empty html", () => {
+	const root = project({
+		"package.json": { workspaces: ["packages/*"] },
+		...workspace("coded", "Code.", { "README.md": "```js\nlet a = 1;\n```\n" }),
+		...workspace("bare", "Nothing."),
+	});
+	const entries = Object.fromEntries(buildWorkspaces({ root }).map((entry) => [entry.slug, entry]));
+	assert.equal(entries.coded.html, '<norn-code-block @code="let a = 1;\n" @language="js"></norn-code-block>\n');
+	assert.equal(entries.bare.html, "");
+});
+
+/** A fetch that answers with the given body and status, and counts its calls. */
+const registry = (body, status = 200) => {
+	const fake = async () => {
+		fake.calls++;
+		return { ok: status === 200, json: async () => body };
+	};
+	fake.calls = 0;
+	return fake;
+};
+
+test("npmRelease: a latest dist-tag is a release, and the answer is reused within the hour", async () => {
+	const fetch = registry({ "dist-tags": { latest: "1.2.3" } });
+	let clock = 0;
+	assert.equal(await npmRelease("@example/released", { fetch, now: () => clock }), true);
+	assert.equal(await npmRelease("@example/released", { fetch, now: () => clock }), true);
+	assert.equal(fetch.calls, 1, "cached");
+	clock = 60 * 60 * 1000;
+	await npmRelease("@example/released", { fetch, now: () => clock });
+	assert.equal(fetch.calls, 2, "asked again after an hour");
+});
+
+test("npmRelease: a missing package, no dist-tag, no network, or no name is no release", async () => {
+	assert.equal(await npmRelease("@example/missing", { fetch: registry({}, 404) }), false);
+	assert.equal(await npmRelease("@example/untagged", { fetch: registry({ "dist-tags": {} }) }), false);
+	assert.equal(
+		await npmRelease("@example/offline", {
+			fetch: async () => {
+				throw new TypeError("fetch failed");
+			},
+		}),
+		false,
+	);
+	assert.equal(await npmRelease(null, { fetch: registry({ "dist-tags": { latest: "1.0.0" } }) }), false);
+});
+
+test("accentHex: the first accent declared in a stylesheet, lowercased, or null", () => {
+	const dir = fs.mkdtempSync(path.join(os.tmpdir(), "accent-"));
+	const css = path.join(dir, "project.css");
+	fs.writeFileSync(css, ":root {\n\t--norn-ui-accent: #FF944D;\n}\n");
+	assert.equal(accentHex(css), "ff944d");
+	fs.writeFileSync(css, ":root { --norn-ui-accent: oklch(0.6 0.2 30); }");
+	assert.equal(accentHex(css), null);
+	assert.equal(accentHex(path.join(dir, "missing.css")), null);
+	fs.rmSync(dir, { recursive: true, force: true });
+});

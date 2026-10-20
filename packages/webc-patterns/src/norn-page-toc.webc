@@ -1,0 +1,141 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page.
+ * Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing.
+ * @prop {{ id: string, text: string, level: number }[]} items
+ * @slot label - The landmark name and visible title, as one element. Falls back to the site's `componentStrings`, then "On this page".
+ * @cssprop --norn-page-toc-link - Link color. Falls back to --norn-text-muted.
+ * @cssprop --norn-page-toc-current - The current section's color and marker. Falls back to --norn-text-accent.
+ * @category landmark
+ */
+--->
+<script webc:setup>
+const escape = (text) => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Renders the flat headings as nested `<li>` elements, one inner `<ol>` per level of depth. */
+function outline(items) {
+	const root = { level: 0, nodes: [] };
+	const trail = [root];
+	for (const item of items) {
+		while (trail.length > 1 && trail.at(-1).level >= item.level) trail.pop();
+		const node = { level: item.level, item, nodes: [] };
+		trail.at(-1).nodes.push(node);
+		trail.push(node);
+	}
+	const list = (nodes) => '<ol>' + nodes.map((node) => '<li><a href="#' + escape(node.item.id) + '">' + escape(node.item.text) + '</a>' + (node.nodes.length ? list(node.nodes) : '') + '</li>').join('') + '</ol>';
+	return list(root.nodes);
+}
+</script>
+<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-page-toc-' + uid">
+	<p :id="'norn-page-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot></p>
+	<template webc:nokeep @html="outline(items)"></template>
+</nav>
+<style>
+	@layer norn.components {
+		norn-page-toc {
+			display: block;
+			font-size: 0.92rem;
+
+			& nav {
+				display: grid;
+				gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& nav > p {
+				margin: 0;
+				color: var(--norn-text-base, t('text.base'));
+				font-weight: 700;
+			}
+
+			& nav > ol,
+			& nav > ol ol {
+				display: grid;
+				gap: 0.15rem;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& nav > ol {
+				border-inline-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+			}
+
+			& nav > ol ol {
+				padding-inline-start: 0.75rem;
+			}
+
+			& nav > ol li > a {
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				min-block-size: 1.5rem;
+				margin-inline-start: -1px;
+				padding: 0.2rem 0.75rem;
+				border-inline-start: 2px solid transparent;
+				color: var(--norn-page-toc-link, var(--norn-text-muted, t('text.muted')));
+				text-decoration: none;
+
+				&:hover {
+					color: var(--norn-text-base, t('text.base'));
+				}
+
+				&[aria-current] {
+					border-inline-start-color: var(--norn-page-toc-current, var(--norn-text-accent, t('text.accent')));
+					color: var(--norn-page-toc-current, var(--norn-text-accent, t('text.accent')));
+					font-weight: 600;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		/** Marks the link to the last section heading scrolled past, or the first one. */
+		class PageToc extends HTMLElement {
+			#observer;
+			#onScroll;
+
+			connectedCallback() {
+				const links = [...this.querySelectorAll('a[href^="#"]')];
+				const targets = links.map((link) => document.getElementById(decodeURIComponent(link.hash.slice(1)))).filter(Boolean);
+				if (!targets.length) return;
+				const mark = () => {
+					const line = innerHeight * 0.25;
+					const current = targets.findLast((target) => target.getBoundingClientRect().top <= line) ?? targets[0];
+					for (const link of links) {
+						if (link.hash.slice(1) === current.id) link.setAttribute("aria-current", "location");
+						else link.removeAttribute("aria-current");
+					}
+				};
+				this.#teardown();
+				this.#onScroll = () => requestAnimationFrame(mark);
+				addEventListener("scroll", this.#onScroll, { passive: true });
+				this.#observer = new ResizeObserver(this.#onScroll);
+				this.#observer.observe(document.documentElement);
+				mark();
+			}
+
+			disconnectedCallback() {
+				this.#teardown();
+			}
+
+			#teardown() {
+				if (this.#onScroll) removeEventListener("scroll", this.#onScroll);
+				this.#observer?.disconnect();
+			}
+		}
+
+		if (!customElements.get("norn-page-toc")) customElements.define("norn-page-toc", PageToc);
+	}
+</script>

@@ -1,0 +1,73 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Where the page sits in the site: a trail of links from the top down, ending at the current page, marked with `aria-current="page"`.
+ * Data-driven, so the last item is always the current one. The separators are decorative chevrons that point the reading way, so they mirror in right-to-left text.
+ * @prop {{ url: string, title: string }[]} items - From the top level to the current page.
+ * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Breadcrumb".
+ * @cssprop --norn-breadcrumb-nav-link - Link color. Falls back to --norn-text-accent.
+ * @cssprop --norn-breadcrumb-nav-separator - Separator color. Falls back to --norn-text-muted.
+ * @category landmark
+ */
+--->
+<nav webc:if="items && items.length" :aria-labelledby="'norn-breadcrumb-nav-' + uid">
+	<span data-label :id="'norn-breadcrumb-nav-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-breadcrumb-nav', 'label', $data.page) || 'Breadcrumb'"></span></slot></span>
+	<ol>
+		<li webc:for="(item, index) of items">
+			<norn-svg-icon webc:if="index" @name="chevron-end"></norn-svg-icon>
+			<a :href="item.url" :aria-current="index === items.length - 1 ? 'page' : undefined" @text="item.title"></a>
+		</li>
+	</ol>
+</nav>
+<style>
+	@layer norn.components {
+		norn-breadcrumb-nav {
+			display: block;
+			font-size: 0.92rem;
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > ol {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: 0.25rem 0.4rem;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& nav > ol > li {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+			}
+
+			& nav > ol > li > norn-svg-icon {
+				color: var(--norn-breadcrumb-nav-separator, var(--norn-text-muted, t('text.muted')));
+			}
+
+			& nav > ol > li > a {
+				color: var(--norn-breadcrumb-nav-link, var(--norn-text-accent, t('text.accent')));
+
+				&[aria-current="page"] {
+					color: var(--norn-text-base, t('text.base'));
+					text-decoration: none;
+				}
+			}
+		}
+	}
+</style>

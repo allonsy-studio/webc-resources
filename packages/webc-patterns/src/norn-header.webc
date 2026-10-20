@@ -1,0 +1,114 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Site header: the brand link, then the primary navigation.
+ * Pass the brand as one element in the `brand` slot, such as `<a slot="brand" rel="home" href="/">Name</a>`, holding text or an `<img>` logo with alt text. A logo is sized by `--norn-header-logo`.
+ * The default slot holds the navigation links, each an `<a>` that may start with a `norn-svg-icon`. Without links there is no navigation landmark.
+ * @slot brand - The brand link, as one element.
+ * @slot label - The navigation landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Primary".
+ * @slot - The navigation links.
+ * @cssprop --norn-header-bg - Background. Falls back to --norn-surface-raised.
+ * @cssprop --norn-header-fg - Brand color. Falls back to --norn-text-base.
+ * @cssprop --norn-header-border - Rule below the bar. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-header-link - Navigation link color. Falls back to --norn-text-accent.
+ * @cssprop --norn-header-logo - Logo height. Falls back to 2rem.
+ * @cssprop --norn-header-stripe - A background (a color or gradient) for a strip along the bottom edge. Unset, there is no strip.
+ * @cssprop --norn-header-stripe-size - Strip thickness. Falls back to 3px.
+ * @category landmark
+ */
+--->
+<header>
+	<slot name="brand"></slot>
+	<nav :aria-labelledby="'norn-header-' + uid"><span data-label :id="'norn-header-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-header', 'label', $data.page) || 'Primary'"></span></slot></span><slot></slot></nav>
+</header>
+<style>
+	@layer norn.components {
+		norn-header {
+			display: block;
+
+			& header {
+				position: relative;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				border-block-end: 1px solid var(--norn-header-border, var(--norn-ui-border-color, t('ui.border.color')));
+				background: var(--norn-header-bg, var(--norn-surface-raised, t('surface.raised')));
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: auto 0 -1px;
+					block-size: var(--norn-header-stripe-size, 3px);
+					background: var(--norn-header-stripe, none);
+				}
+			}
+
+			& header > a[rel="home"] {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				color: var(--norn-header-fg, var(--norn-text-base, t('text.base')));
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: 1.2rem;
+				font-weight: 700;
+				text-decoration: none;
+			}
+
+			& header > [rel="home"] img {
+				display: block;
+				inline-size: auto;
+				max-inline-size: 100%;
+				block-size: var(--norn-header-logo, 2rem);
+			}
+
+			& header > nav:not(:has(a)) {
+				display: none;
+			}
+
+			& header > nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
+				font-size: 0.95rem;
+			}
+
+			& header > nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& header > nav > a {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				color: var(--norn-header-link, var(--norn-text-accent, t('text.accent')));
+				text-decoration: underline dotted;
+				text-decoration-thickness: 1px;
+				text-underline-offset: 0.2em;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration-style: solid;
+				}
+			}
+
+			@media print {
+				& header > nav {
+					display: none;
+				}
+			}
+		}
+	}
+</style>

@@ -1,0 +1,50 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Short facts in a row, such as a license or a runtime: an optional icon and a few words each, with no box. Static text, not controls.
+ * Pass each fact as an `<li>`, which may start with a `norn-svg-icon`. The list has `role="list"`, which Safari needs once the markers are gone.
+ * @slot - The facts, as `<li>` elements.
+ * @cssprop --norn-tag-list-fg - Text color. Falls back to --norn-text-muted.
+ * @cssprop --norn-tag-list-icon - Icon color. Falls back to --norn-text-accent.
+ * @cssprop --norn-tag-list-gap - Space between rows and between facts. Falls back to --norn-space-xs and --norn-space-m.
+ * @category component
+ */
+--->
+<ul role="list"><slot></slot></ul>
+<style>
+	@layer norn.components {
+		norn-tag-list {
+			display: block;
+
+			& ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-tag-list-gap, var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m')));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				color: var(--norn-tag-list-fg, var(--norn-text-muted, t('text.muted')));
+				font-size: 0.95rem;
+			}
+
+			& li {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				max-inline-size: 100%;
+				line-height: 1.5;
+				overflow-wrap: anywhere;
+			}
+
+			& norn-svg-icon {
+				color: var(--norn-tag-list-icon, var(--norn-text-accent, t('text.accent')));
+			}
+		}
+	}
+</style>

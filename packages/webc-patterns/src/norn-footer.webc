@@ -1,0 +1,142 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Site footer: a row of columns, and a colophon below them.
+ * The default slot holds the columns: a lead `<div>` first (the name in a `<p><strong>`, a tagline, the license), then the links, then anything else, such as a credit.
+ * Put the links in one `<nav aria-labelledby="…">`, pointing at a hidden name: a `<p><strong>` heading and a `<ul>`, or for several groups a `<div>` each holding its heading and list. The groups sit side by side and wrap.
+ * When the footer is 60rem or wider, the lead column takes up to 25rem and the others size to their content; narrower, the columns wrap.
+ * @slot - The columns.
+ * @slot colophon - Full-width content below the columns, as one element.
+ * @cssprop --norn-footer-fg - Text color. Falls back to --norn-text-muted.
+ * @cssprop --norn-footer-strong - Headings and names. Falls back to --norn-text-base.
+ * @cssprop --norn-footer-border - Rule above the footer. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-footer-hover - Link hover color. Falls back to --norn-text-accent.
+ * @cssprop --norn-footer-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-footer-lead - Widest the lead column gets on a wide footer. Falls back to 25rem.
+ * @cssprop --norn-footer-name - Color of the name, the lead column's first `strong`. Falls back to --norn-footer-strong.
+ * @cssprop --norn-footer-name-face - Font family of the name. Inherited unless set.
+ * @cssprop --norn-footer-name-size - Font size of the name. Inherited unless set.
+ * @category landmark
+ */
+--->
+<footer>
+	<div><slot></slot></div>
+	<div><slot name="colophon"></slot></div>
+</footer>
+<style>
+	@layer norn.components {
+		norn-footer {
+			display: block;
+			container-type: inline-size;
+			margin-block-start: var(--norn-space-xl, t('space.xl'));
+
+			& footer {
+				display: grid;
+				gap: var(--norn-space-l, t('space.l'));
+				padding: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
+				border-block-start: 1px solid var(--norn-footer-border, var(--norn-ui-border-color, t('ui.border.color')));
+				color: var(--norn-footer-fg, var(--norn-text-muted, t('text.muted')));
+				font-size: 0.95rem;
+			}
+
+			& footer > div {
+				inline-size: min(100%, var(--norn-footer-width, 64rem));
+				margin-inline: auto;
+
+				/* A slot nobody filled leaves its wrapper empty: take it out of the grid. */
+				&:not(:has(*)) {
+					display: none;
+				}
+
+				&:first-child {
+					display: grid;
+					grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+					align-items: start;
+					gap: var(--norn-space-l, t('space.l'));
+				}
+
+				&:first-child > * {
+					display: grid;
+					align-content: start;
+					gap: var(--norn-space-s, t('space.s'));
+				}
+
+				&:first-child > :first-child strong:first-of-type {
+					color: var(--norn-footer-name, var(--norn-footer-strong, var(--norn-text-base, t('text.base'))));
+					font-family: var(--norn-footer-name-face, inherit);
+					font-size: var(--norn-footer-name-size, inherit);
+				}
+
+				/* A nav of several link groups: one landmark, a column per group. */
+				&:first-child > nav:has(> div) {
+					display: flex;
+					flex-wrap: wrap;
+					gap: var(--norn-space-l, t('space.l'));
+				}
+
+				&:first-child > nav > div {
+					display: grid;
+					align-content: start;
+					gap: var(--norn-space-s, t('space.s'));
+				}
+			}
+
+			@container (min-width: 60rem) {
+				& footer > div:first-child {
+					grid-template-columns: minmax(0, var(--norn-footer-lead, 25rem));
+					grid-auto-columns: minmax(min-content, max-content);
+					grid-auto-flow: column;
+					justify-content: space-between;
+				}
+			}
+
+			& :where(p) {
+				margin-block: 0;
+			}
+
+			& :where(strong) {
+				color: var(--norn-footer-strong, var(--norn-text-base, t('text.base')));
+			}
+
+			& :where(small) {
+				font-size: 0.9rem;
+			}
+
+			& footer > div:first-child > * > ul,
+			& footer > div:first-child > nav > div > ul {
+				display: flex;
+				flex-direction: column;
+				gap: 0.4rem;
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& :where(a) {
+				color: inherit;
+			}
+
+			& :where(a:is(:hover, :focus-visible)) {
+				color: var(--norn-footer-hover, var(--norn-text-accent, t('text.accent')));
+			}
+
+			& :where(a:has(norn-svg-icon)) {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+			}
+
+			@media print {
+				& footer {
+					gap: var(--norn-space-s, t('space.s'));
+				}
+			}
+		}
+	}
+</style>

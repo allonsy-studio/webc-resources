@@ -1,0 +1,17 @@
+/* Project styles: unlayered, so they beat every layer in the packages. */
+main {
+	display: grid;
+	gap: var(--norn-space-l, 2rem);
+	inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), 64rem);
+	margin-inline: auto;
+	padding-block: var(--norn-space-l, 2rem);
+}
+
+main:has(> norn-page-layout) {
+	inline-size: 100%;
+	padding-block: 0;
+}
+
+norn-content-card article {
+	border-radius: 2px;
+}

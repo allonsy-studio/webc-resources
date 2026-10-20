@@ -1,0 +1,109 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/allonsy-studio/webc-resources/main/packages/webc-patterns/schema/project.schema.json",
+	"title": "Norn project data",
+	"description": "A project's own site data, beside package.json: what buildSite reads and a mapping passes to the layouts.",
+	"type": "object",
+	"properties": {
+		"tagline": {
+			"description": "Defaults to the first sentence of the package.json description.",
+			"type": "string"
+		},
+		"lede": {
+			"description": "Hero paragraph; defaults to the package.json description.",
+			"type": "string"
+		},
+		"install": {
+			"description": "Install command; defaults to `npm install <package name>`.",
+			"type": "string"
+		},
+		"usage": {
+			"description": "One copy-pasteable code sample under Usage.",
+			"type": "object",
+			"required": [
+				"language",
+				"code"
+			],
+			"properties": {
+				"language": {
+					"type": "string"
+				},
+				"code": {
+					"type": "string"
+				},
+				"caption": {
+					"type": "string"
+				}
+			}
+		},
+		"features": {
+			"description": "Feature cards: three to six, each leading with what the project does for the reader.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"title",
+					"body"
+				],
+				"properties": {
+					"title": {
+						"type": "string",
+						"minLength": 1
+					},
+					"body": {
+						"type": "string",
+						"minLength": 1
+					}
+				}
+			}
+		},
+		"packages": {
+			"description": "Optional package index.",
+			"type": "array",
+			"items": {
+				"type": "object",
+				"required": [
+					"name",
+					"description"
+				],
+				"properties": {
+					"name": {
+						"type": "string",
+						"minLength": 1
+					},
+					"description": {
+						"type": "string",
+						"minLength": 1
+					},
+					"href": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"logo": {
+			"description": "The project's wordmark: a file in content/assets/img/. Without it the header shows the name.",
+			"type": "string"
+		},
+		"favicon": {
+			"description": "A file in content/assets/img/ (svg, png, ico, or webp). Without it the page links an empty icon, so browsers skip the /favicon.ico request.",
+			"type": "string"
+		},
+		"appleTouchIcon": {
+			"description": "A 180px png in content/assets/img/ for home screens. Optional.",
+			"type": "string"
+		},
+		"url": {
+			"description": "The site's URL. Without it, buildSite builds one from its `host` option and the repository name, or leaves it empty.",
+			"type": "string"
+		},
+		"accent": {
+			"not": {},
+			"description": "A style setting: set `--norn-ui-accent` in the project's tokens.css."
+		},
+		"fonts": {
+			"not": {},
+			"description": "A style setting: set `--norn-font-body` and `--norn-font-heading` in the project's tokens.css."
+		}
+	}
+}

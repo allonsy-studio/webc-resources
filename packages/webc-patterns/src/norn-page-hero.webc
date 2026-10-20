@@ -1,0 +1,90 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Page intro, in the default slot: an h1, a lede, the actions, the facts, and anything after, such as an install `norn-code-block`.
+ * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-tag-list`.
+ * Sets `--norn-chrome: terminal` so a code sample inside takes the window-bar frame.
+ * @slot - The h1, lede, actions, facts, and extras, in that order.
+ * @cssprop --norn-page-hero-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-page-hero-link - Tagline color. Falls back to --norn-text-accent.
+ * @category container
+ */
+--->
+<header><slot></slot></header>
+<style>
+	@layer norn.components {
+		norn-page-hero {
+			--norn-chrome: terminal;
+			display: block;
+
+			& header {
+				display: grid;
+				grid-auto-flow: row;
+				align-content: start;
+				gap: var(--norn-space-m, t('space.m'));
+				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-page-hero-width, 64rem));
+				margin-inline: auto;
+				padding-block: var(--norn-space-xl, t('space.xl')) var(--norn-space-l, t('space.l'));
+			}
+
+			& header > h1 {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: clamp(2rem, 5vw, 3.25rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			& header > h1 > :first-child {
+				font-size: 1.15em;
+			}
+
+			& header > h1 > :last-child:not(:first-child) {
+				color: var(--norn-page-hero-link, var(--norn-text-accent, t('text.accent')));
+				font-weight: 400;
+			}
+
+			& header > p {
+				max-inline-size: var(--norn-text-measure, t('text.measure'));
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: 1.2rem;
+				text-wrap: pretty;
+			}
+
+			& header > norn-tag-list {
+				--norn-tag-list-gap: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
+			}
+
+			& header > nav ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, t('space.s'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@media print {
+				& header > nav {
+					display: none;
+				}
+
+				& header {
+					gap: var(--norn-space-s, t('space.s'));
+					padding-block: var(--norn-space-m, t('space.m'));
+				}
+			}
+		}
+	}
+</style>

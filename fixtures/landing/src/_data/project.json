@@ -1,0 +1,41 @@
+{
+	"lede": "A fixture landing site that exercises every section of the studio page bodies.",
+	"install": "npm install @allons-y/fixture-landing",
+	"usage": {
+		"language": "js",
+		"caption": "example.js",
+		"code": "import { greet } from \"@allons-y/fixture-landing\";\n\nconsole.log(greet(\"world\")); // hello, world\n"
+	},
+	"features": [
+		{
+			"title": "Fast to read",
+			"body": "Each page leads with what the project does for the reader."
+		},
+		{
+			"title": "Accessible",
+			"body": "WCAG 2.2 AA in light, dark, and forced colors."
+		},
+		{
+			"title": "Quiet by default",
+			"body": "No script is needed to read any page."
+		},
+		{
+			"title": "Easy to restyle",
+			"body": "Custom properties and unlayered CSS beat every packaged layer."
+		}
+	],
+	"packages": [
+		{
+			"name": "@example/core",
+			"description": "The core package.",
+			"href": "https://example.com/core"
+		},
+		{
+			"name": "@example/cli",
+			"description": "The command line.",
+			"href": "https://example.com/cli"
+		}
+	],
+	"logo": "logo.svg",
+	"favicon": "favicon.svg"
+}
