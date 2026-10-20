@@ -29,3 +29,17 @@ layout: norn-base.webc
 		<template webc:nokeep @html="$data.content || ''"></template>
 	</norn-rich-text>
 </norn-sidebar-layout>
+<style>
+	@layer norn.layout {
+		/* The page title and the body's line length. The base styles set the title's face and wrapping. */
+		norn-sidebar-layout {
+			--norn-rich-text-measure: none;
+
+			& > div > article > h1 {
+				margin: 0;
+				font-size: clamp(1.9rem, 4vw, 2.5rem);
+				overflow-wrap: anywhere;
+			}
+		}
+	}
+</style>

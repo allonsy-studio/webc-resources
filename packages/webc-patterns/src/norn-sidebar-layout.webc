@@ -7,7 +7,8 @@
  */
 
 /**
- * Docs page frame: a navigation column beside the page body. Layout only: wrap prose in `norn-rich-text`.
+ * A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and sets `--norn-rich-text-measure`, as `norn-docs` and `norn-workspace` do.
+ * Wrap prose in `norn-rich-text`.
  * Pass the navigation as one element in the `nav` slot, such as `<norn-side-nav slot="nav" …>`, and the body, starting with its h1, in the default slot.
  * The navigation stays in view while the page scrolls, and a long list scrolls inside it. The columns stack, and the navigation scrolls with the page, when the frame is narrower than 37.5rem.
  * Sections and articles inside the body stack with a small gap.
@@ -26,7 +27,6 @@
 <style>
 	@layer norn.components {
 		norn-sidebar-layout {
-			--norn-rich-text-measure: none;
 			display: block;
 			container-type: inline-size;
 			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-sidebar-layout-width, 64rem));
@@ -63,15 +63,6 @@
 				align-content: start;
 				gap: var(--norn-space-s, t('space.s'));
 				min-inline-size: 0;
-			}
-
-			& > div > article > h1 {
-				margin: 0;
-				font-family: var(--norn-font-heading, t('font.heading'));
-				font-size: clamp(1.9rem, 4vw, 2.5rem);
-				line-height: 1.15;
-				overflow-wrap: anywhere;
-				text-wrap: balance;
 			}
 
 			@container (max-width: 37.5rem) {

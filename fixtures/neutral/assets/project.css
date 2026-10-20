@@ -12,6 +12,17 @@ main:has(> norn-sidebar-layout) {
 	padding-block: 0;
 }
 
+/* The frame is layout only: the project sets the page title and the body's line length. */
+norn-sidebar-layout {
+	--norn-rich-text-measure: none;
+
+	& > div > article > h1 {
+		margin: 0;
+		font-size: clamp(1.9rem, 4vw, 2.5rem);
+		overflow-wrap: anywhere;
+	}
+}
+
 norn-content-card article {
 	border-radius: 2px;
 }
