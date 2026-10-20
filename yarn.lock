@@ -1266,6 +1266,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axe-core@npm:^4.10.2":
+  version: 4.14.0
+  resolution: "axe-core@npm:4.14.0"
+  checksum: 10c0/8aaa0bf748e0dcf202e8f837951a37b28b4b62d639bed58c07a6890bf035ed6a11ede9f4006db9ca8041db821dc80476c27cff08fd70afa9195ee58fb995a958
+  languageName: node
+  linkType: hard
+
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
@@ -3611,6 +3618,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-core@npm:^1.56.0":
+  version: 1.64.1
+  resolution: "playwright-core@npm:1.64.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10c0/91c4f5ed1cff4b0e18b6ac62f66770f5f1b6c204d4aebd6a321c07466dca18a70822ac692597c6059705a703f9768097ac551df179fb49294d639509148e04f3
+  languageName: node
+  linkType: hard
+
 "please-upgrade-node@npm:^3.2.0":
   version: 3.2.0
   resolution: "please-upgrade-node@npm:3.2.0"
@@ -4174,6 +4190,17 @@ __metadata:
   checksum: 10c0/5b124fd8d0ae920aa2a48b49a7a3b9ad1643b5ce7217b808fb6877826e751cabc01897fd4c85cd1989c4e729072b63aad5c3ba1c1325e4433e0d2f6329156bf1
   languageName: node
   linkType: hard
+
+"webc-preview@workspace:preview":
+  version: 0.0.0-use.local
+  resolution: "webc-preview@workspace:preview"
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    axe-core: "npm:^4.10.2"
+    playwright-core: "npm:^1.56.0"
+  languageName: unknown
+  linkType: soft
 
 "webidl-conversions@npm:^3.0.0":
   version: 3.0.1

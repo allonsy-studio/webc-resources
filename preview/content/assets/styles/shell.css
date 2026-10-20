@@ -1,0 +1,212 @@
+/* The preview's own page: a header, the component list, and the page. */
+.skip-link {
+	position: absolute;
+	inset-block-start: var(--preview-space-s);
+	inset-inline-start: var(--preview-space-s);
+	z-index: 1;
+	padding: var(--preview-space-s) var(--preview-space-m);
+	background: var(--preview-bg);
+	color: var(--preview-text);
+	font-weight: 700;
+	transform: translateY(-200%);
+
+	&:focus {
+		transform: none;
+	}
+}
+
+body > header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--preview-space-s) var(--preview-space-l);
+	padding: var(--preview-space-m);
+	border-block-end: 1px solid var(--preview-rule);
+
+	& nav {
+		display: flex;
+		gap: var(--preview-space-m);
+	}
+
+	& nav a[aria-current="page"] {
+		color: var(--preview-text);
+		font-weight: 700;
+	}
+}
+
+/* The brand: the Nauthiz mark, and the name in Aubrey (SIL OFL, self-hosted in assets/fonts). */
+@font-face {
+	font-family: "Aubrey";
+	src: url("../fonts/aubrey.woff2") format("woff2");
+	font-weight: 400;
+	font-display: swap;
+}
+
+body > header a[rel="home"] {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--preview-space-s);
+	color: var(--preview-text);
+	font: 1.6rem / 1 "Aubrey", Georgia, serif;
+	text-decoration: none;
+}
+
+.mark {
+	inline-size: auto;
+	block-size: 1.9rem;
+}
+
+.app {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: var(--preview-space-l);
+	inline-size: min(100% - 2 * var(--preview-space-m), 80rem);
+	margin-inline: auto;
+	padding-block: var(--preview-space-l);
+
+	&:has(> preview-nav) {
+		grid-template-columns: 14rem minmax(0, 1fr);
+	}
+}
+
+preview-nav {
+	position: sticky;
+	inset-block-start: var(--preview-space-m);
+	align-self: start;
+	max-block-size: calc(100dvh - 2 * var(--preview-space-m));
+	overflow-y: auto;
+}
+
+main {
+	display: grid;
+	gap: var(--preview-space-m);
+	align-content: start;
+	min-inline-size: 0;
+
+	& > :is(h1, h2, h3, p) {
+		margin: 0;
+	}
+
+	& > ul {
+		padding-inline-start: 1.25rem;
+	}
+
+	& > h2 {
+		margin-block-start: var(--preview-space-m);
+		font-size: 1.5rem;
+	}
+}
+
+.lead {
+	max-inline-size: var(--preview-measure);
+	font-size: 1.2rem;
+}
+
+.meta {
+	color: var(--preview-muted);
+}
+
+/* A list of links with a line of summary under each. */
+ul.cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+	gap: var(--preview-space-m);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	& li {
+		padding: var(--preview-space-m);
+		border: 1px solid var(--preview-border);
+		border-radius: 0.25rem;
+		background: var(--preview-raised);
+	}
+
+	& :is(h3, p) {
+		margin: 0;
+	}
+
+	& p {
+		margin-block-start: var(--preview-space-xs);
+	}
+}
+
+.story {
+	display: grid;
+	gap: var(--preview-space-s);
+
+	& h3 {
+		margin: 0;
+	}
+}
+
+/* A table scrolls in its own box on a narrow screen. */
+.table {
+	overflow-x: auto;
+}
+
+main table {
+	inline-size: 100%;
+	border-collapse: collapse;
+	border-block: 1px solid var(--preview-border);
+	font-size: 0.95rem;
+
+	& :is(th, td) {
+		padding: var(--preview-space-xs) var(--preview-space-s);
+		border-block-end: 1px solid var(--preview-rule);
+		text-align: start;
+		vertical-align: top;
+	}
+
+	& th[scope="row"] {
+		font-weight: 400;
+
+		& code {
+			font-weight: 700;
+			white-space: nowrap;
+		}
+	}
+
+	& small {
+		display: block;
+		color: var(--preview-muted);
+	}
+
+	& td code {
+		overflow-wrap: anywhere;
+	}
+}
+
+main summary {
+	cursor: pointer;
+}
+
+body > footer {
+	padding: var(--preview-space-m);
+	border-block-start: 1px solid var(--preview-rule);
+	color: var(--preview-muted);
+	font-size: 0.9rem;
+
+	& p {
+		margin: 0;
+	}
+}
+
+@media (max-width: 48rem) {
+	.app:has(> preview-nav) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	preview-nav {
+		position: static;
+		max-block-size: none;
+	}
+}
+
+@media print {
+	.skip-link,
+	body > header nav {
+		display: none;
+	}
+}

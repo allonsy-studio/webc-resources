@@ -25,6 +25,7 @@ neither of them knows the studio exists.
 
 ```text
 packages/<name>/   index.js, README.md, LICENSE, package.json
+preview/           The component preview: an Eleventy site that the Pages workflow publishes
 ```
 
 Component sources live in `packages/*/src` (`src/*.webc`, `src/layouts/*.webc`, `src/css/*.css`) and compile to
@@ -38,6 +39,8 @@ Component sources live in `packages/*/src` (`src/*.webc`, `src/layouts/*.webc`, 
 | `yarn format` | Same, with fixes applied |
 | `yarn test` | Unit tests with `node --test` |
 | `yarn pack:check` | Dry-run pack of every publishable package |
+| `yarn docs:start` | Serve the preview at `http://localhost:8080`, rebuilt as it changes |
+| `yarn docs:build` | Build the preview into `preview/_site`; set `PATH_PREFIX` to build for a subpath |
 | `yarn opx release add` | Record a changeset |
 
 Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint` through the Husky `post-commit` hook.

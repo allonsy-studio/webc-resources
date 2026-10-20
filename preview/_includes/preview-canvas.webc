@@ -1,0 +1,250 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A story in a frame, with the controls to look at it differently: color scheme, width, and an accessibility check.
+ * Without a script it is the frame and a link to open it on its own.
+ * @prop {{ title: string, frameUrl: string }} story
+ */
+--->
+<div data-js>
+	<fieldset data-group="scheme">
+		<legend>Color scheme</legend>
+		<label><input type="radio" value="light" />Light</label>
+		<label><input type="radio" value="" checked />System</label>
+		<label><input type="radio" value="dark" />Dark</label>
+	</fieldset>
+	<fieldset data-group="width">
+		<legend>Width</legend>
+		<label><input type="radio" value="" checked />Fill</label>
+		<label><input type="radio" value="320px" />Phone, 320px</label>
+		<label><input type="radio" value="768px" />Tablet, 768px</label>
+		<label><input type="radio" value="1024px" />Desktop, 1024px</label>
+	</fieldset>
+	<button type="button" data-action="axe" data-state="idle" :data-axe="url('/assets/axe.min.js')">Check accessibility</button>
+</div>
+<div data-stage>
+	<iframe :src="story.frameUrl" :title="story.title + ' preview'" loading="lazy"></iframe>
+</div>
+<p><a :href="story.frameUrl">Open on its own</a></p>
+<div data-results role="status"></div>
+<style>
+	preview-canvas {
+		display: grid;
+		gap: var(--preview-space-s);
+
+		&:not(:defined) [data-js] {
+			display: none;
+		}
+
+		& > div:first-child {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			gap: var(--preview-space-s) var(--preview-space-m);
+			font-size: 0.9rem;
+		}
+
+		& fieldset {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.25rem var(--preview-space-s);
+			min-inline-size: 0;
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		& legend {
+			float: inline-start;
+			margin-inline-end: var(--preview-space-s);
+			padding: 0;
+			font-weight: 700;
+		}
+
+		& label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.3em;
+			min-block-size: 1.5rem;
+		}
+
+		& button {
+			min-block-size: 2.25rem;
+			padding: 0.25rem 0.7rem;
+			border: 2px solid var(--preview-border);
+			border-radius: 0.25rem;
+			background: var(--preview-bg);
+			color: var(--preview-text);
+			font: inherit;
+			cursor: pointer;
+
+			&[data-state="pass"] {
+				border-color: var(--preview-ok);
+			}
+
+			&[data-state="fail"] {
+				border-color: var(--preview-bad);
+			}
+		}
+
+		& p {
+			margin: 0;
+			font-size: 0.9rem;
+		}
+
+		& [data-stage] {
+			overflow-x: auto;
+			padding: var(--preview-space-s);
+			border: 1px dashed var(--preview-border);
+			border-radius: 0.25rem;
+			background: var(--preview-raised);
+		}
+
+		& iframe {
+			display: block;
+			inline-size: var(--canvas-width, 100%);
+			max-inline-size: none;
+			min-block-size: 4rem;
+			margin-inline: auto;
+			border: 0;
+			background: var(--preview-bg);
+		}
+
+		& [data-results] {
+			padding: var(--preview-space-s) var(--preview-space-m);
+			border: 1px solid var(--preview-border);
+			border-radius: 0.25rem;
+			font-size: 0.9rem;
+
+			&:empty {
+				display: none;
+			}
+
+			& ul {
+				margin: 0.25rem 0 0;
+				padding-inline-start: 1.25rem;
+			}
+		}
+
+		@media print {
+			& [data-js] {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
+		let canvases = 0;
+
+		/** A story's frame with its controls. Safe to connect again: the listeners go on once. */
+		class PreviewCanvas extends HTMLElement {
+			#wired = false;
+			#observer;
+
+			connectedCallback() {
+				if (this.#wired) return;
+				this.#wired = true;
+				const frame = this.querySelector("iframe");
+
+				// Radios share a group by name, so each canvas names its own: two canvases on a page must not share a selection.
+				const id = ++canvases;
+				for (const group of this.querySelectorAll("[data-group]")) {
+					for (const input of group.querySelectorAll("input")) input.name = `${group.dataset.group}-${id}`;
+				}
+
+				frame.addEventListener("load", () => this.#attach(frame));
+				if (frame.contentDocument?.readyState === "complete") this.#attach(frame);
+
+				this.addEventListener("change", (event) => {
+					const group = event.target.closest("[data-group]")?.dataset.group;
+					if (group === "scheme") this.#apply(frame);
+					if (group === "width") {
+						this.querySelector("[data-stage]").style.setProperty("--canvas-width", event.target.value || "100%");
+						this.#fit(frame);
+					}
+				});
+				this.querySelector('[data-action="axe"]').addEventListener("click", () => this.#check(frame));
+			}
+
+			disconnectedCallback() {
+				this.#observer?.disconnect();
+				this.#wired = false;
+			}
+
+			/** Follow the frame's height, and carry the controls into a fresh document. */
+			#attach(frame) {
+				const doc = frame.contentDocument;
+				if (!doc?.body) return;
+				this.#observer?.disconnect();
+				this.#observer = new ResizeObserver(() => this.#fit(frame));
+				this.#observer.observe(doc.body);
+				this.#apply(frame);
+				this.#fit(frame);
+			}
+
+			#fit(frame) {
+				const doc = frame.contentDocument;
+				if (doc) frame.style.blockSize = `${doc.documentElement.scrollHeight}px`;
+			}
+
+			/** Write the chosen scheme into the frame's root element. */
+			#apply(frame) {
+				const root = frame?.contentDocument?.documentElement;
+				if (!root) return;
+				root.style.colorScheme = this.querySelector('[data-group="scheme"] input:checked')?.value ?? "";
+				this.#fit(frame);
+			}
+
+			/** Run axe in the frame and list what it finds. The button's state shows the result. */
+			async #check(frame) {
+				const button = this.querySelector('[data-action="axe"]');
+				const results = this.querySelector("[data-results]");
+				button.dataset.state = "running";
+				button.setAttribute("aria-busy", "true");
+				results.textContent = "Checking…";
+				try {
+					const doc = frame.contentDocument;
+					if (!frame.contentWindow.axe) {
+						await new Promise((resolve, reject) => {
+							const script = doc.createElement("script");
+							script.src = new URL(button.dataset.axe, location.href).href;
+							script.addEventListener("load", resolve);
+							script.addEventListener("error", reject);
+							doc.head.append(script);
+						});
+					}
+					const { violations } = await frame.contentWindow.axe.run(doc, { runOnly: { type: "tag", values: TAGS } });
+					button.dataset.state = violations.length ? "fail" : "pass";
+					if (!violations.length) {
+						results.textContent = "No accessibility violations found.";
+						return;
+					}
+					const heading = document.createElement("strong");
+					heading.textContent = `${violations.length} accessibility ${violations.length === 1 ? "violation" : "violations"}`;
+					const list = document.createElement("ul");
+					for (const violation of violations) {
+						const item = document.createElement("li");
+						item.textContent = `${violation.help} (${violation.id}, ${violation.impact}): ${violation.nodes.length} ${violation.nodes.length === 1 ? "element" : "elements"}`;
+						list.append(item);
+					}
+					results.replaceChildren(heading, list);
+				} catch {
+					button.dataset.state = "fail";
+					results.textContent = "The check could not run.";
+				} finally {
+					button.removeAttribute("aria-busy");
+				}
+			}
+		}
+
+		if (!customElements.get("preview-canvas")) customElements.define("preview-canvas", PreviewCanvas);
+	}
+</script>

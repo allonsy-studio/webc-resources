@@ -1,0 +1,80 @@
+<h1 @text="$data.component.name"></h1>
+<p class="lead" @html="$data.component.description[0]"></p>
+<p class="meta">
+	<code @text="$data.component.tag"></code>
+	a <span @text="$data.component.category"></span>, from
+	<code @text="$data.component.packageName"></code>
+</p>
+<p webc:for="paragraph of $data.component.description.slice(1)" @html="paragraph"></p>
+
+<template webc:if="$data.component.head" webc:nokeep>
+	<h2>Where it renders</h2>
+	<p>A head component has no canvas of its own. It renders in the head of every page that uses it.</p>
+</template>
+
+<template webc:if="$data.component.stories.length" webc:nokeep>
+	<h2>Examples</h2>
+	<div class="story" webc:for="story of $data.component.stories">
+		<h3 @text="story.title"></h3>
+		<preview-canvas :@story="story"></preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<pre tabindex="0"><code @text="story.source"></code></pre>
+		</details>
+	</div>
+</template>
+
+<template webc:if="$data.component.props.length" webc:nokeep>
+	<h2>Props</h2>
+	<p webc:if="$data.component.layout">The plugin's <code>props</code> mapping sets them on each page, and the layout reads them as <code>$data.norn</code>.</p>
+	<p webc:else>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<div class="table" role="region" aria-label="Props" tabindex="0">
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr webc:for="prop of $data.component.props">
+					<th scope="row"><code @text="($data.component.layout ? '' : '@') + prop.name"></code><small webc:if="!prop.optional"> required</small></th>
+					<td><code @text="prop.type"></code></td>
+					<td @html="prop.description"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<template webc:if="$data.component.slots.length" webc:nokeep>
+	<h2>Slots</h2>
+	<div class="table" role="region" aria-label="Slots" tabindex="0">
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr webc:for="slot of $data.component.slots">
+					<th scope="row"><code @text="slot.name"></code></th>
+					<td @html="slot.description"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</template>
+
+<template webc:if="$data.component.cssprops.length" webc:nokeep>
+	<h2>Custom properties</h2>
+	<div class="table" role="region" aria-label="Custom properties" tabindex="0">
+		<table>
+			<thead>
+				<tr><th scope="col">Property</th><th scope="col">Type</th><th scope="col">Default</th></tr>
+			</thead>
+			<tbody>
+				<tr webc:for="prop of $data.component.cssprops">
+					<th scope="row"><code @text="prop.name"></code><small webc:if="prop.description" @html="prop.description"></small></th>
+					<td><code webc:if="prop.type" @text="prop.type"></code><span webc:else>none</span></td>
+					<td><code webc:if="prop.fallback" @text="prop.fallback"></code><span webc:else>none</span></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</template>
