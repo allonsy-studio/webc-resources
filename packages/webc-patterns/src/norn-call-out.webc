@@ -1,0 +1,89 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * An aside within prose: a note, tip, important point, warning, or caution, with an icon and a title, and the body in the default slot.
+ * The kinds match GitHub's alerts. `callouts` in `@allons-y/webc-patterns/markdown` writes the same markup for a Markdown `> [!NOTE]` blockquote. Its role is `note`: it is not a landmark.
+ * @prop {string} [variant] - `note`, `tip`, `important`, `warning`, or `caution`. Falls back to `note`.
+ * @slot heading - The title, as one element, such as `<span slot="heading">Careful</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
+ * @slot - The body.
+ * @cssprop --norn-call-out-color - The rule, icon, and title color. Falls back to one per variant.
+ * @cssprop --norn-call-out-bg - Background. Falls back to a tint of the color.
+ * @category container
+ */
+--->
+<script webc:setup>
+const VARIANTS = { note: ["Note", "info"], tip: ["Tip", "tip"], important: ["Important", "important"], warning: ["Warning", "warning"], caution: ["Caution", "caution"] };
+
+/** A known variant, else `note`. */
+const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
+</script>
+<div role="note" :data-variant="kind(variant)">
+	<p><norn-svg-icon :@name="VARIANTS[kind(variant)][1]"></norn-svg-icon><slot name="heading"><span @text="nornComponentStrings?.('norn-call-out', kind(variant), $data.page) || VARIANTS[kind(variant)][0]"></span></slot></p>
+	<slot></slot>
+</div>
+<style>
+	@layer norn.components {
+		norn-call-out {
+			--_color: var(--norn-call-out-color, light-dark(#1b4fc4, #8fb0ff));
+			display: block;
+
+			&:has([data-variant="tip"]) {
+				--_color: var(--norn-call-out-color, light-dark(#0b6b3a, #7ed6a1));
+			}
+
+			&:has([data-variant="important"]) {
+				--_color: var(--norn-call-out-color, light-dark(#6b2fc2, #c4a3ff));
+			}
+
+			&:has([data-variant="warning"]) {
+				--_color: var(--norn-call-out-color, light-dark(#9a4a00, #ffb36b));
+			}
+
+			&:has([data-variant="caution"]) {
+				--_color: var(--norn-call-out-color, light-dark(#b42318, #ff8a80));
+			}
+
+			& > div {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-xs, t('space.xs'));
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
+				overflow-wrap: anywhere;
+				border-inline-start: 4px solid var(--_color);
+				border-start-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				border-end-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-call-out-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
+			}
+
+			& > div > p:first-child {
+				display: flex;
+				align-items: start;
+				gap: 0.4em;
+				margin: 0;
+				color: var(--_color);
+				font-weight: 700;
+			}
+
+			& > div > p:first-child > norn-svg-icon {
+				flex: none;
+				margin-block-start: 0.15em;
+			}
+
+			& > div > :not(:first-child) {
+				margin: 0;
+			}
+
+			@media (forced-colors: active) {
+				& > div {
+					border-inline-start-color: CanvasText;
+				}
+			}
+		}
+	}
+</style>

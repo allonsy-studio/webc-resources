@@ -1,0 +1,108 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A message about the page or the site: information, success, a warning, or an error, with an icon and an optional action.
+ * Color is never the only cue: the icon and a word for the severity, read but not shown, come first. The message goes in the default slot, and an action, such as a `norn-link-button`, in the `action` slot.
+ * A notice already on the page when it loads is static. Set `:@live="true"` on one the page adds later, so a screen reader announces it: politely, or at once for a warning or an error.
+ * @prop {string} [severity] - `info`, `success`, `warning`, or `error`. Falls back to `info`.
+ * @prop {boolean} [live] - Announce the notice when it appears. On for `@live`, `@live="true"`, or `:@live="true"`.
+ * @slot prefix - The severity word read before the message, with its punctuation, as one element, such as `<span slot="prefix">Remarque : </span>`. Falls back to the site's `componentStrings` for the severity, then "Note: ", "Success: ", "Warning: ", or "Error: ".
+ * @slot - The message.
+ * @slot action - One action, such as a link.
+ * @cssprop --norn-page-notice-color - The rule and icon color. Falls back to one per severity.
+ * @cssprop --norn-page-notice-bg - Background. Falls back to a tint of the color.
+ * @category container
+ */
+--->
+<script webc:setup>
+const SEVERITIES = { info: ["Note", "info"], success: ["Success", "success"], warning: ["Warning", "warning"], error: ["Error", "error"] };
+
+/** A known severity, else `info`. */
+const level = (severity) => (Object.hasOwn(SEVERITIES, severity) ? severity : "info");
+
+/** The live role: `alert` interrupts, for a warning or an error; `status` waits. */
+const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ? "alert" : "status");
+</script>
+<div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
+	<norn-svg-icon :@name="SEVERITIES[level(severity)][1]"></norn-svg-icon>
+	<div>
+		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-page-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
+		<slot></slot>
+	</div>
+	<div><slot name="action"></slot></div>
+</div>
+<style>
+	@layer norn.components {
+		norn-page-notice {
+			--_color: var(--norn-page-notice-color, light-dark(#1b4fc4, #8fb0ff));
+			display: block;
+
+			&:has([data-severity="success"]) {
+				--_color: var(--norn-page-notice-color, light-dark(#0b6b3a, #7ed6a1));
+			}
+
+			&:has([data-severity="warning"]) {
+				--_color: var(--norn-page-notice-color, light-dark(#9a4a00, #ffb36b));
+			}
+
+			&:has([data-severity="error"]) {
+				--_color: var(--norn-page-notice-color, light-dark(#b42318, #ff8a80));
+			}
+
+			& > div {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				overflow-wrap: anywhere;
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				border: 1px solid var(--_color);
+				border-inline-start-width: 4px;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-page-notice-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
+			}
+
+			& > div > norn-svg-icon {
+				--norn-svg-icon-size: 1.25rem;
+				flex: none;
+				align-self: start;
+				margin-block-start: 0.15em;
+				color: var(--_color);
+			}
+
+			& > div > div:first-of-type {
+				flex: 1 1 16rem;
+				min-inline-size: 0;
+			}
+
+			& > div > div:first-of-type > :is(p, ul, ol) {
+				margin: 0;
+			}
+
+			& > div > div:last-child:not(:has(*)) {
+				display: none;
+			}
+
+			& > div > div > [data-prefix] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (forced-colors: active) {
+				& > div {
+					border-color: CanvasText;
+				}
+			}
+		}
+	}
+</style>

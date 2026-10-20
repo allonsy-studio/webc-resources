@@ -1,0 +1,49 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A heading that links to itself, so a reader can copy a link to the section. The heading text is the link, marked with a `#` before it.
+ * The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown headings.
+ * @prop {string} slug - The heading's id, and the link's fragment.
+ * @prop {number} [level] - 2 to 6. Falls back to 2.
+ * @slot - The heading text.
+ * @cssprop --norn-heading-anchor-mark - The `#` color. Falls back to --norn-text-muted.
+ * @category component
+ */
+--->
+<h3 webc:if="level == 3" :id="slug"><a :href="'#' + slug"><slot></slot></a></h3>
+<h4 webc:elseif="level == 4" :id="slug"><a :href="'#' + slug"><slot></slot></a></h4>
+<h5 webc:elseif="level == 5" :id="slug"><a :href="'#' + slug"><slot></slot></a></h5>
+<h6 webc:elseif="level == 6" :id="slug"><a :href="'#' + slug"><slot></slot></a></h6>
+<h2 webc:else :id="slug"><a :href="'#' + slug"><slot></slot></a></h2>
+<style>
+	@layer norn.components {
+		norn-heading-anchor {
+			display: block;
+
+			& > :is(h2, h3, h4, h5, h6) {
+				margin: 0;
+				scroll-margin-block-start: var(--norn-space-m, t('space.m'));
+
+				&::before {
+					content: "#" / "";
+					margin-inline-end: 0.25em;
+					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, t('text.muted')));
+				}
+			}
+
+			/* At least 24px tall, the WCAG 2.2 target size, even for a short heading. */
+			& a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-underline-offset: 0.1em;
+			}
+		}
+	}
+</style>

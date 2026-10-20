@@ -1,0 +1,7 @@
+---
+layout: norn-base.webc
+title: Plain page
+description: A page with no components.
+---
+<h1>Plain page</h1>
+<p>No components, so no bundles.</p>

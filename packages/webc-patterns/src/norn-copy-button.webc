@@ -1,0 +1,153 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A button that copies text to the clipboard: `@value`, or the text of the element whose id is `@source`.
+ * It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do.
+ * After a click its label reads the `copied` or `failed` text for two seconds, and a status message says the same to a screen reader.
+ * The texts are in the page, hidden, and the script shows them: the button only exists with a script.
+ * @prop {string} [value] - The text to copy.
+ * @prop {string} [source] - The id of the element whose text to copy, when there is no `value`.
+ * @prop {string} [strings] - The id of an element that holds the texts in place of the slots, for a component that wraps the button, as `norn-code-block` does. It holds one element per slot, marked `data-string="label"`, `"copy"`, `"copied"`, and `"failed"`; the `label` one needs an id.
+ * @slot label - The button's accessible name, such as "Copy the install command", as one element. Without it, the visible text names the button.
+ * @slot copy - The visible text, as one element. Falls back to the site's `componentStrings`, then "Copy".
+ * @slot copied - The text after a copy. Falls back to the site's `componentStrings`, then "Copied".
+ * @slot failed - The text when the copy fails. Falls back to the site's `componentStrings`, then "Copy failed".
+ * @cssprop --norn-copy-button-bg - Background. Falls back to --norn-surface-base.
+ * @cssprop --norn-copy-button-fg - Text color. Falls back to --norn-text-base.
+ * @cssprop --norn-copy-button-border - Border color. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-copy-button-radius - Corner radius. Falls back to --norn-ui-border-radius.
+ * @category component
+ */
+--->
+<span webc:if="!(typeof strings === 'string' && strings)" hidden>
+	<span data-string="label" :id="'norn-copy-button-' + uid"><slot name="label"></slot></span>
+	<span data-string="copy"><slot name="copy"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copy', $data.page) || 'Copy'"></span></slot></span>
+	<span data-string="copied"><slot name="copied"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copied', $data.page) || 'Copied'"></span></slot></span>
+	<span data-string="failed"><slot name="failed"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'failed', $data.page) || 'Copy failed'"></span></slot></span>
+</span>
+<button
+	type="button"
+	hidden
+	:data-value="typeof value === 'string' ? value : undefined"
+	:data-source="typeof source === 'string' ? source : undefined"
+	:data-strings="typeof strings === 'string' && strings ? strings : undefined"
+><norn-svg-icon @name="copy"></norn-svg-icon><span></span></button>
+<span role="status"></span>
+<style>
+	@layer norn.components {
+		norn-copy-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& button {
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				min-block-size: 2rem;
+				padding: 0.25rem 0.7rem;
+				border: 1px solid var(--norn-copy-button-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-radius: var(--norn-copy-button-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
+				background: var(--norn-copy-button-bg, var(--norn-surface-base, t('surface.base')));
+				color: var(--norn-copy-button-fg, var(--norn-text-base, t('text.base')));
+				font: inherit;
+				max-inline-size: 100%;
+				font-size: 0.85rem;
+				overflow-wrap: anywhere;
+				text-align: start;
+				cursor: pointer;
+
+				&[hidden] {
+					display: none;
+				}
+
+				&:is(:hover, :focus-visible) {
+					border-color: var(--norn-text-accent, t('text.accent'));
+				}
+			}
+
+			& [role="status"] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const CONFIRMATION_MS = 2000;
+
+		/** Copies its value, or its target's text, and says how that went, in the texts the page holds. */
+		class CopyButton extends HTMLElement {
+			#wired = false;
+			#timer;
+			#name = "";
+
+			connectedCallback() {
+				const button = this.querySelector("button");
+				if (!button || typeof navigator.clipboard?.writeText !== "function") return;
+				const name = this.#string(button, "label");
+				this.#name = name?.id && name.textContent.trim() ? name.id : "";
+				if (this.#name) button.setAttribute("aria-labelledby", this.#name);
+				button.querySelector("span").textContent = this.#text(button, "copy");
+				button.hidden = false;
+				if (this.#wired) return;
+				this.#wired = true;
+				button.addEventListener("click", () => this.#copy(button));
+			}
+
+			disconnectedCallback() {
+				clearTimeout(this.#timer);
+			}
+
+			/** The element holding one of the texts: in this component, or in the one `data-strings` names. */
+			#string(button, key) {
+				const holder = button.dataset.strings ? document.getElementById(button.dataset.strings) : this.querySelector(":scope > span[hidden]");
+				return holder?.querySelector(`[data-string="${key}"]`);
+			}
+
+			#text(button, key) {
+				return this.#string(button, key)?.textContent.trim() ?? "";
+			}
+
+			async #copy(button) {
+				const label = button.querySelector("span");
+				const status = this.querySelector('[role="status"]');
+				const { value, source } = button.dataset;
+				let ok = true;
+				try {
+					await navigator.clipboard.writeText(value ?? document.getElementById(source)?.textContent ?? "");
+				} catch {
+					ok = false;
+				}
+				const said = this.#text(button, ok ? "copied" : "failed");
+				label.textContent = said;
+				status.textContent = said;
+				// The visible text is the name while it shows the result, so the name always holds the words on the button.
+				button.removeAttribute("aria-labelledby");
+				clearTimeout(this.#timer);
+				this.#timer = setTimeout(() => {
+					label.textContent = this.#text(button, "copy");
+					status.textContent = "";
+					if (this.#name) button.setAttribute("aria-labelledby", this.#name);
+				}, CONFIRMATION_MS);
+			}
+		}
+
+		if (!customElements.get("norn-copy-button")) customElements.define("norn-copy-button", CopyButton);
+	}
+</script>

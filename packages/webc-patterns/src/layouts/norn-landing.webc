@@ -1,0 +1,88 @@
+---
+layout: norn-base.webc
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A project's landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`.
+ * Samples are `norn-code-block`s when `@allons-y/webc-code-sample` is installed, and `<pre><code>` without it.
+ * Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.
+ * @prop {string} [lede] - The hero paragraph. Falls back to the description.
+ * @prop {string} [repo] - The repository's URL.
+ * @prop {string} [license] - The license name, for the hero's facts.
+ * @prop {string} [node] - The lowest Node version, such as `24+`.
+ * @prop {string} [install] - The install command.
+ * @prop {{ language: string, code: string, caption?: string }} [usage] - One sample for the hero. With it, the install command gets its own section.
+ * @prop {{ title: string, body: string, href?: string }[]} [features] - Feature cards.
+ * @prop {{ name: string, description: string, href?: string }[]} [packages] - Package cards, titles in the mono face.
+ * @category template
+ */
+--->
+<norn-page-hero>
+	<h1>
+		<span @text="$data.norn.name || ''"></span>
+		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
+	</h1>
+	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
+	<nav aria-labelledby="norn-landing-actions">
+		<span id="norn-landing-actions" hidden @text="nornComponentStrings?.('norn-landing', 'actions', $data.page) || 'Get started'"></span>
+		<ul role="list">
+			<li webc:if="$data.norn.install"><norn-link-button @href="#install"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'start', $data.page) || 'Get started'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.install ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-tag-list>
+		<li><norn-svg-icon @name="check"></norn-svg-icon><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'free', $data.page) || 'Free & open source'"></span></li>
+		<li webc:if="$data.norn.license"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}').replace('{license}', $data.norn.license)"></span></li>
+		<li webc:if="$data.norn.node"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'node', $data.page) || 'Node {node}').replace('{node}', $data.norn.node)"></span></li>
+	</norn-tag-list>
+	<norn-code-block
+		webc:if="$data.norn.usage && typeof nornTokenRanges === 'function'"
+		id="usage"
+		:@language="$data.norn.usage.language"
+		:@code="$data.norn.usage.code"
+		:@caption="$data.norn.usage.caption"
+	></norn-code-block>
+	<figure webc:elseif="$data.norn.usage" id="usage"><pre><code @text="$data.norn.usage.code"></code></pre><figcaption webc:if="$data.norn.usage.caption" @text="$data.norn.usage.caption"></figcaption></figure>
+	<norn-code-block webc:elseif="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+	<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+</norn-page-hero>
+<norn-page-section webc:if="$data.norn.usage && $data.norn.install" id="install">
+	<h2 @text="nornComponentStrings?.('norn-landing', 'install', $data.page) || 'Install'"></h2>
+	<norn-code-block webc:if="typeof nornTokenRanges === 'function'" @language="sh" :@code="$data.norn.install"></norn-code-block>
+	<pre webc:else><code @text="$data.norn.install"></code></pre>
+</norn-page-section>
+<norn-page-section webc:if="$data.norn.features.length" id="features">
+	<h2 @text="nornComponentStrings?.('norn-landing', 'features', $data.page) || 'Features'"></h2>
+	<norn-card-grid>
+		<li webc:for="feature of $data.norn.features">
+			<norn-content-card>
+				<h3>
+					<a webc:if="feature.href" :href="feature.href" @text="feature.title"></a>
+					<span webc:else @text="feature.title"></span>
+				</h3>
+				<p @text="feature.body"></p>
+			</norn-content-card>
+		</li>
+	</norn-card-grid>
+</norn-page-section>
+<norn-page-section webc:if="$data.norn.packages.length" id="packages">
+	<h2 @text="nornComponentStrings?.('norn-landing', 'packages', $data.page) || 'Packages'"></h2>
+	<norn-card-grid :@mono="true">
+		<li webc:for="pkg of $data.norn.packages">
+			<norn-content-card>
+				<h3>
+					<a webc:if="pkg.href" :href="pkg.href" @text="pkg.name"></a>
+					<span webc:else @text="pkg.name"></span>
+				</h3>
+				<p @text="pkg.description"></p>
+			</norn-content-card>
+		</li>
+	</norn-card-grid>
+</norn-page-section>

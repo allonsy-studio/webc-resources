@@ -14,33 +14,34 @@ its page data to the layout props.
 
 | Package | Holds | Runtime dependencies |
 | --- | --- | --- |
-| `@allons-y/webc-patterns` | Generic components, the six `norn-*` layouts, the base and print styles and the optional reset, the Norn plugin (`/plugin`), the helpers components call, the Markdown add-on (`/markdown`), and the optional project data builders (`/project`) | `hosted-git-info`, `semver`, `markdown-it` (for `/project`); `@allons-y/webc-code-sample` as an optional peer |
+| `@allons-y/webc-patterns` | Generic components, the six `norn-*` layouts, the base and print styles and the optional reset (`css/`), the Norn plugin (`/plugin`), the helpers components call, the Markdown add-on (`/markdown`), and the optional project data builders (`/project`) | `hosted-git-info`, `semver`, `markdown-it` (for `/project`); `@allons-y/webc-code-sample` as an optional peer |
 | `@allons-y/webc-code-sample` | `norn-code-block`, `tokenRanges`, and the Markdown add-on `highlightFences` (`/markdown`) | `prismjs` |
-| `@allons-y/webc-oss-site` (planned rename: `@allons-y/webc-studio`) | The studio theme: brand tokens, fonts, the locked `studio-bar`, `studio-cta`, and `studio-credit`, `studio-head`, `studioProps`, and the studio plugin | None; the patterns package as a peer |
+| `@allons-y/webc-studio` | The studio theme: brand tokens (`css/tokens.css`), fonts, the locked `studio-bar`, `studio-cta`, and `studio-credit`, `studio-head`, `studioProps`, and the studio plugin | None; the patterns package as a peer |
 
-Dependencies point one way: the studio theme package peers on patterns, patterns optionally on the code sample, and
+Dependencies point one way: `webc-studio` peers on patterns, patterns optionally on the code sample, and
 neither of them knows the studio exists.
 
 ## Layout
 
 ```text
-packages/<name>/   index.js, README.md, LICENSE, package.json
+packages/<name>/   src/*.webc, src/layouts/*.webc, src/css/*.css (the sources); components/, layouts/, css/ (compiled from src, not committed); index.js, README.md
+tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
+scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json
+fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
 ```
-
-Component sources live in `packages/*/src` (`src/*.webc`, `src/layouts/*.webc`, `src/css/*.css`) and compile to
-`components/`, `layouts/`, and `css/`. Those are build output: shipped in the package, never committed.
 
 ## Commands
 
 | Command | Does |
 | --- | --- |
+| `yarn build` | Compile every package's `src/` into `components/`, `layouts/`, and `css/`. The commands below that need the compiled files run it first |
 | `yarn lint` | Lint JS, JSON, and Markdown with opx, including the MPL-2.0 header rule |
 | `yarn format` | Same, with fixes applied |
 | `yarn test` | Unit tests with `node --test` |
 | `yarn pack:check` | Dry-run pack of every publishable package |
 | `yarn opx release add` | Record a changeset |
 
-Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint` through the Husky `post-commit` hook.
+`yarn test` and `yarn pack:check` run `yarn build` first. A test file run on its own with `node --test` reads the compiled `components/`, so run `yarn build` before it. Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint` through the Husky `post-commit` hook.
 
 ## Component conventions
 
@@ -56,33 +57,33 @@ Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint
    and stop the scope at the components that style all their own markup (`norn-rich-text` uses
    `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-tag-list)`), with a `:where()` copy in
    `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is
-   the fallback, not the first choice. `components.test.js` must check it.
+   the fallback, not the first choice. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
    `norn.studio` for studio components and tokens. `norn-page-head` declares the order once, in an inline style ahead of the
    bundle links: `norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print`. One outer layer lets a project
    order the whole package against its own layers or a framework's, and keeps common names such as `base` and `components`
    from merging with theirs. A page renders its content before its layout, so the bundle order can't carry the layer order.
-   The base and print styles live in `css/base.css` and `css/print.css`, which the plugin embeds in `norn-base`.
+   The base and print styles are files, `css/base.css` and `css/print.css`, which the plugin embeds in `norn-base`.
 4. A component token falls back to the shared one, and the shared one to its default:
-   `var(--component-token, var(--norn-space-m, t('space.m')))`. Define the shared tokens in `tokens.json` at the root, in Style Dictionary 3 format.
-   It is the source of truth. A token's custom property is `--norn-` plus its path joined with hyphens (`ui.border.color` is
+   `var(--component-token, var(--norn-space-m, t('space.m')))`. `tokens.json` at the root is the source of truth for the
+   shared tokens. A token's custom property is `--norn-` plus its path joined with hyphens (`ui.border.color` is
    `--norn-ui-border-color`). Write the sources in `src/` with `t('<path>')` as the fallback of every shared token you read, and
-   never a literal default. The build compiles `src/*.webc` into `components/`, filling each `t()` from `tokens.json` with
-   `@csstools/postcss-design-tokens`, and fails on an unknown path. Nothing defines a shared token at runtime: the base styles set no custom property, and a component declares no
+   never a literal default. `scripts/build-components.js` compiles `src/*.webc` into `components/` (build output, not committed,
+   shipped in the package), filling each `t()` from `tokens.json` with `@csstools/postcss-design-tokens`, and fails on an unknown
+   path. Nothing defines a shared token at runtime: `css/base.css` sets no custom property, and a component declares no
    `@property` for one. A project overrides a token with its own `tokens.css` (`:root { --norn-ui-accent: #1f6f8b; }`) and every
    component follows. Derived tokens (`text.accent`, `text.on-accent`, `font.heading`) write the token they derive from as
    `var(--norn-ui-accent, {ui.accent})`, so a project value still drives them. A value in `tokens.json` may use `{path}` to
    name another token's default. A component's own custom properties (`--norn-page-toc-link`) keep their names and may register
-   with `@property`, typed as the component likes. `components.test.js` must check the paths, the names, and the compiled values.
+   with `@property`, typed as the component likes. `components.test.js` checks the paths, the names, and the compiled values.
 5. Print rules live in the component's own `@media print` block.
-   The reset is optional, and nothing in Norn relies on it: a component that sets a size with padding or a
+   The reset (`css/reset.css`) is optional, and nothing in Norn relies on it: a component that sets a size with padding or a
    border also sets `box-sizing: border-box`, zeroes the margins and list styles of its own markup, and sizes its own media.
 6. Props use the `@` prefix at every call site (`@title="…"`, `:@title="expr"`).
 7. No HTML comments in components: they ship to every page. The one exception is the three-dash server-only
    comment, `<!--- … --->`, which WebC drops from the output. A file has exactly one. It sits at the top, after any front matter,
    and holds the license header (rule 13) and the JSDoc for the component's props, slots, custom properties, and category.
-   `norn-base` holds it in `<head>`: a comment ahead of the doctype makes WebC render the page without its doctype and shell. Keep the `/** … */` and ` * ` line format: the preview
-   and `components.test.js` must be able to read it. The comment ends at the first `-->` or `--!>`, so its text never contains either. Close it with `--->`. A `--`, a brace, a backtick, or a tag name such as `<slot>` is safe. A `<script webc:setup>` holds code,
+   `norn-base` holds it in `<head>`: a comment ahead of the doctype makes WebC render the page without its doctype and shell. Keep the `/** … */` and ` * ` line format: `components.test.js` reads it. The comment ends at the first `-->` or `--!>`, so its text never contains either. Close it with `--->`. A `--`, a brace, a backtick, or a tag name such as `<slot>` is safe. A `<script webc:setup>` holds code,
    never only comments. It can't import npm modules, and in a layout or page it runs once per template: compute per-page values
    in the attribute expressions, not in the setup block.
    A component's `webc:setup` helpers and its own props are not visible in slot content passed to other components:
@@ -113,17 +114,13 @@ Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint
 11. WCAG 2.2 AA in light, dark, and forced colors. Colors use `light-dark()`.
 12. Spec links point to the section anchor, never a spec's home page.
 13. Every `.js` file starts with the MPL-2.0 SPDX block comment (see `eslint.config.js`). Every `.webc` file carries the same
-    block as the first lines of its `<!--- … --->` comment (rule 7), never in a `webc:setup` block. The lint rule covers `.js`; `components.test.js` must check the `.webc` files.
+    block as the first lines of its `<!--- … --->` comment (rule 7), never in a `webc:setup` block. The lint rule covers `.js`; `components.test.js` checks the `.webc` files.
 14. Every component names its category in its JSDoc with `@category`: `layout` (arranges other things: grids and
     page frames), `landmark` (renders a page region with a role and a name), `container` (a bounded surface that holds
     content), `component` (a self-contained element), `template` (an Eleventy layout: a whole page, filled from props;
     only the `norn-*` layouts), or `document` (head components).
-    `components.test.js` must check it, and the preview groups its navigation by it.
-15. Every component outside the document head, and every layout, has at least one story in
-    `preview/content/stories/<package>/<name>/`. A story is a WebC page rendered in a frame, with its
-    source shown on the component's page. A layout's story is a whole page on that layout (`layout: norn-landing.webc`). The page's props, slots, and custom properties are read from the
-    component's JSDoc, in its `<!--- … --->` comment, so keep that accurate.
-16. Content goes in slots, not attributes, wherever it can: always for layouts, landmarks, and containers.
+    `components.test.js` checks it.
+15. Content goes in slots, not attributes, wherever it can: always for layouts, landmarks, and containers.
     Headings, text, links, and lists are the caller's markup, so the caller picks heading levels and adds icons.
     A list component takes `<li>` children in its default slot. Props are for settings (`@variant`, `@href`),
     and for data a component must compute from, such as `norn-side-nav` marking the current page. Document an
@@ -132,10 +129,10 @@ Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint
     Never put a fallback in a default slot: any child, a line break included, replaces it. A short label with a
     default is a named slot (`norn-skip-link`'s `label`), and a data-driven alternative to the slot uses `webc:if` with
     `<slot webc:else>` (`norn-segmented-control`'s `options`). Named slot fallbacks are safe.
-17. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
+16. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
     names and script-shown text included. The slot's fallback looks the string up site-wide, then gives the English
     default: `<slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-page-toc', 'label', $data.page) || 'On this page'"></span></slot>`.
-    The key is the slot name; list it and its default in `defaultStrings` in the patterns package's `index.js` (`norn-call-out`'s
+    The key is the slot name; list it and its default in `defaultStrings` in `webc-patterns/index.js` (`norn-call-out`'s
     `heading` and `norn-page-notice`'s `prefix` key by variant). A layout has no caller to fill a slot: it looks its texts up
     under its own name (`nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}'`), and
     names a landmark with `aria-labelledby` pointing at a hidden span. An accessible name points `aria-labelledby` at the
@@ -148,8 +145,8 @@ Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint
     copy button). Never build a sentence by joining words around a value: take a template with a placeholder
     (`{count}`, `{name}`). Counts use `Intl.PluralRules` and `Intl.NumberFormat` for the nearest `lang`. The Markdown
     add-on (`@allons-y/webc-patterns/markdown`, `@allons-y/webc-code-sample/markdown`) writes no string and fills no slot: it writes the tag an author would write, and the registry supplies the texts.
-    `components.test.js` must check that the registry, the slots, and the JSDoc agree.
-18. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
+    `components.test.js` checks that the registry, the slots, and the JSDoc agree.
+17. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
 
 ## The plugin, the layouts, and themes
 
@@ -164,14 +161,14 @@ Node 22 or later. CI runs 22 and 24, and `.nvmrc` pins 24. Commits run `opx lint
   Eleventy's placeholder data, so it never throws on missing data, and every list prop defaults to `[]`. `norn` is a reserved
   data key.
 - **Layouts.** `norn-base` (the frame), `norn-docs`, `norn-docs-home`, `norn-landing`, `norn-workspaces`, `norn-workspace`,
-  each extending `norn-base`. Sources live in `packages/webc-patterns/src/layouts/` and compile to `layouts/`, which ships. A layout's
+  each extending `norn-base`. Sources in `packages/webc-patterns/src/layouts/`, compiled to `layouts/` and shipped. A layout's
   own CSS sits in `norn.layout` and starts at a `data-norn-*` attribute or a component tag of its own markup.
 - **Hooks.** `norn-base` renders `head`, `banner`, `cta`, and `credit` with `<template webc:nokeep @html="nornHook('name')">`.
   `fillHooks(config, fills)` appends markup; an unknown name throws; page data can't change a hook.
 - **Themes.** A theme is a CSS file of custom properties plus hook fills and components, added through the plugin's
-  `components` option. The studio plugin adds the Norn plugin with its components, fills the hooks, embeds its `tokens.css`,
+  `components` option. The studio plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
   sets `themeColor` and `locale` as `defaults`, and copies the fonts.
-- **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. The plugin reads them at build time and the `nornIcons` helper hands them to `norn-svg-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
+- **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-svg-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
 - **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. With it, layouts render `norn-code-block`;
   without it, `<pre><code>`. A layout tests `typeof nornTokenRanges === 'function'`.
 
@@ -206,9 +203,9 @@ schema (studio).
 
 Each package versions independently with changesets through `@allons-y/opx-release`,
 starting at `0.1.0-beta.0`. Add a changeset for anything that changes a consumer's output.
-Until `1.0.0`, the repo stays in changesets pre mode (`beta`), so releases version as `0.1.0-beta.N`.
-Leave it with `yarn opx release pre exit` before `1.0.0`. Set `onlyUpdatePeerDependentsWhenOutOfRange`
-so a peer bump does not force a major on dependents whose range still holds.
+The repo is in changesets pre mode (`beta`), so releases version as `0.1.0-beta.N`; leave it with
+`yarn opx release pre exit` before `1.0.0`. `onlyUpdatePeerDependentsWhenOutOfRange` keeps a peer
+bump from forcing a major on dependents whose range still holds.
 
 ## Commits and pull requests
 

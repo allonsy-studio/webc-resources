@@ -268,20 +268,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@allons-y/webc-code-sample@workspace:packages/webc-code-sample":
+"@allons-y/webc-code-sample@workspace:*, @allons-y/webc-code-sample@workspace:packages/webc-code-sample":
   version: 0.0.0-use.local
   resolution: "@allons-y/webc-code-sample@workspace:packages/webc-code-sample"
   dependencies:
+    markdown-it: "npm:^15.0.2"
     prismjs: "npm:^1.30.0"
   peerDependencies:
     "@11ty/eleventy": ^3.0.0
     "@11ty/eleventy-plugin-webc": ^0.11.0
+    "@allons-y/webc-patterns": ^0.1.0-beta.0
   languageName: unknown
   linkType: soft
 
-"@allons-y/webc-oss-site@workspace:packages/webc-oss-site":
+"@allons-y/webc-patterns@workspace:*, @allons-y/webc-patterns@workspace:packages/webc-patterns":
   version: 0.0.0-use.local
-  resolution: "@allons-y/webc-oss-site@workspace:packages/webc-oss-site"
+  resolution: "@allons-y/webc-patterns@workspace:packages/webc-patterns"
   dependencies:
     hosted-git-info: "npm:^10.1.1"
     markdown-it: "npm:^15.0.2"
@@ -290,39 +292,19 @@ __metadata:
     "@11ty/eleventy": ^3.0.0
     "@11ty/eleventy-plugin-webc": ^0.11.0
     "@allons-y/webc-code-sample": ^0.1.0-beta.0
-    "@allons-y/webc-patterns": ^0.1.0-beta.0
+  peerDependenciesMeta:
+    "@allons-y/webc-code-sample":
+      optional: true
   languageName: unknown
   linkType: soft
 
-"@allons-y/webc-patterns@workspace:packages/webc-patterns":
+"@allons-y/webc-studio@workspace:*, @allons-y/webc-studio@workspace:packages/webc-studio":
   version: 0.0.0-use.local
-  resolution: "@allons-y/webc-patterns@workspace:packages/webc-patterns"
+  resolution: "@allons-y/webc-studio@workspace:packages/webc-studio"
   peerDependencies:
     "@11ty/eleventy": ^3.0.0
     "@11ty/eleventy-plugin-webc": ^0.11.0
-  languageName: unknown
-  linkType: soft
-
-"@allons-y/webc@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "@allons-y/webc@workspace:."
-  dependencies:
-    "@11ty/eleventy": "npm:^3.1.6"
-    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
-    "@allons-y/opx-cli": "npm:^0.1.0-beta.0"
-    "@allons-y/opx-lint-js": "npm:^0.1.0-beta.0"
-    "@allons-y/opx-lint-json": "npm:^0.1.0-beta.0"
-    "@allons-y/opx-lint-md": "npm:^0.1.0-beta.0"
-    "@allons-y/opx-release": "npm:^0.1.0-beta.0"
-    "@eslint/css": "npm:^1.4.0"
-    "@eslint/js": "npm:^10.0.1"
-    "@eslint/json": "npm:^2.0.1"
-    "@eslint/markdown": "npm:^8.0.3"
-    eslint: "npm:^10.8.0"
-    eslint-plugin-license-header: "npm:^0.9.0"
-    husky: "npm:^9.1.7"
-    lint-staged: "npm:^17.3.0"
-    typescript: "npm:^6.0.3"
+    "@allons-y/webc-patterns": ^0.1.0-beta.0
   languageName: unknown
   linkType: soft
 
@@ -620,6 +602,35 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@csstools/css-parser-algorithms@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@csstools/css-parser-algorithms@npm:4.0.2"
+  peerDependencies:
+    "@csstools/css-tokenizer": ^4.0.2
+  checksum: 10c0/ecd411e081ad522fb2e94d7b48d7f8e20cf5ef5f2017addecb80746f7403d289b4e403aee7422330a88f4193942e10bedb960326a7c0567528fc2273b0be5db7
+  languageName: node
+  linkType: hard
+
+"@csstools/css-tokenizer@npm:^4.0.2":
+  version: 4.0.2
+  resolution: "@csstools/css-tokenizer@npm:4.0.2"
+  checksum: 10c0/748b42450064cca6a54d2bb8a719cb765c6433b8988ed8855f39c9814b8ef30c4daab235ffee9dacb0388916d6e250ec6bee454e8353d06161228e129e4272ae
+  languageName: node
+  linkType: hard
+
+"@csstools/postcss-design-tokens@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@csstools/postcss-design-tokens@npm:5.0.2"
+  dependencies:
+    "@csstools/css-parser-algorithms": "npm:^4.0.2"
+    "@csstools/css-tokenizer": "npm:^4.0.2"
+    postcss-value-parser: "npm:^4.2.0"
+  peerDependencies:
+    postcss: ^8.4
+  checksum: 10c0/c462e888bd7e4624013166cbb443d72b718c9c3f63366c426a7f7e8b486556b272f47305035382bbca3db4e454317996a96498182a682049c2bb8f6ac35e1a42
+  languageName: node
+  linkType: hard
+
 "@eslint-community/eslint-utils@npm:^4.8.0, @eslint-community/eslint-utils@npm:^4.9.1":
   version: 4.10.1
   resolution: "@eslint-community/eslint-utils@npm:4.10.1"
@@ -761,6 +772,18 @@ __metadata:
   checksum: 10c0/2daebaedcfbd261478e8b87dfb46d3118f48277c19eb298483ebc6f3b438e9688b86ddca13b3aeb08dfb06be00fb6073506852386aa124645c1170e7e33d140c
   languageName: node
   linkType: hard
+
+"@example/plugin-a@workspace:fixtures/workspaces/packages/plugin-a":
+  version: 0.0.0-use.local
+  resolution: "@example/plugin-a@workspace:fixtures/workspaces/packages/plugin-a"
+  languageName: unknown
+  linkType: soft
+
+"@example/plugin-b@workspace:fixtures/workspaces/packages/plugin-b":
+  version: 0.0.0-use.local
+  resolution: "@example/plugin-b@workspace:fixtures/workspaces/packages/plugin-b"
+  languageName: unknown
+  linkType: soft
 
 "@humanfs/core@npm:^0.19.2":
   version: 0.19.2
@@ -1266,6 +1289,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axe-core@npm:^4.10.2":
+  version: 4.14.0
+  resolution: "axe-core@npm:4.14.0"
+  checksum: 10c0/8aaa0bf748e0dcf202e8f837951a37b28b4b62d639bed58c07a6890bf035ed6a11ede9f4006db9ca8041db821dc80476c27cff08fd70afa9195ee58fb995a958
+  languageName: node
+  linkType: hard
+
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
@@ -1576,7 +1606,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domelementtype@npm:^2.0.1, domelementtype@npm:^2.2.0":
+"dom-serializer@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "dom-serializer@npm:2.0.0"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.2"
+    entities: "npm:^4.2.0"
+  checksum: 10c0/d5ae2b7110ca3746b3643d3ef60ef823f5f078667baf530cec096433f1627ec4b6fa8c072f09d079d7cda915fd2c7bc1b7b935681e9b09e591e1e15f4040b8e2
+  languageName: node
+  linkType: hard
+
+"domelementtype@npm:^2.0.1, domelementtype@npm:^2.2.0, domelementtype@npm:^2.3.0":
   version: 2.3.0
   resolution: "domelementtype@npm:2.3.0"
   checksum: 10c0/686f5a9ef0fff078c1412c05db73a0dce096190036f33e400a07e2a4518e9f56b1e324f5c576a0a747ef0e75b5d985c040b0d51945ce780c0dd3c625a18cd8c9
@@ -1592,6 +1633,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
+  version: 5.0.3
+  resolution: "domhandler@npm:5.0.3"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+  checksum: 10c0/bba1e5932b3e196ad6862286d76adc89a0dbf0c773e5ced1eb01f9af930c50093a084eff14b8de5ea60b895c56a04d5de8bbc4930c5543d029091916770b2d2a
+  languageName: node
+  linkType: hard
+
 "domutils@npm:^2.8.0":
   version: 2.8.0
   resolution: "domutils@npm:2.8.0"
@@ -1600,6 +1650,17 @@ __metadata:
     domelementtype: "npm:^2.2.0"
     domhandler: "npm:^4.2.0"
   checksum: 10c0/d58e2ae01922f0dd55894e61d18119924d88091837887bf1438f2327f32c65eb76426bd9384f81e7d6dcfb048e0f83c19b222ad7101176ad68cdc9c695b563db
+  languageName: node
+  linkType: hard
+
+"domutils@npm:^3.1.0":
+  version: 3.2.2
+  resolution: "domutils@npm:3.2.2"
+  dependencies:
+    dom-serializer: "npm:^2.0.0"
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.3"
+  checksum: 10c0/47938f473b987ea71cd59e59626eb8666d3aa8feba5266e45527f3b636c7883cca7e582d901531961f742c519d7514636b7973353b648762b2e3bedbf235fada
   languageName: node
   linkType: hard
 
@@ -1641,7 +1702,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:^4.4.0, entities@npm:^4.5.0":
+"entities@npm:^4.2.0, entities@npm:^4.4.0, entities@npm:^4.5.0":
   version: 4.5.0
   resolution: "entities@npm:4.5.0"
   checksum: 10c0/5b039739f7621f5d1ad996715e53d964035f75ad3b9a4d38c6b3804bb226e282ffeae2443624d8fdd9c47d8e926ae9ac009c54671243f0c3294c26af7cc85250
@@ -2049,6 +2110,52 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fixture-docs@workspace:fixtures/docs":
+  version: 0.0.0-use.local
+  resolution: "fixture-docs@workspace:fixtures/docs"
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-patterns": "workspace:*"
+    "@allons-y/webc-studio": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
+"fixture-landing@workspace:fixtures/landing":
+  version: 0.0.0-use.local
+  resolution: "fixture-landing@workspace:fixtures/landing"
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-patterns": "workspace:*"
+    "@allons-y/webc-studio": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
+"fixture-neutral@workspace:fixtures/neutral":
+  version: 0.0.0-use.local
+  resolution: "fixture-neutral@workspace:fixtures/neutral"
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    "@allons-y/webc-patterns": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
+"fixture-workspaces@workspace:fixtures/workspaces":
+  version: 0.0.0-use.local
+  resolution: "fixture-workspaces@workspace:fixtures/workspaces"
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-patterns": "workspace:*"
+    "@allons-y/webc-studio": "workspace:*"
+  languageName: unknown
+  linkType: soft
+
 "flat-cache@npm:^6.1.23":
   version: 6.1.23
   resolution: "flat-cache@npm:6.1.23"
@@ -2231,6 +2338,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"htmlparser2@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "htmlparser2@npm:9.1.0"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.3"
+    domutils: "npm:^3.1.0"
+    entities: "npm:^4.5.0"
+  checksum: 10c0/394f6323efc265bbc791d8c0d96bfe95984e0407565248521ab92e2dc7668e5ceeca7bc6ed18d408b9ee3b25032c5743368a4280d280332d782821d5d467ad8f
+  languageName: node
+  linkType: hard
+
 "http-equiv-refresh@npm:^2.0.1":
   version: 2.0.1
   resolution: "http-equiv-refresh@npm:2.0.1"
@@ -2410,6 +2529,13 @@ __metadata:
   version: 3.1.6
   resolution: "iso-639-1@npm:3.1.6"
   checksum: 10c0/5169ff6cf5365ead818ee32e82307b778d3a458316181e9e12e588680aa7482dbde692ca09a26ff3b9ad17c742cbfb7c16355bb02dadc683f0fbdd8587262c50
+  languageName: node
+  linkType: hard
+
+"js-tokens@npm:^9.0.0":
+  version: 9.0.1
+  resolution: "js-tokens@npm:9.0.1"
+  checksum: 10c0/68dcab8f233dde211a6b5fd98079783cbcd04b53617c1250e3553ee16ab3e6134f5e65478e41d82f6d351a052a63d71024553933808570f04dbf828d7921e80e
   languageName: node
   linkType: hard
 
@@ -3334,6 +3460,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^3.3.20":
+  version: 3.3.20
+  resolution: "nanoid@npm:3.3.20"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10c0/856e8bf3bddb959d65997bd94908be030dbc5e6ed88fb3af2a638e51d1938f4d4f454c7c7231aba340775224f88b8cfd3ce1693c70471bfd05f5b6a2227c0c1e
+  languageName: node
+  linkType: hard
+
 "nanoid@npm:^4.0.1":
   version: 4.0.2
   resolution: "nanoid@npm:4.0.2"
@@ -3583,7 +3718,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"picocolors@npm:^1.1.0":
+"picocolors@npm:^1.1.0, picocolors@npm:^1.1.1":
   version: 1.1.1
   resolution: "picocolors@npm:1.1.1"
   checksum: 10c0/e2e3e8170ab9d7c7421969adaa7e1b31434f789afb9b3f115f6b96d91945041ac3ceb02e9ec6fe6510ff036bcc0bf91e69a1772edc0b707e12b19c0f2d6bcf58
@@ -3611,12 +3746,61 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-core@npm:^1.56.0":
+  version: 1.64.1
+  resolution: "playwright-core@npm:1.64.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 10c0/91c4f5ed1cff4b0e18b6ac62f66770f5f1b6c204d4aebd6a321c07466dca18a70822ac692597c6059705a703f9768097ac551df179fb49294d639509148e04f3
+  languageName: node
+  linkType: hard
+
 "please-upgrade-node@npm:^3.2.0":
   version: 3.2.0
   resolution: "please-upgrade-node@npm:3.2.0"
   dependencies:
     semver-compare: "npm:^1.0.0"
   checksum: 10c0/222514d2841022be4b843f38d415beadcc6409c0545d6d153778d71c601bba7bbf1cd5827d650c7fae6a9a2ba7cf00f4b6729b40d015a3a5ba2937e57bc1c435
+  languageName: node
+  linkType: hard
+
+"postcss-html@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "postcss-html@npm:2.0.0"
+  dependencies:
+    htmlparser2: "npm:^9.1.0"
+    js-tokens: "npm:^9.0.0"
+    postcss-safe-parser: "npm:^7.0.1"
+  peerDependencies:
+    postcss: ^8.5.0
+  checksum: 10c0/7c11a7711faf56cedcdf288bbc18091b1ea5ad49327689fd049b454cc336950147f620763a2bf0b0cbcc11c1ace540d9a91de965458a5eb789a803a8ebde3b65
+  languageName: node
+  linkType: hard
+
+"postcss-safe-parser@npm:^7.0.1":
+  version: 7.1.0
+  resolution: "postcss-safe-parser@npm:7.1.0"
+  peerDependencies:
+    postcss: ^8.4.31
+  checksum: 10c0/c6ae9cb33883a41d7180f8978e80cc185de20101e54caa431cfacdba55472a46cdccf2a25e09fc08111e4a79dc3f75bda5135571808927ea504e8de792534916
+  languageName: node
+  linkType: hard
+
+"postcss-value-parser@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "postcss-value-parser@npm:4.2.0"
+  checksum: 10c0/f4142a4f56565f77c1831168e04e3effd9ffcc5aebaf0f538eee4b2d465adfd4b85a44257bb48418202a63806a7da7fe9f56c330aebb3cac898e46b4cbf49161
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.5.31":
+  version: 8.5.31
+  resolution: "postcss@npm:8.5.31"
+  dependencies:
+    nanoid: "npm:^3.3.20"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.2"
+  checksum: 10c0/52f94c6655f86f568a803ce9c8eb3c749e109cc711d26644c4cde953b30c1b947a2f25af3b9453de68584ac655572f46ed8e830b8ab2f21dd226b3f640992e00
   languageName: node
   linkType: hard
 
@@ -3892,7 +4076,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"source-map-js@npm:^1.0.1, source-map-js@npm:^1.2.1":
+"source-map-js@npm:^1.0.1, source-map-js@npm:^1.2.1, source-map-js@npm:^1.2.2":
   version: 1.2.2
   resolution: "source-map-js@npm:1.2.2"
   checksum: 10c0/d5d6dec62266834f83dd4f8a2606a196fb1a006ca5d53b0ef80ee513b7eba2f4e2ae241f4bc129ae7e9b80dea24f6e3d92b446b7e6e96be7653cab8888168a94
@@ -4174,6 +4358,34 @@ __metadata:
   checksum: 10c0/5b124fd8d0ae920aa2a48b49a7a3b9ad1643b5ce7217b808fb6877826e751cabc01897fd4c85cd1989c4e729072b63aad5c3ba1c1325e4433e0d2f6329156bf1
   languageName: node
   linkType: hard
+
+"webc@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "webc@workspace:."
+  dependencies:
+    "@11ty/eleventy": "npm:^3.1.6"
+    "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
+    "@allons-y/opx-cli": "npm:^0.1.0-beta.0"
+    "@allons-y/opx-lint-js": "npm:^0.1.0-beta.0"
+    "@allons-y/opx-lint-json": "npm:^0.1.0-beta.0"
+    "@allons-y/opx-lint-md": "npm:^0.1.0-beta.0"
+    "@allons-y/opx-release": "npm:^0.1.0-beta.0"
+    "@csstools/postcss-design-tokens": "npm:^5.0.2"
+    "@eslint/css": "npm:^1.4.0"
+    "@eslint/js": "npm:^10.0.1"
+    "@eslint/json": "npm:^2.0.1"
+    "@eslint/markdown": "npm:^8.0.3"
+    axe-core: "npm:^4.10.2"
+    eslint: "npm:^10.8.0"
+    eslint-plugin-license-header: "npm:^0.9.0"
+    husky: "npm:^9.1.7"
+    lint-staged: "npm:^17.3.0"
+    playwright-core: "npm:^1.56.0"
+    postcss: "npm:^8.5.31"
+    postcss-html: "npm:^2.0.0"
+    typescript: "npm:^6.0.3"
+  languageName: unknown
+  linkType: soft
 
 "webidl-conversions@npm:^3.0.0":
   version: 3.0.1

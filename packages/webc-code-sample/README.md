@@ -1,27 +1,109 @@
 # @allons-y/webc-code-sample
 
-`code-sample` WebC component with build-time syntax highlighting. Prism runs at build; the browser receives token ranges for the CSS Custom Highlight API and a copy button, with no highlighter shipped.
+Part of [Norn](https://github.com/allonsy-studio/webc-resources#readme). `norn-code-block` WebC component with build-time syntax highlighting. Prism runs at build; the browser receives token ranges for the CSS Custom Highlight API and a copy button, with no highlighter shipped.
 
 ## Status
 
-Pre-release. The package is scaffolded; the component and helpers land in phase 2 of the migration plan.
+Beta. Versions are `0.1.0-beta.N` until 1.0.
 
 ## Install
 
 ```sh
-npm install --save-dev @allons-y/webc-code-sample
+npm install --save-dev @11ty/eleventy @11ty/eleventy-plugin-webc @allons-y/webc-patterns @allons-y/webc-code-sample
 ```
 
-The package does not register `@11ty/eleventy-plugin-webc`. The project registers it once and adds `codeSample` to its `components` list.
+Node 22 or later. Evergreen browsers from about 2024. Features newer than that, such as the CSS Custom Highlight API, degrade gracefully: the code stays readable plain text.
+
+The package registers nothing itself. It is an optional peer dependency of `@allons-y/webc-patterns`: with it installed, the Norn plugin registers `norn-code-block`, the `nornTokenRanges` helper, and the Markdown add-on, and the Norn layouts show their samples with it. The copy button is the patterns package's `norn-copy-button`.
+
+## Usage
+
+Install it beside the patterns package and add the Norn plugin (or a theme that adds it, such as `@allons-y/webc-studio`). There is nothing else to register:
+
+```js
+import norn from "@allons-y/webc-patterns/plugin";
+
+export default function (config) {
+	config.addPlugin(norn, { props: (data) => ({ title: data.title, name: "My project" }) });
+
+	return { markdownTemplateEngine: false };
+}
+```
+
+Without the Norn plugin, add `codeBlock` to the project's own WebC `components` list beside `patterns()` from `@allons-y/webc-patterns`, and register `tokenRanges` as `nornTokenRanges`. Without `patterns()` in the list, `norn-copy-button` is an unknown tag and the code blocks render with no copy button and no error.
+
+Call the component from a WebC page. Props take the `@` prefix:
+
+```html
+<norn-code-block @language="js" @caption="example.js" @code="const answer = 42;"></norn-code-block>
+```
+
+### Markdown
+
+The Norn plugin adds the Markdown add-on for fenced code. Without the plugin, amend the library yourself:
+
+```js
+import { highlightFences } from "@allons-y/webc-code-sample/markdown";
+
+config.amendLibrary("md", highlightFences);
+```
+
+Each fence renders as the `<norn-code-block>` an author would write, with the fence's first word as `@language`. The add-on fills no slots, so the labels and button texts come from the component's fallbacks, as in Translating below. The fence's tag is compiled by WebC, so the page's layout renders the Markdown content with `@html="content"`. Every Norn layout does, and `norn-base` does for a Markdown page that uses it directly.
+
+### Translating
+
+Every string a visitor sees or hears is content in the page, in a named slot, hidden until the script uses it: slot `label` names the code when there is no caption, `copy-label` names the copy button (`{name}` stands in for the code's name, filled in by the script), and `copy`, `copied`, and `failed` are the button's texts:
+
+```html
+<norn-code-block @language="sh" @code="npm install">
+	<span slot="label">Commande d'installation</span>
+	<span slot="copy-label">Copier la {name}</span>
+	<span slot="copy">Copier</span>
+</norn-code-block>
+```
+
+An empty slot falls back to the site's strings from the patterns package's `componentStrings`, under `norn-code-block` (`label`, with `{language}` for the language, and `copy-label`) and `norn-copy-button` (`copy`, `copied`, `failed`), then to English. That covers Markdown fences too: `highlightFences` writes no slots of its own.
+
+### Layout requirements
+
+The Norn layouts meet these. A layout of the project's own:
+
+- Links the page's bundles from the layout head, with `webc:keep` on both tags. WebC removes `<link>` and `<script src>` without it. `norn-page-head` does this.
+
+  ```html
+  <link rel="stylesheet" :href="getBundleFileUrl('css')" webc:keep />
+  <script :src="getBundleFileUrl('js')" defer webc:keep></script>
+  ```
+
+- Sets `markdownTemplateEngine: false`, or the default Liquid pass rewrites `{{ }}` inside fences.
+- Drops the `href=""` and `src=""` tags a page with no bundles is left with: `webc:if` can't guard them, because the URL resolves after render. The Norn plugin registers `dropEmptyBundleTags` from the patterns package as a transform for this.
+
+### Without JavaScript
+
+The code stays readable plain text, and is not a tab stop: the script makes it a named, focusable region only while it scrolls sideways. The highlight colors need the CSS Custom Highlight API and a script. The copy button sits in the caption row, above the code, and needs a script and the Clipboard API, which browsers expose only on secure origins (HTTPS or localhost): elsewhere it stays hidden. The code always reads left to right, in a right-to-left page too. The script registers `norn-code-block` as a custom element, so a sample added to the page later is enhanced too.
+
+### Customizing
+
+Custom properties, each falling back to a shared token, which falls back to its default compiled into the component, so the sample keeps its look with no stylesheet beside it:
+
+| Property | Controls |
+| --- | --- |
+| `--norn-code-block-bg`, `--norn-code-block-fg` | Surface and text colors |
+| `--norn-code-block-border`, `--norn-code-block-radius`, `--norn-code-block-padding`, `--norn-code-block-shadow` | Frame, and the window-bar frame's shadow |
+| `--norn-code-block-font` | Font stack |
+| `--norn-code-block-dot-1`, `--norn-code-block-dot-2`, `--norn-code-block-dot-3` | Terminal window dots |
+| `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` | Syntax colors |
+| `--norn-chrome: terminal` | Set on an ancestor for the window-bar frame |
 
 ## Exports
 
 | Export | Purpose |
 | --- | --- |
-| `codeSample` | Absolute path to `components/code-sample.webc` |
-| `tokenRanges(code, language)` | Prism tokens as `[group, start, end][]` character offsets |
-| `highlightFences(md)` | markdown-it amend that renders fenced code as `<code-sample>` |
+| `codeBlock` | Absolute path to `components/norn-code-block.webc` |
+| `tokenRanges(code, language)` | Prism tokens as `[group, start, end][]` character offsets. The plugin registers it as `nornTokenRanges` |
 | `loadLanguages(names)` | Prism's loader, for languages beyond the defaults |
+
+`@allons-y/webc-code-sample/markdown` exports `highlightFences(md)`, a markdown-it amend that renders fenced code as `<norn-code-block>`.
 
 ## License
 

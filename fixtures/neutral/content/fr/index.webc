@@ -1,0 +1,16 @@
+---
+layout: norn-base.webc
+title: Composants en français
+description: Les chaînes viennent de componentStrings, sans prop sur les balises.
+---
+<h1>Composants en français</h1>
+<norn-page-toc :@items="[{ id: 'recherche', text: 'Recherche', level: 2 }, { id: 'avis', text: 'Avis', level: 2 }]"></norn-page-toc>
+<h2 id="recherche">Recherche</h2>
+<norn-search @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
+<h2 id="avis">Avis</h2>
+<norn-call-out @variant="tip"><p>Un conseil.</p></norn-call-out>
+<norn-page-notice @severity="warning"><p>Le site change bientôt.</p></norn-page-notice>
+<p id="commande">npm install @example/project</p>
+<norn-copy-button @source="commande"></norn-copy-button>
+<norn-theme-toggle></norn-theme-toggle>
+<norn-page-pager :@prev="({ url: '/docs/one/', title: 'Précédente' })" :@next="({ url: '/docs/two/', title: 'Suivante' })"></norn-page-pager>

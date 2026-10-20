@@ -1,0 +1,25 @@
+{
+	"private": true,
+	"name": "fixture-docs",
+	"version": "0.0.0",
+	"description": "A fixture docs site for the studio WebC packages. It exercises the docs pages and pager.",
+	"license": "MPL-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/allonsy-studio/webc-resources.git"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "eleventy --config=src/eleventy.config.js"
+	},
+	"devDependencies": {
+		"@11ty/eleventy": "^3.1.6",
+		"@11ty/eleventy-plugin-webc": "^0.11.2",
+		"@allons-y/webc-code-sample": "workspace:*",
+		"@allons-y/webc-patterns": "workspace:*",
+		"@allons-y/webc-studio": "workspace:*"
+	},
+	"engines": {
+		"node": ">=22"
+	}
+}

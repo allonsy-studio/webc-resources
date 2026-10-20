@@ -1,0 +1,69 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A link styled as a button, for a call to action. It navigates, so it stays a link: use a `<button>` for an action on the page.
+ * The default slot is the link text, and may hold a `norn-svg-icon`.
+ * @prop {string} href
+ * @prop {string} [variant] - `primary`, a filled accent, or `quiet`, an outline. Falls back to `primary`.
+ * @slot - The link text, which may hold a `norn-svg-icon`.
+ * @cssprop --norn-link-button-accent - Primary background. Falls back to --norn-ui-accent.
+ * @cssprop --norn-link-button-on-accent - Primary text. Falls back to --norn-text-on-accent, then Canvas.
+ * @cssprop --norn-link-button-link - Quiet text. Falls back to --norn-text-accent.
+ * @cssprop --norn-link-button-border - Border color. Falls back to --norn-ui-accent.
+ * @cssprop --norn-link-button-border-width - Border width. Falls back to 1px.
+ * @cssprop --norn-link-button-radius - Corner radius. Falls back to --norn-ui-border-radius.
+ * @category component
+ */
+--->
+<a :href="href" :data-variant="variant === 'quiet' ? 'quiet' : 'primary'"><slot></slot></a>
+<style>
+	@layer norn.components {
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& a[data-variant] {
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5em;
+				min-block-size: 2.75rem;
+				padding: 0.6rem 1.1rem;
+				border: var(--norn-link-button-border-width, 1px) solid var(--norn-link-button-border, var(--norn-ui-accent, t('ui.accent')));
+				border-radius: var(--norn-link-button-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
+				background: var(--norn-link-button-accent, var(--norn-ui-accent, t('ui.accent')));
+				color: var(--norn-link-button-on-accent, var(--norn-text-on-accent, t('text.on-accent')));
+				font-weight: 700;
+				line-height: 1.3;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline-width: 2px;
+				}
+			}
+
+			& a[data-variant="quiet"] {
+				background: transparent;
+				color: var(--norn-link-button-link, var(--norn-text-accent, t('text.accent')));
+			}
+
+			@media (forced-colors: active) {
+				& a[data-variant] {
+					border-color: LinkText;
+					color: LinkText;
+				}
+			}
+		}
+	}
+</style>

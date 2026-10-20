@@ -1,0 +1,20 @@
+---
+layout: norn-base.webc
+title: Slotted components
+description: Components inside containers keep their own styles.
+---
+<h1>Slotted components</h1>
+<norn-rich-text>
+	<p>Prose with tags.</p>
+	<norn-tag-list id="in-prose"><li>One</li><li>Two</li></norn-tag-list>
+</norn-rich-text>
+<norn-footer>
+	<div>
+		<p>Lead column.</p>
+		<norn-tag-list id="in-footer"><li>One</li><li>Two</li></norn-tag-list>
+	</div>
+</norn-footer>
+<norn-side-nav :@items="[{ url: '/', title: 'Home', icon: 'book' }]">
+	<span slot="label">Sections</span>
+	<norn-search slot="search" @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
+</norn-side-nav>

@@ -1,0 +1,260 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Site search: a search landmark with a field that lists results as the visitor types, from a Pagefind index.
+ * Without a script, or before the index is built, it is a plain form that searches the site on the web: `@action` with the query as `q`, limited to `@site`.
+ * The status texts are in the page, hidden, and the script shows them. Each falls back to the site's `componentStrings`, then English.
+ * The script picks the status for a count by the plural rules of the nearest `lang`, with `Intl.PluralRules`, and formats the number for it. An empty form falls back to `results-other`.
+ * Build the index with Pagefind after Eleventy. Results read their title and excerpt from the index; the excerpt keeps only Pagefind's `<mark>` highlights.
+ * @prop {string} [bundle] - Pagefind's script. Falls back to `/pagefind/pagefind.js`; pass `url('/pagefind/pagefind.js')` under a path prefix.
+ * @prop {string} [action] - Where the plain form sends the query. Falls back to `https://duckduckgo.com/`.
+ * @prop {string} [site] - The site's host, sent with the plain form as `sites`, to keep results on the site.
+ * @slot label - The field's label, the button's text, and the landmark's name, as one element. Falls back to "Search".
+ * @slot none - The status when nothing matches. Falls back to "No results".
+ * @slot results-one - The status for a count in the `one` plural category, with `{count}` for the number. Falls back to "{count} result", or to `results-other` when the site's strings set only that.
+ * @slot results-other - The status for any other count. Falls back to "{count} results".
+ * @slot results-zero - The status for the `zero` category.
+ * @slot results-two - The status for the `two` category.
+ * @slot results-few - The status for the `few` category.
+ * @slot results-many - The status for the `many` category.
+ * @cssprop --norn-search-bg - Field and results background. Falls back to --norn-surface-base.
+ * @cssprop --norn-search-border - Field and results border. Falls back to --norn-ui-border-color.
+ * @category component
+ */
+--->
+<search :aria-labelledby="'norn-search-' + uid" :data-bundle="bundle || '/pagefind/pagefind.js'">
+	<form :action="action || 'https://duckduckgo.com/'" method="get">
+		<label>
+			<span :id="'norn-search-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'label', $data.page) || 'Search'"></span></slot></span>
+			<input type="search" name="q" autocomplete="off" spellcheck="false" />
+		</label>
+		<input webc:if="site" type="hidden" name="sites" :value="site" />
+		<button type="submit"><norn-svg-icon @name="search"></norn-svg-icon><span><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'label', $data.page) || 'Search'"></span></slot></span></button>
+	</form>
+	<p role="status"></p>
+	<ol role="list" hidden></ol>
+	<span hidden>
+		<span data-string="none"><slot name="none"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'none', $data.page) || 'No results'"></span></slot></span>
+		<span data-string="results-zero"><slot name="results-zero"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-zero', $data.page) || ''"></span></slot></span>
+		<span data-string="results-one"><slot name="results-one"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-one', $data.page) || (nornComponentStrings?.('norn-search', 'results-other', $data.page) ? '' : '{count} result')"></span></slot></span>
+		<span data-string="results-two"><slot name="results-two"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-two', $data.page) || ''"></span></slot></span>
+		<span data-string="results-few"><slot name="results-few"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-few', $data.page) || ''"></span></slot></span>
+		<span data-string="results-many"><slot name="results-many"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-many', $data.page) || ''"></span></slot></span>
+		<span data-string="results-other"><slot name="results-other"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-other', $data.page) || '{count} results'"></span></slot></span>
+	</span>
+</search>
+<style>
+	@layer norn.components {
+		norn-search {
+			display: block;
+			container-type: inline-size;
+
+			& search {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-xs, t('space.xs'));
+				overflow-wrap: anywhere;
+			}
+
+			& form {
+				display: flex;
+				gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& label {
+				display: grid;
+				flex: 1;
+				min-inline-size: 0;
+			}
+
+			& label > span {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& :is(input, button) {
+				box-sizing: border-box;
+				min-block-size: 2.25rem;
+				padding: 0.3rem 0.6rem;
+				border: 1px solid var(--norn-search-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
+				color: var(--norn-text-base, t('text.base'));
+				font: inherit;
+			}
+
+			& input {
+				inline-size: 100%;
+			}
+
+			& button {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4em;
+				cursor: pointer;
+			}
+
+			/* With live results, the button is only a fallback. */
+			&[data-live] button {
+				display: none;
+			}
+
+			@container (max-width: 16rem) {
+				& button > span {
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+					white-space: nowrap;
+				}
+			}
+
+			& [role="status"] {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: 0.85rem;
+			}
+
+			& ol {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-s, t('space.s'));
+				margin: 0;
+				padding: var(--norn-space-s, t('space.s'));
+				border: 1px solid var(--norn-search-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
+				list-style: none;
+
+				&[hidden] {
+					display: none;
+				}
+			}
+
+			& li {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: 0.15rem;
+			}
+
+			& li p {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: 0.88rem;
+			}
+
+			& mark {
+				background: none;
+				color: var(--norn-text-base, t('text.base'));
+				font-weight: 700;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const LIMIT = 8;
+		const DELAY_MS = 200;
+
+		/** Pagefind's excerpt as nodes: text, and `<mark>` for its highlights. Anything else stays text. */
+		const excerpt = (html) =>
+			html.split(/(<mark>.*?<\/mark>)/).map((part) => {
+				const holder = document.createElement("template");
+				holder.innerHTML = part.replace(/<\/?mark>/g, "");
+				const text = holder.content.textContent;
+				if (!part.startsWith("<mark>")) return document.createTextNode(text);
+				const mark = document.createElement("mark");
+				mark.textContent = text;
+				return mark;
+			});
+
+		/** Live results from a Pagefind index. Without one, the form searches the web. */
+		class SiteSearch extends HTMLElement {
+			#wired = false;
+			#pagefind;
+			#latest = 0;
+
+			async connectedCallback() {
+				if (this.#wired) return;
+				this.#wired = true;
+				const search = this.querySelector("search");
+				try {
+					this.#pagefind = await import(new URL(search.dataset.bundle, document.baseURI).href);
+					await this.#pagefind.options?.({ excerptLength: 20 });
+				} catch {
+					return;
+				}
+				this.dataset.live = "";
+				const input = this.querySelector('input[type="search"]');
+				input.addEventListener("input", () => this.#search(input.value));
+				this.querySelector("form").addEventListener("submit", (event) => {
+					event.preventDefault();
+					this.querySelector("ol a")?.focus();
+				});
+			}
+
+			async #search(query) {
+				const run = ++this.#latest;
+				const list = this.querySelector("ol");
+				const status = this.querySelector('[role="status"]');
+				if (!query.trim()) {
+					list.hidden = true;
+					list.replaceChildren();
+					status.textContent = "";
+					return;
+				}
+				const found = await this.#pagefind.debouncedSearch(query, {}, DELAY_MS);
+				if (found === null || run !== this.#latest) return;
+				const pages = await Promise.all(found.results.slice(0, LIMIT).map((result) => result.data()));
+				if (run !== this.#latest) return;
+				list.replaceChildren(
+					...pages.map((page) => {
+						const item = document.createElement("li");
+						const link = document.createElement("a");
+						link.href = page.url;
+						link.textContent = page.meta?.title || page.url;
+						const text = document.createElement("p");
+						text.append(...excerpt(page.excerpt ?? ""));
+						item.append(link, text);
+						return item;
+					}),
+				);
+				list.hidden = !pages.length;
+				const total = found.results.length;
+				status.textContent = total ? this.#count(total) : this.#string("none");
+			}
+
+			/** One of the status texts the page holds, or "" when its slot and fallback are empty. */
+			#string(key) {
+				return this.querySelector(`search > [hidden] > [data-string="${key}"]`)?.textContent.trim() ?? "";
+			}
+
+			/** The status for a count, in the plural form and number format of the nearest `lang`. */
+			#count(total) {
+				const lang = this.closest("[lang]")?.lang || undefined;
+				let category = "other";
+				let number = String(total);
+				try {
+					category = new Intl.PluralRules(lang).select(total);
+					number = new Intl.NumberFormat(lang).format(total);
+				} catch {
+					// An invalid lang keeps the defaults.
+				}
+				return (this.#string(`results-${category}`) || this.#string("results-other")).replaceAll("{count}", number);
+			}
+		}
+
+		if (!customElements.get("norn-search")) customElements.define("norn-search", SiteSearch);
+	}
+</script>

@@ -1,14 +1,14 @@
 {
-	"name": "@allons-y/webc-oss-site",
+	"name": "@allons-y/webc-studio",
 	"version": "0.1.0-beta.0",
-	"description": "Allons-y Studio open source project site layer: studio banner, call to action, footer credit, page bodies, and site data builders.",
+	"description": "The Allons-y Studio theme for Norn sites: brand tokens, self-hosted fonts, and the locked studio banner, call to action, and footer credit.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
-	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme",
+	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-studio#readme",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/allonsy-studio/webc-resources.git",
-		"directory": "packages/webc-oss-site"
+		"directory": "packages/webc-studio"
 	},
 	"bugs": {
 		"url": "https://github.com/allonsy-studio/webc-resources/issues"
@@ -20,23 +20,27 @@
 	"type": "module",
 	"exports": {
 		".": "./index.js",
+		"./css/tokens.css": "./css/tokens.css",
+		"./schema/oss-docs.schema.json": "./schema/oss-docs.schema.json",
 		"./package.json": "./package.json"
 	},
 	"files": [
 		"components/",
+		"css/",
+		"fonts/",
+		"schema/",
 		"index.js",
 		"LICENSE",
 		"README.md"
 	],
-	"dependencies": {
-		"hosted-git-info": "^10.1.1",
-		"markdown-it": "^15.0.2",
-		"semver": "^7.8.5"
+	"scripts": {
+		"prepack": "node ../../scripts/build-components.js webc-studio && yarn copy:svg && yarn copy:fonts",
+		"copy:fonts": "node scripts/copy-fonts.js",
+		"copy:svg": "node scripts/inline-svg.js"
 	},
 	"peerDependencies": {
 		"@11ty/eleventy": "^3.0.0",
 		"@11ty/eleventy-plugin-webc": "^0.11.0",
-		"@allons-y/webc-code-sample": "^0.1.0-beta.0",
 		"@allons-y/webc-patterns": "^0.1.0-beta.0"
 	},
 	"keywords": [

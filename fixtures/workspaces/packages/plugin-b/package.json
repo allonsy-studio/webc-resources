@@ -1,0 +1,6 @@
+{
+	"private": true,
+	"name": "@example/plugin-b",
+	"version": "0.0.0",
+	"description": "The second plugin."
+}

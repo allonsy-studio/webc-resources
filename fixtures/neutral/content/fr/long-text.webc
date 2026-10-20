@@ -1,0 +1,146 @@
+---
+layout: norn-base.webc
+title: Textes longs et accentués
+description: Chaque composant reçoit des chaînes bien plus longues que celles par défaut.
+frame:
+  name: Le laboratoire de développement des composants accessibles
+  nav:
+    - url: /docs/one/
+      title: Documentation complète et détaillée
+    - url: https://example.com/source
+      title: Code source et journal des modifications
+  footer:
+    text: Un très long texte d’introduction au pied de page, écrit pour vérifier que les colonnes s’adaptent à un contenu bien plus long que prévu.
+    groups:
+      - heading: Ressources complémentaires
+        links:
+          - url: https://example.com/source
+            title: Dépôt du code source et des contributions
+          - url: https://example.com/changelog
+            title: Journal des modifications publiées
+    colophon: Une très longue ligne de clôture, avec des accents, des œuvres, des cœurs et des àéîõü pour tester la césure des mots.
+---
+<norn-page-layout>
+	<norn-side-nav
+		slot="nav"
+		:@items="[
+			{ url: '/fr/long-text/', title: 'Une très longue entrée de navigation latérale qui doit passer à la ligne', icon: 'book', children: [{ url: '/docs/one/', title: 'Une sous-page dont le titre est lui aussi beaucoup trop long' }, { url: '/docs/two/', title: 'Électroencéphalographiquement' }] },
+			{ url: '/docs/one/', title: 'Anticonstitutionnellement' }
+		]"
+	>
+		<span slot="label">Navigation latérale de la documentation, avec un nom très long</span>
+		<norn-search slot="search" @bundle="/assets/pagefind/long-text.js" @site="example.com">
+			<span slot="label">Rechercher dans toute la documentation du laboratoire</span>
+			<span slot="none">Aucun résultat ne correspond à votre recherche, essayez d’autres mots</span>
+			<span slot="results-one">{count} résultat trouvé dans la documentation complète du laboratoire</span>
+			<span slot="results-other">{count} résultats trouvés dans la documentation complète du laboratoire</span>
+		</norn-search>
+	</norn-side-nav>
+	<h1>Un titre de page extraordinairement long, avec des mots accentués comme écoresponsabilité et hétérogénéité</h1>
+	<norn-breadcrumb-nav
+		:@items="[
+			{ url: '/', title: 'Accueil du laboratoire de développement des composants' },
+			{ url: '/docs/one/', title: 'Documentation complète et détaillée des composants accessibles' },
+			{ url: '/fr/', title: 'Guides pratiques pour les équipes éditoriales et techniques' },
+			{ url: '/fr/long-text/', title: 'Textes longs et accentués : un cas limite pour chaque composant' }
+		]"
+	>
+		<span slot="label">Fil d’Ariane montrant le chemin complet jusqu’à la page courante</span>
+	</norn-breadcrumb-nav>
+	<norn-page-toc :@items="[{ id: 'avis', text: 'Des avis et des encadrés dont les titres sont particulièrement longs', level: 2 }, { id: 'onglets', text: 'Onglets de code aux noms interminables', level: 2 }, { id: 'sous-titre', text: 'Un sous-titre tout aussi long que les autres entrées', level: 3 }, { id: 'cartes', text: 'Cartes', level: 2 }]">
+		<span slot="label">Sommaire de la page, avec un titre qui occupe plusieurs lignes</span>
+	</norn-page-toc>
+	<norn-page-section id="avis">
+		<h2 id="avis">Avis et encadrés</h2>
+		<norn-call-out @variant="warning">
+			<span slot="heading">Un titre d’encadré volontairement très long qui doit s’étendre sur trois lignes au moins, même sur un grand écran, pour vérifier la mise en page</span>
+			<p>Le corps de l’encadré contient aussi un mot sans espace : Donaudampfschifffahrtsgesellschaftskapitänsmützenverschlusssicherung, et une adresse https://example.com/une/adresse/tres/longue/qui/ne/contient/aucune/espace/ni/tiret/du/tout.</p>
+		</norn-call-out>
+		<norn-page-notice @severity="warning">
+			<span slot="prefix">Attention, avis important pour toutes les équipes : </span>
+			<p>Le message de l’avis est lui aussi bien plus long que d’habitude, et contient un mot interminable comme anticonstitutionnellement ou électroencéphalographiquement.</p>
+			<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Ouvrir la documentation complète et détaillée</norn-link-button>
+		</norn-page-notice>
+		<norn-accordion-group>
+			<details name="faq">
+				<summary>Une question très longue, posée avec beaucoup de détails, qui doit passer à la ligne sans déborder de son cadre</summary>
+				<p>Une réponse tout aussi longue, avec un identifiant sans espace : nornAccordionGroupAvecUnNomBeaucoupTropLongPourTenirSurUneSeuleLigneDeTelephone.</p>
+			</details>
+		</norn-accordion-group>
+		<norn-tag-list>
+			<li>Compatible avec toutes les versions récentes de Node</li>
+			<li>Aucune dépendance à l’exécution, ni directe ni indirecte</li>
+		</norn-tag-list>
+	</norn-page-section>
+	<norn-page-section id="onglets">
+		<h2 id="onglets">Onglets de code</h2>
+		<norn-code-tabs @group="long-text">
+			<span slot="label">Commandes d’installation pour chaque gestionnaire de paquets</span>
+			<span slot="sample">Exemple numéro {n} d’une série d’exemples</span>
+			<norn-code-block data-tab="Installation avec le gestionnaire de paquets npm" @language="sh" @code="npm install @example/long"></norn-code-block>
+			<norn-code-block data-tab="Installation avec yarn, version moderne" @language="sh" @code="yarn add @example/long"></norn-code-block>
+			<norn-code-block data-tab="Électroencéphalographiquement" @language="sh" @code="pnpm add @example/long"></norn-code-block>
+		</norn-code-tabs>
+		<norn-heading-anchor @slug="sous-titre" :@level="3">Un sous-titre tout aussi long que les autres entrées du sommaire</norn-heading-anchor>
+		<norn-data-table>
+			<span slot="label">Tableau large défilant dans sa propre boîte, avec un nom très long</span>
+			<table>
+				<thead>
+					<tr><th scope="col">Une colonne dont l’intitulé est très long</th><th scope="col">Type</th><th scope="col">Valeur par défaut</th><th scope="col">Description détaillée de l’option</th></tr>
+				</thead>
+				<tbody>
+					<tr><td><code>unNomDOptionExtraordinairementLongPourTesterLeDebordement</code></td><td><code>string</code></td><td><code>"_site"</code></td><td>Où le build écrit ses pages, avec une explication bien trop détaillée pour une cellule.</td></tr>
+				</tbody>
+			</table>
+		</norn-data-table>
+		<p id="commande">npm install @example/un-paquet-dont-le-nom-est-vraiment-tres-long</p>
+		<norn-copy-button @source="commande">
+			<span slot="label">Copier la commande d’installation complète dans le presse-papiers</span>
+			<span slot="copy">Copier la commande d’installation</span>
+			<span slot="copied">La commande a bien été copiée dans le presse-papiers</span>
+			<span slot="failed">La copie a échoué, copiez la commande à la main</span>
+		</norn-copy-button>
+	</norn-page-section>
+	<norn-page-section id="cartes">
+		<h2 id="cartes">Cartes</h2>
+		<norn-card-grid>
+			<li>
+				<norn-content-card>
+					<h3><a href="/docs/one/">Un titre de carte extrêmement long qui occupe plusieurs lignes dans une colonne étroite</a></h3>
+					<p>Un corps de carte court.</p>
+				</norn-content-card>
+			</li>
+			<li>
+				<norn-content-card>
+					<h3><a href="/docs/two/">Électroencéphalographiquement</a></h3>
+					<p>Un corps de carte beaucoup plus long, avec des accents, des œuvres et des cœurs, qui s’étend sur de nombreuses lignes pour comparer la hauteur des cartes voisines dans une même rangée.</p>
+				</norn-content-card>
+			</li>
+			<li>
+				<norn-content-card>
+					<h3><a href="/plain/">@example/un-paquet-dont-le-nom-est-vraiment-tres-long-pour-un-titre</a></h3>
+					<p>Un identifiant sans espace dans le titre.</p>
+				</norn-content-card>
+			</li>
+		</norn-card-grid>
+		<norn-content-card id="seule">
+			<h3>Une carte hors d’une grille, avec un titre assez long pour passer à la ligne</h3>
+			<p>Son titre et son texte se suivent sans se chevaucher.</p>
+		</norn-content-card>
+		<norn-segmented-control @name="taille" :@options="[{ value: 's', label: 'Une option au libellé vraiment très long', checked: true }, { value: 'l', label: 'Une autre option, tout aussi longue que la première' }]">
+			<span slot="legend">Une légende de groupe volontairement très longue pour la taille</span>
+		</norn-segmented-control>
+		<norn-theme-toggle>
+			<span slot="label">Choisir le thème de couleurs du site, clair, sombre ou système</span>
+			<span slot="light">Thème clair</span>
+			<span slot="system">Thème du système</span>
+			<span slot="dark">Thème sombre</span>
+		</norn-theme-toggle>
+	</norn-page-section>
+	<norn-page-pager
+		:@prev="({ url: '/docs/one/', title: 'Une page précédente dont le titre est vraiment très long, avec des accents' })"
+		:@next="({ url: '/docs/two/', title: 'Une page suivante dont le titre est lui aussi beaucoup trop long pour une ligne' })"
+	>
+		<span slot="label">Pages voisines dans la documentation, précédente et suivante</span>
+	</norn-page-pager>
+</norn-page-layout>

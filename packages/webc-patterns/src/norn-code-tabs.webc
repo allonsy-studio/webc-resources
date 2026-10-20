@@ -1,0 +1,215 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * The same thing in a few forms, such as npm, yarn, and pnpm, as tabs over `norn-code-block`s. Without a script every sample shows, stacked.
+ * Pass the samples in the default slot. Each tab is named by the sample's `data-tab` attribute, else its caption, else its `label` slot, else its language, all read from the markup.
+ * The tabs follow the ARIA tabs pattern: arrow keys move between them, in the reading direction, and Home and End jump to the ends. Tabs that share a `@group` switch together, and the choice is remembered in this browser.
+ * @prop {string} [group] - Tabs with the same group, on any page, show the same choice.
+ * @slot - The samples, each a `norn-code-block`.
+ * @slot label - The tab list's name, as one element, such as `<span slot="label">Install commands</span>`. Falls back to the site's `componentStrings`, then "Code samples".
+ * @slot sample - A tab's name when its sample has no `data-tab`, caption, label, or language, with `{n}` for its number. Falls back to the site's `componentStrings`, then "Sample {n}".
+ * @cssprop --norn-code-tabs-current - The selected tab's text and underline. Falls back to --norn-text-accent.
+ * @cssprop --norn-code-tabs-rule - The line under the tabs. Falls back to --norn-ui-border-color.
+ * @category container
+ */
+--->
+<span hidden>
+	<span data-string="label" :id="'norn-code-tabs-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-code-tabs', 'label', $data.page) || 'Code samples'"></span></slot></span>
+	<span data-string="sample"><slot name="sample"><span webc:nokeep @text="nornComponentStrings?.('norn-code-tabs', 'sample', $data.page) || 'Sample {n}'"></span></slot></span>
+</span>
+<div :data-group="group || undefined"><slot></slot></div>
+<style>
+	@layer norn.components {
+		norn-code-tabs {
+			display: block;
+
+			& > div {
+				display: grid;
+				gap: var(--norn-space-s, t('space.s'));
+			}
+
+			& > div > [role="tablist"] {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-xs, t('space.xs'));
+				border-block-end: 1px solid var(--norn-code-tabs-rule, var(--norn-ui-border-color, t('ui.border.color')));
+			}
+
+			& > div > [role="tablist"] > [role="tab"] {
+				margin-block-end: -1px;
+				padding: 0.4rem 0.75rem;
+				border: 0;
+				border-block-end: 2px solid transparent;
+				background: none;
+				color: var(--norn-text-muted, t('text.muted'));
+				font: inherit;
+				font-size: 0.9rem;
+				overflow-wrap: anywhere;
+				cursor: pointer;
+
+				&[aria-selected="true"] {
+					border-block-end-color: var(--norn-code-tabs-current, var(--norn-text-accent, t('text.accent')));
+					color: var(--norn-code-tabs-current, var(--norn-text-accent, t('text.accent')));
+					font-weight: 600;
+				}
+			}
+
+			& > div > [role="tabpanel"][hidden] {
+				display: none;
+			}
+
+			/* The tab names the sample, so the caption would repeat it. */
+			& > div > [role="tabpanel"] figcaption {
+				display: none;
+			}
+
+			@media (forced-colors: active) {
+				& > div > [role="tablist"] > [role="tab"][aria-selected="true"] {
+					border-block-end-color: Highlight;
+				}
+			}
+
+			@media print {
+				& > div > [role="tablist"] {
+					display: none;
+				}
+
+				& > div > [role="tabpanel"][hidden] {
+					display: block;
+				}
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const STORE = "norn-code-tabs:";
+		let sets = 0;
+
+		const remembered = (group) => {
+			try {
+				return group ? localStorage.getItem(STORE + group) : null;
+			} catch {
+				return null;
+			}
+		};
+
+		const remember = (group, name) => {
+			try {
+				if (group) localStorage.setItem(STORE + group, name);
+			} catch {
+				// Not remembered: the choice holds for this page only.
+			}
+		};
+
+		/**
+		 * A sample's tab name, read from its markup, so it never waits on the code block's script:
+		 * its `data-tab`, its caption, the text of its `label` slot when the author filled it, or its language.
+		 */
+		const nameOf = (panel) => {
+			const label = panel.querySelector(":scope > figure > [data-name]");
+			return (
+				panel.dataset.tab ||
+				panel.querySelector("figcaption")?.textContent.trim() ||
+				(label && !label.querySelector("[data-default]") ? label.textContent.trim() : "") ||
+				panel.querySelector("pre[data-language]")?.dataset.language ||
+				""
+			);
+		};
+
+		/** Tabs over the code samples in the slot. The stacked samples are the whole component without a script. */
+		class CodeTabs extends HTMLElement {
+			#sync = (event) => {
+				if (event.detail.group === this.#group && event.detail.source !== this) this.#select(event.detail.name, false);
+			};
+
+			get #box() {
+				return this.querySelector(":scope > div");
+			}
+
+			get #group() {
+				return this.#box?.dataset.group;
+			}
+
+			connectedCallback() {
+				document.addEventListener("codetabschange", this.#sync);
+				const box = this.#box;
+				if (!box || box.querySelector(':scope > [role="tablist"]')) return;
+				const panels = [...box.querySelectorAll(":scope > norn-code-block")];
+				if (panels.length < 2) return;
+				const id = `norn-code-tabs-${++sets}`;
+				const strings = this.querySelector(":scope > [hidden]");
+				const name = strings?.querySelector('[data-string="label"]');
+				const sample = strings?.querySelector('[data-string="sample"]')?.textContent.trim() || "{n}";
+				const list = document.createElement("div");
+				list.setAttribute("role", "tablist");
+				if (name?.id) list.setAttribute("aria-labelledby", name.id);
+				panels.forEach((panel, index) => {
+					const tab = document.createElement("button");
+					tab.type = "button";
+					tab.id = `${id}-tab-${index}`;
+					tab.setAttribute("role", "tab");
+					tab.setAttribute("aria-controls", (panel.id ||= `${id}-panel-${index}`));
+					tab.textContent = nameOf(panel) || sample.replaceAll("{n}", String(index + 1));
+					panel.setAttribute("role", "tabpanel");
+					panel.setAttribute("aria-labelledby", tab.id);
+					list.append(tab);
+				});
+				box.prepend(list);
+				list.addEventListener("click", (event) => {
+					const tab = event.target.closest('[role="tab"]');
+					if (tab) this.#select(tab.textContent, true);
+				});
+				list.addEventListener("keydown", (event) => this.#key(event));
+				const tabs = this.#tabs();
+				const saved = remembered(this.#group);
+				this.#select(tabs.some((tab) => tab.textContent === saved) ? saved : tabs[0].textContent, false);
+			}
+
+			disconnectedCallback() {
+				document.removeEventListener("codetabschange", this.#sync);
+			}
+
+			#tabs() {
+				return [...this.querySelectorAll('[role="tab"]')];
+			}
+
+			/** Show the tab with this name. A person's choice is remembered and shared with the group; a sync is not passed on. */
+			#select(name, chosen) {
+				const tabs = this.#tabs();
+				if (!tabs.some((tab) => tab.textContent === name)) return;
+				for (const tab of tabs) {
+					const selected = tab.textContent === name;
+					tab.setAttribute("aria-selected", String(selected));
+					tab.tabIndex = selected ? 0 : -1;
+					document.getElementById(tab.getAttribute("aria-controls")).hidden = !selected;
+				}
+				if (!chosen) return;
+				remember(this.#group, name);
+				if (this.#group) document.dispatchEvent(new CustomEvent("codetabschange", { detail: { group: this.#group, name, source: this } }));
+			}
+
+			/** Arrow keys follow the reading direction; Home and End go to the ends. Moving focus selects the tab. */
+			#key(event) {
+				const tabs = this.#tabs();
+				const index = tabs.indexOf(document.activeElement);
+				if (index === -1) return;
+				const forward = getComputedStyle(this).direction === "rtl" ? "ArrowLeft" : "ArrowRight";
+				const backward = forward === "ArrowRight" ? "ArrowLeft" : "ArrowRight";
+				const next = { [forward]: (index + 1) % tabs.length, [backward]: (index - 1 + tabs.length) % tabs.length, Home: 0, End: tabs.length - 1 }[event.key];
+				if (next === undefined) return;
+				event.preventDefault();
+				tabs[next].focus();
+				this.#select(tabs[next].textContent, true);
+			}
+		}
+
+		if (!customElements.get("norn-code-tabs")) customElements.define("norn-code-tabs", CodeTabs);
+	}
+</script>

@@ -1,0 +1,49 @@
+---
+layout: norn-base.webc
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A monorepo's home page: the hero with the install sample, then an index of the workspaces, titles in the mono face. Extends `norn-base`.
+ * The install sample is a `norn-code-block` when `@allons-y/webc-code-sample` is installed, and a `<pre><code>` without it.
+ * Its texts ("Get started", "Browse packages", "View on GitHub", "Packages") come from `componentStrings` under `norn-workspaces`, then English.
+ * @prop {string} [lede] - The hero paragraph. Falls back to the description.
+ * @prop {string} [install] - The install command.
+ * @prop {string} [repo] - The repository's URL.
+ * @prop {{ name: string, description?: string, url: string }[]} [workspaces] - The workspaces, each with its page.
+ * @category template
+ */
+--->
+<norn-page-hero>
+	<h1>
+		<span @text="$data.norn.name || ''"></span>
+		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
+	</h1>
+	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
+	<nav aria-labelledby="norn-workspaces-actions">
+		<span id="norn-workspaces-actions" hidden @text="nornComponentStrings?.('norn-workspaces', 'actions', $data.page) || 'Get started'"></span>
+		<ul role="list">
+			<li webc:if="$data.norn.workspaces.length"><norn-link-button @href="#packages"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces', 'browse', $data.page) || 'Browse packages'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.workspaces.length ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-code-block webc:if="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+	<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
+</norn-page-hero>
+<norn-page-section webc:if="$data.norn.workspaces.length" id="packages">
+	<h2 @text="nornComponentStrings?.('norn-workspaces', 'packages', $data.page) || 'Packages'"></h2>
+	<norn-card-grid :@mono="true">
+		<li webc:for="workspace of $data.norn.workspaces">
+			<norn-content-card>
+				<h3><a :href="workspace.url" @text="workspace.name || workspace.title"></a></h3>
+				<p webc:if="workspace.description" @text="workspace.description"></p>
+			</norn-content-card>
+		</li>
+	</norn-card-grid>
+</norn-page-section>

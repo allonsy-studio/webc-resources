@@ -1,0 +1,108 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A stack of disclosures, from native `<details>` elements: the browser handles the keyboard, find-in-page, and links into a closed section.
+ * Pass each section as a `<details>` with a `<summary>` in the default slot. Give them one `name` to keep only one open at a time.
+ * A section slides open where the browser can animate to an intrinsic size, unless motion is reduced; elsewhere it opens at once.
+ * @slot - The sections, each a `<details>`.
+ * @cssprop --norn-accordion-group-rule - Rules between sections. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-accordion-group-marker - The chevron's color. Falls back to --norn-text-accent.
+ * @cssprop --norn-accordion-group-duration - The slide's length. Falls back to 200ms.
+ * @category container
+ */
+--->
+<div><slot></slot></div>
+<style>
+	@layer norn.components {
+		norn-accordion-group {
+			display: block;
+			interpolate-size: allow-keywords;
+			overflow-wrap: anywhere;
+
+			& > div > details {
+				border-block-end: 1px solid var(--norn-accordion-group-rule, var(--norn-ui-border-color, t('ui.border.color')));
+
+				&:first-child {
+					border-block-start: 1px solid var(--norn-accordion-group-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				}
+
+				&[open] > summary::after {
+					rotate: 225deg;
+					translate: 0 0.15em;
+				}
+
+				&::details-content {
+					block-size: 0;
+					overflow: hidden;
+				}
+
+				&[open]::details-content {
+					block-size: auto;
+				}
+			}
+
+			& > div > details > summary {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-s, t('space.s'));
+				padding-block: var(--norn-space-s, t('space.s'));
+				font-weight: 600;
+				list-style: none;
+				cursor: pointer;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				/* A chevron drawn with two borders, pointing down when closed and up when open. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					margin-inline-end: 0.25em;
+					border-block-end: 2px solid var(--norn-accordion-group-marker, var(--norn-text-accent, t('text.accent')));
+					border-inline-end: 2px solid var(--norn-accordion-group-marker, var(--norn-text-accent, t('text.accent')));
+					rotate: 45deg;
+					translate: 0 -0.15em;
+				}
+			}
+
+			& > div > details > :not(summary) {
+				margin-block: 0 var(--norn-space-s, t('space.s'));
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary::after {
+					transition: rotate var(--norn-accordion-group-duration, 200ms) ease-out, translate var(--norn-accordion-group-duration, 200ms) ease-out;
+				}
+
+				& > div > details::details-content {
+					transition: block-size var(--norn-accordion-group-duration, 200ms) ease-out,
+						content-visibility var(--norn-accordion-group-duration, 200ms) allow-discrete;
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > div > details::details-content {
+					block-size: auto;
+					content-visibility: visible;
+				}
+			}
+		}
+	}
+</style>

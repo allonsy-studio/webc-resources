@@ -1,0 +1,95 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * Docs page frame: a navigation column beside the page body. Layout only: wrap prose in `norn-rich-text`.
+ * Pass the navigation as one element in the `nav` slot, such as `<norn-side-nav slot="nav" …>`, and the body, starting with its h1, in the default slot.
+ * The navigation stays in view while the page scrolls, and a long list scrolls inside it. The columns stack, and the navigation scrolls with the page, when the frame is narrower than 37.5rem.
+ * Sections and articles inside the body stack with a small gap.
+ * @slot nav - The navigation, as one element.
+ * @slot - The page body, starting with its h1.
+ * @cssprop --norn-page-layout-nav - Navigation column width. Falls back to 14rem.
+ * @cssprop --norn-page-layout-width - Overall width. Falls back to 64rem.
+ * @cssprop --norn-page-layout-gap - Space between the navigation and the body. Falls back to --norn-space-l.
+ * @category layout
+ */
+--->
+<div>
+	<slot name="nav"></slot>
+	<article><slot></slot></article>
+</div>
+<style>
+	@layer norn.components {
+		norn-page-layout {
+			--norn-rich-text-measure: none;
+			display: block;
+			container-type: inline-size;
+			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-page-layout-width, 64rem));
+			margin-inline: auto;
+			padding-block: var(--norn-space-l, t('space.l'));
+
+			& > div {
+				display: grid;
+				grid-template-columns: var(--norn-page-layout-nav, 14rem) minmax(0, 1fr);
+				align-items: start;
+				gap: var(--norn-page-layout-gap, var(--norn-space-l, t('space.l')));
+			}
+
+			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. */
+			& > div > :first-child:not(article) {
+				position: sticky;
+				inset-block-start: var(--norn-space-m, t('space.m'));
+				display: flex;
+				flex-direction: column;
+				max-block-size: calc(100dvh - 2 * var(--norn-space-m, t('space.m')));
+			}
+
+			& > div > article {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				align-content: start;
+				gap: var(--norn-space-m, t('space.m'));
+				min-inline-size: 0;
+			}
+
+			& > div > article > :is(article, section) {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				align-content: start;
+				gap: var(--norn-space-s, t('space.s'));
+				min-inline-size: 0;
+			}
+
+			& > div > article > h1 {
+				margin: 0;
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: clamp(1.9rem, 4vw, 2.5rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			@container (max-width: 37.5rem) {
+				& > div {
+					grid-template-columns: minmax(0, 1fr);
+				}
+
+				& > div > :first-child:not(article) {
+					position: static;
+					max-block-size: none;
+				}
+			}
+
+			@media print {
+				& > div {
+					grid-template-columns: minmax(0, 1fr);
+				}
+			}
+		}
+	}
+</style>

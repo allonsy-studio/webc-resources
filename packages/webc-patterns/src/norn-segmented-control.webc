@@ -1,0 +1,222 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value.
+ * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-svg-icon`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
+ * A thumb slides to the checked option, unless motion is reduced. Up to eight options, drawn at equal widths.
+ * A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.
+ * @prop {boolean} [icon-only] - Hides the option text visually; it stays the radio's name. On for `@icon-only`, `@icon-only="true"`, or `:@icon-only="true"`.
+ * @prop {string} [legend] - The group's name, when the `legend` slot is empty.
+ * @prop {string} [name] - The radios' shared name. Required with `options`: the build fails without it.
+ * @prop {{ value: string, label: string, icon?: string, checked?: boolean }[]} [options] - The options, in place of the default slot. Each label is also its `title`.
+ * @slot legend - The group's name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden.
+ * @slot - The option labels, when there are no `options`.
+ * @cssprop --norn-segmented-control-thumb - Checked option background. Falls back to --norn-text-accent.
+ * @cssprop --norn-segmented-control-on-thumb - Checked option text. Falls back to --norn-surface-base.
+ * @cssprop --norn-segmented-control-border - Outline. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-segmented-control-radius - Corner radius. Falls back to --norn-ui-border-radius.
+ * @cssprop --norn-segmented-control-duration - Thumb slide time. Falls back to 180ms.
+ * @category component
+ */
+--->
+<script webc:setup>
+/** The options, after checking they come with the name that makes their radios one group. */
+const grouped = (options, name) => {
+	if (options && (typeof name !== "string" || !name)) throw new Error("norn-segmented-control: `:@options` needs `@name`, or each radio is its own group and several can be checked at once.");
+	return options;
+};
+</script>
+<fieldset :data-icon-only="iconOnly === true || iconOnly === '' || iconOnly === 'true' ? '' : undefined">
+	<legend><slot name="legend"><span webc:if="legend" @text="legend"></span></slot></legend>
+	<template webc:nokeep webc:if="grouped(options, name)">
+		<label webc:for="option of options" :title="option.label">
+			<input type="radio" :name="name" :value="option.value" :checked="option.checked ? '' : undefined" />
+			<norn-svg-icon webc:if="option.icon" :@name="option.icon"></norn-svg-icon>
+			<span @text="option.label"></span>
+		</label>
+	</template>
+	<slot webc:else></slot>
+</fieldset>
+<style>
+	@layer norn.components {
+		norn-segmented-control {
+			--_gap: 2px;
+			--_count: 1;
+			--_index: 0;
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& fieldset {
+				box-sizing: border-box;
+				position: relative;
+				display: grid;
+				grid-auto-columns: minmax(0, 1fr);
+				grid-auto-flow: column;
+				gap: var(--_gap);
+				min-inline-size: 0;
+				margin: 0;
+				padding: var(--_gap);
+				border: 1px solid var(--norn-segmented-control-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-radius: var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
+
+				/* The thumb: one option wide, moved along by the index of the checked one. */
+				&:has(input:checked)::before {
+					content: "";
+					position: absolute;
+					inset-block: var(--_gap);
+					inset-inline-start: var(--_gap);
+					inline-size: calc((100% - var(--_gap) * (var(--_count) + 1)) / var(--_count));
+					border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) - var(--_gap));
+					background: var(--norn-segmented-control-thumb, var(--norn-text-accent, t('text.accent')));
+					translate: calc(var(--_index) * (100% + var(--_gap))) 0;
+				}
+
+				&:has(> label:nth-of-type(2)) {
+					--_count: 2;
+				}
+
+				&:has(> label:nth-of-type(3)) {
+					--_count: 3;
+				}
+
+				&:has(> label:nth-of-type(4)) {
+					--_count: 4;
+				}
+
+				&:has(> label:nth-of-type(5)) {
+					--_count: 5;
+				}
+
+				&:has(> label:nth-of-type(6)) {
+					--_count: 6;
+				}
+
+				&:has(> label:nth-of-type(7)) {
+					--_count: 7;
+				}
+
+				&:has(> label:nth-of-type(8)) {
+					--_count: 8;
+				}
+
+				&:has(> label:nth-of-type(2) input:checked) {
+					--_index: 1;
+				}
+
+				&:has(> label:nth-of-type(3) input:checked) {
+					--_index: 2;
+				}
+
+				&:has(> label:nth-of-type(4) input:checked) {
+					--_index: 3;
+				}
+
+				&:has(> label:nth-of-type(5) input:checked) {
+					--_index: 4;
+				}
+
+				&:has(> label:nth-of-type(6) input:checked) {
+					--_index: 5;
+				}
+
+				&:has(> label:nth-of-type(7) input:checked) {
+					--_index: 6;
+				}
+
+				&:has(> label:nth-of-type(8) input:checked) {
+					--_index: 7;
+				}
+			}
+
+			& legend,
+			& [data-icon-only] label > span {
+				box-sizing: border-box;
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			&:dir(rtl) fieldset::before {
+				translate: calc(var(--_index) * (-100% - var(--_gap))) 0;
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& fieldset::before {
+					transition: translate var(--norn-segmented-control-duration, 180ms) ease-out;
+				}
+
+				& label {
+					box-sizing: border-box;
+					transition: color var(--norn-segmented-control-duration, 180ms) ease-out;
+				}
+			}
+
+			/* The radio covers its label, so a click anywhere on the option selects it, and the native control keeps the focus. */
+			& label {
+				position: relative;
+				z-index: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.4em;
+				min-inline-size: 2.5rem;
+				min-block-size: 2.25rem;
+				padding-inline: 0.6rem;
+				border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) - var(--_gap));
+				color: var(--norn-text-muted, t('text.muted'));
+				cursor: pointer;
+				overflow-wrap: anywhere;
+				text-align: center;
+
+				&:hover {
+					background: var(--norn-surface-raised, t('surface.raised'));
+					color: var(--norn-text-base, t('text.base'));
+				}
+
+				&:has(input:checked) {
+					background: transparent;
+					color: var(--norn-segmented-control-on-thumb, var(--norn-surface-base, t('surface.base')));
+				}
+
+				&:has(input:focus-visible) {
+					outline: 3px solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: 2px;
+				}
+			}
+
+			& input {
+				box-sizing: border-box;
+				position: absolute;
+				inset: 0;
+				z-index: 1;
+				margin: 0;
+				opacity: 0;
+				cursor: pointer;
+			}
+
+			& norn-svg-icon {
+				--norn-svg-icon-size: 1.25rem;
+			}
+
+			@media (forced-colors: active) {
+				& fieldset::before {
+					background: Highlight;
+				}
+
+				& label:has(input:checked) {
+					color: HighlightText;
+					forced-color-adjust: none;
+				}
+			}
+		}
+	}
+</style>

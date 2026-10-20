@@ -1,0 +1,3 @@
+<article data-project-card>
+	<h3 @text="title"></h3>
+</article>
