@@ -19,7 +19,7 @@ body:
         - "Markdown add-on"
         - "Tokens / theming"
         - "Code sample (norn-code-block)"
-        - "Studio theme"
+        - "OSS site theme"
         - "Accessibility"
         - "Component preview"
         - "npm package / install"

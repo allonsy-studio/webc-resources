@@ -10,7 +10,7 @@ import path from "node:path";
 
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import norn, { base, fillHooks } from "@allons-y/webc-patterns/plugin";
-import { components as studioComponents, fonts, studioProps } from "@allons-y/webc-studio";
+import { components as ossComponents, fonts, ossProps } from "@allons-y/webc-oss-site";
 
 import { buildComponents } from "../scripts/build-components.js";
 
@@ -28,11 +28,11 @@ const DOCS = [
 /** The frames that stand in for the sample workspaces' pages: the first workspace's story, then the second's. The sample data links to pages that do not exist. */
 const WORKSPACE_FRAMES = ["/frames/patterns/norn-workspace/default/", "/frames/patterns/norn-workspace/second/"];
 
-/** The layout stories' props: the sample project data, mapped the way a studio project's is, without the studio theme. */
+/** The layout stories' props: the sample project data, mapped the way an Allons-y Studio project's is, without the OSS site theme. */
 const props = (data, noIndex) => {
 	const workspaces = (data.workspaces ?? []).map((workspace, index) => ({ ...workspace, url: WORKSPACE_FRAMES[index] ?? WORKSPACE_FRAMES[0] }));
 	const docs = (data.collections?.docs ?? []).map((page) => ({ url: page.url, title: page.data?.title, description: page.data?.description }));
-	return { ...studioProps(data.site, data.project, { docs, anchors: data.anchors === true, studio: false }), title: data.title, docs, search: { bundle: noIndex }, workspaces, workspace: data.workspace && { ...data.workspace, url: workspaces.find(({ name }) => name === data.workspace.name)?.url } };
+	return { ...ossProps(data.site, data.project, { docs, anchors: data.anchors === true, oss: false }), title: data.title, docs, search: { bundle: noIndex }, workspaces, workspace: data.workspace && { ...data.workspace, url: workspaces.find(({ name }) => name === data.workspace.name)?.url } };
 };
 
 /** @param {import("@11ty/eleventy").UserConfig} config */
@@ -40,10 +40,10 @@ export default async function (config) {
 	// Compile the component sources first, and again before every rebuild: this listener runs ahead of the WebC plugin's, which globs the compiled folders.
 	await buildComponents();
 	config.on("eleventy.before", () => buildComponents());
-	// The studio components are listed for their own stories; the layouts render without the studio theme.
+	// The OSS components are listed for their own stories; the layouts render without the OSS site theme.
 	// The preview builds no Pagefind index. The search stories load a script that fails instead, so the search falls back to its plain form with no 404.
 	const noIndex = () => config.getFilter("url")("/assets/no-index.js");
-	config.addPlugin(norn, { props: (data) => props(data, noIndex()), components: [studioComponents, at("_includes/*.webc")] });
+	config.addPlugin(norn, { props: (data) => props(data, noIndex()), components: [ossComponents, at("_includes/*.webc")] });
 	fillHooks(config, { head: '<link rel="stylesheet" href="/assets/norn/reset.css" webc:keep />\n<script src="/assets/tokens.js" webc:keep></script>' });
 	config.addPlugin(HtmlBasePlugin);
 

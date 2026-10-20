@@ -18,7 +18,7 @@ export default function (config) {
 | --- | --- |
 | [`@allons-y/webc-patterns`](packages/webc-patterns) | Generic components, the `norn-*` page layouts, and the Norn plugin |
 | [`@allons-y/webc-code-sample`](packages/webc-code-sample) | Code sample component with build-time syntax highlighting, used by the plugin when installed |
-| [`@allons-y/webc-studio`](packages/webc-studio) | The Allons-y Studio theme for Norn: brand tokens, fonts, and the studio banner, call to action, and credit |
+| [`@allons-y/webc-oss-site`](packages/webc-oss-site) | The OSS site theme for Norn: Allons-y Studio brand tokens, fonts, and the OSS banner, call to action, and credit |
 
 Try every component and layout in the [component preview](https://allonsy-studio.github.io/webc-resources/).
 

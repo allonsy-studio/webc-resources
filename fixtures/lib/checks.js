@@ -8,11 +8,11 @@
 import { bundles, headOf, read, sheets, tagNames, between } from "./build.js";
 
 /** The cascade layer order, which norn-page-head declares inline. */
-const ORDER = "@layer norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print;";
+const ORDER = "@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;";
 
 const ALLOWED_HEAD = ["link", "meta", "script", "style", "title"];
 
-/** The checks every studio-on fixture shares. */
+/** The checks every oss-on fixture shares. */
 export function sharedChecks({ test, assert, getPages, getOutput }) {
 	test("the head holds only meta, title, link, style, and script", () => {
 		for (const html of Object.values(getPages())) {
@@ -48,11 +48,11 @@ export function sharedChecks({ test, assert, getPages, getOutput }) {
 		for (const html of Object.values(getPages())) {
 			assert.equal((html.match(/<h1\b/g) ?? []).length, 1);
 			assert.equal((html.match(/<main id="main" tabindex="-1">/g) ?? []).length, 1);
-			assert.ok(html.indexOf("<norn-skip-link>") < html.indexOf("<studio-bar>") && html.indexOf("<studio-bar>") < html.indexOf("<norn-header>"), "the skip link, the banner, then the header");
+			assert.ok(html.indexOf("<norn-skip-link>") < html.indexOf("<oss-bar>") && html.indexOf("<oss-bar>") < html.indexOf("<norn-header>"), "the skip link, the banner, then the header");
 		}
 	});
 
-	test("the studio layer renders: banner, call to action, and credit, all with accessible names", () => {
+	test("the OSS site layer renders: banner, call to action, and credit, all with accessible names", () => {
 		for (const html of Object.values(getPages())) {
 			assert.ok(html.includes('<svg role="img" aria-label="Brought to you by Allons-y Studio" width="500" height="64"'), "banner");
 			assert.equal((html.match(/<svg role="img" aria-label="Brought to you by Allons-y Studio" width="300" height="135" xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="273 0 334 150"/g) ?? []).length, 2, "credit, light and dark, cropped to the art");
@@ -65,20 +65,20 @@ export function sharedChecks({ test, assert, getPages, getOutput }) {
 		for (const html of Object.values(getPages())) {
 			const main = between(html, "<main", "</main>");
 			const footer = between(html, "<norn-footer>", "</norn-footer>");
-			assert.ok(main.includes("<studio-cta>"), "the call to action is in main");
-			assert.ok(main.slice(0, -"</main>".length).replace(/(\s*<\/(?!studio-cta)[a-z]+-[a-z-]+>)+\s*$/, "").trimEnd().endsWith("</studio-cta>"), "and comes last, inside the template at most");
-			assert.ok(!footer.includes("<studio-cta>"), "not in the footer");
-			assert.ok(footer.indexOf("<strong>") < footer.indexOf("<studio-credit>"));
+			assert.ok(main.includes("<oss-cta>"), "the call to action is in main");
+			assert.ok(main.slice(0, -"</main>".length).replace(/(\s*<\/(?!oss-cta)[a-z]+-[a-z-]+>)+\s*$/, "").trimEnd().endsWith("</oss-cta>"), "and comes last, inside the template at most");
+			assert.ok(!footer.includes("<oss-cta>"), "not in the footer");
+			assert.ok(footer.indexOf("<strong>") < footer.indexOf("<oss-credit>"));
 		}
 	});
 
-	test("the call to action signs the studio name", () => {
-		for (const html of Object.values(getPages())) assert.ok(between(html, "<studio-cta>", "</studio-cta>").includes("<span data-signature>Allons-y Studio</span>"));
+	test("the call to action signs the Allons-y Studio name", () => {
+		for (const html of Object.values(getPages())) assert.ok(between(html, "<oss-cta>", "</oss-cta>").includes("<span data-signature>Allons-y Studio</span>"));
 	});
 
-	test("the studio contact address appears only inside the call to action", () => {
+	test("the Allons-y Studio contact address appears only inside the call to action", () => {
 		for (const html of Object.values(getPages())) {
-			const cta = between(html, "<studio-cta>", "</studio-cta>");
+			const cta = between(html, "<oss-cta>", "</oss-cta>");
 			assert.equal((html.match(/consulting@allons-y\.studio/g) ?? []).length, 1);
 			assert.ok(cta.includes("mailto:consulting@allons-y.studio"));
 		}

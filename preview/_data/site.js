@@ -8,9 +8,9 @@
 import path from "node:path";
 
 import { buildSite } from "@allons-y/webc-patterns/project";
-import { host } from "@allons-y/webc-studio";
+import { host } from "@allons-y/webc-oss-site";
 
-/** The sample site facts the layout stories show, built the way a studio project's are. */
+/** The sample site facts the layout stories show, built the way an Allons-y Studio project's are. */
 export default () =>
 	buildSite({
 		packagePath: path.resolve(import.meta.dirname, "../package.json"),

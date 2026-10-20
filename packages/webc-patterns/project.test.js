@@ -89,7 +89,7 @@ test("buildSite: the url is the project's with a trailing slash, else the host's
 	const root = project({ "package.json": PKG });
 	assert.equal(buildSite({ packagePath: path.join(root, "package.json") }).url, null, "no host, no url");
 	assert.equal(buildSite({ packagePath: path.join(root, "package.json"), host: "https://pages.example.com/" }).url, "https://pages.example.com/widget/", "a trailing slash on the host");
-	assert.ok(!("studio" in site({ "oss-docs": { studio: false } })), "the studio setting is the studio's to read");
+	assert.ok(!("oss" in site({ "oss-docs": { oss: false } })), "the oss setting is the OSS site theme's to read");
 });
 
 test("buildSite: the node version is the lowest major, or null when unbounded", () => {

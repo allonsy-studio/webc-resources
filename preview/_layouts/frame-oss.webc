@@ -6,7 +6,7 @@
 		<link rel="stylesheet" href="/assets/norn/base.css" webc:keep />
 		<link rel="stylesheet" href="/assets/norn/print.css" webc:keep />
 		<link rel="icon" href="/assets/norn-favicon.svg" type="image/svg+xml" />
-		<meta webc:is="studio-head" webc:nokeep />
+		<meta webc:is="oss-head" webc:nokeep />
 		<script src="/assets/tokens.js" webc:keep></script>
 		<link rel="stylesheet" href="/assets/styles/project.css" webc:keep />
 	</head>

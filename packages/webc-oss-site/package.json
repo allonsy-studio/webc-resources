@@ -1,14 +1,14 @@
 {
-	"name": "@allons-y/webc-studio",
+	"name": "@allons-y/webc-oss-site",
 	"version": "0.1.0-beta.0",
-	"description": "The Allons-y Studio theme for Norn sites: brand tokens, self-hosted fonts, and the locked studio banner, call to action, and footer credit.",
+	"description": "The OSS site theme for Norn sites: Allons-y Studio brand tokens, self-hosted fonts, and the locked OSS banner, call to action, and footer credit.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
-	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-studio#readme",
+	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/allonsy-studio/webc-resources.git",
-		"directory": "packages/webc-studio"
+		"directory": "packages/webc-oss-site"
 	},
 	"bugs": {
 		"url": "https://github.com/allonsy-studio/webc-resources/issues"
@@ -34,7 +34,7 @@
 		"README.md"
 	],
 	"scripts": {
-		"prepack": "node ../../scripts/build-components.js webc-studio && yarn copy:svg && yarn copy:fonts",
+		"prepack": "node ../../scripts/build-components.js webc-oss-site && yarn copy:svg && yarn copy:fonts",
 		"copy:fonts": "node scripts/copy-fonts.js",
 		"copy:svg": "node scripts/inline-svg.js"
 	},

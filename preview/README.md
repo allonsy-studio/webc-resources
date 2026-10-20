@@ -1,6 +1,6 @@
 # Component preview
 
-A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the studio theme; the studio components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
+A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the OSS site theme; the OSS components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
 
 ## Run it
 
@@ -20,7 +20,7 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 | Source | The story file, shown with `norn-code-block` |
 | Canvas controls | The `preview-canvas` component, below |
 
-Head components (`norn-page-head`, `studio-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
+Head components (`norn-page-head`, `oss-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
 
 The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document.
 
@@ -74,6 +74,6 @@ A new component or layout with no story fails `yarn test`. For a layout, the sto
 | `lib/catalog.js` | The JSDoc parser and the component and story catalog |
 | `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
 | `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
-| `_layouts/` | The page shell, and the plain and studio story frames: layouts of the preview's own, which call `norn-page-head` and link the reset, base, and print styles |
+| `_layouts/` | The page shell, and the plain and OSS story frames: layouts of the preview's own, which call `norn-page-head` and link the reset, base, and print styles |
 | `content/` | The index, foundations, and component pages, `stories/`, and `assets/` (the token loader and the preview CSS) |
 | `build.test.js` | Builds the preview and audits its pages |

@@ -281,6 +281,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@allons-y/webc-oss-site@workspace:*, @allons-y/webc-oss-site@workspace:packages/webc-oss-site":
+  version: 0.0.0-use.local
+  resolution: "@allons-y/webc-oss-site@workspace:packages/webc-oss-site"
+  peerDependencies:
+    "@11ty/eleventy": ^3.0.0
+    "@11ty/eleventy-plugin-webc": ^0.11.0
+    "@allons-y/webc-patterns": ^0.1.0-beta.0
+  languageName: unknown
+  linkType: soft
+
 "@allons-y/webc-patterns@workspace:*, @allons-y/webc-patterns@workspace:packages/webc-patterns":
   version: 0.0.0-use.local
   resolution: "@allons-y/webc-patterns@workspace:packages/webc-patterns"
@@ -295,16 +305,6 @@ __metadata:
   peerDependenciesMeta:
     "@allons-y/webc-code-sample":
       optional: true
-  languageName: unknown
-  linkType: soft
-
-"@allons-y/webc-studio@workspace:*, @allons-y/webc-studio@workspace:packages/webc-studio":
-  version: 0.0.0-use.local
-  resolution: "@allons-y/webc-studio@workspace:packages/webc-studio"
-  peerDependencies:
-    "@11ty/eleventy": ^3.0.0
-    "@11ty/eleventy-plugin-webc": ^0.11.0
-    "@allons-y/webc-patterns": ^0.1.0-beta.0
   languageName: unknown
   linkType: soft
 
@@ -2117,8 +2117,8 @@ __metadata:
     "@11ty/eleventy": "npm:^3.1.6"
     "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
     "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-oss-site": "workspace:*"
     "@allons-y/webc-patterns": "workspace:*"
-    "@allons-y/webc-studio": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2129,8 +2129,8 @@ __metadata:
     "@11ty/eleventy": "npm:^3.1.6"
     "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
     "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-oss-site": "workspace:*"
     "@allons-y/webc-patterns": "workspace:*"
-    "@allons-y/webc-studio": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -2151,8 +2151,8 @@ __metadata:
     "@11ty/eleventy": "npm:^3.1.6"
     "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
     "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-oss-site": "workspace:*"
     "@allons-y/webc-patterns": "workspace:*"
-    "@allons-y/webc-studio": "workspace:*"
   languageName: unknown
   linkType: soft
 
@@ -4366,8 +4366,8 @@ __metadata:
     "@11ty/eleventy": "npm:^3.1.6"
     "@11ty/eleventy-plugin-webc": "npm:^0.11.2"
     "@allons-y/webc-code-sample": "workspace:*"
+    "@allons-y/webc-oss-site": "workspace:*"
     "@allons-y/webc-patterns": "workspace:*"
-    "@allons-y/webc-studio": "workspace:*"
     axe-core: "npm:^4.10.2"
   languageName: unknown
   linkType: soft

@@ -35,7 +35,7 @@ export default function (config) {
 }
 ```
 
-Then pick a layout per page in its front matter: `layout: norn-docs.webc`. The plugin owns the project's one `@11ty/eleventy-plugin-webc` registration: pass more component globs as `components`, and don't add the WebC plugin separately. For the studio theme, add `@allons-y/webc-studio`'s plugin in place of this one (see its [README](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-studio#readme)).
+Then pick a layout per page in its front matter: `layout: norn-docs.webc`. The plugin owns the project's one `@11ty/eleventy-plugin-webc` registration: pass more component globs as `components`, and don't add the WebC plugin separately. For the OSS site theme, add `@allons-y/webc-oss-site`'s plugin in place of this one (see its [README](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme)).
 
 | Option | Default | Does |
 | --- | --- | --- |
@@ -251,10 +251,10 @@ The accent drives the link color (`--norn-text-accent`) and the text on an accen
 | `code` | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` |
 | `space` | `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl` |
 
-A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-studio`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-studio#readme) is a theme. Its `css/tokens.css` sets the mono face, the card accents, and the header stripe in the `norn.studio` layer, and its plugin fills all four hooks:
+A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, the card accents, and the header stripe in the `norn.oss` layer, and its plugin fills all four hooks:
 
 ```css
-@layer norn.studio {
+@layer norn.oss {
 	:root {
 		--norn-font-mono: "PT Mono", ui-monospace, monospace;
 		--norn-feature-2: #ff944d;
@@ -264,7 +264,7 @@ A theme is a file like that, plus the components and hook fills it adds through 
 
 ### Collisions
 
-Tag names are the file names of the components: `norn-*` for the patterns, and `studio-*` for the studio. A project component with the tag of a packaged one, a `norn-link-button.webc` of its own, fails the build with "Global component name collision". Give the project's components another prefix, or replace a packaged one on purpose by leaving it out:
+Tag names are the file names of the components: `norn-*` for the patterns, and `oss-*` for the OSS site theme. A project component with the tag of a packaged one, a `norn-link-button.webc` of its own, fails the build with "Global component name collision". Give the project's components another prefix, or replace a packaged one on purpose by leaving it out:
 
 ```js
 config.addPlugin(norn, { props, exclude: ["norn-content-card"], components: ["_includes/*.webc"] });
@@ -310,7 +310,7 @@ A layout that does not extend `norn-base` calls `norn-page-head` in its head, wh
 - **Call head components with `<meta webc:is>`.** A custom tag in `<head>` makes the parser close the head early, so a head component is called as a `<meta>` with `webc:is` and `webc:nokeep`. A void tag has no children, so `norn-page-head` has no slot: write extra head tags after it.
 - **The layer order comes first.** `norn-page-head` declares it in an inline style ahead of the bundle links, so it holds whatever order the page's styles bundle in.
 - **Link bundles with `webc:keep`.** WebC removes `<link>` and `<script src>` without it. `norn-page-head` does this for the bundles.
-- **Every packaged layer sits inside one `norn` layer:** `norn.reset`, `norn.base`, `norn.layout`, `norn.components`, `norn.studio`, `norn.print`. A project that uses its own layers, or a framework such as Tailwind, orders the whole package with one name, as in `@layer norn, base, components, utilities;`, and no layer names collide.
+- **Every packaged layer sits inside one `norn` layer:** `norn.reset`, `norn.base`, `norn.layout`, `norn.components`, `norn.oss`, `norn.print`. A project that uses its own layers, or a framework such as Tailwind, orders the whole package with one name, as in `@layer norn, base, components, utilities;`, and no layer names collide.
 - **Project CSS stays unlayered.** It beats every layer without `!important`.
 - **`.visually-hidden` hides text but keeps it read.** `css/base.css` defines it. It shows again while it or a child has focus.
 

@@ -1,5 +1,5 @@
 {
-	"lede": "A fixture landing site that exercises every section of the studio page bodies.",
+	"lede": "A fixture landing site that exercises every section of the OSS site page bodies.",
 	"install": "npm install @allons-y/fixture-landing",
 	"usage": {
 		"language": "js",

@@ -122,7 +122,7 @@ describe("docs fixture", () => {
 		assert.ok(footer.indexOf("<p data-badges>") > footer.indexOf("<strong>") && footer.indexOf("<p data-badges>") < footer.indexOf("Licensed under"));
 	});
 
-	test("conduct and security links come from the project's own files, not the studio's", () => {
+	test("conduct and security links come from the project's own files, not Allons-y Studio's", () => {
 		const help = between(pages["/"], "<strong>Help</strong>", "</nav>");
 		assert.ok(help.includes(`<a href="${REPO}/blob/main/CODE_OF_CONDUCT.md">Code of conduct</a>`));
 		assert.ok(help.includes(`<a href="${REPO}/blob/main/SECURITY.md">Security policy</a>`));

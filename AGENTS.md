@@ -16,10 +16,10 @@ its page data to the layout props.
 | --- | --- | --- |
 | `@allons-y/webc-patterns` | Generic components, the six `norn-*` layouts, the base and print styles and the optional reset (`css/`), the Norn plugin (`/plugin`), the helpers components call, the Markdown add-on (`/markdown`), and the optional project data builders (`/project`) | `hosted-git-info`, `semver`, `markdown-it` (for `/project`); `@allons-y/webc-code-sample` as an optional peer |
 | `@allons-y/webc-code-sample` | `norn-code-block`, `tokenRanges`, and the Markdown add-on `highlightFences` (`/markdown`) | `prismjs` |
-| `@allons-y/webc-studio` | The studio theme: brand tokens (`css/tokens.css`), fonts, the locked `studio-bar`, `studio-cta`, and `studio-credit`, `studio-head`, `studioProps`, and the studio plugin | None; the patterns package as a peer |
+| `@allons-y/webc-oss-site` | The OSS site theme: brand tokens (`css/tokens.css`), fonts, the locked `oss-bar`, `oss-cta`, and `oss-credit`, `oss-head`, `ossProps`, and the OSS site plugin | None; the patterns package as a peer |
 
-Dependencies point one way: `webc-studio` peers on patterns, patterns optionally on the code sample, and
-neither of them knows the studio exists.
+Dependencies point one way: `webc-oss-site` peers on patterns, patterns optionally on the code sample, and
+neither of them knows the OSS site theme exists.
 
 ## Layout
 
@@ -62,8 +62,8 @@ preview/           the component preview: an Eleventy site with a page and stori
    `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is
    the fallback, not the first choice. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
-   `norn.studio` for studio components and tokens. `norn-page-head` declares the order once, in an inline style ahead of the
-   bundle links: `norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print`. One outer layer lets a project
+   `norn.oss` for the OSS components and tokens. `norn-page-head` declares the order once, in an inline style ahead of the
+   bundle links: `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. One outer layer lets a project
    order the whole package against its own layers or a framework's, and keeps common names such as `base` and `components`
    from merging with theirs. A page renders its content before its layout, so the bundle order can't carry the layer order.
    The base and print styles are files, `css/base.css` and `css/print.css`, which the plugin embeds in `norn-base`.
@@ -174,7 +174,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 - **Hooks.** `norn-base` renders `head`, `banner`, `cta`, and `credit` with `<template webc:nokeep @html="nornHook('name')">`.
   `fillHooks(config, fills)` appends markup; an unknown name throws; page data can't change a hook.
 - **Themes.** A theme is a CSS file of custom properties plus hook fills and components, added through the plugin's
-  `components` option. The studio plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
+  `components` option. The OSS site plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
   sets `themeColor` and `locale` as `defaults`, and copies the fonts.
 - **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-svg-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
 - **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. With it, layouts render `norn-code-block`;
@@ -182,13 +182,13 @@ preview/           the component preview: an Eleventy site with a page and stori
 
 ## Decisions
 
-1. Tag prefix: `norn-` on every patterns and code-sample component, no "site" in a name. Studio components use `studio-` and never `norn-`.
+1. Tag prefix: `norn-` on every patterns and code-sample component, no "site" in a name. OSS theme components use `oss-` and never `norn-`.
 2. Strings: every visitor-facing string is content in the page, through a named slot, with the `componentStrings` registry as the fallback and the English default last. No string props.
-3. Studio copy stays English.
+3. OSS site theme copy stays English.
 4. One footer navigation, with grouped lists.
 5. Page templates ship as Eleventy layouts named `norn-*.webc`, all extending `norn-base.webc`.
 6. Markdown is an add-on that writes the same markup an author would. Components are designed for hand-written HTML.
-7. The studio package holds only branding and marketing content. Everything generic lives in patterns.
+7. The OSS site package holds only branding and marketing content. Everything generic lives in patterns.
 8. Projects keep their data in any shape and map it to component and layout props. Nothing in Norn reads a fixed `site` or `project` object.
 9. Shared design tokens are compiled `var()` fallbacks: `tokens.json` holds the defaults, the build writes them into each component, and a project overrides any token with its own `tokens.css`. No stylesheet has to define them.
 10. The Norn plugin owns the one plugin-webc registration; a theme or project adds globs through its `components` option, and nothing touches plugin-webc's internals.
@@ -205,7 +205,7 @@ props and slot names, layout names and their props (the `norn` data key), hook n
 custom properties and their fallbacks, cascade layer names and order,
 helper names components and layouts call (`nornTokenRanges`, `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`), the `norn` layer and `--norn-*` token names (and the paths in `tokens.json` that name them), the `data-tokens` format, exported
 functions and their options, the string keys in `defaultStrings`, the `project.json` schema (patterns), and the `oss-docs`
-schema (studio).
+schema (OSS site).
 
 ## Releases
 

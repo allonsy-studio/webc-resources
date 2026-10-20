@@ -66,7 +66,7 @@ describe("the catalog", () => {
 		assert.equal(where["norn-card-grid"], "layout");
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.equal(where[name], "landmark", name);
 		for (const name of ["norn-content-card", "norn-page-section"]) assert.equal(where[name], "container", name);
-		for (const name of ["norn-page-head", "studio-head"]) assert.equal(where[name], "document", name);
+		for (const name of ["norn-page-head", "oss-head"]) assert.equal(where[name], "document", name);
 		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces", "norn-workspace"]) assert.equal(where[name], "template", name);
 		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces"], "the layouts, and nothing else");
 	});
@@ -139,13 +139,13 @@ describe("the preview build", () => {
 		}
 	});
 
-	test("the layout stories read the sample data through the props mapping, without the studio theme", () => {
-		assert.ok(pageFor(output, "/frames/patterns/norn-landing/default/").includes("A sample project, so the studio page bodies have something to show."));
+	test("the layout stories read the sample data through the props mapping, without the OSS site theme", () => {
+		assert.ok(pageFor(output, "/frames/patterns/norn-landing/default/").includes("A sample project, so the OSS site page bodies have something to show."));
 		assert.ok(pageFor(output, "/frames/patterns/norn-workspace/default/").includes("<h1>@example/plugin-a</h1>"));
 		const docs = pageFor(output, "/frames/patterns/norn-docs/usage/");
 		assert.ok(docs.includes('rel="prev"') && docs.includes('rel="next"'), "the pager reads the docs collection");
 		for (const url of ["/frames/patterns/norn-base/default/", "/frames/patterns/norn-docs-home/default/", "/frames/patterns/norn-workspaces/default/"]) {
-			assert.ok(!/<studio-(bar|cta|credit)/.test(pageFor(output, url)), `${url} has no studio part`);
+			assert.ok(!/<oss-(bar|cta|credit)/.test(pageFor(output, url)), `${url} has no OSS part`);
 		}
 		const story = catalog.components.find(({ name }) => name === "norn-landing").stories[0];
 		assert.ok(story.source.startsWith("---\ntitle: Default") && story.source.includes("layout: norn-landing.webc"), "a layout story's source shows its front matter");
@@ -414,7 +414,7 @@ describe("the preview in a browser", () => {
 
 	test("a page with no examples lists its properties without override fields", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/studio/studio-head/");
+		await page.goto(server.url + "/components/oss-site/oss-head/");
 		assert.deepEqual(await page.locator("preview-props thead th").allTextContents(), ["Property", "Type", "Default"]);
 		assert.equal(await page.locator("preview-props input").count(), 0);
 		await page.close();
@@ -511,8 +511,8 @@ describe("the preview in a browser", () => {
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a plain frame");
 		assert.equal(await band(page), "rgb(194, 24, 91)", "the light value, in a light scheme");
 
-		await page.goto(server.url + "/frames/studio/studio-cta/default/");
-		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a studio frame");
+		await page.goto(server.url + "/frames/oss-site/oss-cta/default/");
+		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "an OSS frame");
 
 		await page.goto(server.url + "/frames/patterns/norn-landing/default/");
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a layout frame");

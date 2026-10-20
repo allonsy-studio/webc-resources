@@ -2,4 +2,4 @@
 title: Default
 order: 1
 ---
-<studio-credit></studio-credit>
+<oss-bar></oss-bar>

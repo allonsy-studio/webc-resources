@@ -106,7 +106,7 @@ test("a source declares a shared token only to set it for the project, and never
 	for (const { file, text } of sources) {
 		for (const [, name] of styles(text, file).matchAll(/^\s*(--norn-[\w-]+)\s*:/gm)) {
 			if (!byName.has(name)) continue;
-			assert.equal(file, "webc-studio/src/css/tokens.css", `${file}: ${name} is set only in the studio brand`);
+			assert.equal(file, "webc-oss-site/src/css/tokens.css", `${file}: ${name} is set only in the Allons-y Studio brand`);
 		}
 	}
 });
@@ -146,7 +146,7 @@ test("the base styles define no token: base.css sets color-scheme, norn-page-hea
 	const base = stylesheets.find(({ file }) => file === "webc-patterns/css/base.css").text;
 	assert.ok(/^@layer norn\.base \{\s*:root \{\s*color-scheme: light dark;/m.test(base));
 	const head = components.find(({ file }) => file === "webc-patterns/components/norn-page-head.webc").text;
-	assert.ok(head.includes("<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print;</style>"), "the order, inline");
+	assert.ok(head.includes("<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>"), "the order, inline");
 	assert.ok(head.indexOf("@layer norn.reset,") < head.indexOf("getBundleFileUrl('css')"), "ahead of the bundle link");
 	assert.ok(!head.includes("norn-foundation"), "no foundation bucket");
 	for (const { file, text } of stylesheets.filter(({ file }) => file.startsWith("webc-patterns/"))) {
@@ -537,7 +537,7 @@ test("a component reads uid between the same two slots or components, so its ids
 	// WebC hands the uid of each component it meets, slotted ones included, to the component around it.
 	for (const { file, text } of components) {
 		const markup = withoutDocs(text).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
-		const segments = markup.split(/(?=<slot\b|<(?:norn|studio)-[a-z-]+\b)/).filter((part) => /\buid\b/.test(part));
+		const segments = markup.split(/(?=<slot\b|<(?:norn|oss)-[a-z-]+\b)/).filter((part) => /\buid\b/.test(part));
 		assert.ok(segments.length <= 1, `${file}: uid is read on both sides of a slot or a component`);
 	}
 });

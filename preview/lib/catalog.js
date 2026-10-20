@@ -11,7 +11,7 @@ import path from "node:path";
 import { readTokens as readTokensFile } from "../../scripts/build-components.js";
 
 /** Components that live in the document head: they have no canvas, since every frame renders them. */
-export const HEAD_COMPONENTS = new Set(["norn-page-head", "studio-head"]);
+export const HEAD_COMPONENTS = new Set(["norn-page-head", "oss-head"]);
 
 /** The kinds of component, in the order the preview shows them. Each component names its own in its JSDoc with `@category`. */
 export const CATEGORIES = [
@@ -27,7 +27,7 @@ export const CATEGORIES = [
 const PACKAGES = [
 	["webc-patterns", "Patterns"],
 	["webc-code-sample", "Code sample"],
-	["webc-studio", "Studio site"],
+	["webc-oss-site", "OSS site"],
 ];
 
 const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -70,7 +70,7 @@ function describeProp(text, tokens) {
 	const known = [...fallback.matchAll(/--norn-[a-z0-9-]+/g)].map(([name]) => name).find((name) => tokens.has(name));
 	let type = known ? (KIND_TYPES[tokens.get(known).kind] ?? "") : "";
 	if (!type && /\d(rem|em|px)\b/.test(fallback)) type = "<length>";
-	if (!type && /#[0-9a-f]{3,8}\b|Text\b|Canvas|studio (magenta|orange|yellow|teal)/i.test(fallback)) type = "<color>";
+	if (!type && /#[0-9a-f]{3,8}\b|Text\b|Canvas|Allons-y Studio (magenta|orange|yellow|teal)/i.test(fallback)) type = "<color>";
 	const single = /^--norn-[a-z0-9-]+$/.test(fallback) && tokens.has(fallback);
 	return { description: inline(summary.trim()), fallback, fallbackValue: single ? tokens.get(fallback).value : "", type };
 }

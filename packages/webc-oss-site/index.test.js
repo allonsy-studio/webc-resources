@@ -14,7 +14,7 @@ import { test } from "node:test";
 import norn from "@allons-y/webc-patterns/plugin";
 
 import { prepare } from "./scripts/lib.js";
-import studio, { components as glob, fonts, host, policies, studioEnabled, studioProps, tokens } from "./index.js";
+import oss, { components as glob, fonts, host, policies, ossEnabled, ossProps, tokens } from "./index.js";
 
 const COMPONENTS = path.join(import.meta.dirname, "components");
 const components = fs.readdirSync(COMPONENTS).filter((file) => file.endsWith(".webc")).map((file) => file.slice(0, -5));
@@ -40,19 +40,19 @@ const SITE = {
 	badgeColor: "ff944d",
 };
 
-test("studioEnabled: on unless package.json sets oss-docs.studio to false", () => {
-	const root = fs.mkdtempSync(path.join(os.tmpdir(), "studio-"));
+test("ossEnabled: on unless package.json sets oss-docs.oss to false", () => {
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "oss-"));
 	const packagePath = path.join(root, "package.json");
-	for (const [settings, expected] of [[undefined, true], [{ flavor: "docs" }, true], [{ studio: true }, true], [{ studio: false }, false]]) {
+	for (const [settings, expected] of [[undefined, true], [{ flavor: "docs" }, true], [{ oss: true }, true], [{ oss: false }, false]]) {
 		fs.writeFileSync(packagePath, JSON.stringify({ name: "x", "oss-docs": settings }));
-		assert.equal(studioEnabled({ packagePath }), expected, JSON.stringify(settings));
+		assert.equal(ossEnabled({ packagePath }), expected, JSON.stringify(settings));
 	}
 	fs.rmSync(root, { recursive: true, force: true });
 	assert.equal(host, "https://projects.allons-y.studio");
 });
 
-test("studioProps: the head, header, and footer props from the site facts and project.json", () => {
-	const props = studioProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", body: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ url: "/start/", title: "Start" }], anchors: true });
+test("ossProps: the head, header, and footer props from the site facts and project.json", () => {
+	const props = ossProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", body: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ url: "/start/", title: "Start" }], anchors: true });
 	assert.equal(props.ogTitle, "widget: Builds widgets");
 	assert.equal(props.icon, "/assets/img/favicon.svg");
 	assert.deepEqual(props.logo, { src: "/assets/img/logo.svg", alt: "widget" });
@@ -70,31 +70,31 @@ test("studioProps: the head, header, and footer props from the site facts and pr
 	]);
 });
 
-test("studioProps: conduct and security come from the project first, and the studio's policies only with the studio on", () => {
-	const help = (options) => studioProps(SITE, {}, options).footer.groups[1].links;
+test("ossProps: conduct and security come from the project first, and Allons-y Studio's policies only with the OSS site theme on", () => {
+	const help = (options) => ossProps(SITE, {}, options).footer.groups[1].links;
 	assert.deepEqual(help().slice(2).map(({ url }) => url), [SITE.conductUrl, policies.security]);
-	assert.deepEqual(help({ studio: false }).slice(2).map(({ url }) => url), [SITE.conductUrl], "no studio policy");
+	assert.deepEqual(help({ oss: false }).slice(2).map(({ url }) => url), [SITE.conductUrl], "no Allons-y Studio policy");
 });
 
-test("studioProps: missing data gives empty props and the studio's policies, never a throw", () => {
+test("ossProps: missing data gives empty props and Allons-y Studio's policies, never a throw", () => {
 	for (const args of [[], [undefined, undefined], [{}, {}], [null, "x", { docs: "x" }]]) {
-		const props = studioProps(...args);
+		const props = ossProps(...args);
 		assert.deepEqual([props.nav, props.features, props.packages, props.footer.badges], [[], [], [], []], JSON.stringify(args));
 		assert.deepEqual(props.footer.groups.flatMap(({ links }) => links.map(({ url }) => url)), [policies.conduct, policies.security]);
 	}
-	assert.deepEqual(studioProps(undefined, undefined, { studio: false }).footer.groups, [], "with the studio off, no group is left empty");
+	assert.deepEqual(ossProps(undefined, undefined, { oss: false }).footer.groups, [], "with the OSS site theme off, no group is left empty");
 });
 
-/** A stand-in for Eleventy's config that records what the studio plugin registers. */
+/** A stand-in for Eleventy's config that records what the OSS site plugin registers. */
 function fakeConfig() {
 	const calls = { plugins: [], passthrough: [] };
 	return { calls, addPlugin: (plugin, options) => calls.plugins.push({ plugin, options }), addPassthroughCopy: (copy) => calls.passthrough.push(copy) };
 }
 
-test("the studio plugin adds Norn with the studio components, the theme color, and the project's options, and copies the fonts", () => {
+test("the OSS site plugin adds Norn with the OSS components, the theme color, and the project's options, and copies the fonts", () => {
 	const config = fakeConfig();
 	const props = () => ({});
-	studio(config, { props, components: ["_includes/*.webc"], defaults: { locale: "fr_FR" } });
+	oss(config, { props, components: ["_includes/*.webc"], defaults: { locale: "fr_FR" } });
 	assert.equal(config.calls.plugins.length, 1);
 	const [{ plugin, options }] = config.calls.plugins;
 	assert.equal(plugin, norn);
@@ -105,9 +105,9 @@ test("the studio plugin adds Norn with the studio components, the theme color, a
 	assert.ok(glob.endsWith("/components/*.webc") && !glob.includes("\\"));
 });
 
-test("the brand tokens set only custom properties, in the norn.studio layer", () => {
+test("the brand tokens set only custom properties, in the norn.oss layer", () => {
 	const css = fs.readFileSync(tokens, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
-	assert.ok(css.trim().startsWith("@layer norn.studio {\n\t:root {"));
+	assert.ok(css.trim().startsWith("@layer norn.oss {\n\t:root {"));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
 	assert.ok(declarations.length > 8 && declarations.every((name) => name.startsWith("--norn-")), declarations.join(", "));
 	for (const name of ["--norn-font-mono", "--norn-feature-1", "--norn-code-block-dot-1", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
@@ -118,23 +118,23 @@ test("fonts: a forward-slash folder holding the four woff2 files", () => {
 	assert.deepEqual(fs.readdirSync(fonts).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
 });
 
-test("the package ships the four studio components, and no page body or generic chrome", () => {
-	assert.deepEqual(components, ["studio-bar", "studio-credit", "studio-cta", "studio-head"]);
+test("the package ships the four OSS components, and no page body or generic chrome", () => {
+	assert.deepEqual(components, ["oss-bar", "oss-credit", "oss-cta", "oss-head"]);
 });
 
-test("each studio component inlines its SVGs with an accessible name or a decorative mark", () => {
+test("each OSS component inlines its SVGs with an accessible name or a decorative mark", () => {
 	const read = (name) => fs.readFileSync(path.join(COMPONENTS, `${name}.webc`), "utf8");
 	const label = 'role="img" aria-label="Brought to you by Allons-y Studio"';
-	assert.equal((read("studio-bar").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1);
-	assert.equal((read("studio-credit").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 2);
-	assert.equal((read("studio-cta").match(/<svg aria-hidden="true" width="72" height="72"/g) ?? []).length, 1);
-	for (const name of ["studio-bar", "studio-cta", "studio-credit"]) assert.ok(!/<svg[^>]*>\s*<\/svg>/.test(read(name)), `${name} has no empty placeholder`);
+	assert.equal((read("oss-bar").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1);
+	assert.equal((read("oss-credit").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 2);
+	assert.equal((read("oss-cta").match(/<svg aria-hidden="true" width="72" height="72"/g) ?? []).length, 1);
+	for (const name of ["oss-bar", "oss-cta", "oss-credit"]) assert.ok(!/<svg[^>]*>\s*<\/svg>/.test(read(name)), `${name} has no empty placeholder`);
 });
 
-test("the studio contact address lives only in studio-cta, and no component carries an HTML comment", () => {
+test("the Allons-y Studio contact address lives only in oss-cta, and no component carries an HTML comment", () => {
 	for (const name of components) {
 		const text = fs.readFileSync(path.join(COMPONENTS, `${name}.webc`), "utf8");
-		assert.equal(/consulting@allons-y\.studio|mailto:/.test(text), name === "studio-cta", name);
+		assert.equal(/consulting@allons-y\.studio|mailto:/.test(text), name === "oss-cta", name);
 		assert.ok(!text.replace(/<!---[\s\S]*?--->/g, "").replace(/<svg[\s\S]*?<\/svg>/g, "").includes("<!--"), `${name} has no HTML comment`);
 		assert.ok(text.startsWith("<!---\n/*\n * SPDX-License-Identifier: MPL-2.0"), `${name} starts with the license header`);
 	}

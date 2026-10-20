@@ -177,7 +177,7 @@ export default function norn(config, options = {}) {
 	let projectIcons = readIcons(icons);
 
 	const own = state(config);
-	if (own.registered) throw new Error("norn: the plugin is added twice. A theme such as @allons-y/webc-studio adds it for you: add the theme in its place.");
+	if (own.registered) throw new Error("norn: the plugin is added twice. A theme such as @allons-y/webc-oss-site adds it for you: add the theme in its place.");
 	own.registered = true;
 
 	if (config.plugins?.some((entry) => entry.plugin === webc)) {

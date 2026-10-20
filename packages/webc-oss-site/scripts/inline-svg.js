@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// Inline the org's studio SVGs into the compiled studio components, so the package ships no asset folder.
+// Inline the org's SVGs into the compiled OSS components, so the package ships no asset folder.
 // Run by `prepack`, after the build writes `components/` from `src/`. Idempotent: each component's SVGs are replaced in place, in order.
 
 import fs from "node:fs";
@@ -24,9 +24,9 @@ const CREDIT_VIEWBOX = "273 0 334 150";
 
 /** Component file to its SVGs in order: the source file, the attributes the inline copy gets, and an optional cropped viewBox. */
 const INLINE = {
-	"studio-bar.webc": [{ file: "oss-banner.svg", attributes: `role="img" aria-label="${ALT}" width="500" height="64"`, viewBox: BANNER_VIEWBOX }],
-	"studio-cta.webc": [{ file: "mark.svg", attributes: 'aria-hidden="true" width="72" height="72"' }],
-	"studio-credit.webc": [
+	"oss-bar.webc": [{ file: "oss-banner.svg", attributes: `role="img" aria-label="${ALT}" width="500" height="64"`, viewBox: BANNER_VIEWBOX }],
+	"oss-cta.webc": [{ file: "mark.svg", attributes: 'aria-hidden="true" width="72" height="72"' }],
+	"oss-credit.webc": [
 		{ file: "oss-footer-light.svg", attributes: `role="img" aria-label="${ALT}" width="300" height="135"`, viewBox: CREDIT_VIEWBOX },
 		{ file: "oss-footer-dark.svg", attributes: `role="img" aria-label="${ALT}" width="300" height="135"`, viewBox: CREDIT_VIEWBOX },
 	],

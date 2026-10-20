@@ -1,6 +1,6 @@
 {
 	"$schema": "https://json-schema.org/draft/2020-12/schema",
-	"$id": "https://raw.githubusercontent.com/allonsy-studio/webc-resources/main/packages/webc-studio/schema/oss-docs.schema.json",
+	"$id": "https://raw.githubusercontent.com/allonsy-studio/webc-resources/main/packages/webc-oss-site/schema/oss-docs.schema.json",
 	"title": "oss-docs settings",
 	"description": "How a project's site is built: the value of the `oss-docs` key in its package.json.",
 	"type": "object",
@@ -20,8 +20,8 @@
 				"workspaces"
 			]
 		},
-		"studio": {
-			"description": "false opts out of the studio layer: no banner, call to action, or footer credit.",
+		"oss": {
+			"description": "false opts out of the OSS site layer: no banner, call to action, or footer credit.",
 			"type": "boolean",
 			"default": true
 		},

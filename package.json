@@ -2,7 +2,7 @@
 	"private": true,
 	"name": "webc",
 	"version": "0.0.0",
-	"description": "WebC component packages for Eleventy sites: generic patterns, build-time code samples, & the studio open source site layer.",
+	"description": "WebC component packages for Eleventy sites: generic patterns, build-time code samples, & the OSS site theme.",
 	"license": "MPL-2.0",
 	"repository": {
 		"type": "git",

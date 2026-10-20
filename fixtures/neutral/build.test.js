@@ -131,7 +131,7 @@ describe("neutral fixture build", () => {
 	});
 
 	test("the layer order is declared inline first, and the base, print, and project's reset styles bundle with the page", () => {
-		const ORDER = "@layer norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print;";
+		const ORDER = "@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;";
 		for (const html of Object.values(pages)) {
 			const [, head] = html.match(/<head>([\s\S]*?)<\/head>/);
 			assert.ok(head.includes(`<style>${ORDER}</style>`) && head.indexOf(ORDER) < head.indexOf('<link rel="stylesheet"'), "layer order leads");
@@ -310,8 +310,8 @@ describe("neutral fixture build", () => {
 		}
 	});
 
-	test("a summary twitter:card and no image tags without an image, and no studio content", () => {
-		for (const html of Object.values(pages)) assert.ok(html.includes('<meta name="twitter:card" content="summary">') && !html.includes("og:image") && !/studio|allons-y/i.test(html.replace(/<style>@layer [^<]*<\/style>/, "")), "nothing past the layer order names the studio");
+	test("a summary twitter:card and no image tags without an image, and no OSS site content", () => {
+		for (const html of Object.values(pages)) assert.ok(html.includes('<meta name="twitter:card" content="summary">') && !html.includes("og:image") && !/\boss\b|\boss-|allons-y/i.test(html.replace(/<style>@layer [^<]*<\/style>/, "")), "nothing past the layer order names the OSS site theme");
 	});
 });
 

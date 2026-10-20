@@ -8,7 +8,7 @@
 import path from "node:path";
 
 import { buildSite } from "@allons-y/webc-patterns/project";
-import { host } from "@allons-y/webc-studio";
+import { host } from "@allons-y/webc-oss-site";
 
 export default () =>
 	buildSite({

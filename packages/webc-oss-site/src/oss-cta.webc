@@ -7,14 +7,14 @@
  */
 
 /**
- * Studio call to action, at the foot of the page. Locked: its copy and actions are fixed, and it takes no slots. The one setting is the heading level.
- * Closes the page body, above the footer: the `cta` hook places it last. The studio name is signed in the signature face, Yellowtail, which `studio-head` declares.
- * Its actions are `norn-link-button`s, colored through the norn-link-button tokens. The one place the studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
+ * OSS call to action, at the foot of the page. Locked: its copy and actions are fixed, and it takes no slots. The one setting is the heading level.
+ * Closes the page body, above the footer: the `cta` hook places it last. The Allons-y Studio name is signed in the signature face, Yellowtail, which `oss-head` declares.
+ * Its actions are `norn-link-button`s, colored through the norn-link-button tokens. The one place Allons-y Studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
  * @prop {number} [level] - The heading level, 2 to 4, to fit the page outline. Anything else falls back to 2.
- * @cssprop --studio-navy - Background. Defined here.
- * @cssprop --studio-ink - Text color. Defined here.
- * @cssprop --studio-link - Action color. Defined here.
- * @cssprop --studio-signature - The face the studio name is signed in. Defined here.
+ * @cssprop --oss-navy - Background. Defined here.
+ * @cssprop --oss-ink - Text color. Defined here.
+ * @cssprop --oss-link - Action color. Defined here.
+ * @cssprop --oss-signature - The face the Allons-y Studio name is signed in. Defined here.
  * @category container
  */
 --->
@@ -33,16 +33,16 @@
 	</ul>
 </section>
 <style>
-	@layer norn.studio {
-		studio-cta {
-			--studio-navy: #33394e;
-			--studio-ink: #ffffff;
-			--studio-link: #ffd36b;
-			--studio-signature: "Yellowtail", "Yellowtail Fallback", cursive;
-			--norn-link-button-accent: var(--studio-link);
-			--norn-link-button-on-accent: var(--studio-navy);
-			--norn-link-button-link: var(--studio-link);
-			--norn-link-button-border: var(--studio-link);
+	@layer norn.oss {
+		oss-cta {
+			--oss-navy: #33394e;
+			--oss-ink: #ffffff;
+			--oss-link: #ffd36b;
+			--oss-signature: "Yellowtail", "Yellowtail Fallback", cursive;
+			--norn-link-button-accent: var(--oss-link);
+			--norn-link-button-on-accent: var(--oss-navy);
+			--norn-link-button-link: var(--oss-link);
+			--norn-link-button-border: var(--oss-link);
 			--norn-link-button-border-width: 2px;
 			display: block;
 			container-type: inline-size;
@@ -56,8 +56,8 @@
 				gap: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
 				padding: var(--norn-space-l, t('space.l'));
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--studio-navy);
-				color: var(--studio-ink);
+				background: var(--oss-navy);
+				color: var(--oss-ink);
 			}
 
 			& svg {
@@ -78,9 +78,9 @@
 				font-weight: 600;
 			}
 
-			/* The studio name is signed. */
+			/* The Allons-y Studio name is signed. */
 			& [data-signature] {
-				font-family: var(--studio-signature);
+				font-family: var(--oss-signature);
 				font-size: 1.3em;
 				font-weight: 400;
 				line-height: 1;
@@ -106,7 +106,7 @@
 			}
 
 			& :focus-visible {
-				outline-color: var(--studio-link);
+				outline-color: var(--oss-link);
 			}
 
 			@container (max-width: 37.5rem) {

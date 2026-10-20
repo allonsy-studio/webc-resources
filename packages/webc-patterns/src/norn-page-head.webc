@@ -11,7 +11,7 @@
  * Call it in the head as `<meta webc:is="norn-page-head" webc:nokeep … />`: a custom tag in the head would close it early.
  * Emits Open Graph tags and `twitter:card`: `summary_large_image` when an image is set, else `summary`. Write extra head tags right after the call: they land after the bundle links.
  * Declares the layer order in an inline style before the bundle links, so it comes first whatever order the page's styles bundle in:
- * `norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print`. A project's unlayered CSS beats every layer without `!important`.
+ * `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. A project's unlayered CSS beats every layer without `!important`.
  * The base and print styles are files, `css/base.css` and `css/print.css`: `norn-base` embeds them, and a layout of the project's own adds them itself.
  * Register `dropEmptyBundleTags` as a transform so a page without CSS or JS keeps no empty `<link>` or `<script>`; the Norn plugin does.
  * @prop {string} title
@@ -48,7 +48,7 @@ function absoluteImage(src, base) {
 </script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.studio, norn.print;</style>
+<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
 <title @text="title"></title>
 <meta webc:if="description" name="description" :content="description" />
 <link webc:if="typeof url === 'string'" rel="canonical" :href="url" />

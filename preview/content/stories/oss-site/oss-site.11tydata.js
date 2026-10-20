@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// The studio components style themselves with the studio head, so they use the studio frame.
+// The OSS components style themselves with the OSS head, so they use the OSS frame.
 
 export default {
 	layout: "frame-oss.webc",

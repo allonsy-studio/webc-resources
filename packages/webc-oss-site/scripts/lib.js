@@ -8,21 +8,21 @@
 import fs from "node:fs";
 import path from "node:path";
 
-/** Where the org's studio assets live when no local checkout is given. */
+/** Where the org's assets live when no local checkout is given. */
 const RAW = "https://raw.githubusercontent.com/allonsy-studio/.github/main/assets";
 
 /**
- * Read a studio asset from a local checkout of the org's `.github` repository (`STUDIO_ASSETS`, its `assets` folder), else from GitHub.
+ * Read an asset from a local checkout of the org's `.github` repository (`OSS_ASSETS`, its `assets` folder), else from GitHub.
  *
  * @param {"svg" | "fonts"} kind
  * @param {string} name
  * @returns {Promise<Buffer>}
  */
 export async function readAsset(kind, name) {
-	const local = process.env.STUDIO_ASSETS;
+	const local = process.env.OSS_ASSETS;
 	if (local) return fs.readFileSync(path.join(local, kind, name));
 	const response = await fetch(`${RAW}/${kind}/${name}`);
-	if (!response.ok) throw new Error(`${RAW}/${kind}/${name}: ${response.status}. Set STUDIO_ASSETS to a local checkout's assets folder to build offline.`);
+	if (!response.ok) throw new Error(`${RAW}/${kind}/${name}: ${response.status}. Set OSS_ASSETS to a local checkout's assets folder to build offline.`);
 	return Buffer.from(await response.arrayBuffer());
 }
 

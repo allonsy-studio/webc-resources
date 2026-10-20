@@ -20,7 +20,7 @@ The package registers nothing itself. It is an optional peer dependency of `@all
 
 ## Usage
 
-Install it beside the patterns package and add the Norn plugin (or a theme that adds it, such as `@allons-y/webc-studio`). There is nothing else to register:
+Install it beside the patterns package and add the Norn plugin (or a theme that adds it, such as `@allons-y/webc-oss-site`). There is nothing else to register:
 
 ```js
 import norn from "@allons-y/webc-patterns/plugin";

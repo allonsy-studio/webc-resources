@@ -8,7 +8,7 @@
 import path from "node:path";
 
 import { accentHex, buildSite } from "@allons-y/webc-patterns/project";
-import { host } from "@allons-y/webc-studio";
+import { host } from "@allons-y/webc-oss-site";
 
 // The fixture stands in for a released package, so the badges render without asking the registry.
 export default () => ({

@@ -1,13 +1,13 @@
 /*
- * The Allons-y Studio brand as Norn tokens, in the norn.studio layer: the studio plugin adds it to every page's bundle.
+ * The Allons-y Studio brand as Norn tokens, in the norn.oss layer: the OSS site plugin adds it to every page's bundle.
  * A theme is a file like this one, of custom properties. A project's own unlayered tokens.css still wins over it.
  */
-@layer norn.studio {
+@layer norn.oss {
 	:root {
-		/* PT Mono, the studio's locked monospace, which studio-head declares. */
+		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
 		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-		/* Card accents, in order: the project color, then the studio palette. */
+		/* Card accents, in order: the project color, then the Allons-y Studio palette. */
 		--norn-feature-1: var(--norn-ui-accent, t('ui.accent'));
 		--norn-feature-2: #ff944d;
 		--norn-feature-3: #1f91ad;

@@ -17,7 +17,7 @@ import { sharedChecks } from "../lib/checks.js";
 const here = import.meta.dirname;
 const REPO = "https://github.com/allonsy-studio/webc-resources";
 
-describe("landing fixture with the studio layer", () => {
+describe("landing fixture with the OSS site layer", () => {
 	let output;
 	let pages;
 
@@ -32,8 +32,8 @@ describe("landing fixture with the studio layer", () => {
 		const html = pages["/"];
 		const hero = between(html, "<norn-page-hero>", "</norn-page-hero>");
 		assert.ok(hero.includes("<span>fixture-landing</span>"));
-		assert.ok(hero.includes("<span>A fixture landing site for the studio WebC packages</span>"));
-		assert.ok(hero.includes("A fixture landing site that exercises every section of the studio page bodies."));
+		assert.ok(hero.includes("<span>A fixture landing site for the OSS WebC packages</span>"));
+		assert.ok(hero.includes("A fixture landing site that exercises every section of the OSS site page bodies."));
 		const actions = namedBetween(hero, "nav", "Get started", "</nav>");
 		assert.ok(actions.includes('<a href="#install" data-variant="primary">Get started</a>') && actions.includes(`<a href="${REPO}" data-variant="quiet">View on GitHub</a>`));
 		const chips = [...between(hero, "<norn-tag-list>", "</norn-tag-list>").matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1].replace(/<norn-svg-icon>[\s\S]*?<\/norn-svg-icon>|<\/?span>/g, "").trim());
@@ -65,13 +65,13 @@ describe("landing fixture with the studio layer", () => {
 	test("the head carries the site metadata, the favicon, the font preload, and one theme color", () => {
 		const head = headOf(pages["/"]);
 		for (const expected of [
-			"<title>fixture-landing: A fixture landing site for the studio WebC packages</title>",
+			"<title>fixture-landing: A fixture landing site for the OSS WebC packages</title>",
 			'<link rel="canonical" href="https://projects.allons-y.studio/webc-resources/">',
-			'<meta name="description" content="A fixture landing site for the studio WebC packages. It exercises every page section.">',
+			'<meta name="description" content="A fixture landing site for the OSS WebC packages. It exercises every page section.">',
 			'<meta name="theme-color" content="#33394e">',
 			'<meta property="og:site_name" content="fixture-landing">',
 			'<meta property="og:locale" content="en_US">',
-			'<meta property="og:title" content="fixture-landing: A fixture landing site for the studio WebC packages">',
+			'<meta property="og:title" content="fixture-landing: A fixture landing site for the OSS WebC packages">',
 			'<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">',
 			'<link rel="preload" href="/assets/fonts/pt-mono.woff2" as="font" type="font/woff2" crossorigin>',
 		]) {
@@ -81,7 +81,7 @@ describe("landing fixture with the studio layer", () => {
 		assert.ok(!head.includes("apple-touch-icon"));
 	});
 
-	test("the footer links the project, the help pages, and the studio's conduct and security policies", () => {
+	test("the footer links the project, the help pages, and Allons-y Studio's conduct and security policies", () => {
 		const footer = between(pages["/"], "<norn-footer>", "</norn-footer>");
 		assert.ok(footer.includes("<strong>fixture-landing</strong>") && footer.includes(`<a href="${REPO}/blob/main/LICENSE">MPL-2.0</a>`));
 		assert.equal(footer.match(/<nav\b/g).length, 1, "one footer navigation");
@@ -93,9 +93,9 @@ describe("landing fixture with the studio layer", () => {
 		}
 	});
 
-	test("the stripe is a brand token in the studio layer, and the fonts ship as files the bundle can reach", () => {
+	test("the stripe is a brand token in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
 		const css = allCss(output, pages["/"]);
-		assert.match(css, /@layer norn\.studio \{\s*:root \{[^}]*--norn-header-stripe: linear-gradient\(/);
+		assert.match(css, /@layer norn\.oss \{\s*:root \{[^}]*--norn-header-stripe: linear-gradient\(/);
 		assert.ok(/norn-header \{[\s\S]*?& header \{[\s\S]*?&::after/.test(css) && !pages["/"].includes("--norn-header-stripe"), "set in the theme, not on the tag");
 		assert.ok(css.includes('src: url("../assets/fonts/pt-mono.woff2")'));
 		assert.deepEqual(fs.readdirSync(path.join(output, "assets", "fonts")).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
@@ -113,20 +113,20 @@ describe("landing fixture under a path prefix", () => {
 	});
 });
 
-describe("landing fixture with the studio layer off", () => {
+describe("landing fixture with the OSS site layer off", () => {
 	let output;
 	let pages;
 
 	before(() => {
-		output = buildFixture(here, { output: "_site-studio-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.studio-off.json") } });
+		output = buildFixture(here, { output: "_site-oss-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.oss-off.json") } });
 		pages = pagesIn(output);
 	});
 
-	test("no banner, call to action, credit, studio CSS, or studio links", () => {
+	test("no banner, call to action, credit, OSS CSS, or Allons-y Studio links", () => {
 		for (const html of Object.values(pages)) {
-			assert.ok(!/<studio-(bar|cta|credit)|Brought to you by|Let's build something|consulting@|scheduler\.zoom\.us|https:\/\/allons-y\.studio|allonsy-studio\/\.github/.test(html));
-			assert.ok(!/studio-bar|studio-cta|studio-credit|--studio-/.test(allCss(output, html)));
-			assert.ok(!html.includes("Code of conduct") && !html.includes("Security policy"), "no studio policy links, and the project has none of its own");
+			assert.ok(!/<oss-(bar|cta|credit)|Brought to you by|Let's build something|consulting@|scheduler\.zoom\.us|https:\/\/allons-y\.studio|allonsy-studio\/\.github/.test(html));
+			assert.ok(!/oss-bar|oss-cta|oss-credit|--oss-/.test(allCss(output, html)));
+			assert.ok(!html.includes("Code of conduct") && !html.includes("Security policy"), "no Allons-y Studio policy links, and the project has none of its own");
 		}
 	});
 
@@ -139,9 +139,9 @@ describe("landing fixture with the studio layer off", () => {
 	});
 });
 
-describe("the studio lock", () => {
-	test("a project component named like a studio component fails the build", () => {
-		assert.throws(() => buildFixture(here, { output: "_site-collision", config: "src/eleventy.collision.config.js" }), /studio-cta/i);
+describe("the OSS lock", () => {
+	test("a project component named like an OSS component fails the build", () => {
+		assert.throws(() => buildFixture(here, { output: "_site-collision", config: "src/eleventy.collision.config.js" }), /oss-cta/i);
 	});
 });
 
@@ -222,7 +222,7 @@ describe("landing fixture in a browser", () => {
 		for (const [width, expected] of [[1280, 500], [375, 375]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			await page.goto(server.url + "/");
-			const box = await page.locator("studio-bar svg").boundingBox();
+			const box = await page.locator("oss-bar svg").boundingBox();
 			assert.ok(Math.abs(box.width - expected) < 1, `${width}px wide viewport: ${box.width}`);
 			await page.close();
 		}
@@ -235,8 +235,8 @@ describe("landing fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("the studio layer passes axe with it off, too", async () => {
-		const off = buildFixture(here, { output: "_site-studio-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.studio-off.json") } });
+	test("the OSS site layer passes axe with it off, too", async () => {
+		const off = buildFixture(here, { output: "_site-oss-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.oss-off.json") } });
 		const offServer = await serve(off);
 		try {
 			assert.deepEqual(await audit(browser, offServer.url, pagesOf(off)), []);
@@ -269,8 +269,8 @@ describe("landing fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("the studio-off page has no stripe", async () => {
-		const off = buildFixture(here, { output: "_site-studio-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.studio-off.json") } });
+	test("the oss-off page has no stripe", async () => {
+		const off = buildFixture(here, { output: "_site-oss-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.oss-off.json") } });
 		const offServer = await serve(off);
 		const page = await browser.newPage();
 		try {
@@ -288,7 +288,7 @@ describe("landing fixture in a browser", () => {
 			const page = await context.newPage();
 			await page.goto(server.url + "/");
 			await page.addStyleTag({ content: `html { color-scheme: ${forced}; }` });
-			const shown = await page.$$eval("studio-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
+			const shown = await page.$$eval("oss-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
 			assert.equal(shown, visible, `${forced} forced over the visitor's preference`);
 			await context.close();
 		}
@@ -299,7 +299,7 @@ describe("landing fixture in a browser", () => {
 			const context = await browser.newContext({ colorScheme });
 			const page = await context.newPage();
 			await page.goto(server.url + "/");
-			const shown = await page.$$eval("studio-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
+			const shown = await page.$$eval("oss-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
 			assert.equal(shown, visible, colorScheme);
 			await context.close();
 		}

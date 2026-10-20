@@ -1,5 +1,5 @@
 {
-	"lede": "A sample project, so the studio page bodies have something to show.",
+	"lede": "A sample project, so the OSS site page bodies have something to show.",
 	"install": "npm install @example/core",
 	"usage": {
 		"language": "js",

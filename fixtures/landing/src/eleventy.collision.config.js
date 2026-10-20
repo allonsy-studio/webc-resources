@@ -11,7 +11,7 @@ import { configure } from "./eleventy.config.js";
 
 const here = path.relative(process.cwd(), import.meta.dirname) || ".";
 
-/** A project component named like a locked studio component: the build must fail.
+/** A project component named like a locked OSS component: the build must fail.
  *
  * @param {import("@11ty/eleventy").UserConfig} config */
 export default function (config) {

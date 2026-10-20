@@ -1,7 +1,7 @@
 /* Project styles: the accent and fonts. */
 :root {
 	--norn-ui-accent: #2346d4;
-	/* Fonts: the studio pairing is bundled; uncomment it, or load your own & put the family first.
+	/* Fonts: the Allons-y Studio pairing is bundled; uncomment it, or load your own & put the family first.
 	--norn-font-body: "Instrument Sans", "Instrument Sans Fallback", ui-sans-serif, system-ui, sans-serif;
 	--norn-font-heading: "Yellowtail", "Yellowtail Fallback", var(--norn-font-body); */
 }
