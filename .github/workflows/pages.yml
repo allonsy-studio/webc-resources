@@ -10,12 +10,11 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
-    name: Build the preview
+  publish:
+    name: Build and publish the preview
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-      pages: read
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -34,30 +33,19 @@ jobs:
       - name: Install Node dependencies
         run: yarn install --immutable
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v6
-
       - name: Build the preview
         run: yarn docs:build
         env:
           PATH_PREFIX: /webc-resources/
 
-      - name: Upload the preview
-        uses: actions/upload-pages-artifact@v5
-        with:
-          path: preview/_site
-
-  deploy:
-    name: Deploy to GitHub Pages
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy the preview
-        id: deployment
-        uses: actions/deploy-pages@v5
+      # Pages serves the gh-pages branch, so no Actions artifact is uploaded.
+      - name: Publish to the gh-pages branch
+        working-directory: preview/_site
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          touch .nojekyll
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Publish the preview from ${GITHUB_SHA}"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
