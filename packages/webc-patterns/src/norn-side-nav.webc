@@ -8,7 +8,7 @@
 
 /**
  * Sidebar navigation from a list of pages. Marks the current page with `aria-current="page"`, and a page holding it with `aria-current="true"`.
- * An item may carry a `norn-svg-icon` name and child pages, which list under it with a rule down the start edge.
+ * An item may carry a `norn-icon` name and child pages, which list under it with a rule down the start edge.
  * In a sticky `norn-sidebar-layout` column only the list scrolls, so a search field in the `search` slot stays put.
  * @prop {{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]} items
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
@@ -29,7 +29,7 @@
 			<a
 				:href="item.url"
 				:aria-current="item.url === $data.page.url ? 'page' : (item.children || []).some((child) => child.url === $data.page.url) ? 'true' : undefined"
-			><norn-svg-icon webc:if="item.icon" :@name="item.icon"></norn-svg-icon><span @text="item.title"></span></a>
+			><norn-icon webc:if="item.icon" :@name="item.icon"></norn-icon><span @text="item.title"></span></a>
 			<ul webc:if="item.children && item.children.length">
 				<li webc:for="child of item.children">
 					<a :href="child.url" :aria-current="child.url === $data.page.url ? 'page' : undefined"><span @text="child.title"></span></a>
@@ -113,7 +113,7 @@
 				}
 			}
 
-			& nav > ul norn-svg-icon {
+			& nav > ul norn-icon {
 				flex: none;
 				align-self: center;
 				color: var(--norn-side-nav-icon, var(--norn-text-accent, t('text.accent')));

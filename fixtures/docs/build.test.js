@@ -46,13 +46,13 @@ describe("docs fixture", () => {
 		assert.ok(hero.includes('<norn-code-block id="install">') && hero.includes("npm install fixture-docs"));
 		const index = between(html, '<norn-section id="docs"', "</norn-section>");
 		assert.ok(index.includes("<h2>Documentation</h2>"));
-		assert.ok(index.includes("<dl data-norn-contents>") && !index.includes("<norn-content-card"), "a contents list, not cards");
+		assert.ok(index.includes("<dl data-norn-contents>") && !index.includes("<norn-card"), "a contents list, not cards");
 		assert.deepEqual([...index.matchAll(/<dt><a href="([^"]+)">([^<]+)<\/a><\/dt>/g)].map((match) => [match[1], match[2]]), [
 			["/getting-started/", "Getting started"],
 			["/usage/", "Usage"],
 			["/reference/", "Reference"],
 		]);
-		assert.ok(index.includes("Install the project and run it once.") && !index.includes("--norn-content-card-title-face"));
+		assert.ok(index.includes("Install the project and run it once.") && !index.includes("--norn-card-title-face"));
 	});
 
 	test("the sidebar marks the current page, and the pager links the neighbors", () => {
@@ -68,16 +68,16 @@ describe("docs fixture", () => {
 		assert.ok(pages["/reference/"].includes('rel="prev" href="/usage/"') && !pages["/reference/"].includes('rel="next"'));
 	});
 
-	test("GitHub-style alerts in Markdown render as call-outs", () => {
+	test("GitHub-style alerts in Markdown render as callouts", () => {
 		const html = pages["/getting-started/"];
-		assert.match(html, /<norn-call-out>\s*<div role="note" data-variant="tip">/);
+		assert.match(html, /<norn-callout>\s*<div role="note" data-variant="tip">/);
 		assert.match(html, /<div role="note" data-variant="warning">[\s\S]*?<p>Node 22 or later is required\.<\/p>/);
 		assert.ok(!html.includes("[!TIP]") && !html.includes("[!WARNING]"));
 	});
 
 	test("a docs page keeps the compiled Markdown as it is: norn-base does not render it twice", () => {
 		const html = pages["/getting-started/"];
-		assert.equal((html.match(/<norn-call-out>/g) ?? []).length, 2);
+		assert.equal((html.match(/<norn-callout>/g) ?? []).length, 2);
 		assert.equal((html.match(/<div role="note"/g) ?? []).length, 2);
 		assert.equal((html.match(/<norn-code-block>/g) ?? []).length, 1);
 		assert.equal((html.match(/<figure>/g) ?? []).length, 1);
@@ -109,8 +109,8 @@ describe("docs fixture", () => {
 
 	test("the header links the docs and the repository", () => {
 		const nav = namedBetween(pages["/usage/"], "nav", "Primary", "</nav>");
-		assert.deepEqual([...nav.matchAll(/<a href="([^"]+)">([\s\S]*?)<\/a>/g)].map((match) => match[2].replace(/<norn-svg-icon>[\s\S]*?<\/norn-svg-icon>/, "").trim()), ["Docs", "GitHub"]);
-		assert.match(nav, /<a href="\/getting-started\/"><norn-svg-icon>\s*<svg [^>]*aria-hidden="true"/, "Docs carries the book icon");
+		assert.deepEqual([...nav.matchAll(/<a href="([^"]+)">([\s\S]*?)<\/a>/g)].map((match) => match[2].replace(/<norn-icon>[\s\S]*?<\/norn-icon>/, "").trim()), ["Docs", "GitHub"]);
+		assert.match(nav, /<a href="\/getting-started\/"><norn-icon>\s*<svg [^>]*aria-hidden="true"/, "Docs carries the book icon");
 	});
 
 	test("a released package shows its npm version and download badges in the project accent", () => {

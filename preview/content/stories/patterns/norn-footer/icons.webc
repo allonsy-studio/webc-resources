@@ -12,8 +12,8 @@ bleed: true
 		<div>
 			<p><strong>Project</strong></p>
 			<ul>
-				<li><a href="https://example.com/"><norn-svg-icon @name="external"></norn-svg-icon> GitHub</a></li>
-				<li><a href="https://example.com/changelog"><norn-svg-icon @name="book"></norn-svg-icon> Changelog</a></li>
+				<li><a href="https://example.com/"><norn-icon @name="external"></norn-icon> GitHub</a></li>
+				<li><a href="https://example.com/changelog"><norn-icon @name="book"></norn-icon> Changelog</a></li>
 			</ul>
 		</div>
 	</nav>

@@ -43,7 +43,7 @@ export default function (config) {
 }
 ```
 
-Pages pick a layout from the patterns package: `norn-landing.webc`, `norn-docs-home.webc` and `norn-docs.webc`, or `norn-workspaces.webc` and `norn-workspace.webc`. Its README lists each layout's props and shows how to [copy a layout](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-patterns#copy-a-layout) to change it. Don't add the Norn plugin as well: the OSS site plugin adds it, and a second one fails the build. The project's own `fillHooks` calls append after the theme's.
+Pages pick a layout from the patterns package: `norn-landing.webc`, `norn-docs-home.webc` and `norn-docs.webc`, or `norn-workspaces-home.webc` and `norn-workspace.webc`. Its README lists each layout's props and shows how to [copy a layout](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-patterns#copy-a-layout) to change it. Don't add the Norn plugin as well: the OSS site plugin adds it, and a second one fails the build. The project's own `fillHooks` calls append after the theme's.
 
 The site data comes from the patterns package's builders, one line per data file. Pass the theme's `host` so a project without its own URL gets its path on Allons-y Studio's pages host:
 
@@ -113,7 +113,7 @@ A project component named `oss-bar.webc`, `oss-cta.webc`, or `oss-credit.webc` c
 
 ## Notes
 
-- **Icons come from `norn-svg-icon`.** The Docs link carries a book, the hero facts a check, and a docs page may name a sidebar icon. Footer links and card badges have none, and `features[].icon` is not in the schema.
+- **Icons come from `norn-icon`.** The Docs link carries a book, the hero facts a check, and a docs page may name a sidebar icon. Footer links and card badges have none, and `features[].icon` is not in the schema.
 - **Conduct and security links** use the project's own `CODE_OF_CONDUCT.md` and `SECURITY.md` when it keeps them, and show Allons-y Studio's only when the OSS site layer is on.
 - **The workspaces sidebar** is labeled "Packages", not "Documentation".
 - **The OSS credit and call to action** are inline SVGs, not image files.

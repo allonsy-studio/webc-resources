@@ -36,7 +36,7 @@ describe("landing fixture with the OSS site layer", () => {
 		assert.ok(hero.includes("A fixture landing site that exercises every section of the OSS site page bodies."));
 		const actions = namedBetween(hero, "nav", "Get started", "</nav>");
 		assert.ok(actions.includes('<a href="#install" data-variant="primary">Get started</a>') && actions.includes(`<a href="${REPO}" data-variant="quiet">View on GitHub</a>`));
-		const chips = [...between(hero, "<norn-tag-list>", "</norn-tag-list>").matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1].replace(/<norn-svg-icon>[\s\S]*?<\/norn-svg-icon>|<\/?span>/g, "").trim());
+		const chips = [...between(hero, "<norn-fact-list>", "</norn-fact-list>").matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1].replace(/<norn-icon>[\s\S]*?<\/norn-icon>|<\/?span>/g, "").trim());
 		assert.deepEqual(chips, ["Free &amp; open source", "License: MPL-2.0", "Node 22+"]);
 		assert.ok(hero.includes('<norn-code-block id="usage">') && hero.includes("<figcaption>example.js</figcaption>"));
 	});
@@ -47,10 +47,10 @@ describe("landing fixture with the OSS site layer", () => {
 		assert.ok(html.includes("npm install @allons-y/fixture-landing"));
 		assert.ok(html.includes('<norn-section id="features">'));
 		assert.ok(!/<(section|norn-section)\b[^>]*aria-labelledby/.test(html), "a section takes no name");
-		assert.equal((between(html, '<norn-section id="features"', "</norn-section>").match(/<norn-content-card>/g) ?? []).length, 4);
+		assert.equal((between(html, '<norn-section id="features"', "</norn-section>").match(/<norn-card>/g) ?? []).length, 4);
 		const packages = between(html, '<norn-section id="packages"', "</norn-section>");
-		assert.equal((packages.match(/<norn-content-card>/g) ?? []).length, 2);
-		assert.ok(packages.includes('style="--norn-content-card-title-face: mono"'));
+		assert.equal((packages.match(/<norn-card>/g) ?? []).length, 2);
+		assert.ok(packages.includes('style="--norn-card-title-face: mono"'));
 		assert.ok(packages.includes('<a href="https://example.com/core">@example/core</a>'));
 	});
 

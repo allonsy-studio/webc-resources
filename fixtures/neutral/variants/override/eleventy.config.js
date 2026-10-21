@@ -9,5 +9,5 @@ import { at, configure } from "../../site.js";
 
 /** The same project component, with the packaged one excluded: the project's version renders. */
 export default function (config) {
-	return configure(config, { components: [at("variants/override/_includes/*.webc")], exclude: ["norn-content-card"], output: "_site-override" });
+	return configure(config, { components: [at("variants/override/_includes/*.webc")], exclude: ["norn-card"], output: "_site-override" });
 }

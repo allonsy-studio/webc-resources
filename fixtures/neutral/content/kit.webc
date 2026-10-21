@@ -13,19 +13,19 @@ description: The small components, one of each.
 <norn-theme-toggle></norn-theme-toggle>
 <norn-theme-toggle><span slot="label">Scheme, again</span></norn-theme-toggle>
 <h2>Icons</h2>
-<p id="icons"><norn-svg-icon @name="warning"><span slot="label">Warning</span></norn-svg-icon> Labeled. <norn-svg-icon @name="arrow-end"></norn-svg-icon> Decorative.</p>
-<p id="project-icon"><norn-svg-icon @name="badge"><span slot="label">Badge</span></norn-svg-icon> Project icon.</p>
-<p dir="rtl" id="rtl">التالي <norn-svg-icon @name="arrow-end"></norn-svg-icon></p>
+<p id="icons"><norn-icon @name="warning"><span slot="label">Warning</span></norn-icon> Labeled. <norn-icon @name="arrow-end"></norn-icon> Decorative.</p>
+<p id="project-icon"><norn-icon @name="badge"><span slot="label">Badge</span></norn-icon> Project icon.</p>
+<p dir="rtl" id="rtl">التالي <norn-icon @name="arrow-end"></norn-icon></p>
 <h2>Link buttons</h2>
 <p>
-	<norn-link-button @href="/docs/one/">Read the docs <norn-svg-icon @name="arrow-end"></norn-svg-icon></norn-link-button>
+	<norn-link-button @href="/docs/one/">Read the docs <norn-icon @name="arrow-end"></norn-icon></norn-link-button>
 	<norn-link-button @href="https://example.com/source" @variant="quiet">Source</norn-link-button>
 </p>
 <h2>Tags</h2>
-<norn-tag-list>
-	<li><norn-svg-icon @name="check"></norn-svg-icon>Node 24+</li>
+<norn-fact-list>
+	<li><norn-icon @name="check"></norn-icon>Node 24+</li>
 	<li>No runtime dependencies</li>
-</norn-tag-list>
+</norn-fact-list>
 <p><a href="#icons">Jump to icons <span class="visually-hidden">on this page</span></a></p>
 <h2>Nested navigation</h2>
 <norn-side-nav :@items="[{ url: '/docs/one/', title: 'Docs', icon: 'book', children: [{ url: '/kit/', title: 'Kit' }, { url: '/plain/', title: 'Plain' }] }, { url: '/', title: 'Home' }]">
@@ -40,15 +40,15 @@ description: The small components, one of each.
 	<p>The build failed.</p>
 </norn-notice>
 <h2>Call-outs</h2>
-<norn-call-out>
+<norn-callout>
 	<p>A note, with the default title.</p>
-</norn-call-out>
-<norn-call-out @variant="caution">
+</norn-callout>
+<norn-callout @variant="caution">
 	<span slot="heading">Careful</span>
 	<p>A caution with its own title.</p>
-</norn-call-out>
+</norn-callout>
 <h2>Questions</h2>
-<norn-accordion-group>
+<norn-accordion>
 	<details name="faq">
 		<summary>Does it need a script?</summary>
 		<p>No. The browser opens and closes each section.</p>
@@ -57,7 +57,7 @@ description: The small components, one of each.
 		<summary>Can two be open?</summary>
 		<p>Not when they share a name.</p>
 	</details>
-</norn-accordion-group>
+</norn-accordion>
 <h2>Line breaks inside the tags</h2>
 <norn-segmented-control @legend="Size" @name="size" :@options="[{ value: 's', label: 'Small', checked: true }, { value: 'l', label: 'Large' }]">
 </norn-segmented-control>

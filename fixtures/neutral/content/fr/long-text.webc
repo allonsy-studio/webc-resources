@@ -52,25 +52,25 @@ frame:
 	</norn-toc>
 	<norn-section id="avis">
 		<h2 id="avis">Avis et encadrés</h2>
-		<norn-call-out @variant="warning">
+		<norn-callout @variant="warning">
 			<span slot="heading">Un titre d’encadré volontairement très long qui doit s’étendre sur trois lignes au moins, même sur un grand écran, pour vérifier la mise en page</span>
 			<p>Le corps de l’encadré contient aussi un mot sans espace : Donaudampfschifffahrtsgesellschaftskapitänsmützenverschlusssicherung, et une adresse https://example.com/une/adresse/tres/longue/qui/ne/contient/aucune/espace/ni/tiret/du/tout.</p>
-		</norn-call-out>
+		</norn-callout>
 		<norn-notice @severity="warning">
 			<span slot="prefix">Attention, avis important pour toutes les équipes : </span>
 			<p>Le message de l’avis est lui aussi bien plus long que d’habitude, et contient un mot interminable comme anticonstitutionnellement ou électroencéphalographiquement.</p>
 			<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Ouvrir la documentation complète et détaillée</norn-link-button>
 		</norn-notice>
-		<norn-accordion-group>
+		<norn-accordion>
 			<details name="faq">
 				<summary>Une question très longue, posée avec beaucoup de détails, qui doit passer à la ligne sans déborder de son cadre</summary>
 				<p>Une réponse tout aussi longue, avec un identifiant sans espace : nornAccordionGroupAvecUnNomBeaucoupTropLongPourTenirSurUneSeuleLigneDeTelephone.</p>
 			</details>
-		</norn-accordion-group>
-		<norn-tag-list>
+		</norn-accordion>
+		<norn-fact-list>
 			<li>Compatible avec toutes les versions récentes de Node</li>
 			<li>Aucune dépendance à l’exécution, ni directe ni indirecte</li>
-		</norn-tag-list>
+		</norn-fact-list>
 	</norn-section>
 	<norn-section id="onglets">
 		<h2 id="onglets">Onglets de code</h2>
@@ -105,28 +105,28 @@ frame:
 		<h2 id="cartes">Cartes</h2>
 		<norn-card-grid>
 			<li>
-				<norn-content-card>
+				<norn-card>
 					<h3><a href="/docs/one/">Un titre de carte extrêmement long qui occupe plusieurs lignes dans une colonne étroite</a></h3>
 					<p>Un corps de carte court.</p>
-				</norn-content-card>
+				</norn-card>
 			</li>
 			<li>
-				<norn-content-card>
+				<norn-card>
 					<h3><a href="/docs/two/">Électroencéphalographiquement</a></h3>
 					<p>Un corps de carte beaucoup plus long, avec des accents, des œuvres et des cœurs, qui s’étend sur de nombreuses lignes pour comparer la hauteur des cartes voisines dans une même rangée.</p>
-				</norn-content-card>
+				</norn-card>
 			</li>
 			<li>
-				<norn-content-card>
+				<norn-card>
 					<h3><a href="/plain/">@example/un-paquet-dont-le-nom-est-vraiment-tres-long-pour-un-titre</a></h3>
 					<p>Un identifiant sans espace dans le titre.</p>
-				</norn-content-card>
+				</norn-card>
 			</li>
 		</norn-card-grid>
-		<norn-content-card id="seule">
+		<norn-card id="seule">
 			<h3>Une carte hors d’une grille, avec un titre assez long pour passer à la ligne</h3>
 			<p>Son titre et son texte se suivent sans se chevaucher.</p>
-		</norn-content-card>
+		</norn-card>
 		<norn-segmented-control @name="taille" :@options="[{ value: 's', label: 'Une option au libellé vraiment très long', checked: true }, { value: 'l', label: 'Une autre option, tout aussi longue que la première' }]">
 			<span slot="legend">Une légende de groupe volontairement très longue pour la taille</span>
 		</norn-segmented-control>

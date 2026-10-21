@@ -60,10 +60,10 @@ test("fillHooks appends fills in order, and an unknown hook or a fill that is no
 
 test("the plugin registers the WebC plugin once: the patterns, then the code sample when it is installed, then the extra globs", () => {
 	const config = fakeConfig();
-	norn(config, { components: ["theme/*.webc", "_includes/*.webc"], exclude: ["norn-content-card"], layouts: false });
+	norn(config, { components: ["theme/*.webc", "_includes/*.webc"], exclude: ["norn-card"], layouts: false });
 	const registrations = config.calls.plugins.filter(({ plugin }) => plugin === webc);
 	assert.equal(registrations.length, 1);
-	assert.deepEqual(registrations[0].options.components, [patterns({ exclude: ["norn-content-card"] }), codeBlock, "theme/*.webc", "_includes/*.webc"]);
+	assert.deepEqual(registrations[0].options.components, [patterns({ exclude: ["norn-card"] }), codeBlock, "theme/*.webc", "_includes/*.webc"]);
 });
 
 test("the plugin registers the helpers, the Markdown add-ons, the empty bundle tag transform, and the computed props", () => {
@@ -101,7 +101,7 @@ test("layouts: false registers none, a list leaves those out, and an unknown nam
 	assert.deepEqual(none.calls.templates, {});
 	const some = fakeConfig();
 	norn(some, { layouts: ["norn-landing", "norn-docs.webc"] });
-	assert.deepEqual(Object.keys(some.calls.templates).sort(), ["src/_layouts/norn-base.webc", "src/_layouts/norn-docs-home.webc", "src/_layouts/norn-workspace.webc", "src/_layouts/norn-workspaces.webc"]);
+	assert.deepEqual(Object.keys(some.calls.templates).sort(), ["src/_layouts/norn-base.webc", "src/_layouts/norn-docs-home.webc", "src/_layouts/norn-workspace.webc", "src/_layouts/norn-workspaces-home.webc"]);
 	assert.throws(() => norn(fakeConfig(), { layouts: ["norn-home"] }), /no layout named "norn-home". Layouts: norn-base, norn-docs/);
 });
 

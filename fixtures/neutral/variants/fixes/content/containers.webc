@@ -7,7 +7,7 @@ title: Containers
 	<ul><li><div><ul id="plain-ul"><li id="plain-li"><span id="plain-span">One</span></li><li>Two</li></ul></div></li></ul>
 	<section id="plain-section"><p>A section.</p></section>
 	<article id="plain-article"><p>An article.</p></article>
-	<norn-tag-list id="plain-tags"><li>Node 24+</li><li>MIT</li></norn-tag-list>
+	<norn-fact-list id="plain-tags"><li>Node 24+</li><li>MIT</li></norn-fact-list>
 </div>
 <norn-card-grid id="grid">
 	<li><div><ul id="grid-ul"><li id="grid-li"><span id="grid-span">One</span></li><li>Two</li></ul></div></li>
@@ -16,11 +16,11 @@ title: Containers
 	<h2>A section</h2>
 	<section id="section-section"><p>A section.</p></section>
 </norn-section>
-<norn-content-card id="card">
+<norn-card id="card">
 	<h3>A card</h3>
 	<article id="card-article"><p>An article.</p></article>
-</norn-content-card>
+</norn-card>
 <norn-footer id="footer">
 	<div><p><strong>Name</strong></p></div>
-	<norn-tag-list id="footer-tags"><li>Node 24+</li><li>MIT</li></norn-tag-list>
+	<norn-fact-list id="footer-tags"><li>Node 24+</li><li>MIT</li></norn-fact-list>
 </norn-footer>

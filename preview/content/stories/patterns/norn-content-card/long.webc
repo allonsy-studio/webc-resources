@@ -1,9 +1,0 @@
----
-title: Long text
-order: 3
----
-<h2>Cards</h2>
-<norn-content-card>
-	<h3>A heading that runs long enough to wrap onto a second line in a narrow frame</h3>
-	<p>The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-content-card-radius in the custom properties.</p>
-</norn-content-card>

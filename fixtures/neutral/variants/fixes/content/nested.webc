@@ -3,12 +3,12 @@ layout: norn-base.webc
 title: Nested
 ---
 <h1>Nested</h1>
-<norn-call-out id="note-alone"><p>A note.</p></norn-call-out>
-<norn-call-out @variant="tip" id="tip-alone"><p>A tip.</p></norn-call-out>
-<norn-call-out id="note-outer">
+<norn-callout id="note-alone"><p>A note.</p></norn-callout>
+<norn-callout @variant="tip" id="tip-alone"><p>A tip.</p></norn-callout>
+<norn-callout id="note-outer">
 	<p>A note around a tip.</p>
-	<norn-call-out @variant="tip" id="tip-inner"><p>A tip.</p></norn-call-out>
-</norn-call-out>
+	<norn-callout @variant="tip" id="tip-inner"><p>A tip.</p></norn-callout>
+</norn-callout>
 <norn-notice id="info-alone"><p>Information.</p></norn-notice>
 <norn-notice @severity="warning" id="warning-alone"><p>A warning.</p></norn-notice>
 <norn-notice id="info-outer">

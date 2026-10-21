@@ -1,0 +1,9 @@
+---
+title: Default
+order: 1
+---
+<norn-fact-list>
+	<li><norn-icon @name="check"></norn-icon>Free &amp; open source</li>
+	<li><norn-icon @name="check"></norn-icon>License: MPL-2.0</li>
+	<li><norn-icon @name="check"></norn-icon>Node 24+</li>
+</norn-fact-list>

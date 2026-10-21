@@ -80,9 +80,9 @@ const STRINGS = {
 		packages: "Packages",
 	},
 	"norn-workspace": { nav: "Packages" },
-	"norn-workspaces": { actions: "Get started", browse: "Browse packages", repo: "View on GitHub", packages: "Packages" },
+	"norn-workspaces-home": { actions: "Get started", browse: "Browse packages", repo: "View on GitHub", packages: "Packages" },
 	"norn-breadcrumb-nav": { label: "Breadcrumb" },
-	"norn-call-out": { note: "Note", tip: "Tip", important: "Important", warning: "Warning", caution: "Caution" },
+	"norn-callout": { note: "Note", tip: "Tip", important: "Important", warning: "Warning", caution: "Caution" },
 	"norn-code-block": { label: "{language} code", "copy-label": "Copy {name} to clipboard" },
 	"norn-code-tabs": { label: "Code samples", sample: "Sample {n}" },
 	"norn-copy-button": { copy: "Copy", copied: "Copied", failed: "Copy failed" },
@@ -107,7 +107,7 @@ const STRINGS = {
 
 /**
  * Every string the components and layouts show or read, with its English default, by component or layout and key.
- * A component's key is the slot it fills when the page leaves that slot empty, or for `norn-call-out` and `norn-notice` the variant or severity whose `heading` or `prefix` it is.
+ * A component's key is the slot it fills when the page leaves that slot empty, or for `norn-callout` and `norn-notice` the variant or severity whose `heading` or `prefix` it is.
  * A layout's key names a text it writes itself, such as `norn-landing`'s `license`, a template with `{license}` for the value.
  * `norn-code-block` takes its button texts from the `norn-copy-button` keys.
  * A `null` default means the component has none and falls back to another key.

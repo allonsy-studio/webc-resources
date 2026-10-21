@@ -9,7 +9,7 @@
 /**
  * Site header: the brand link, then the primary navigation.
  * Pass the brand as one element in the `brand` slot, such as `<a slot="brand" rel="home" href="/">Name</a>`, holding text or an `<img>` logo with alt text. A logo is sized by `--norn-header-logo`.
- * The default slot holds the navigation links, each an `<a>` that may start with a `norn-svg-icon`. Without links there is no navigation landmark.
+ * The default slot holds the navigation links, each an `<a>` that may start with a `norn-icon`. Without links there is no navigation landmark.
  * @slot brand - The brand link, as one element.
  * @slot label - The navigation landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Primary".
  * @slot - The navigation links.

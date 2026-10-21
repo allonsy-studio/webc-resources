@@ -12,8 +12,8 @@
  * @prop {string} [variant] - `note`, `tip`, `important`, `warning`, or `caution`. Falls back to `note`.
  * @slot heading - The title, as one element, such as `<span slot="heading">Careful</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
  * @slot - The body.
- * @cssprop --norn-call-out-color - The rule, icon, and title color. Falls back to one per variant.
- * @cssprop --norn-call-out-bg - Background. Falls back to a tint of the color.
+ * @cssprop --norn-callout-color - The rule, icon, and title color. Falls back to one per variant.
+ * @cssprop --norn-callout-bg - Background. Falls back to a tint of the color.
  * @category container
  */
 --->
@@ -24,29 +24,29 @@ const VARIANTS = { note: ["Note", "info"], tip: ["Tip", "tip"], important: ["Imp
 const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 </script>
 <div role="note" :data-variant="kind(variant)">
-	<p><norn-svg-icon :@name="VARIANTS[kind(variant)][1]"></norn-svg-icon><slot name="heading"><span @text="nornComponentStrings?.('norn-call-out', kind(variant), $data.page) || VARIANTS[kind(variant)][0]"></span></slot></p>
+	<p><norn-icon :@name="VARIANTS[kind(variant)][1]"></norn-icon><slot name="heading"><span @text="nornComponentStrings?.('norn-callout', kind(variant), $data.page) || VARIANTS[kind(variant)][0]"></span></slot></p>
 	<slot></slot>
 </div>
 <style>
 	@layer norn.components {
-		norn-call-out {
-			--_color: var(--norn-call-out-color, light-dark(#1b4fc4, #8fb0ff));
+		norn-callout {
+			--_color: var(--norn-callout-color, light-dark(#1b4fc4, #8fb0ff));
 			display: block;
 
 			&:has(> [data-variant="tip"]) {
-				--_color: var(--norn-call-out-color, light-dark(#0b6b3a, #7ed6a1));
+				--_color: var(--norn-callout-color, light-dark(#0b6b3a, #7ed6a1));
 			}
 
 			&:has(> [data-variant="important"]) {
-				--_color: var(--norn-call-out-color, light-dark(#6b2fc2, #c4a3ff));
+				--_color: var(--norn-callout-color, light-dark(#6b2fc2, #c4a3ff));
 			}
 
 			&:has(> [data-variant="warning"]) {
-				--_color: var(--norn-call-out-color, light-dark(#9a4a00, #ffb36b));
+				--_color: var(--norn-callout-color, light-dark(#9a4a00, #ffb36b));
 			}
 
 			&:has(> [data-variant="caution"]) {
-				--_color: var(--norn-call-out-color, light-dark(#b42318, #ff8a80));
+				--_color: var(--norn-callout-color, light-dark(#b42318, #ff8a80));
 			}
 
 			& > div {
@@ -58,7 +58,7 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 				border-inline-start: 4px solid var(--_color);
 				border-start-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
 				border-end-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-call-out-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
+				background: var(--norn-callout-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
 			}
 
 			& > div > p:first-child {
@@ -70,7 +70,7 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 				font-weight: 700;
 			}
 
-			& > div > p:first-child > norn-svg-icon {
+			& > div > p:first-child > norn-icon {
 				flex: none;
 				margin-block-start: 0.15em;
 			}

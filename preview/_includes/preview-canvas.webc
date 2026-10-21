@@ -15,22 +15,22 @@
 <div data-js>
 	<norn-segmented-control data-group="scheme" :@icon-only="true">
 		<span slot="legend">Color scheme</span>
-		<label title="Light"><input type="radio" value="light" /><norn-svg-icon @name="sun"></norn-svg-icon><span>Light</span></label>
-		<label title="System"><input type="radio" value="" checked /><norn-svg-icon @name="system"></norn-svg-icon><span>System</span></label>
-		<label title="Dark"><input type="radio" value="dark" /><norn-svg-icon @name="moon"></norn-svg-icon><span>Dark</span></label>
+		<label title="Light"><input type="radio" value="light" /><norn-icon @name="sun"></norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked /><norn-icon @name="system"></norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark" /><norn-icon @name="moon"></norn-icon><span>Dark</span></label>
 	</norn-segmented-control>
 	<norn-segmented-control data-group="width" :@icon-only="true">
 		<span slot="legend">Width</span>
-		<label title="Fill"><input type="radio" value="" checked /><norn-svg-icon @name="fill"></norn-svg-icon><span>Fill</span></label>
-		<label title="Phone, 320px"><input type="radio" value="320px" /><norn-svg-icon @name="phone"></norn-svg-icon><span>Phone, 320px</span></label>
-		<label title="Tablet, 768px"><input type="radio" value="768px" /><norn-svg-icon @name="tablet"></norn-svg-icon><span>Tablet, 768px</span></label>
-		<label title="Desktop, 1024px"><input type="radio" value="1024px" /><norn-svg-icon @name="desktop"></norn-svg-icon><span>Desktop, 1024px</span></label>
+		<label title="Fill"><input type="radio" value="" checked /><norn-icon @name="fill"></norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px" /><norn-icon @name="phone"></norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px" /><norn-icon @name="tablet"></norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px" /><norn-icon @name="desktop"></norn-icon><span>Desktop, 1024px</span></label>
 	</norn-segmented-control>
 	<button type="button" data-action="axe" data-state="idle" :data-axe="url('/assets/axe.min.js')">
-		<norn-svg-icon @name="accessibility" data-for="idle"></norn-svg-icon>
-		<norn-svg-icon @name="loading" data-for="running"></norn-svg-icon>
-		<norn-svg-icon @name="success" data-for="pass"></norn-svg-icon>
-		<norn-svg-icon @name="error" data-for="fail"></norn-svg-icon>
+		<norn-icon @name="accessibility" data-for="idle"></norn-icon>
+		<norn-icon @name="loading" data-for="running"></norn-icon>
+		<norn-icon @name="success" data-for="pass"></norn-icon>
+		<norn-icon @name="error" data-for="fail"></norn-icon>
 		Check accessibility
 	</button>
 </div>
@@ -72,8 +72,8 @@
 			cursor: pointer;
 		}
 
-		preview-canvas button norn-svg-icon {
-			--norn-svg-icon-size: 1.15rem;
+		preview-canvas button norn-icon {
+			--norn-icon-size: 1.15rem;
 		}
 
 		/* One icon per state: idle, running, pass, fail. */

@@ -14,7 +14,7 @@ layout: norn-base.webc
  * The search is live from a Pagefind index at `pagefind/`, or a web search of the site's host without one. Only the page body is indexed.
  * The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings.
  * The sidebar's name ("Documentation") and the search label ("Search the docs") come from `componentStrings` under `norn-docs`, then English.
- * @prop {{ url: string, title: string, icon?: string }[]} [docs] - The docs pages, in order. `icon` names a sidebar `norn-svg-icon`.
+ * @prop {{ url: string, title: string, icon?: string }[]} [docs] - The docs pages, in order. `icon` names a sidebar `norn-icon`.
  * @prop {{ url: string, title: string }} [prev] - Falls back to the page before this one in `docs`, by `nornAdjacent`.
  * @prop {{ url: string, title: string }} [next] - Falls back to the page after this one in `docs`.
  * @prop {{ bundle?: string, site?: string } | false} [search] - Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`). `false` leaves the search out.

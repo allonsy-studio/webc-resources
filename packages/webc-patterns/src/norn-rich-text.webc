@@ -27,8 +27,8 @@
 			max-inline-size: var(--norn-rich-text-measure, var(--norn-text-measure, t('text.measure')));
 		}
 
-		/* Prose styles stop at the components that style all their own markup. A call-out, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
-		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-tag-list) {
+		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
+		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
 			h2,
 			h3 {
 				margin: var(--norn-space-s, t('space.s')) 0 0;

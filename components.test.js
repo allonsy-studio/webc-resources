@@ -328,8 +328,8 @@ test("the leak check flags a descendant step from the host to the component's ow
 		["norn-card-grid", "norn-card-grid ul > li > *", "ul"],
 		["norn-section", "norn-section section", "section"],
 		["norn-section", "norn-section section > h2", "section"],
-		["norn-content-card", "norn-content-card article", "article"],
-		["norn-content-card", "norn-content-card article > :is(h2, h3, h4, h5, h6) a", "article"],
+		["norn-card", "norn-card article", "article"],
+		["norn-card", "norn-card article > :is(h2, h3, h4, h5, h6) a", "article"],
 		["norn-footer", "norn-footer footer > div:first-child > * > ul", "footer"],
 	]) {
 		assert.equal(leak(selector, treeOf(name), name), step, selector);
@@ -337,7 +337,7 @@ test("the leak check flags a descendant step from the host to the component's ow
 	for (const [name, selector] of [
 		["norn-card-grid", "norn-card-grid > ul > li > *"],
 		["norn-section", "norn-section > section > h2"],
-		["norn-content-card", "norn-content-card > article > :is(h2, h3, h4, h5, h6) a"],
+		["norn-card", "norn-card > article > :is(h2, h3, h4, h5, h6) a"],
 		["norn-footer", "norn-footer > footer > div:first-child > :is(div, nav) > ul"],
 		["norn-footer", "norn-footer :where(p)"],
 	]) {
@@ -424,13 +424,13 @@ test("defaultStrings lists every string a component or layout looks up, with the
 		assert.ok(text?.includes(`nornComponentStrings?.('${component}', `), `${component} never looks up its strings`);
 		for (const [key, value] of Object.entries(keys)) {
 			if (value !== null) assert.ok(text.includes(value.replace(/: $/, "")), `${component}.${key}: the component's own default is not "${value}"`);
-			if (!["norn-call-out", "norn-notice"].includes(component)) assert.ok(looked.has(`${component}.${key}`), `${component}.${key} is never looked up`);
+			if (!["norn-callout", "norn-notice"].includes(component)) assert.ok(looked.has(`${component}.${key}`), `${component}.${key} is never looked up`);
 		}
 	}
 });
 
 test("every component string is a named slot with the registry as its fallback, and none is a prop", () => {
-	const SLOT_OF = { "norn-call-out": "heading", "norn-notice": "prefix" };
+	const SLOT_OF = { "norn-callout": "heading", "norn-notice": "prefix" };
 	for (const [component, keys] of Object.entries(defaultStrings).filter(([name]) => !LAYOUTS.includes(name))) {
 		const text = components.find(({ file }) => path.basename(file, ".webc") === component).text;
 		const slots = slotsOf(text);
@@ -459,7 +459,7 @@ test("no component writes a string into an aria-label or a data attribute for it
 const FRENCH = {
 	"norn-toc": { label: "Sur cette page" },
 	"norn-search": { label: "Rechercher", none: "Aucun résultat", "results-one": "{count} résultat", "results-other": "{count} résultats" },
-	"norn-call-out": { tip: "Astuce" },
+	"norn-callout": { tip: "Astuce" },
 	"norn-notice": { warning: "Attention : " },
 	"norn-code-block": { label: "code {language}", "copy-label": "Copier le {name}" },
 	"norn-copy-button": { copy: "Copier", copied: "Copié", failed: "Échec" },
@@ -477,7 +477,7 @@ test("componentStrings fills every component's slot fallbacks from one table", a
 	const search = unid(await render("<norn-search></norn-search>", { strings }));
 	assert.ok(search.includes("<span>Rechercher</span>") && search.includes('<span data-string="none">Aucun résultat</span>'));
 	assert.ok(search.includes('<span data-string="results-one">{count} résultat</span>') && search.includes('<span data-string="results-other">{count} résultats</span>'));
-	assert.match(await render('<norn-call-out @variant="tip"><p>x</p></norn-call-out>', { strings }), /<span>Astuce<\/span>/);
+	assert.match(await render('<norn-callout @variant="tip"><p>x</p></norn-callout>', { strings }), /<span>Astuce<\/span>/);
 	assert.ok((await render('<norn-notice @severity="warning"><p>x</p></norn-notice>', { strings })).includes("<span data-prefix>Attention : </span>"));
 	const code = unid(await render('<norn-code-block @language="js" @code="x"></norn-code-block>', { strings }));
 	assert.ok(code.includes("<span data-default>code js</span>") && code.includes('<span data-string="label">Copier le {name}</span>'));
@@ -496,7 +496,7 @@ test("a string comes from the slot, else the registry, else the English default"
 	assert.ok(unid(await render("<norn-breadcrumb-nav :@items=\"[{ url: '/', title: 'Accueil' }]\"></norn-breadcrumb-nav>", { strings: FRENCH })).includes("<span data-label>Breadcrumb</span>"), "a string the table leaves out keeps the English default");
 	const notice = await render('<norn-notice @severity="error"><span slot="prefix">Erreur : </span><p>x</p></norn-notice>', { strings: FRENCH });
 	assert.ok(notice.includes("<span data-prefix><span>Erreur : </span></span>"));
-	const callout = await render('<norn-call-out @variant="tip"><span slot="heading">Conseil</span><p>x</p></norn-call-out>', { strings: FRENCH });
+	const callout = await render('<norn-callout @variant="tip"><span slot="heading">Conseil</span><p>x</p></norn-callout>', { strings: FRENCH });
 	assert.ok(callout.includes("<span>Conseil</span></p>") && !callout.includes("Astuce"));
 	const strings = { "norn-skip-link": { label: "Skip ahead" }, fr: { "norn-skip-link": { label: "Aller au contenu" } }, de: { "norn-skip-link": { label: "Zum Inhalt" } } };
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings, lang: "fr-CA" })).includes(">Aller au contenu</a>"));
@@ -508,7 +508,7 @@ test("an author's line break inside a tag leaves a named slot's fallback in plac
 	assert.ok((await render("<norn-skip-link>\n</norn-skip-link>")).includes('<a href="#main">Skip to content</a>'));
 	assert.ok(unid(await render("<norn-header>\n\t<a href=\"/\">Home</a>\n</norn-header>")).includes("<span data-label>Primary</span>"));
 	assert.ok(unid(await render("<norn-copy-button @value=\"x\">\n</norn-copy-button>")).includes('<span data-string="copy">Copy</span>'));
-	assert.match(await render('<norn-call-out @variant="warning">\n\t<p>x</p>\n</norn-call-out>'), /<span>Warning<\/span><\/p>/);
+	assert.match(await render('<norn-callout @variant="warning">\n\t<p>x</p>\n</norn-callout>'), /<span>Warning<\/span><\/p>/);
 	const search = unid(await render("<norn-search>\n</norn-search>"));
 	assert.ok(search.includes('<span data-string="results-other">{count} results</span>') && search.includes('<span data-string="results-one">{count} result</span>'));
 });
@@ -518,47 +518,47 @@ test("norn-search leaves results-one empty when the registry sets only results-o
 	assert.ok(html.includes('<span data-string="results-one"></span>') && html.includes('<span data-string="results-other">{count} 件</span>'));
 });
 
-/** Project icons as the plugin hands them to norn-svg-icon: a stroke icon, a filled one, and a directional one. */
+/** Project icons as the plugin hands them to norn-icon: a stroke icon, a filled one, and a directional one. */
 const PROJECT_ICONS = {
 	ring: { viewBox: "0 0 32 32", body: '<g fill="none" stroke="currentColor" stroke-width="3"><circle cx="16" cy="16" r="8"/></g>', mirror: false },
 	solid: { viewBox: "0 0 20 20", body: '<path fill="currentColor" d="M2 2h16v16H2z"/>', mirror: false },
 	"arrow-end": { viewBox: "0 0 20 20", body: '<path fill="currentColor" d="M2 8h10V4l6 6l-6 6v-4H2z"/>', mirror: true },
 };
 
-test("norn-svg-icon draws a project icon with its own viewBox and paint, hidden from assistive tech, and marks it as a project icon", async () => {
+test("norn-icon draws a project icon with its own viewBox and paint, hidden from assistive tech, and marks it as a project icon", async () => {
 	const helpers = { nornIcons: () => PROJECT_ICONS };
-	const stroke = await render('<norn-svg-icon @name="ring"><span slot="label">Ring</span></norn-svg-icon>', { helpers });
+	const stroke = await render('<norn-icon @name="ring"><span slot="label">Ring</span></norn-icon>', { helpers });
 	assert.ok(stroke.includes('<svg viewBox="0 0 32 32" aria-hidden="true" data-project>'));
 	assert.ok(stroke.includes('<g fill="none" stroke="currentColor" stroke-width="3"><circle cx="16" cy="16" r="8"/></g>'));
 	assert.match(stroke, /<\/svg>\s*<span>Ring<\/span>/, "the label still follows the drawing");
-	const filled = await render('<norn-svg-icon @name="solid"></norn-svg-icon>', { helpers });
+	const filled = await render('<norn-icon @name="solid"></norn-icon>', { helpers });
 	assert.ok(filled.includes('<svg viewBox="0 0 20 20" aria-hidden="true" data-project>') && filled.includes('<path fill="currentColor" d="M2 2h16v16H2z"/>'));
 	assert.ok(!/<path d=|data-fill|data-mirror/.test(stroke + filled), "no built-in path, and no mirror unless asked");
 });
 
-test("norn-svg-icon mirrors a project icon only when it is set to mirror", async () => {
+test("norn-icon mirrors a project icon only when it is set to mirror", async () => {
 	const helpers = { nornIcons: () => PROJECT_ICONS };
-	assert.ok(!(await render('<norn-svg-icon @name="solid"></norn-svg-icon>', { helpers })).includes("data-mirror"));
-	assert.ok((await render('<norn-svg-icon @name="arrow-end"></norn-svg-icon>', { helpers })).includes('<svg viewBox="0 0 20 20" aria-hidden="true" data-mirror data-project>'));
+	assert.ok(!(await render('<norn-icon @name="solid"></norn-icon>', { helpers })).includes("data-mirror"));
+	assert.ok((await render('<norn-icon @name="arrow-end"></norn-icon>', { helpers })).includes('<svg viewBox="0 0 20 20" aria-hidden="true" data-mirror data-project>'));
 });
 
 test("a project icon with a built-in's name replaces it, and the other built-ins stay", async () => {
 	const helpers = { nornIcons: () => PROJECT_ICONS };
-	const replaced = await render('<norn-svg-icon @name="arrow-end"></norn-svg-icon>', { helpers });
+	const replaced = await render('<norn-icon @name="arrow-end"></norn-icon>', { helpers });
 	assert.ok(replaced.includes("M2 8h10V4l6 6l-6 6v-4H2z") && !replaced.includes("M5 12h14M13 6l6 6l-6 6"));
-	const kept = await render('<norn-svg-icon @name="check"></norn-svg-icon>', { helpers });
+	const kept = await render('<norn-icon @name="check"></norn-icon>', { helpers });
 	assert.ok(kept.includes('<svg viewBox="0 0 24 24" aria-hidden="true">') && kept.includes('<path d="M5 12l5 5L20 7"></path>') && !kept.includes("data-project"));
 });
 
-test("norn-svg-icon without the plugin draws the built-in icons, and an unknown name lists the built-in and project names", async () => {
-	const alone = await render('<norn-svg-icon @name="arrow-end"></norn-svg-icon>');
+test("norn-icon without the plugin draws the built-in icons, and an unknown name lists the built-in and project names", async () => {
+	const alone = await render('<norn-icon @name="arrow-end"></norn-icon>');
 	assert.ok(alone.includes('<svg viewBox="0 0 24 24" aria-hidden="true" data-mirror>'));
-	await assert.rejects(render('<norn-svg-icon @name="ring"></norn-svg-icon>'), /no icon named "ring". Built-in: accessibility, arrow-end[^]*warning. Project: none/);
-	await assert.rejects(render('<norn-svg-icon @name="nope"></norn-svg-icon>', { helpers: { nornIcons: () => PROJECT_ICONS } }), /no icon named "nope". Built-in: accessibility[^]*Project: ring, solid, arrow-end/);
+	await assert.rejects(render('<norn-icon @name="ring"></norn-icon>'), /no icon named "ring". Built-in: accessibility, arrow-end[^]*warning. Project: none/);
+	await assert.rejects(render('<norn-icon @name="nope"></norn-icon>', { helpers: { nornIcons: () => PROJECT_ICONS } }), /no icon named "nope". Built-in: accessibility[^]*Project: ring, solid, arrow-end/);
 });
 
-test("norn-svg-icon styles the stroke on built-in icons only, so a project icon keeps its own paint", () => {
-	const css = styles(components.find(({ file }) => file === "webc-patterns/components/norn-svg-icon.webc").text);
+test("norn-icon styles the stroke on built-in icons only, so a project icon keeps its own paint", () => {
+	const css = styles(components.find(({ file }) => file === "webc-patterns/components/norn-icon.webc").text);
 	assert.match(squash(css), /&:not\(\[data-project\]\) \{ fill: none; stroke: currentcolor;/);
 	assert.match(squash(css), /&\[data-project\] \{ fill: currentcolor; \}/);
 });
@@ -573,7 +573,7 @@ test("a component reads uid between the same two slots or components, so its ids
 });
 
 test("a labelled landmark points aria-labelledby at its own name, one id per instance", async () => {
-	const icon = '<a href="/"><norn-svg-icon @name="book"></norn-svg-icon>Docs</a>';
+	const icon = '<a href="/"><norn-icon @name="book"></norn-icon>Docs</a>';
 	const html = await render(`<norn-header>${icon}</norn-header><norn-header>${icon}</norn-header>`);
 	const ids = [...html.matchAll(/<nav aria-labelledby="([^"]+)">/g)].map(([, id]) => id);
 	assert.equal(ids.length, 2);
@@ -705,7 +705,7 @@ test("the server-only comment never reaches the output: a component, a component
 	const base = { name: "widget", title: "Usage", url: "https://example.com/widget/usage/", lang: "en", nav: [], footer: { badges: [], groups: [] } };
 	const page = await render(layoutText("norn-base"), { helpers: { ...HEAD_HELPERS, nornHook: () => "" }, data: { content: "", norn: base } });
 	assert.ok(page.startsWith("<!doctype html>"), "the doctype stays first");
-	for (const [label, html] of [["norn-skip-link", await render("<norn-skip-link></norn-skip-link>")], ["norn-svg-icon", await render('<norn-svg-icon @name="book"></norn-svg-icon>')], ["norn-base", page]]) {
+	for (const [label, html] of [["norn-skip-link", await render("<norn-skip-link></norn-skip-link>")], ["norn-icon", await render('<norn-icon @name="book"></norn-icon>')], ["norn-base", page]]) {
 		assert.ok(html.length > 0 && !LEAK.test(html), `${label}: no trace of the comment`);
 	}
 });
@@ -745,7 +745,7 @@ test("norn-base leaves out the brand link and the footer name without a logo or 
 });
 
 test("the hero layouts leave out an empty h1 and an empty action navigation when they have only a title", async () => {
-	for (const name of ["norn-landing", "norn-docs-home", "norn-workspaces"]) {
+	for (const name of ["norn-landing", "norn-docs-home", "norn-workspaces-home"]) {
 		const bare = await render(layoutText(name), { data: { norn: BARE } });
 		assert.ok(!bare.includes("<h1") && !bare.includes("<nav") && !bare.includes(`id="${name}-actions"`), `${name}: no h1, no actions`);
 		const named = await render(layoutText(name), { data: { norn: { ...BARE, name: "Widget", tagline: "Does things" } } });
@@ -768,23 +768,23 @@ test("norn-heading-anchor without a slug fails the build and names the component
 	assert.ok(html.includes('<h3 id="title"><a href="#title">Title</a></h3>'), "a slug that is passed wins over the helper");
 });
 
-test("norn-svg-icon builds its whole svg in one expression, and the markup stays as it was", async () => {
-	const markup = withoutDocs(fs.readFileSync(path.join(PACKAGES, "webc-patterns/components/norn-svg-icon.webc"), "utf8")).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
+test("norn-icon builds its whole svg in one expression, and the markup stays as it was", async () => {
+	const markup = withoutDocs(fs.readFileSync(path.join(PACKAGES, "webc-patterns/components/norn-icon.webc"), "utf8")).replace(/<(script|style)[\s\S]*?<\/\1>/g, "");
 	const dynamic = [...markup.matchAll(/\s[:@][\w-]+=/g)].map(([attribute]) => attribute.trim());
 	assert.ok(dynamic.length <= 2, `the template has ${dynamic.length} dynamic attributes: ${dynamic.join(" ")}`);
 	const compact = (html) => html.replace(/\s*\n\s*/g, "").match(/<svg[\s\S]*?<\/svg>/)[0];
 	const helpers = { nornIcons: () => PROJECT_ICONS };
 	const cases = [
-		['<norn-svg-icon @name="check"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
-		['<norn-svg-icon @name="arrow-start"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true" data-mirror><path d="M19 12H5M11 6l-6 6l6 6"></path></svg>'],
-		['<norn-svg-icon @name="system"></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path><path d="M12 3a9 9 0 0 1 0 18z" data-fill></path></svg>'],
-		['<norn-svg-icon @name="check"><span slot="label">Done</span></norn-svg-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
-		['<norn-svg-icon @name="ring"></norn-svg-icon>', `<svg viewBox="0 0 32 32" aria-hidden="true" data-project>${PROJECT_ICONS.ring.body}</svg>`],
-		['<norn-svg-icon @name="solid"></norn-svg-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-project>${PROJECT_ICONS.solid.body}</svg>`],
-		['<norn-svg-icon @name="arrow-end"></norn-svg-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-mirror data-project>${PROJECT_ICONS["arrow-end"].body}</svg>`],
+		['<norn-icon @name="check"></norn-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
+		['<norn-icon @name="arrow-start"></norn-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true" data-mirror><path d="M19 12H5M11 6l-6 6l6 6"></path></svg>'],
+		['<norn-icon @name="system"></norn-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path><path d="M12 3a9 9 0 0 1 0 18z" data-fill></path></svg>'],
+		['<norn-icon @name="check"><span slot="label">Done</span></norn-icon>', '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"></path></svg>'],
+		['<norn-icon @name="ring"></norn-icon>', `<svg viewBox="0 0 32 32" aria-hidden="true" data-project>${PROJECT_ICONS.ring.body}</svg>`],
+		['<norn-icon @name="solid"></norn-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-project>${PROJECT_ICONS.solid.body}</svg>`],
+		['<norn-icon @name="arrow-end"></norn-icon>', `<svg viewBox="0 0 20 20" aria-hidden="true" data-mirror data-project>${PROJECT_ICONS["arrow-end"].body}</svg>`],
 	];
 	for (const [source, expected] of cases) assert.equal(compact(await render(source, { helpers })), expected, source);
-	assert.match(await render('<norn-svg-icon @name="check"><span slot="label">Done</span></norn-svg-icon>'), /<\/svg>\s*<span>Done<\/span>/, "the label follows the drawing");
+	assert.match(await render('<norn-icon @name="check"><span slot="label">Done</span></norn-icon>'), /<\/svg>\s*<span>Done<\/span>/, "the label follows the drawing");
 });
 
 test("norn-toc emits its escaped outline as it is, and heading text with markup stays text", async () => {

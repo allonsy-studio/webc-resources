@@ -68,12 +68,12 @@ describe("neutral fixture build", () => {
 	});
 
 	test("props render after the layout chain, on a WebC page and a Markdown page", () => {
-		assert.equal((pages.index.match(/<norn-content-card>/g) ?? []).length, 7);
+		assert.equal((pages.index.match(/<norn-card>/g) ?? []).length, 7);
 		assert.ok(pages.index.includes('<a href="/docs/one/">Linked card</a>'));
 		assert.ok(pages.index.includes("<span>Plain card</span>"));
 		assert.ok(pages.one.includes("<h1>First page</h1>"));
 		for (const html of Object.values(pages)) {
-			assert.ok(!/<(norn-content-card|norn-card-grid|norn-side-nav|norn-sidebar-layout|norn-pager|norn-hero|norn-header|norn-footer|norn-skip-link|norn-link-button|norn-tag-list|norn-svg-icon)[^>]*\s(@|items|title|body|href|heading|prev|next|brand|name|variant|label)[=\s>]/.test(html), "no props left on a kept tag");
+			assert.ok(!/<(norn-card|norn-card-grid|norn-side-nav|norn-sidebar-layout|norn-pager|norn-hero|norn-header|norn-footer|norn-skip-link|norn-link-button|norn-fact-list|norn-icon)[^>]*\s(@|items|title|body|href|heading|prev|next|brand|name|variant|label)[=\s>]/.test(html), "no props left on a kept tag");
 		}
 	});
 
@@ -85,8 +85,8 @@ describe("neutral fixture build", () => {
 	test("a Markdown page on norn-base compiles the components its add-ons write", () => {
 		const html = pages.markdownBase;
 		assert.match(html, /<main id="main"[^>]*><h1>Markdown on the frame<\/h1>/);
-		assert.match(html, /<norn-call-out>\s*<div role="note" data-variant="tip">/);
-		assert.equal((html.match(/<norn-call-out>/g) ?? []).length, 1);
+		assert.match(html, /<norn-callout>\s*<div role="note" data-variant="tip">/);
+		assert.equal((html.match(/<norn-callout>/g) ?? []).length, 1);
 		assert.match(html, /<norn-code-block>\s*<figure>/);
 		assert.equal((html.match(/<norn-code-block>/g) ?? []).length, 1);
 		assert.match(html, /<norn-data-table>\s*<span hidden id="[^"]+"><\/span>\s*<div><table>/);
@@ -126,7 +126,7 @@ describe("neutral fixture build", () => {
 	});
 
 	test("norn-card-grid sets the mono title variant only when asked", () => {
-		assert.equal((pages.index.match(/style="--norn-content-card-title-face: mono"/g) ?? []).length, 1);
+		assert.equal((pages.index.match(/style="--norn-card-title-face: mono"/g) ?? []).length, 1);
 		assert.equal((pages.index.match(/<norn-card-grid>\s*<ul role="list">/g) ?? []).length, 1);
 	});
 
@@ -145,13 +145,13 @@ describe("neutral fixture build", () => {
 
 	test("each page's own CSS holds only the components on it, each once", () => {
 		const [cards] = bundles(output, pages.index);
-		for (const name of ["norn-hero", "norn-link-button", "norn-tag-list", "norn-content-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
+		for (const name of ["norn-hero", "norn-link-button", "norn-fact-list", "norn-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
 		assert.ok(!/norn-sidebar-layout|norn-pager|norn-side-nav/.test(cards));
-		assert.equal((cards.match(/norn-content-card \{/g) ?? []).length, 1);
+		assert.equal((cards.match(/norn-card \{/g) ?? []).length, 1);
 		assert.ok(cards.includes("--norn-chrome: terminal"));
 		const [docs] = bundles(output, pages.one);
 		for (const name of ["norn-sidebar-layout", "norn-side-nav", "norn-pager", "norn-header"]) assert.ok(docs.includes(`${name} {`), name);
-		assert.ok(!/norn-content-card|norn-card-grid|norn-hero/.test(docs));
+		assert.ok(!/norn-card|norn-card-grid|norn-hero/.test(docs));
 	});
 
 	test("the project stylesheet follows the bundles and sits outside every layer", () => {
@@ -210,13 +210,13 @@ describe("neutral fixture build", () => {
 	test("norn-header renders the brand and links", () => {
 		assert.ok(pages.index.includes('<a rel="home" href="/">'));
 		assert.ok(labelledBy(pages.index, "nav", "Primary") !== -1);
-		assert.match(pages.index, /<a href="\/docs\/one\/"><norn-svg-icon>\s*<svg [^>]*aria-hidden="true"/);
+		assert.match(pages.index, /<a href="\/docs\/one\/"><norn-icon>\s*<svg [^>]*aria-hidden="true"/);
 		assert.ok(!/<norn-header[^>]*\s(brand|links|logo)=/.test(pages.index));
 	});
 
 	test("norn-side-nav lists child pages under their parent, and marks the parent of the current page", () => {
 		const nav = pages.kit.slice(labelledBy(pages.kit, "nav", "Guides"));
-		assert.match(nav, /<a href="\/docs\/one\/" aria-current="true"><norn-svg-icon>/);
+		assert.match(nav, /<a href="\/docs\/one\/" aria-current="true"><norn-icon>/);
 		assert.ok(nav.includes('<a href="/kit/" aria-current="page"><span>Kit</span></a>'));
 		assert.ok(nav.includes('<a href="/plain/"><span>Plain</span></a>'));
 		assert.ok(nav.includes('<a href="/"><span>Home</span></a>'));
@@ -242,7 +242,7 @@ describe("neutral fixture build", () => {
 		assert.ok(pages.index.includes("<li>Free &amp; open source</li>") || pages.index.includes("<li>Free & open source</li>"));
 	});
 
-	test("norn-svg-icon hides the drawing, reads a labeled icon's slot as text, and marks the directional ones", () => {
+	test("norn-icon hides the drawing, reads a labeled icon's slot as text, and marks the directional ones", () => {
 		assert.ok(/<svg viewBox="0 0 24 24" aria-hidden="true">[\s\S]*?<\/svg>\s*<span>Warning<\/span>/.test(pages.kit));
 		assert.ok(!/role="img"|aria-label=/.test(pages.kit.slice(pages.kit.indexOf('<p id="icons">'), pages.kit.indexOf("<h2>Link buttons"))));
 		assert.ok(pages.kit.includes('<svg viewBox="0 0 24 24" aria-hidden="true" data-mirror>'));
@@ -258,7 +258,7 @@ describe("neutral fixture build", () => {
 	test("an unknown icon name fails the build, and lists the built-in and project names", () => {
 		const content = path.join(here, "variants", "bad-icon", "content");
 		fs.mkdirSync(content, { recursive: true });
-		fs.writeFileSync(path.join(content, "bad-icon.webc"), '<norn-svg-icon @name="nope"></norn-svg-icon>');
+		fs.writeFileSync(path.join(content, "bad-icon.webc"), '<norn-icon @name="nope"></norn-icon>');
 		try {
 			assert.throws(() => build({ config: "variants/bad-icon/eleventy.config.js", output: "_site-bad-icon" }), /no icon named "nope"[\s\S]*Built-in: accessibility[\s\S]*Project: badge/);
 		} finally {
@@ -279,7 +279,7 @@ describe("neutral fixture build", () => {
 		assert.ok(pages.kit.includes('<h3 id="deeper"><a href="#deeper">Deeper</a></h3>'));
 		const start = labelledBy(pages.kit, "nav", "Breadcrumb");
 		const trail = pages.kit.slice(start, pages.kit.indexOf("</ol>", start));
-		assert.equal((trail.match(/<norn-svg-icon>/g) ?? []).length, 2, "a separator between each pair");
+		assert.equal((trail.match(/<norn-icon>/g) ?? []).length, 2, "a separator between each pair");
 		assert.ok(trail.includes('<a href="/kit/" aria-current="page">Component kit</a>'));
 	});
 
@@ -347,7 +347,7 @@ describe("neutral fixture in a browser", () => {
 	test("project CSS beats the packaged layers, and the layers rank as declared", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/");
-		assert.equal(await page.$eval("norn-content-card article", (element) => getComputedStyle(element).borderTopLeftRadius), "2px", "unlayered project rule wins");
+		assert.equal(await page.$eval("norn-card article", (element) => getComputedStyle(element).borderTopLeftRadius), "2px", "unlayered project rule wins");
 		const action = page.locator("norn-hero norn-link-button a").first();
 		assert.equal(await action.evaluate((element) => getComputedStyle(element).textDecorationLine), "none", "components outrank base");
 		assert.equal(await action.evaluate((element) => getComputedStyle(element).color), await resolveColor(page, token("text.on-accent")));
@@ -371,7 +371,7 @@ describe("neutral fixture in a browser", () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/kit/");
 		assert.equal(await page.$eval("#rtl svg", (svg) => getComputedStyle(svg).transform), "matrix(-1, 0, 0, 1, 0, 0)");
-		assert.equal(await page.$eval("#icons norn-svg-icon:last-child svg", (svg) => getComputedStyle(svg).transform), "none");
+		assert.equal(await page.$eval("#icons norn-icon:last-child svg", (svg) => getComputedStyle(svg).transform), "none");
 		const project = await page.$eval("#project-icon svg", (svg) => {
 			const { fill, stroke } = getComputedStyle(svg.querySelector("path"));
 			return { box: [svg.getBoundingClientRect().width, svg.getBoundingClientRect().height, parseFloat(getComputedStyle(svg).fontSize)], fill, stroke, color: getComputedStyle(svg).color };
@@ -451,11 +451,11 @@ describe("neutral fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("norn-call-out is a note with its title and icon, and norn-accordion-group keeps one section open by name", async () => {
+	test("norn-callout is a note with its title and icon, and norn-accordion keeps one section open by name", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/kit/");
 		assert.deepEqual(await page.getByRole("note").evaluateAll((notes) => notes.map((note) => note.querySelector("p").textContent.trim())), ["Note", "Careful"]);
-		const sections = page.locator("norn-accordion-group details");
+		const sections = page.locator("norn-accordion details");
 		await sections.nth(0).locator("summary").click();
 		await sections.nth(1).locator("summary").click();
 		assert.deepEqual(await sections.evaluateAll((all) => all.map((details) => details.open)), [false, true]);
@@ -584,10 +584,10 @@ describe("neutral fixture in a browser", () => {
 		const slotted = await browser.newPage();
 		await slotted.goto(server.url + "/slotted/");
 		for (const selector of ["#in-prose ul", "#in-footer ul", "#in-prose li", "#in-footer li"]) {
-			assert.deepEqual(await styles(slotted, selector), await styles(alone, `norn-tag-list ${selector.split(" ")[1]}`), selector);
+			assert.deepEqual(await styles(slotted, selector), await styles(alone, `norn-fact-list ${selector.split(" ")[1]}`), selector);
 		}
 		for (const page of [alone, slotted]) await search(page);
-		for (const selector of ["norn-search li a", "norn-search button norn-svg-icon"]) {
+		for (const selector of ["norn-search li a", "norn-search button norn-icon"]) {
 			assert.deepEqual(await styles(slotted, selector), await styles(alone, selector), `${selector} in norn-side-nav`);
 		}
 		await alone.close();
@@ -645,14 +645,14 @@ describe("overriding a packaged component", () => {
 	});
 
 	test("a project component named like a packaged one fails the build", () => {
-		assert.throws(() => build({ config: "variants/collision/eleventy.config.js", output: "_site-collision" }), /norn-content-card/i);
+		assert.throws(() => build({ config: "variants/collision/eleventy.config.js", output: "_site-collision" }), /norn-card/i);
 	});
 
 	test("excluding it from the glob lets the project's version render", () => {
 		const output = build({ config: "variants/override/eleventy.config.js", output: "_site-override" });
 		const html = read(output, "index.html");
 		assert.ok(html.includes("<article data-project-card>"));
-		assert.ok(!html.includes("<norn-content-card>"), "the packaged card is not used");
+		assert.ok(!html.includes("<norn-card>"), "the packaged card is not used");
 	});
 });
 

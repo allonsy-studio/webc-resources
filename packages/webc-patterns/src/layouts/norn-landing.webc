@@ -37,11 +37,11 @@ layout: norn-base.webc
 			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.install ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
-	<norn-tag-list>
-		<li><norn-svg-icon @name="check"></norn-svg-icon><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'free', $data.page) || 'Free & open source'"></span></li>
-		<li webc:if="$data.norn.license"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}').replace('{license}', $data.norn.license)"></span></li>
-		<li webc:if="$data.norn.node"><norn-svg-icon @name="check"></norn-svg-icon><span @text="(nornComponentStrings?.('norn-landing', 'node', $data.page) || 'Node {node}').replace('{node}', $data.norn.node)"></span></li>
-	</norn-tag-list>
+	<norn-fact-list>
+		<li><norn-icon @name="check"></norn-icon><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'free', $data.page) || 'Free & open source'"></span></li>
+		<li webc:if="$data.norn.license"><norn-icon @name="check"></norn-icon><span @text="(nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}').replace('{license}', $data.norn.license)"></span></li>
+		<li webc:if="$data.norn.node"><norn-icon @name="check"></norn-icon><span @text="(nornComponentStrings?.('norn-landing', 'node', $data.page) || 'Node {node}').replace('{node}', $data.norn.node)"></span></li>
+	</norn-fact-list>
 	<template webc:nokeep>
 		<norn-code-block
 			webc:if="$data.norn.usage && typeof nornTokenRanges === 'function'"
@@ -64,13 +64,13 @@ layout: norn-base.webc
 	<h2 @text="nornComponentStrings?.('norn-landing', 'features', $data.page) || 'Features'"></h2>
 	<norn-card-grid>
 		<li webc:for="feature of $data.norn.features">
-			<norn-content-card>
+			<norn-card>
 				<h3>
 					<a webc:if="feature.href" :href="feature.href" @text="feature.title"></a>
 					<span webc:else @text="feature.title"></span>
 				</h3>
 				<p @text="feature.body"></p>
-			</norn-content-card>
+			</norn-card>
 		</li>
 	</norn-card-grid>
 </norn-section>
@@ -78,13 +78,13 @@ layout: norn-base.webc
 	<h2 @text="nornComponentStrings?.('norn-landing', 'packages', $data.page) || 'Packages'"></h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="pkg of $data.norn.packages">
-			<norn-content-card>
+			<norn-card>
 				<h3>
 					<a webc:if="pkg.href" :href="pkg.href" @text="pkg.name"></a>
 					<span webc:else @text="pkg.name"></span>
 				</h3>
 				<p @text="pkg.description"></p>
-			</norn-content-card>
+			</norn-card>
 		</li>
 	</norn-card-grid>
 </norn-section>

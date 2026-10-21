@@ -8,27 +8,27 @@
 
 /**
  * A card: a heading, then its text, on a raised surface with a colored band along the top.
- * Pass the heading and body in the default slot, as in `<norn-content-card><h3><a href="…">Title</a></h3><p>…</p></norn-content-card>`. Pick the heading level for the outline: h3 under an h2.
- * `norn-card-grid` sets the inherited `--norn-content-card-rows` to `subgrid` for its cards. It is not a setting: leave it alone elsewhere.
+ * Pass the heading and body in the default slot, as in `<norn-card><h3><a href="…">Title</a></h3><p>…</p></norn-card>`. Pick the heading level for the outline: h3 under an h2.
+ * `norn-card-grid` sets the inherited `--norn-card-rows` to `subgrid` for its cards. It is not a setting: leave it alone elsewhere.
  * In a `norn-card-grid` the first child, the second, and the third (a footer, such as a link) each take a row shared with the neighboring cards, so they line up. A card with a fourth child lays out on its own.
  * @slot - The heading, then the body.
- * @cssprop --norn-content-card-bg - Background. Falls back to --norn-surface-raised.
- * @cssprop --norn-content-card-border - Border color. Falls back to --norn-ui-border-color.
- * @cssprop --norn-content-card-radius - Corner radius. Falls back to --norn-ui-border-radius.
- * @cssprop --norn-content-card-padding - Inner spacing. Falls back to --norn-space-m.
- * @cssprop --norn-content-card-accent - Top band color. Falls back to --norn-card-accent (set per item by norn-card-grid), then --norn-ui-accent.
- * @cssprop --norn-content-card-link - Heading link color. Falls back to --norn-text-accent.
- * @cssprop --norn-content-card-title-face - Inherited. Set to `mono` for a heading in the mono face.
+ * @cssprop --norn-card-bg - Background. Falls back to --norn-surface-raised.
+ * @cssprop --norn-card-border - Border color. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-card-radius - Corner radius. Falls back to --norn-ui-border-radius.
+ * @cssprop --norn-card-padding - Inner spacing. Falls back to --norn-space-m.
+ * @cssprop --norn-card-accent - Top band color. Falls back to --norn-ui-accent. norn-card-grid sets it per item. Set it on a card to override, or use --norn-card-grid-accent-1 to -4 for a grid's colors.
+ * @cssprop --norn-card-link - Heading link color. Falls back to --norn-text-accent.
+ * @cssprop --norn-card-title-face - Inherited. Set to `mono` for a heading in the mono face.
  * @category container
  */
 --->
 <article><slot></slot></article>
 <style>
 	@layer norn.components {
-		norn-content-card {
+		norn-card {
 			display: grid;
 			grid-template-columns: minmax(0, 1fr);
-			grid-template-rows: var(--norn-content-card-rows, none);
+			grid-template-rows: var(--norn-card-rows, none);
 			block-size: 100%;
 
 			/* In a norn-card-grid the card spans three rows, one each for the heading, the body, and a footer, so they line up across a row. */
@@ -38,14 +38,14 @@
 				display: grid;
 				grid-row: 1 / -1;
 				grid-template-columns: minmax(0, 1fr);
-				grid-template-rows: var(--norn-content-card-rows, none);
+				grid-template-rows: var(--norn-card-rows, none);
 				align-content: start;
 				row-gap: 0;
 				block-size: 100%;
-				padding: var(--norn-content-card-padding, var(--norn-space-m, t('space.m')));
-				border: 1px solid var(--norn-content-card-border, var(--norn-ui-border-color, t('ui.border.color')));
-				border-radius: var(--norn-content-card-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				background: var(--norn-content-card-bg, var(--norn-surface-raised, t('surface.raised')));
+				padding: var(--norn-card-padding, var(--norn-space-m, t('space.m')));
+				border: 1px solid var(--norn-card-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border-radius: var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
+				background: var(--norn-card-bg, var(--norn-surface-raised, t('surface.raised')));
 
 				/* A fourth child has no row to take, so a card with more than a heading, a body, and a footer lays out on its own. */
 				&:has(> :nth-child(4)) {
@@ -58,8 +58,8 @@
 					inset: -1px;
 					inline-size: calc(100% + 2px);
 					block-size: 0.6em;
-					border-radius: var(--norn-content-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) var(--norn-content-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) 0 0;
-					background: var(--norn-content-card-accent, var(--norn-card-accent, var(--norn-ui-accent, t('ui.accent'))));
+					border-radius: var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) 0 0;
+					background: var(--norn-card-accent, var(--norn-ui-accent, t('ui.accent')));
 				}
 			}
 
@@ -81,7 +81,7 @@
 
 			& > article > :is(h2, h3, h4, h5, h6) a,
 			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) a {
-				color: var(--norn-content-card-link, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-card-link, var(--norn-text-accent, t('text.accent')));
 				text-decoration: underline dotted;
 				text-decoration-thickness: 1px;
 				text-underline-offset: 0.2em;
@@ -97,7 +97,7 @@
 				text-wrap: pretty;
 			}
 
-			@container style(--norn-content-card-title-face: mono) {
+			@container style(--norn-card-title-face: mono) {
 				& > article > :is(h2, h3, h4, h5, h6),
 				& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
 					font-family: var(--norn-font-mono, t('font.mono'));

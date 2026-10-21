@@ -3,7 +3,7 @@ title: Plain
 order: 1
 ---
 <h2>Cards</h2>
-<norn-content-card>
+<norn-card>
 	<h3>Plain card</h3>
 	<p>A card with a heading and a body, and no link.</p>
-</norn-content-card>
+</norn-card>

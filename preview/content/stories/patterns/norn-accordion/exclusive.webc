@@ -2,7 +2,7 @@
 title: One open at a time
 order: 1
 ---
-<norn-accordion-group>
+<norn-accordion>
 	<details name="faq" open>
 		<summary>Does it need a script?</summary>
 		<p>No. The browser opens and closes each section, and find-in-page opens a closed one.</p>
@@ -15,4 +15,4 @@ order: 1
 		<summary>Does it animate?</summary>
 		<p>Where the browser can animate to an intrinsic size, unless motion is reduced.</p>
 	</details>
-</norn-accordion-group>
+</norn-accordion>

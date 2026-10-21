@@ -11,25 +11,25 @@
  * Pass each section as a `<details>` with a `<summary>` in the default slot. Give them one `name` to keep only one open at a time.
  * A section slides open where the browser can animate to an intrinsic size, unless motion is reduced; elsewhere it opens at once.
  * @slot - The sections, each a `<details>`.
- * @cssprop --norn-accordion-group-rule - Rules between sections. Falls back to --norn-ui-border-color.
- * @cssprop --norn-accordion-group-marker - The chevron's color. Falls back to --norn-text-accent.
- * @cssprop --norn-accordion-group-duration - The slide's length. Falls back to 200ms.
+ * @cssprop --norn-accordion-rule - Rules between sections. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-accordion-marker - The chevron's color. Falls back to --norn-text-accent.
+ * @cssprop --norn-accordion-duration - The slide's length. Falls back to 200ms.
  * @category container
  */
 --->
 <div><slot></slot></div>
 <style>
 	@layer norn.components {
-		norn-accordion-group {
+		norn-accordion {
 			display: block;
 			interpolate-size: allow-keywords;
 			overflow-wrap: anywhere;
 
 			& > div > details {
-				border-block-end: 1px solid var(--norn-accordion-group-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, t('ui.border.color')));
 
 				&:first-child {
-					border-block-start: 1px solid var(--norn-accordion-group-rule, var(--norn-ui-border-color, t('ui.border.color')));
+					border-block-start: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, t('ui.border.color')));
 				}
 
 				&[open] > summary::after {
@@ -69,8 +69,8 @@
 					inline-size: 0.5em;
 					block-size: 0.5em;
 					margin-inline-end: 0.25em;
-					border-block-end: 2px solid var(--norn-accordion-group-marker, var(--norn-text-accent, t('text.accent')));
-					border-inline-end: 2px solid var(--norn-accordion-group-marker, var(--norn-text-accent, t('text.accent')));
+					border-block-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, t('text.accent')));
+					border-inline-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, t('text.accent')));
 					rotate: 45deg;
 					translate: 0 -0.15em;
 				}
@@ -82,12 +82,12 @@
 
 			@media (prefers-reduced-motion: no-preference) {
 				& > div > details > summary::after {
-					transition: rotate var(--norn-accordion-group-duration, 200ms) ease-out, translate var(--norn-accordion-group-duration, 200ms) ease-out;
+					transition: rotate var(--norn-accordion-duration, 200ms) ease-out, translate var(--norn-accordion-duration, 200ms) ease-out;
 				}
 
 				& > div > details::details-content {
-					transition: block-size var(--norn-accordion-group-duration, 200ms) ease-out,
-						content-visibility var(--norn-accordion-group-duration, 200ms) allow-discrete;
+					transition: block-size var(--norn-accordion-duration, 200ms) ease-out,
+						content-visibility var(--norn-accordion-duration, 200ms) allow-discrete;
 				}
 			}
 

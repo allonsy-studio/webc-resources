@@ -18,7 +18,7 @@ export const STRINGS = {
 		"norn-header": { label: "Principal" },
 		"norn-toc": { label: "Sur cette page" },
 		"norn-search": { label: "Rechercher", none: "Aucun résultat", "results-one": "{count} résultat", "results-other": "{count} résultats" },
-		"norn-call-out": { tip: "Astuce" },
+		"norn-callout": { tip: "Astuce" },
 		"norn-notice": { warning: "Attention : " },
 		"norn-copy-button": { copy: "Copier", copied: "Copié", failed: "Échec de la copie" },
 		"norn-code-block": { label: "code {language}", "copy-label": "Copier le {name}" },

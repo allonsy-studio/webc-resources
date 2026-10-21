@@ -1,4 +1,4 @@
 ---
-layout: norn-workspaces.webc
+layout: norn-workspaces-home.webc
 permalink: /index.html
 ---

@@ -38,21 +38,21 @@ facts:
 			<li webc:for="(action, index) of actions"><norn-link-button :@href="action.href" :@variant="index ? 'quiet' : 'primary'" @text="action.text"></norn-link-button></li>
 		</ul>
 	</nav>
-	<norn-tag-list>
+	<norn-fact-list>
 		<li webc:for="fact of facts" @text="fact"></li>
-	</norn-tag-list>
+	</norn-fact-list>
 </norn-hero>
 <norn-section id="features">
 	<h2>Features</h2>
 	<norn-card-grid>
 		<li webc:for="item of features">
-			<norn-content-card>
+			<norn-card>
 				<h3>
 					<a webc:if="item.href" :href="item.href" @text="item.title"></a>
 					<span webc:else @text="item.title"></span>
 				</h3>
 				<p @text="item.body"></p>
-			</norn-content-card>
+			</norn-card>
 		</li>
 	</norn-card-grid>
 </norn-section>
@@ -60,10 +60,10 @@ facts:
 	<h2>Packages</h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="item of packages">
-			<norn-content-card>
+			<norn-card>
 				<h3><a :href="item.href" @text="item.title"></a></h3>
 				<p @text="item.body"></p>
-			</norn-content-card>
+			</norn-card>
 		</li>
 	</norn-card-grid>
 </norn-section>

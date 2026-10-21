@@ -30,7 +30,7 @@ const level = (severity) => (Object.hasOwn(SEVERITIES, severity) ? severity : "i
 const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ? "alert" : "status");
 </script>
 <div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
-	<norn-svg-icon :@name="SEVERITIES[level(severity)][1]"></norn-svg-icon>
+	<norn-icon :@name="SEVERITIES[level(severity)][1]"></norn-icon>
 	<div>
 		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
 		<slot></slot>
@@ -68,8 +68,8 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 				background: var(--norn-notice-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
 			}
 
-			& > div > norn-svg-icon {
-				--norn-svg-icon-size: 1.25rem;
+			& > div > norn-icon {
+				--norn-icon-size: 1.25rem;
 				flex: none;
 				align-self: start;
 				margin-block-start: 0.15em;

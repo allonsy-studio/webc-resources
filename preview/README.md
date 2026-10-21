@@ -58,10 +58,10 @@ title: Linked heading
 order: 2
 ---
 <h2>Cards</h2>
-<norn-content-card>
+<norn-card>
 	<h3><a href="https://example.com/">Linked card</a></h3>
 	<p>Put a link in the heading to link the card.</p>
-</norn-content-card>
+</norn-card>
 ```
 
 A new component or layout with no story fails `yarn test`. For a layout, the story's front matter names it (`layout: norn-landing.webc`), and the page's props come from the sample `site` and `project` data in `_data/`, mapped in `eleventy.config.js`.

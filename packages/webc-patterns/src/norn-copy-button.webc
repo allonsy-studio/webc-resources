@@ -37,7 +37,7 @@
 	:data-value="typeof value === 'string' ? value : undefined"
 	:data-source="typeof source === 'string' ? source : undefined"
 	:data-strings="typeof strings === 'string' && strings ? strings : undefined"
-><norn-svg-icon @name="copy"></norn-svg-icon><span></span></button>
+><norn-icon @name="copy"></norn-icon><span></span></button>
 <span role="status"></span>
 <style>
 	@layer norn.components {

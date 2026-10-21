@@ -58,7 +58,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    and the bundle order picks the winner. Reach the component's own markup the same way, from the host by a child path (`norn-card-grid > ul`, not `norn-card-grid ul`), so a `<ul>` in a slotted card is left alone. Reach slotted content through a child path from the slot's position
    (`norn-footer > footer > div:first-child > :is(div, nav) > ul`). Where prose styles must reach a slot's markup, scope them with `@scope`
    and stop the scope at the components that style all their own markup (`norn-rich-text` uses
-   `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-tag-list)`), with a `:where()` copy in
+   `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list)`), with a `:where()` copy in
    `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is
    the fallback, not the first choice. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
@@ -109,7 +109,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    A boolean prop is on for `true`, `''` (a bare `@x`), and `'true'`, and off otherwise:
    test `x === true || x === '' || x === 'true'`, so `@x="false"` stays off.
    A prop the output can't do without throws from a `webc:setup` function called in the markup, naming the
-   component and the prop, as `norn-svg-icon` and `norn-segmented-control` do: WebC's own errors name neither.
+   component and the prop, as `norn-icon` and `norn-segmented-control` do: WebC's own errors name neither.
 10. Nothing inside `<head>` may keep its custom tag: the parser moves everything after it
     into `<body>`. Call a head component as `<meta webc:is="name" webc:nokeep />`: it has no
     children, so a head component has no slot. Bundle links need `webc:keep`, and `webc:if`
@@ -140,7 +140,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 17. Every string a visitor sees or hears is content in the page, through a named slot, never a prop: accessible
     names and script-shown text included. The slot's fallback looks the string up site-wide, then gives the English
     default: `<slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot>`.
-    The key is the slot name; list it and its default in `defaultStrings` in `webc-patterns/index.js` (`norn-call-out`'s
+    The key is the slot name; list it and its default in `defaultStrings` in `webc-patterns/index.js` (`norn-callout`'s
     `heading` and `norn-notice`'s `prefix` key by variant). A layout has no caller to fill a slot: it looks its texts up
     under its own name (`nornComponentStrings?.('norn-landing', 'license', $data.page) || 'License: {license}'`), and
     names a landmark with `aria-labelledby` pointing at a hidden span. An accessible name points `aria-labelledby` at the
@@ -168,7 +168,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 - **Props.** `props` maps page data to the layout props; without it, the same-named page data. It also runs against
   Eleventy's placeholder data, so it never throws on missing data, and every list prop defaults to `[]`. `norn` is a reserved
   data key.
-- **Layouts.** `norn-base` (the frame), `norn-docs`, `norn-docs-home`, `norn-landing`, `norn-workspaces`, `norn-workspace`,
+- **Layouts.** `norn-base` (the frame), `norn-docs`, `norn-docs-home`, `norn-landing`, `norn-workspaces-home`, `norn-workspace`,
   each extending `norn-base`. Sources in `packages/webc-patterns/src/layouts/`, compiled to `layouts/` and shipped. A layout's
   own CSS sits in `norn.layout` and starts at a `data-norn-*` attribute or a component tag of its own markup.
 - **Hooks.** `norn-base` renders `head`, `banner`, `cta`, and `credit` with `<template webc:nokeep @html="nornHook('name')">`.
@@ -176,7 +176,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 - **Themes.** A theme is a CSS file of custom properties plus hook fills and components, added through the plugin's
   `components` option. The OSS site plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
   sets `themeColor` and `locale` as `defaults`, and copies the fonts.
-- **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-svg-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
+- **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
 - **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. With it, layouts render `norn-code-block`;
   without it, `<pre><code>`. A layout tests `typeof nornTokenRanges === 'function'`.
 

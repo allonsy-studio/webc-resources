@@ -13,10 +13,10 @@ bleed: true
 			<li><norn-link-button @href="https://example.com/" @variant="quiet">View on GitHub</norn-link-button></li>
 		</ul>
 	</nav>
-	<norn-tag-list>
-		<li><norn-svg-icon @name="check"></norn-svg-icon>Free &amp; open source</li>
-		<li><norn-svg-icon @name="check"></norn-svg-icon>License: MPL-2.0</li>
-		<li><norn-svg-icon @name="check"></norn-svg-icon>Node 24+</li>
-	</norn-tag-list>
+	<norn-fact-list>
+		<li><norn-icon @name="check"></norn-icon>Free &amp; open source</li>
+		<li><norn-icon @name="check"></norn-icon>License: MPL-2.0</li>
+		<li><norn-icon @name="check"></norn-icon>Node 24+</li>
+	</norn-fact-list>
 	<norn-code-block @language="sh" @code="$ npm install @example/project"></norn-code-block>
 </norn-hero>

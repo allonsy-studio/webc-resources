@@ -8,7 +8,7 @@
 
 /**
  * A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value.
- * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-svg-icon`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
+ * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
  * A thumb slides to the checked option, unless motion is reduced. Up to eight options, drawn at equal widths.
  * A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.
  * @prop {boolean} [icon-only] - Hides the option text visually; it stays the radio's name. On for `@icon-only`, `@icon-only="true"`, or `:@icon-only="true"`.
@@ -37,7 +37,7 @@ const grouped = (options, name) => {
 	<template webc:nokeep webc:if="grouped(options, name)">
 		<label webc:for="option of options" :title="option.label">
 			<input type="radio" :name="name" :value="option.value" :checked="option.checked ? '' : undefined" />
-			<norn-svg-icon webc:if="option.icon" :@name="option.icon"></norn-svg-icon>
+			<norn-icon webc:if="option.icon" :@name="option.icon"></norn-icon>
 			<span @text="option.label"></span>
 		</label>
 	</template>
@@ -203,8 +203,8 @@ const grouped = (options, name) => {
 				cursor: pointer;
 			}
 
-			& norn-svg-icon {
-				--norn-svg-icon-size: 1.25rem;
+			& norn-icon {
+				--norn-icon-size: 1.25rem;
 			}
 
 			@media (forced-colors: active) {

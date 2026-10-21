@@ -8,7 +8,7 @@
 
 /**
  * Responsive grid of cards. Each card takes the next accent color.
- * Pass each card in an `<li>`, as in `<li><norn-content-card>…</norn-content-card></li>`. The list has `role="list"`, which Safari needs once the markers are gone.
+ * Pass each card in an `<li>`, as in `<li><norn-card>…</norn-card></li>`. The list has `role="list"`, which Safari needs once the markers are gone.
  * Each card spans three rows of the grid, with `grid-template-rows: subgrid`, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box.
  * @slot - The cards, each in an `<li>`.
  * @prop {boolean} [mono] - Set the card titles in the mono face. On for `@mono`, `@mono="true"`, or `:@mono="true"`.
@@ -21,7 +21,7 @@
  * @category container
  */
 --->
-<ul role="list" :style="mono === true || mono === '' || mono === 'true' ? '--norn-content-card-title-face: mono' : ''"><slot></slot></ul>
+<ul role="list" :style="mono === true || mono === '' || mono === 'true' ? '--norn-card-title-face: mono' : ''"><slot></slot></ul>
 <style>
 	@layer norn.components {
 		norn-card-grid {
@@ -65,7 +65,7 @@
 					display: grid;
 					grid-row: span 3;
 					grid-template-rows: subgrid;
-					--norn-content-card-rows: subgrid;
+					--norn-card-rows: subgrid;
 					margin-block-end: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
 				}
 

@@ -30,7 +30,7 @@ export const print = posix(path.join(HERE, "css", "print.css"));
 export const HOOKS = Object.freeze(["head", "banner", "cta", "credit"]);
 
 /** The layouts the plugin ships. Every one but `norn-base` extends `norn-base`. */
-export const LAYOUTS = Object.freeze(["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces"]);
+export const LAYOUTS = Object.freeze(["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces-home"]);
 
 /** The props `norn-base` and the layouts read, looked up on the page data by name when there is no `props` mapping. */
 const PROPS = [
@@ -161,8 +161,8 @@ function readLayout(name) {
  * @param {string[]} [options.components] - More component globs: a theme's, the project's
  * @param {string[]} [options.exclude] - Packaged components to leave out, so the project can supply its own
  * @param {Record<string, object>} [options.strings] - The `componentStrings` table, registered as `nornComponentStrings`
- * @param {string | string[] | Record<string, string | { src: string, mirror?: boolean }>} [options.icons] - Project icons for `norn-svg-icon`: a glob or list of globs of `.svg` files, each named for its file without the extension, or a record of names to a path or `{ src, mirror }`. Paths resolve against the working directory. A name that matches a built-in icon replaces it
- * @param {boolean} [options.markdown] - Amend Markdown with the add-ons: fenced code as `norn-code-block` when the code sample is installed, call-outs, scrolling tables, and anchored headings. On by default
+ * @param {string | string[] | Record<string, string | { src: string, mirror?: boolean }>} [options.icons] - Project icons for `norn-icon`: a glob or list of globs of `.svg` files, each named for its file without the extension, or a record of names to a path or `{ src, mirror }`. Paths resolve against the working directory. A name that matches a built-in icon replaces it
+ * @param {boolean} [options.markdown] - Amend Markdown with the add-ons: fenced code as `norn-code-block` when the code sample is installed, callouts, scrolling tables, and anchored headings. On by default
  * @param {object} [options.defaults] - Prop values a theme sets, under the mapping's
  * @throws {Error} On a bad option, a missing icon file, a second registration of the plugin or of `@11ty/eleventy-plugin-webc`, or, at build time, a project layout named like a shipped one
  */

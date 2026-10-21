@@ -126,7 +126,7 @@
 				color: var(--norn-footer-hover, var(--norn-text-accent, t('text.accent')));
 			}
 
-			& :where(a:has(norn-svg-icon)) {
+			& :where(a:has(norn-icon)) {
 				display: inline-flex;
 				align-items: center;
 				gap: 0.4em;

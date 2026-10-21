@@ -26,7 +26,7 @@ export function scrollTables(md) {
 const CALLOUT = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/i;
 
 /**
- * markdown-it amend: a blockquote that opens with `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, or `[!CAUTION]` renders as `<norn-call-out>`, as on GitHub.
+ * markdown-it amend: a blockquote that opens with `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, or `[!CAUTION]` renders as `<norn-callout>`, as on GitHub.
  * It writes no title: the component's `heading` slot falls back to the site's `componentStrings`, then English.
  *
  * @param {import("markdown-it").default} md
@@ -57,11 +57,11 @@ export function callouts(md) {
 		}
 	});
 	const render = (tokens, index, options, env, self) => self.renderToken(tokens, index, options);
-	const callout = (variant) => `<norn-call-out @variant="${variant}">\n`;
+	const callout = (variant) => `<norn-callout @variant="${variant}">\n`;
 	const open = md.renderer.rules.blockquote_open ?? render;
 	const close = md.renderer.rules.blockquote_close ?? render;
 	md.renderer.rules.blockquote_open = (tokens, index, ...rest) => (tokens[index].meta?.callout ? callout(tokens[index].meta.callout) : open(tokens, index, ...rest));
-	md.renderer.rules.blockquote_close = (tokens, index, ...rest) => (tokens[index].meta?.callout ? "</norn-call-out>\n" : close(tokens, index, ...rest));
+	md.renderer.rules.blockquote_close = (tokens, index, ...rest) => (tokens[index].meta?.callout ? "</norn-callout>\n" : close(tokens, index, ...rest));
 }
 
 /** A URL fragment from heading text: lowercase, accents off, runs of anything else as one hyphen. */

@@ -4,6 +4,6 @@ order: 2
 ---
 <h2>Packages</h2>
 <norn-card-grid :@mono="true">
-	<li><norn-content-card><h3><a href="https://example.com/core">@example/core</a></h3><p>The core package.</p></norn-content-card></li>
-	<li><norn-content-card><h3><a href="https://example.com/cli">@example/cli</a></h3><p>The command line.</p></norn-content-card></li>
+	<li><norn-card><h3><a href="https://example.com/core">@example/core</a></h3><p>The core package.</p></norn-card></li>
+	<li><norn-card><h3><a href="https://example.com/cli">@example/cli</a></h3><p>The command line.</p></norn-card></li>
 </norn-card-grid>

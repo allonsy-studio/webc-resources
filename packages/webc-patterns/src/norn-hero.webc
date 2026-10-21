@@ -8,7 +8,7 @@
 
 /**
  * Page intro, in the default slot: an h1, a lede, the actions, the facts, and anything after, such as an install `norn-code-block`.
- * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-tag-list`.
+ * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-fact-list`.
  * Sets `--norn-chrome: terminal` so a code sample inside takes the window-bar frame.
  * @slot - The h1, lede, actions, facts, and extras, in that order.
  * @cssprop --norn-hero-width - Content width. Falls back to 64rem.
@@ -62,8 +62,8 @@
 				text-wrap: pretty;
 			}
 
-			& > header > norn-tag-list {
-				--norn-tag-list-gap: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
+			& > header > norn-fact-list {
+				--norn-fact-list-gap: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
 			}
 
 			& > header > nav ul {

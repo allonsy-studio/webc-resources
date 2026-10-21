@@ -35,7 +35,7 @@
  * @prop {{ href: string, type?: string }} [icon] - The favicon, or its URL. Without it the page links an empty icon, so browsers skip `/favicon.ico`.
  * @prop {string} [touchIcon] - A 180px PNG for home screens.
  * @prop {{ src: string, alt?: string }} [logo] - The brand image, or its URL, in place of the name. The brand link renders only with a logo or a name.
- * @prop {{ url: string, title: string, icon?: string }[]} [nav] - The header links. `icon` names a `norn-svg-icon`.
+ * @prop {{ url: string, title: string, icon?: string }[]} [nav] - The header links. `icon` names a `norn-icon`.
  * @prop {{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { url: string, title: string }[] }[], colophon?: string }} [footer] - The footer: the lead column (`name` falls back to the site name, `text` to the tagline), its badges and license, one navigation of grouped links, and a closing line.
  * @category template
  */
@@ -86,7 +86,7 @@
 				<img webc:if="$data.norn.logo" :src="$data.norn.logo.src" :alt="$data.norn.logo.alt || $data.norn.name || ''" />
 				<span webc:else @text="$data.norn.name || ''"></span>
 			</a>
-			<a webc:for="link of $data.norn.nav" :href="link.url"><norn-svg-icon webc:if="link.icon" :@name="link.icon"></norn-svg-icon><span webc:nokeep @text="link.title"></span></a>
+			<a webc:for="link of $data.norn.nav" :href="link.url"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
 		</norn-header>
 		<main id="main" tabindex="-1"><template webc:if="/^norn-base(\.webc)?$/.test(String($data.layout)) && !String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
 		<norn-footer>

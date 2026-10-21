@@ -15,8 +15,8 @@
  * Directional icons (`arrow-start`, `arrow-end`, `chevron-end`, and a project icon set to `mirror`) mirror in a right-to-left context.
  * @prop {string} name - A built-in icon or a project icon. The built-in names are: accessibility, arrow-end, arrow-start, book, caution, check, chevron-down, chevron-end, copy, desktop, error, external, fill, hash, important, info, link, loading, moon, phone, search, success, sun, system, tablet, tip, warning.
  * @slot label - The icon's name, as one element, read but not shown. Leave it out for a decorative icon.
- * @cssprop --norn-svg-icon-size - Width and height. Falls back to 1em.
- * @cssprop --norn-svg-icon-stroke - Line weight of a built-in icon. Falls back to 2.
+ * @cssprop --norn-icon-size - Width and height. Falls back to 1em.
+ * @cssprop --norn-icon-stroke - Line weight of a built-in icon. Falls back to 2.
  * @category component
  */
 --->
@@ -67,7 +67,7 @@ function icon(name) {
 	const own = project();
 	if (Object.hasOwn(own, name)) return own[name];
 	if (!Object.hasOwn(ICONS, name)) {
-		throw new Error(`norn-svg-icon: no icon named "${name}". Built-in: ${Object.keys(ICONS).join(", ")}. Project: ${Object.keys(own).join(", ") || "none"}`);
+		throw new Error(`norn-icon: no icon named "${name}". Built-in: ${Object.keys(ICONS).join(", ")}. Project: ${Object.keys(own).join(", ") || "none"}`);
 	}
 	return { ...ICONS[name], mirror: MIRROR.includes(name) };
 }
@@ -91,21 +91,21 @@ function drawing(name) {
 <slot name="label"></slot>
 <style>
 	@layer norn.components {
-		norn-svg-icon {
+		norn-icon {
 			display: inline-flex;
 			flex: none;
 			vertical-align: -0.125em;
 
 			& svg {
-				inline-size: var(--norn-svg-icon-size, 1em);
-				block-size: var(--norn-svg-icon-size, 1em);
+				inline-size: var(--norn-icon-size, 1em);
+				block-size: var(--norn-icon-size, 1em);
 
 				&:not([data-project]) {
 					fill: none;
 					stroke: currentcolor;
 					stroke-linecap: round;
 					stroke-linejoin: round;
-					stroke-width: var(--norn-svg-icon-stroke, 2);
+					stroke-width: var(--norn-icon-stroke, 2);
 				}
 
 				&[data-project] {

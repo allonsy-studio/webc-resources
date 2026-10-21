@@ -8,7 +8,7 @@ description: Les chaînes viennent de componentStrings, sans prop sur les balise
 <h2 id="recherche">Recherche</h2>
 <norn-search @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
 <h2 id="avis">Avis</h2>
-<norn-call-out @variant="tip"><p>Un conseil.</p></norn-call-out>
+<norn-callout @variant="tip"><p>Un conseil.</p></norn-callout>
 <norn-notice @severity="warning"><p>Le site change bientôt.</p></norn-notice>
 <p id="commande">npm install @example/project</p>
 <norn-copy-button @source="commande"></norn-copy-button>

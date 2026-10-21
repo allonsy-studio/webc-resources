@@ -24,20 +24,20 @@ test("scrollTables: wraps each Markdown table in norn-data-table, and leaves oth
 	assert.match(html, /^<norn-data-table><table>\n<thead>[\s\S]*<\/table>\n<\/norn-data-table>\n<p>Text\.<\/p>\n$/);
 });
 
-test("callouts: a marked blockquote renders as norn-call-out, with the marker gone", () => {
+test("callouts: a marked blockquote renders as norn-callout, with the marker gone", () => {
 	const md = markdownIt();
 	callouts(md);
-	assert.equal(md.render("> [!WARNING]\n> Back up first.\n"), '<norn-call-out @variant="warning">\n<p>Back up first.</p>\n</norn-call-out>\n');
-	assert.equal(md.render("> [!tip] Inline text.\n"), '<norn-call-out @variant="tip">\n<p>Inline text.</p>\n</norn-call-out>\n');
+	assert.equal(md.render("> [!WARNING]\n> Back up first.\n"), '<norn-callout @variant="warning">\n<p>Back up first.</p>\n</norn-callout>\n');
+	assert.equal(md.render("> [!tip] Inline text.\n"), '<norn-callout @variant="tip">\n<p>Inline text.</p>\n</norn-callout>\n');
 });
 
 test("callouts: a marker alone in its paragraph leaves no empty paragraph, and nested quotes close in place", () => {
 	const md = markdownIt();
 	callouts(md);
 	const html = md.render("> [!NOTE]\n>\n> First.\n>\n> > Quoted.\n");
-	assert.ok(html.startsWith('<norn-call-out @variant="note">\n'), html);
+	assert.ok(html.startsWith('<norn-callout @variant="note">\n'), html);
 	assert.ok(!/<p>\s*<\/p>/.test(html), html);
-	assert.ok(html.includes("<blockquote>\n<p>Quoted.</p>\n</blockquote>\n</norn-call-out>\n"), html);
+	assert.ok(html.includes("<blockquote>\n<p>Quoted.</p>\n</blockquote>\n</norn-callout>\n"), html);
 });
 
 test("callouts: a plain blockquote, or an unknown marker, stays a blockquote", () => {
@@ -80,5 +80,5 @@ test("headings: lists the anchored headings at the chosen levels, as plain text"
 
 test("callouts: writes no heading slot, and ignores options, so the component's fallback supplies the title", () => {
 	const md = markdownIt().use(callouts, { headings: { note: "Remarque" } });
-	assert.equal(md.render("> [!NOTE]\n> Texte."), '<norn-call-out @variant="note">\n<p>Texte.</p>\n</norn-call-out>\n');
+	assert.equal(md.render("> [!NOTE]\n> Texte."), '<norn-callout @variant="note">\n<p>Texte.</p>\n</norn-callout>\n');
 });

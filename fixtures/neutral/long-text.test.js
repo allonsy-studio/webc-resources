@@ -41,7 +41,7 @@ async function widest(page) {
 	await page.keyboard.press("Tab");
 	await page.locator("norn-search input[type=search]").fill("composant");
 	await page.locator("norn-search ol a").first().waitFor();
-	await page.locator("norn-accordion-group details").first().evaluate((details) => (details.open = true));
+	await page.locator("norn-accordion details").first().evaluate((details) => (details.open = true));
 	await page.locator('norn-copy-button button[data-source="commande"]').click();
 	await page.locator("norn-code-tabs [role=tab]").last().click();
 }

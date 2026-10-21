@@ -20,7 +20,7 @@
 	<span data-label :id="'norn-breadcrumb-nav-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-breadcrumb-nav', 'label', $data.page) || 'Breadcrumb'"></span></slot></span>
 	<ol>
 		<li webc:for="(item, index) of items">
-			<norn-svg-icon webc:if="index" @name="chevron-end"></norn-svg-icon>
+			<norn-icon webc:if="index" @name="chevron-end"></norn-icon>
 			<a :href="item.url" :aria-current="index === items.length - 1 ? 'page' : undefined" @text="item.title"></a>
 		</li>
 	</ol>
@@ -56,7 +56,7 @@
 				gap: 0.4rem;
 			}
 
-			& nav > ol > li > norn-svg-icon {
+			& nav > ol > li > norn-icon {
 				color: var(--norn-breadcrumb-nav-separator, var(--norn-text-muted, t('text.muted')));
 			}
 

@@ -1,9 +1,0 @@
----
-title: Default
-order: 1
----
-<norn-tag-list>
-	<li><norn-svg-icon @name="check"></norn-svg-icon>Free &amp; open source</li>
-	<li><norn-svg-icon @name="check"></norn-svg-icon>License: MPL-2.0</li>
-	<li><norn-svg-icon @name="check"></norn-svg-icon>Node 24+</li>
-</norn-tag-list>

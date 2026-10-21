@@ -46,7 +46,7 @@ Then pick a layout per page in its front matter: `layout: norn-docs.webc`. The p
 | `strings` | `{}` | The site's strings for every component and layout (see Translating) |
 | `markdown` | `true` | Amend Markdown with the add-ons below |
 | `defaults` | `{}` | Prop values a theme sets, under the mapping's |
-| `icons` | none | Project icons for `norn-svg-icon` (see Project icons) |
+| `icons` | none | Project icons for `norn-icon` (see Project icons) |
 
 The plugin registers:
 
@@ -58,7 +58,7 @@ The plugin registers:
 
 ### Project icons
 
-`norn-svg-icon` draws the project's own icons beside its built-in set. Name them in the plugin's `icons` option, as a glob or a list of globs of `.svg` files, each named for its file without the extension, or as a record of names to a path or `{ src, mirror }`:
+`norn-icon` draws the project's own icons beside its built-in set. Name them in the plugin's `icons` option, as a glob or a list of globs of `.svg` files, each named for its file without the extension, or as a record of names to a path or `{ src, mirror }`:
 
 ```js
 config.addPlugin(norn, {
@@ -67,14 +67,14 @@ config.addPlugin(norn, {
 });
 ```
 
-Then `<norn-svg-icon @name="logo"></norn-svg-icon>`. Paths resolve against the working directory. A name is lowercase kebab case. A missing file, a bad name, or two files with one name fails the build, and so does a name no icon has: the error lists the built-in and project names.
+Then `<norn-icon @name="logo"></norn-icon>`. Paths resolve against the working directory. A name is lowercase kebab case. A missing file, a bad name, or two files with one name fails the build, and so does a name no icon has: the error lists the built-in and project names.
 
 - A project icon with a built-in's name replaces the built-in.
 - The icon keeps its `viewBox`, or takes one from a numeric `width` and `height`, or gets `0 0 24 24`, and its own paint. Draw it with `currentColor` so it follows the text color; a file with no paint is filled with `currentColor`. The built-in stroke styling applies to the built-in icons only, so a filled SVG renders filled.
 - The size, `<title>`, `<desc>`, scripts, and event handler attributes are dropped, and the drawing is always hidden from assistive tech. Name an icon that carries meaning in the `label` slot, as for any icon.
 - `mirror: true` flips the icon in right-to-left text, as the built-in arrows do.
 
-Without the plugin, `norn-svg-icon` draws the built-in set only.
+Without the plugin, `norn-icon` draws the built-in set only.
 
 Without the plugin, register the components as `patterns()` (or `npm:@allons-y/webc-patterns/components/*.webc`) in the project's own WebC `components` list. The layouts, helpers, and Markdown add-ons are then the project's to wire up.
 
@@ -119,7 +119,7 @@ config.addPlugin(norn, {
 | `icon` | `{ href, type? }` or a URL | an empty icon | `<link rel="icon">`. The type comes from the extension. The empty icon stops the `/favicon.ico` request |
 | `touchIcon` | string | none | `<link rel="apple-touch-icon">`, a 180px PNG |
 | `logo` | `{ src, alt? }` or a URL | none | An image in the header in place of the name. `alt` falls back to the name |
-| `nav` | `{ url, title, icon? }[]` | `[]` | The links of `norn-header`. `icon` names a `norn-svg-icon` |
+| `nav` | `{ url, title, icon? }[]` | `[]` | The links of `norn-header`. `icon` names a `norn-icon` |
 | `footer` | object | `{ badges: [], groups: [] }` | `norn-footer`, from the fields below |
 | `footer.name`, `footer.text` | string | the name, the tagline | The lead column's title and line |
 | `footer.license` | `{ name, url }` | none | "Licensed under {license}", linked |
@@ -133,7 +133,7 @@ Each of the other layouts adds its own props, below. The base props a layout rea
 
 #### `norn-base.webc`
 
-The page frame: head, skip link, header, `main` around the content, and footer. It takes the props above. Used as a page's layout, it compiles the content of a page that is not a WebC file, so a Markdown page's call-outs, code fences, and tables render as components. A WebC page, and a page on a layout that extends `norn-base`, already holds compiled content, which the frame inserts as it is.
+The page frame: head, skip link, header, `main` around the content, and footer. It takes the props above. Used as a page's layout, it compiles the content of a page that is not a WebC file, so a Markdown page's callouts, code fences, and tables render as components. A WebC page, and a page on a layout that extends `norn-base`, already holds compiled content, which the frame inserts as it is.
 
 #### `norn-docs.webc`
 
@@ -172,7 +172,7 @@ The hero with a sample, then install, features, and packages sections. Reads `na
 | `features` | `{ title, body, href? }[]` | `[]` | Cards in the features section |
 | `packages` | `{ name, description, href? }[]` | `[]` | Cards in the packages section, names in the mono face |
 
-#### `norn-workspaces.webc`
+#### `norn-workspaces-home.webc`
 
 A monorepo's home page: the hero with the install sample, then an index of the workspaces. Reads `name`, `tagline`, and `description`.
 
@@ -268,7 +268,7 @@ A theme is a file like that, plus the components and hook fills it adds through 
 Tag names are the file names of the components: `norn-*` for the patterns, and `oss-*` for the OSS site theme. A project component with the tag of a packaged one, a `norn-link-button.webc` of its own, fails the build with "Global component name collision". Give the project's components another prefix, or replace a packaged one on purpose by leaving it out:
 
 ```js
-config.addPlugin(norn, { props, exclude: ["norn-content-card"], components: ["_includes/*.webc"] });
+config.addPlugin(norn, { props, exclude: ["norn-card"], components: ["_includes/*.webc"] });
 ```
 
 `exclude` throws when it names a component the package does not have. The plugin also fails, with a message that says what to remove, when:
@@ -307,7 +307,7 @@ A layout that does not extend `norn-base` calls `norn-head` in its head, which d
 </html>
 ```
 
-- **Render a Markdown page's `content` with `@html`.** WebC then compiles the `norn-call-out` and `norn-code-block` tags the add-ons write.
+- **Render a Markdown page's `content` with `@html`.** WebC then compiles the `norn-callout` and `norn-code-block` tags the add-ons write.
 - **Call head components with `<meta webc:is>`.** A custom tag in `<head>` makes the parser close the head early, so a head component is called as a `<meta>` with `webc:is` and `webc:nokeep`. A void tag has no children, so `norn-head` has no slot: write extra head tags after it.
 - **The layer order comes first.** `norn-head` declares it in an inline style ahead of the bundle links, so it holds whatever order the page's styles bundle in.
 - **Link bundles with `webc:keep`.** WebC removes `<link>` and `<script src>` without it. `norn-head` does this for the bundles.
@@ -331,12 +331,12 @@ config.addJavaScriptFunction("nornHeadings", headings);
 ```
 
 - `scrollTables` wraps each table in `norn-data-table`.
-- `callouts` turns a `> [!NOTE]` blockquote into a `norn-call-out` of that kind.
+- `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
 - `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does.
 - `headings(html)` lists the anchored headings of rendered HTML for `norn-toc`. Register it as `nornHeadings`.
 - `slugify(text)` is the id function `headingAnchors` uses.
 
-The add-on writes only what an author would write by hand, and no text of its own. A call-out title, a code block's labels, and every other string come from the component's slots, which fall back to `componentStrings` and then English (see Translating).
+The add-on writes only what an author would write by hand, and no text of its own. A callout title, a code block's labels, and every other string come from the component's slots, which fall back to `componentStrings` and then English (see Translating).
 
 ### Project data
 
@@ -360,28 +360,28 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-header` | slot `brand` (the home link), default slot (the links), slot `label` | Brand link and primary navigation |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
 | `norn-section` | `id` on the host, default slot (the h2, then content) | Section with an anchor. Not a landmark: the heading carries the outline |
-| `norn-hero` | default slot (h1, lede, actions, `norn-tag-list`, extras) | Page intro |
-| `norn-content-card` | default slot (a heading, then the body) | Card with a colored band along the top |
+| `norn-hero` | default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
+| `norn-card` | default slot (a heading, then the body) | Card with a colored band along the top |
 | `norn-card-grid` | default slot (`<li>` cards), `:@mono="true"` | Responsive grid of cards, each taking the next accent |
 | `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
 | `norn-sidebar-layout` | slot `nav`, default slot (the body, from its h1) | Navigation column beside a page body. The navigation stays in view; the columns stack below 37.5rem |
 | `norn-rich-text` | default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
 | `norn-link-button` | `@href`, `@variant` (`primary` or `quiet`), default slot | A link styled as a button, for a call to action |
-| `norn-tag-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |
+| `norn-fact-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |
 | `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The thumb slides unless motion is reduced |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |
 | `norn-copy-button` | `@value` or `@source` (an id), slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |
 | `norn-data-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, a named tab stop while it scrolls |
 | `norn-notice` | `@severity` (`info`, `success`, `warning`, `error`), `:@live`, default slot, slots `prefix` and `action` | A message about the page, with an icon and a severity word read first |
-| `norn-call-out` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | A note within prose, as `role="note"` |
-| `norn-accordion-group` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
+| `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | A note within prose, as `role="note"` |
+| `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
 | `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view |
 | `norn-breadcrumb-nav` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |
-| `norn-svg-icon` | `@name`, slot `label` | An inline icon from a built-in set or the plugin's `icons` option. Decorative unless it has a label; directional icons mirror in right-to-left text |
+| `norn-icon` | `@name`, slot `label` | An inline icon from a built-in set or the plugin's `icons` option. Decorative unless it has a label; directional icons mirror in right-to-left text |
 
 Each component documents its custom properties in JSDoc, in the comment at the top of its file. Every property falls back to a shared token (`--norn-ui-accent`, `--norn-ui-border-color`, `--norn-space-m`, and so on), and the shared token falls back to its default, compiled into the component. A component renders the same with no tokens set, and no stylesheet defines them.
 
@@ -419,20 +419,20 @@ config.addPlugin(norn, {
 		"norn-skip-link": { label: "Aller au contenu" },
 		"norn-toc": { label: "Sur cette page" },
 		"norn-search": { label: "Rechercher", none: "Aucun résultat", "results-one": "{count} résultat", "results-other": "{count} résultats" },
-		"norn-call-out": { note: "Remarque", tip: "Astuce" },
+		"norn-callout": { note: "Remarque", tip: "Astuce" },
 		"norn-landing": { start: "Commencer", license: "Licence : {license}" },
 	},
 });
 ```
 
-A layout has no caller to fill a slot, so its texts are keys of their own under the layout's name: `norn-landing`'s `start` ("Get started") and `license` ("License: {license}"), `norn-base`'s `license` ("Licensed under {license}"), and so on. `defaultStrings` lists every component, layout, and key with its English default. A key is the slot it fills; `norn-call-out`'s `heading` and `norn-notice`'s `prefix` take one key per variant or severity, and `norn-code-block` reads its button texts from the `norn-copy-button` keys. An unknown component or key fails the build with the list of valid ones. For a site in several languages, key the tables by language tag, as `{ fr: { … }, de: { … } }`: each page picks its table by `page.lang`, which [Eleventy's i18n plugin](https://www.11ty.dev/docs/plugins/i18n/) sets from the URL (`/fr/…`), and `fr-CA` falls back to `fr`. `norn-base` sets `<html lang>` from the `lang` prop, which falls back to `page.lang`. Then:
+A layout has no caller to fill a slot, so its texts are keys of their own under the layout's name: `norn-landing`'s `start` ("Get started") and `license` ("License: {license}"), `norn-base`'s `license` ("Licensed under {license}"), and so on. `defaultStrings` lists every component, layout, and key with its English default. A key is the slot it fills; `norn-callout`'s `heading` and `norn-notice`'s `prefix` take one key per variant or severity, and `norn-code-block` reads its button texts from the `norn-copy-button` keys. An unknown component or key fails the build with the list of valid ones. For a site in several languages, key the tables by language tag, as `{ fr: { … }, de: { … } }`: each page picks its table by `page.lang`, which [Eleventy's i18n plugin](https://www.11ty.dev/docs/plugins/i18n/) sets from the URL (`/fr/…`), and `fr-CA` falls back to `fr`. `norn-base` sets `<html lang>` from the `lang` prop, which falls back to `page.lang`. Then:
 
 - A landmark names itself with `aria-labelledby`, pointing at its own text: the title of `norn-toc`, or visually hidden text in `norn-header`, `norn-side-nav`, `norn-pager`, and `norn-breadcrumb-nav`.
 - Text only a script shows sits in the page as hidden elements that the script reads: `norn-copy-button`'s texts, `norn-search`'s statuses, `norn-theme-toggle`'s names, and `norn-code-tabs`'s fallback tab name.
 - `norn-search` picks `results-one`, `results-other`, or another plural form with `Intl.PluralRules` for the nearest `lang`, and formats the count for it. `{count}` stands in for the number. An empty form falls back to `results-other`.
 - `norn-notice`'s `prefix` carries its own punctuation, as in `"Remarque : "`.
 - `norn-data-table` without a caption or a `label` slot names its scroll box from the column headings, so it needs no string of its own.
-- Markdown call-outs take their titles from `componentStrings`, like any call-out: the Markdown add-on writes no `heading` slot.
+- Markdown callouts take their titles from `componentStrings`, like any callout: the Markdown add-on writes no `heading` slot.
 - `norn-pager`'s arrows are drawn in CSS and point the other way in right-to-left text.
 
 ## Exports
@@ -459,7 +459,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 | Export | Purpose |
 | --- | --- |
 | `scrollTables(md)` | markdown-it amend that wraps each table in `norn-data-table` |
-| `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-call-out` |
+| `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
 | `headingAnchors(md, { levels })` | markdown-it amend that gives headings ids and links them to themselves; levels 2 and 3 by default |
 | `headings(html, { levels })` | The anchored headings of rendered HTML as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |
 | `slugify(text)` | The URL fragment `headingAnchors` makes from heading text |

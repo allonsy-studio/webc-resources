@@ -8,10 +8,10 @@
 
 /**
  * A link styled as a button, for a call to action. It navigates, so it stays a link: use a `<button>` for an action on the page.
- * The default slot is the link text, and may hold a `norn-svg-icon`.
+ * The default slot is the link text, and may hold a `norn-icon`.
  * @prop {string} href
  * @prop {string} [variant] - `primary`, a filled accent, or `quiet`, an outline. Falls back to `primary`.
- * @slot - The link text, which may hold a `norn-svg-icon`.
+ * @slot - The link text, which may hold a `norn-icon`.
  * @cssprop --norn-link-button-accent - Primary background. Falls back to --norn-ui-accent.
  * @cssprop --norn-link-button-on-accent - Primary text. Falls back to --norn-text-on-accent, then Canvas.
  * @cssprop --norn-link-button-link - Quiet text. Falls back to --norn-text-accent.

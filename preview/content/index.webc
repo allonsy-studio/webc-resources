@@ -13,10 +13,10 @@ description: Norn's WebC components for Eleventy, rendered from the packages the
 	<p @text="category.description"></p>
 	<norn-card-grid :@mono="true">
 		<li webc:for="component of category.components">
-			<norn-content-card>
+			<norn-card>
 				<h3><a :href="component.url" @text="component.name"></a></h3>
 				<p @text="component.summaryText"></p>
-			</norn-content-card>
+			</norn-card>
 		</li>
 	</norn-card-grid>
 </template>

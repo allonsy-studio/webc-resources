@@ -63,15 +63,15 @@ describe("the component fixes, built from content with only the data a page name
 		}
 	}
 
-	test("a list, a section, an article, and a tag-list column inside card-grid, norn-section, content-card, and footer keep their standalone styles", async () => {
+	test("a list, a section, an article, and a fact-list column inside card-grid, norn-section, card, and footer keep their standalone styles", async () => {
 		await onPage("/containers/", async (page) => {
 			for (const [label, plain, nested] of [
 				["a list in a card of a card-grid", "#plain-ul", "#grid-ul"],
 				["its items", "#plain-li", "#grid-li"],
 				["and what the items hold", "#plain-span", "#grid-span"],
 				["a section in a norn-section", "#plain-section", "#section-section"],
-				["an article in a content-card", "#plain-article", "#card-article"],
-				["a tag-list column in a footer", "#plain-tags", "#footer-tags"],
+				["an article in a card", "#plain-article", "#card-article"],
+				["a fact-list column in a footer", "#plain-tags", "#footer-tags"],
 				["its list", "#plain-tags > ul", "#footer-tags > ul"],
 			]) {
 				assert.deepEqual(await computed(page, nested, BOX), await computed(page, plain, BOX), label);
@@ -83,12 +83,12 @@ describe("the component fixes, built from content with only the data a page name
 		await onPage("/containers/", async (page) => {
 			assert.equal((await computed(page, "#grid > ul", ["display"])).display, "grid", "the card-grid's own list");
 			assert.equal((await computed(page, "#section > section", ["paddingBlockStart"])).paddingBlockStart, "32px", "the norn-section's own section");
-			assert.notEqual((await computed(page, "#card > article", ["borderBlockStartWidth"])).borderBlockStartWidth, "0px", "the content-card's own article");
+			assert.notEqual((await computed(page, "#card > article", ["borderBlockStartWidth"])).borderBlockStartWidth, "0px", "the card's own article");
 			assert.equal((await computed(page, "#footer > footer > div:first-child", ["display"])).display, "grid", "the footer's own columns");
 		});
 	});
 
-	test("a call-out or a notice inside another keeps its own color, and the one around it keeps its", async () => {
+	test("a callout or a notice inside another keeps its own color, and the one around it keeps its", async () => {
 		await onPage("/nested/", async (page) => {
 			const rule = (selector) => computed(page, selector, ["borderInlineStartColor"]);
 			assert.deepEqual(await rule("#note-outer > div"), await rule("#note-alone > div"), "a note around a tip is still a note");
@@ -180,8 +180,8 @@ describe("the component fixes, built from content with only the data a page name
 			const LINK = ["color", "fontSize", "textDecorationLine", "textDecorationStyle"];
 			assert.deepEqual(await computed(page, "#section-wrapped h2", HEADING), await computed(page, "#section-plain h2", HEADING), "norn-section");
 			for (const [label, plain, wrapped] of [
-				["content-card", "#card-plain", "#card-wrapped"],
-				["content-card in a mono card-grid", "#mono-plain", "#mono-wrapped"],
+				["card", "#card-plain", "#card-wrapped"],
+				["card in a mono card-grid", "#mono-plain", "#mono-wrapped"],
 			]) {
 				assert.deepEqual(await computed(page, `${wrapped} h3`, HEADING), await computed(page, `${plain} h3`, HEADING), `${label}: the heading`);
 				assert.deepEqual(await computed(page, `${wrapped} h3 a`, LINK), await computed(page, `${plain} h3 a`, LINK), `${label}: the link`);

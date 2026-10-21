@@ -2,4 +2,4 @@
 title: With an icon
 order: 2
 ---
-<norn-link-button @href="#next">Next step <norn-svg-icon @name="arrow-end"></norn-svg-icon></norn-link-button>
+<norn-link-button @href="#next">Next step <norn-icon @name="arrow-end"></norn-icon></norn-link-button>
