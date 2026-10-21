@@ -86,7 +86,7 @@ const STRINGS = {
 	"norn-code-block": { label: "{language} code", "copy-label": "Copy {name} to clipboard" },
 	"norn-code-tabs": { label: "Code samples", sample: "Sample {n}" },
 	"norn-copy-button": { copy: "Copy", copied: "Copied", failed: "Copy failed" },
-	"norn-header": { label: "Primary" },
+	"norn-header": { label: "Primary", summary: "Menu" },
 	"norn-notice": { info: "Note: ", success: "Success: ", warning: "Warning: ", error: "Error: " },
 	"norn-pager": { label: "Pager" },
 	"norn-toc": { label: "On this page" },

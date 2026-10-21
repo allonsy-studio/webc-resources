@@ -359,7 +359,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | --- | --- | --- |
 | `norn-head` | `@title`, `@description`, `@url`, `@theme-color`, `@og-title`, `@og-image`, `@og-image-alt`, `:@theme-toggle` | Head metadata, Open Graph and Twitter card tags, the layer order, and the bundle links. `norn-base` calls it |
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
-| `norn-header` | slot `brand` (the home link), default slot (the links), slot `label` | Brand link and primary navigation |
+| `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary` | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
 | `norn-section` | `id` on the host, default slot (the h2, then content) | Section with an anchor. Not a landmark: the heading carries the outline |
 | `norn-hero` | default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |

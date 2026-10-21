@@ -99,7 +99,8 @@ describe("the preview build", () => {
 
 	test("the nav groups the components by category, in order", () => {
 		const html = pageFor(output, "/");
-		const groups = [...html.matchAll(/<summary>([^<]+)<\/summary>/g)].map(([, title]) => title);
+		const nav = html.slice(html.indexOf('<nav aria-label="Components">'));
+		const groups = [...nav.matchAll(/<summary>([^<]+)<\/summary>/g)].map(([, title]) => title);
 		assert.deepEqual(groups, ["Layout", "Landmark", "Container", "Component", "Template", "Document"]);
 		const landmark = html.slice(html.indexOf("<summary>Landmark</summary>"), html.indexOf("<summary>Container</summary>"));
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.ok(landmark.includes(`>${name}</a>`), name);
@@ -632,7 +633,7 @@ describe("the preview in a browser", () => {
 		assert.equal(await row.getByRole("button", { name: "Reset --norn-card-radius" }).isDisabled(), true, "nothing to reset yet");
 		const color = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-card-bg"]') });
 		assert.equal(await color.locator('[data-col="type"]').textContent(), "<color>");
-		assert.match(await color.locator("td").nth(1).textContent(), /--norn-surface-raised\s+light-dark\(hsl\(40, 14%, 96%\), hsl\(0, 0%, 11%\)\)/);
+		assert.match(await color.locator("td").nth(1).textContent(), /--norn-surface-raised\s+light-dark\(hsl\(40, 14%, 96%\), #242932\)/);
 		assert.equal(await table.locator("tbody tr").count(), 1 + 6, "the shared accent, then the component's six");
 		await page.close();
 	});

@@ -191,6 +191,27 @@ test("the baseline tokens are in tokens.json, each with the value the components
 	for (const tokenPath of ["ui.accent", "ui.border.color", "ui.border.radius", "ui.shadow", "space.xs", "space.s", "space.m", "space.l", "space.xl"]) assert.ok(byPath.has(tokenPath), `${tokenPath} stays`);
 });
 
+test("the dark raised and code surfaces step up from the page by at least 1.25:1, the light values are unchanged, and the text on them reads at AA", () => {
+	const hex = (value) => [1, 3, 5].map((index) => parseInt(value.slice(index, index + 2), 16));
+	const luminance = (color) => {
+		const [r, g, b] = color.map((channel) => ((channel /= 255) <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4));
+		return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+	};
+	const ratio = (a, b) => {
+		const [high, low] = [luminance(hex(a)), luminance(hex(b))].sort((x, y) => y - x);
+		return (high + 0.05) / (low + 0.05);
+	};
+	const pair = (tokenPath) => byPath.get(tokenPath).resolved.match(/^light-dark\((.+?), (#[0-9a-f]{6})\)$/);
+	const dark = (tokenPath) => pair(tokenPath)[2];
+	assert.equal(pair("surface.raised")[1], "hsl(40, 14%, 96%)", "light raised is as it was");
+	assert.equal(pair("surface.code")[1], "hsl(40, 14%, 94%)", "light code is as it was");
+	assert.equal(pair("surface.base")[1], "#ffffff");
+	assert.ok(ratio(dark("surface.raised"), dark("surface.base")) >= 1.25, `raised on base ${ratio(dark("surface.raised"), dark("surface.base")).toFixed(2)}:1`);
+	assert.ok(ratio(dark("surface.code"), dark("surface.base")) >= 1.25, "code on base");
+	for (const name of ["text.base", "text.muted"]) assert.ok(ratio(dark(name), dark("surface.raised")) >= 4.5, `${name} on raised`);
+	for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number"]) assert.ok(ratio(dark(name), dark("surface.code")) >= 4.5, `${name} on code`);
+});
+
 test("the base styles draw one focus ring from the focus tokens, with no narrower exception, and one body line height", () => {
 	const base = squash(stylesheets.find(({ file }) => file === "webc-patterns/css/base.css").text);
 	assert.ok(base.includes("outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent,"), "the ring reads the width token");
@@ -306,7 +327,7 @@ test("the build writes the @supports not at-rule(@scope) copy of norn-rich-text 
 	const fallback = compiled.slice(compiled.lastIndexOf("@supports not at-rule(@scope)"));
 	assert.ok(fallback.startsWith("@supports not at-rule(@scope) { norn-rich-text { & :where(h2), & :where(h3)"), "the copy follows the scope");
 	assert.ok(fallback.includes("& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {"), "a pseudo-element stays outside");
-	assert.ok(/@media \(hover: hover\) \{ & :where\(:is\(h1, h2, h3, h4, h5, h6\):has\(> a\)\)::before/.test(fallback), "an at-rule inside is copied with its rules moved");
+	assert.ok(/@media \(hover: hover\) and \(min-width: 70rem\) \{ & :where\(:is\(h1, h2, h3, h4, h5, h6\):has\(> a\)\)::before/.test(fallback), "an at-rule inside is copied with its rules moved");
 	const scoped = compiled.slice(0, compiled.lastIndexOf("@supports not at-rule(@scope)"));
 	const rules = (css) => [...css.matchAll(/\{ ([^{}]*?) \}/g)].length;
 	assert.equal(rules(fallback.slice(fallback.indexOf("norn-rich-text {"))), rules(scoped.slice(scoped.indexOf("@scope"))) , "a rule for each rule");
@@ -318,6 +339,14 @@ test("the docs layouts share one title rule in norn-base, and norn-docs-home lis
 	const home = squash(styles(sources.find(({ file }) => file.endsWith("/layouts/norn-docs-home.webc")).text));
 	assert.ok(!/border-block-end|padding-block-end/.test(home), "no rule per item");
 	assert.ok(home.includes("gap: var(--norn-space-s,") && home.includes("dt a { text-decoration: none; &::after { content: \"\"; position: absolute; inset: 0;"), "a gap, and a link that fills its row");
+});
+
+test("norn-header folds its links into a closed details with a summary from the slot, the registry, then English", async () => {
+	const html = unid(await render('<norn-header><a href="/">Home</a></norn-header>'));
+	assert.ok(/<details>\s*<summary><span>Menu<\/span><\/summary>\s*<nav /.test(html) || html.includes("<summary>Menu</summary>"), "the links are inside a closed details");
+	assert.ok(unid(await render('<norn-header><span slot="summary">Pages</span><a href="/">Home</a></norn-header>')).includes("<summary><span>Pages</span></summary>"), "the slot");
+	assert.ok(unid(await render('<norn-header><a href="/">Home</a></norn-header>', { strings: { "norn-header": { summary: "Navigation" } } })).includes("<summary>Navigation</summary>"), "the registry");
+	assert.equal(defaultStrings["norn-header"].summary, "Menu");
 });
 
 test("norn-sidebar-layout folds its navigation into a closed details with a summary from the slot, the registry, then English", async () => {

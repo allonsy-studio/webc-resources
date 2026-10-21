@@ -7,7 +7,7 @@
  */
 
 /**
- * Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself shows its `#` while it is hovered or has focus, where the pointer can hover.
+ * Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself shows its `#` while it is hovered or has focus, where the pointer can hover and the page is at least 70rem wide. Elsewhere the `#` stays in line.
  * Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`.
  * @slot - The prose, as rendered HTML.
  * @cssprop --norn-rich-text-measure - Line length. Falls back to --norn-text-measure.
@@ -78,12 +78,12 @@
 				text-decoration: underline;
 			}
 
-			/* Where the pointer can hover, the # hangs in the margin and shows with the heading's hover and focus. */
-			@media (hover: hover) {
+			/* Where the pointer can hover and the margin has room (see norn-heading-anchor), the # hangs in it and shows with the heading's hover and focus. */
+			@media (hover: hover) and (min-width: 70rem) {
 				:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
 					display: inline-block;
 					inline-size: 1ch;
-					margin-inline: -1.25ch 0.25ch;
+					margin-inline: -1.15ch 0.15ch;
 					opacity: 0;
 				}
 

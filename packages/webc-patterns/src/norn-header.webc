@@ -10,8 +10,10 @@
  * Site header: the brand link, then the primary navigation.
  * Pass the brand as one element in the `brand` slot, such as `<a slot="brand" rel="home" href="/">Name</a>`, holding text or an `<img>` logo with alt text. A logo is sized by `--norn-header-logo`.
  * The default slot holds the navigation links, each an `<a>` that may start with a `norn-icon`. Without links there is no navigation landmark. The links are quiet until the pointer or focus is on one, and the one marked `aria-current` has the text color and a 2px accent line.
+ * When the header is narrower than 40rem, the links fold into a closed `<details>` at the end of the brand's row, under the `summary` text, and the open menu lists them full width. A browser without `::details-content` always shows the control.
  * @slot brand - The brand link, as one element.
  * @slot label - The navigation landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Primary".
+ * @slot summary - The text of the control that opens the links on a narrow header, as one element. Falls back to the site's `componentStrings`, then "Menu".
  * @slot - The navigation links.
  * @cssprop --norn-header-bg - Background. Falls back to --norn-surface-raised.
  * @cssprop --norn-header-fg - Brand color. Falls back to --norn-text-base.
@@ -24,12 +26,16 @@
 --->
 <header>
 	<slot name="brand"></slot>
-	<nav :aria-labelledby="'norn-header-' + uid"><span data-label :id="'norn-header-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-header', 'label', $data.page) || 'Primary'"></span></slot></span><slot></slot></nav>
+	<details>
+		<summary><slot name="summary"><span webc:nokeep @text="nornComponentStrings?.('norn-header', 'summary', $data.page) || 'Menu'"></span></slot></summary>
+		<nav :aria-labelledby="'norn-header-' + uid"><span data-label :id="'norn-header-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-header', 'label', $data.page) || 'Primary'"></span></slot></span><slot></slot></nav>
+	</details>
 </header>
 <style>
 	@layer norn.components {
 		norn-header {
 			display: block;
+			container-type: inline-size;
 
 			& > header {
 				position: relative;
@@ -68,18 +74,28 @@
 				block-size: var(--norn-header-logo, 2rem);
 			}
 
-			& > header > nav:not(:has(a)) {
+			/* Wide, the details is only a wrapper: its summary is hidden, and the navigation sits in the row. */
+			& > header > details {
+				display: contents;
+
+				&::details-content {
+					content-visibility: visible;
+					display: contents;
+				}
+			}
+
+			& > header > details > summary {
 				display: none;
 			}
 
-			& > header > nav {
+			& > header > details > nav {
 				display: flex;
 				flex-wrap: wrap;
 				gap: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
 				font-size: var(--norn-font-size-m, t('font.size.m'));
 			}
 
-			& > header > nav > [data-label] {
+			& > header > details > nav > [data-label] {
 				position: absolute;
 				inline-size: 1px;
 				block-size: 1px;
@@ -88,7 +104,7 @@
 				white-space: nowrap;
 			}
 
-			& > header > nav > a {
+			& > header > details > nav > a {
 				--_state: 0%;
 				box-sizing: border-box;
 				display: inline-flex;
@@ -117,33 +133,131 @@
 				}
 			}
 
+			/* Narrow, the links fold into a control at the end of the brand's row. Open, they take the full width below it. */
+			@container (max-width: 40rem) {
+				& > header {
+					row-gap: 0;
+				}
+
+				& > header > details:not([open])::details-content {
+					content-visibility: hidden;
+				}
+
+				& > header > details::details-content {
+					display: block;
+					flex: 1 0 100%;
+				}
+
+				& > header > details > nav {
+					flex-direction: column;
+					padding-block-start: var(--norn-space-xs, t('space.xs'));
+					flex-wrap: nowrap;
+					gap: 0;
+				}
+
+				& > header > details > nav > a {
+					padding-inline: var(--norn-space-s, t('space.s'));
+				}
+
+				& > header > details > summary {
+					--_state: 0%;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					gap: var(--norn-space-s, t('space.s'));
+					min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+					margin-inline-start: auto;
+					padding-inline: var(--norn-space-s, t('space.s'));
+					border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+					background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+					font-weight: 600;
+					list-style: none;
+					cursor: pointer;
+
+					&::-webkit-details-marker {
+						display: none;
+					}
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, t('ui.state.press'));
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+					}
+
+					/* A chevron drawn with two borders, pointing down when closed and up when open. */
+					&::after {
+						box-sizing: border-box;
+						content: "";
+						flex: none;
+						inline-size: 0.5em;
+						block-size: 0.5em;
+						border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						rotate: 45deg;
+					}
+				}
+
+				& > header > details[open] > summary::after {
+					rotate: 225deg;
+				}
+			}
+
 			@media (pointer: coarse) {
-				& > header > nav > a {
+				& > header > details > nav > a,
+				& > header > details > summary {
 					min-block-size: 2.75rem;
 				}
 			}
 
 			@media (prefers-reduced-motion: no-preference) {
-				& > header > nav > a {
+				& > header > details > nav > a,
+				& > header > details > summary {
 					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
 				}
 			}
 
 			/* A clear border would be drawn in the text color, so the links that aren't current take the page's. */
 			@media (forced-colors: active) {
-				& > header > nav > a {
+				& > header > details > nav > a {
 					border-block-end-color: Canvas;
 				}
 
-				& > header > nav > a[aria-current] {
+				& > header > details > nav > a[aria-current] {
 					border-block-end-color: Highlight;
+				}
+
+				& > header > details > summary::after {
+					border-color: CanvasText;
 				}
 			}
 
 			@media print {
-				& > header > nav {
+				& > header > details {
 					display: none;
 				}
+			}
+
+			/* Last, so a header with no links drops the whole control. */
+			& > header > details:not(:has(a)) {
+				display: none;
+			}
+		}
+
+		/* Without ::details-content a closed details can't show its links, so the control is always there. */
+		@supports not selector(::details-content) {
+			norn-header > header > details > summary {
+				display: flex;
+				align-items: center;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				margin-inline-start: auto;
+				font-weight: 600;
+				cursor: pointer;
 			}
 		}
 	}

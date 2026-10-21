@@ -8,7 +8,7 @@
 
 /**
  * Code sample tokenized at build time. Its script registers `norn-code-block` as a custom element that adds the highlight colors; without the script the markup is the whole sample.
- * A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. A caption, when there is one, sits above the code. The code reads left to right in any page direction.
+ * A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction.
  * Needs `tokenRanges` registered as the `nornTokenRanges` JavaScript function, and the patterns package's components.
  * The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button.
  * Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.
@@ -102,6 +102,20 @@ const nameOf = (language, label) =>
 				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
 				line-height: 1.5;
+			}
+
+			/* With the copy button showing, the code's scrolling area stops short of it. A transparent border is outside the scrolling area and under the background, so no code runs beneath the button. The button sits at the figure's end, and the code is always left to right, so a right-to-left page takes the border on the other side. */
+			& figure:has(> norn-copy-button > button:not([hidden])) {
+				--_chip: calc(2 * var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-2xs, t('space.2xs')) + var(--norn-space-xs, t('space.xs')));
+			}
+
+			& figure:has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: var(--_chip) solid transparent;
+			}
+
+			& figure:dir(rtl):has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: 0;
+				border-inline-start: var(--_chip) solid transparent;
 			}
 
 			& code {

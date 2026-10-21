@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* global document, getComputedStyle, matchMedia */
+/* global document, getComputedStyle, matchMedia, Range */
 
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -477,5 +477,160 @@ describe("the design pass, built from content with only the data a page names", 
 			await page.waitForTimeout(250);
 			assert.notEqual(await link.evaluate((element) => getComputedStyle(element).backgroundColor), rest);
 		});
+	});
+
+	test("at 390px the header's links fold into a closed details beside the brand, one row tall, and opening it shows every link", async () => {
+		await onPage(
+			"/header/",
+			async (page) => {
+				const details = page.locator("norn-header > header > details");
+				assert.equal(await details.evaluate((element) => element.open), false, "closed");
+				assert.equal(await details.locator("nav a").count(), 5, "the links are inside it");
+				const summary = page.locator("norn-header > header > details > summary");
+				assert.equal((await summary.textContent()).trim(), "Menu");
+				const brand = await page.locator("norn-header > header > a[rel=home]").boundingBox();
+				const control = await summary.boundingBox();
+				const header = await page.locator("norn-header > header").boundingBox();
+				assert.ok(control.y < brand.y + brand.height && brand.y < control.y + control.height, "the brand and the summary share a row");
+				assert.ok(control.x > brand.x + brand.width, "the summary is after the brand");
+				assert.ok(Math.abs(control.x + control.width - (header.x + header.width)) < 24, "at the end");
+				assert.ok(header.height < 70, `one row tall (${header.height}px)`);
+				await summary.click();
+				await page.waitForTimeout(250);
+				const rows = await details.locator("nav a").evaluateAll((links) => links.map((link) => link.getBoundingClientRect()).map(({ x, y, width, height }) => ({ x, y, width, height })));
+				assert.equal(rows.length, 5);
+				for (const row of rows) assert.ok(row.width > 300 && row.height >= 36, "full width rows");
+				assert.ok(new Set(rows.map((row) => Math.round(row.y))).size === 5, "one under another");
+				assert.equal(await page.locator("norn-header nav a[aria-current]").evaluate((link) => getComputedStyle(link).borderBottomWidth), "2px", "the current link keeps its line");
+			},
+			{ viewport: { width: 390, height: 800 } },
+		);
+	});
+
+	test("at 390px with a coarse pointer the open menu's rows are 44px", async () => {
+		await onPage(
+			"/header/",
+			async (page) => {
+				await page.locator("norn-header summary").click();
+				const heights = await page.locator("norn-header nav a").evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+				for (const height of heights) assert.ok(height >= 44, `${height}px`);
+			},
+			{ viewport: { width: 390, height: 800 }, hasTouch: true, isMobile: true },
+		);
+	});
+
+	test("at 1280px the header shows no summary and its links sit in one row", async () => {
+		await onPage("/header/", async (page) => {
+			assert.equal(await page.locator("norn-header summary").isVisible(), false);
+			const tops = await page.locator("norn-header nav a").evaluateAll((links) => links.map((link) => Math.round(link.getBoundingClientRect().top)));
+			assert.equal(tops.length, 5);
+			assert.equal(new Set(tops).size, 1, "one row");
+			assert.ok((await page.locator("norn-header > header").boundingBox()).height < 70);
+		});
+	});
+
+	test("at 390px no code sits under the copy button: the code's scrolling area stops short of it", async () => {
+		await onPage(
+			"/overflow/",
+			async (page) => {
+				const button = page.locator("norn-code-block norn-copy-button button");
+				await button.waitFor({ state: "visible" });
+				const chip = await button.boundingBox();
+				const area = await page.locator("norn-code-block pre").evaluate((pre) => {
+					const box = pre.getBoundingClientRect();
+					return { left: box.left + pre.clientLeft, right: box.left + pre.clientLeft + pre.clientWidth };
+				});
+				assert.ok(chip.x >= area.right || chip.x + chip.width <= area.left, `the button (${chip.x}-${chip.x + chip.width}) is outside the code's area (${area.left}-${area.right})`);
+				const first = await page.locator("norn-code-block code").evaluate((code) => {
+					const range = new Range();
+					range.selectNodeContents(code.firstChild);
+					const rect = range.getClientRects()[0];
+					const pre = code.closest("pre");
+					return { right: rect.right, scrolls: pre.scrollWidth > pre.clientWidth };
+				});
+				assert.ok(first.scrolls && first.right > chip.x, "the first line is long, and still scrolls");
+			},
+			{ viewport: { width: 390, height: 800 } },
+		);
+	});
+
+	test("the code block keeps the button clear on the matching side in a right-to-left page", async () => {
+		await onPage(
+			"/overflow/",
+			async (page) => {
+				await page.evaluate(() => document.documentElement.setAttribute("dir", "rtl"));
+				const chip = await page.locator("norn-code-block norn-copy-button button").boundingBox();
+				const area = await page.locator("norn-code-block pre").evaluate((pre) => {
+					const box = pre.getBoundingClientRect();
+					return { left: box.left + pre.clientLeft, right: box.left + pre.clientLeft + pre.clientWidth };
+				});
+				assert.ok(chip.x + chip.width <= area.left, "the button is at the start edge, outside the code's area");
+			},
+			{ viewport: { width: 390, height: 800 } },
+		);
+	});
+
+	/** Where each hung `#` starts, against the left edge of the heading's link: the mark's box is the link's start minus its width and end margin. */
+	const marks = (page) =>
+		page.evaluate(() =>
+			[...document.querySelectorAll("main h2, main h3")]
+				.filter((heading) => heading.querySelector(":scope > a"))
+				.map((heading) => {
+					const style = getComputedStyle(heading, "::before");
+					const link = heading.querySelector(":scope > a").getBoundingClientRect();
+					const edge = heading.closest("norn-rich-text, norn-section, main").getBoundingClientRect();
+					const hangs = parseFloat(style.marginLeft) < 0;
+					return { id: heading.id, left: hangs ? link.left - parseFloat(style.marginRight) - parseFloat(style.width) : heading.getBoundingClientRect().left, hangs, frame: edge.left };
+				}),
+		);
+
+	test("at 320px the heading mark stays inside its frame, in a heading anchor and in prose", async () => {
+		await onPage(
+			"/anchors/",
+			async (page) => {
+				const found = await marks(page);
+				assert.equal(found.length, 3);
+				for (const mark of found) {
+					assert.ok(mark.left >= 0 && mark.left >= mark.frame - 0.01, `${mark.id}: the mark starts at ${mark.left}px, inside the frame at ${mark.frame}px`);
+					assert.equal(mark.hangs, false, `${mark.id}: in line`);
+				}
+			},
+			{ viewport: { width: 320, height: 800 } },
+		);
+	});
+
+	test("at 1280px the heading mark still hangs in the margin, and stays on the page", async () => {
+		await onPage("/anchors/", async (page) => {
+			const found = await marks(page);
+			assert.equal(found.length, 3);
+			for (const mark of found) {
+				assert.ok(mark.hangs, `${mark.id}: hangs`);
+				assert.ok(mark.left >= 0, `${mark.id}: starts at ${mark.left}px`);
+			}
+		});
+	});
+
+	/** The dark values of the surfaces and the text on them, as the browser draws them. */
+	test("in dark, the raised and code surfaces stand apart from the page at 1.25:1 or more, and the text on them reads at AA", async () => {
+		await onPage(
+			"/docs/",
+			async (page) => {
+				const read = async (name, property = "color") => rgbOf(page, await resolveColor(page, token(name), property));
+				const base = await read("surface.base", "background-color");
+				const raised = await read("surface.raised", "background-color");
+				const code = await read("surface.code", "background-color");
+				assert.ok(ratio(raised, base) >= 1.25, `raised on base ${ratio(raised, base).toFixed(2)}:1`);
+				assert.ok(ratio(code, base) >= 1.25, `code on base ${ratio(code, base).toFixed(2)}:1`);
+				for (const name of ["text.base", "text.muted", "text.accent"]) {
+					const value = ratio(await read(name), raised);
+					assert.ok(value >= 4.5, `${name} on raised ${value.toFixed(2)}:1`);
+				}
+				for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number"]) {
+					const value = ratio(await read(name), code);
+					assert.ok(value >= 4.5, `${name} on code ${value.toFixed(2)}:1`);
+				}
+			},
+			{ colorScheme: "dark" },
+		);
 	});
 });
