@@ -4,7 +4,7 @@ title: Component kit
 description: The small components, one of each.
 ---
 <h1>Component kit</h1>
-<norn-breadcrumb-nav :@items="[{ url: '/', title: 'Home' }, { url: '/docs/one/', title: 'Docs' }, { url: '/kit/', title: 'Component kit' }]"></norn-breadcrumb-nav>
+<norn-breadcrumbs :@items="[{ url: '/', title: 'Home' }, { url: '/docs/one/', title: 'Docs' }, { url: '/kit/', title: 'Component kit' }]"></norn-breadcrumbs>
 <norn-search @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
 <norn-toc :@items="[{ id: 'anchors', text: 'Anchors', level: 2 }, { id: 'deeper', text: 'Deeper', level: 3 }]"></norn-toc>
 <norn-heading-anchor @slug="anchors">Anchors</norn-heading-anchor>

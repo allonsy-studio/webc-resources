@@ -81,7 +81,7 @@ const STRINGS = {
 	},
 	"norn-workspace": { nav: "Packages" },
 	"norn-workspaces-home": { actions: "Get started", browse: "Browse packages", repo: "View on GitHub", packages: "Packages" },
-	"norn-breadcrumb-nav": { label: "Breadcrumb" },
+	"norn-breadcrumbs": { label: "Breadcrumb" },
 	"norn-callout": { note: "Note", tip: "Tip", important: "Important", warning: "Warning", caution: "Caution" },
 	"norn-code-block": { label: "{language} code", "copy-label": "Copy {name} to clipboard" },
 	"norn-code-tabs": { label: "Code samples", sample: "Sample {n}" },

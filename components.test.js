@@ -692,7 +692,7 @@ test("a string comes from the slot, else the registry, else the English default"
 	assert.ok((await render(`<norn-skip-link>${slot}</norn-skip-link>`, { strings: FRENCH })).includes("><span>Sauter</span></a>"), "the slot wins over the registry");
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings: FRENCH })).includes(">Aller au contenu</a>"), "the registry fills an empty slot");
 	assert.ok((await render("<norn-skip-link></norn-skip-link>")).includes(">Skip to content</a>"), "no helper registered");
-	assert.ok(unid(await render("<norn-breadcrumb-nav :@items=\"[{ url: '/', title: 'Accueil' }]\"></norn-breadcrumb-nav>", { strings: FRENCH })).includes("<span data-label>Breadcrumb</span>"), "a string the table leaves out keeps the English default");
+	assert.ok(unid(await render("<norn-breadcrumbs :@items=\"[{ url: '/', title: 'Accueil' }]\"></norn-breadcrumbs>", { strings: FRENCH })).includes("<span data-label>Breadcrumb</span>"), "a string the table leaves out keeps the English default");
 	const notice = await render('<norn-notice @severity="error"><span slot="prefix">Erreur : </span><p>x</p></norn-notice>', { strings: FRENCH });
 	assert.ok(notice.includes("<span data-prefix><span>Erreur : </span></span>"));
 	const callout = await render('<norn-callout @variant="tip"><span slot="heading">Conseil</span><p>x</p></norn-callout>', { strings: FRENCH });

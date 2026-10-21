@@ -380,7 +380,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
 | `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view. Folds under its title when `--norn-toc-fold: on` is set |
-| `norn-breadcrumb-nav` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
+| `norn-breadcrumbs` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |
 | `norn-icon` | `@name`, slot `label` | An inline icon from a built-in set or the plugin's `icons` option. Decorative unless it has a label; directional icons mirror in right-to-left text |
@@ -429,7 +429,7 @@ config.addPlugin(norn, {
 
 A layout has no caller to fill a slot, so its texts are keys of their own under the layout's name: `norn-landing`'s `start` ("Get started") and `license` ("License: {license}"), `norn-base`'s `license` ("Licensed under {license}"), and so on. `defaultStrings` lists every component, layout, and key with its English default. A key is the slot it fills; `norn-callout`'s `heading` and `norn-notice`'s `prefix` take one key per variant or severity, and `norn-code-block` reads its button texts from the `norn-copy-button` keys. An unknown component or key fails the build with the list of valid ones. For a site in several languages, key the tables by language tag, as `{ fr: { … }, de: { … } }`: each page picks its table by `page.lang`, which [Eleventy's i18n plugin](https://www.11ty.dev/docs/plugins/i18n/) sets from the URL (`/fr/…`), and `fr-CA` falls back to `fr`. `norn-base` sets `<html lang>` from the `lang` prop, which falls back to `page.lang`. Then:
 
-- A landmark names itself with `aria-labelledby`, pointing at its own text: the title of `norn-toc`, or visually hidden text in `norn-header`, `norn-side-nav`, `norn-pager`, and `norn-breadcrumb-nav`.
+- A landmark names itself with `aria-labelledby`, pointing at its own text: the title of `norn-toc`, or visually hidden text in `norn-header`, `norn-side-nav`, `norn-pager`, and `norn-breadcrumbs`.
 - Text only a script shows sits in the page as hidden elements that the script reads: `norn-copy-button`'s texts, `norn-search`'s statuses, `norn-theme-toggle`'s names, and `norn-code-tabs`'s fallback tab name.
 - `norn-search` picks `results-one`, `results-other`, or another plural form with `Intl.PluralRules` for the nearest `lang`, and formats the count for it. `{count}` stands in for the number. An empty form falls back to `results-other`.
 - `norn-notice`'s `prefix` carries its own punctuation, as in `"Remarque : "`.

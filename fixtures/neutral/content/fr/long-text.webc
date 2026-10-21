@@ -37,7 +37,7 @@ frame:
 		</norn-search>
 	</norn-side-nav>
 	<h1>Un titre de page extraordinairement long, avec des mots accentués comme écoresponsabilité et hétérogénéité</h1>
-	<norn-breadcrumb-nav
+	<norn-breadcrumbs
 		:@items="[
 			{ url: '/', title: 'Accueil du laboratoire de développement des composants' },
 			{ url: '/docs/one/', title: 'Documentation complète et détaillée des composants accessibles' },
@@ -46,7 +46,7 @@ frame:
 		]"
 	>
 		<span slot="label">Fil d’Ariane montrant le chemin complet jusqu’à la page courante</span>
-	</norn-breadcrumb-nav>
+	</norn-breadcrumbs>
 	<norn-toc :@items="[{ id: 'avis', text: 'Des avis et des encadrés dont les titres sont particulièrement longs', level: 2 }, { id: 'onglets', text: 'Onglets de code aux noms interminables', level: 2 }, { id: 'sous-titre', text: 'Un sous-titre tout aussi long que les autres entrées', level: 3 }, { id: 'cartes', text: 'Cartes', level: 2 }]">
 		<span slot="label">Sommaire de la page, avec un titre qui occupe plusieurs lignes</span>
 	</norn-toc>

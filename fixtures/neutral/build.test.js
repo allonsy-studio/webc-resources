@@ -275,7 +275,7 @@ describe("neutral fixture build", () => {
 		assert.ok(!pages.three.includes("On this page"), "no contents for a page with fewer than two headings");
 	});
 
-	test("norn-heading-anchor renders the heading at its level, and norn-breadcrumb-nav marks the current page", () => {
+	test("norn-heading-anchor renders the heading at its level, and norn-breadcrumbs marks the current page", () => {
 		assert.ok(pages.kit.includes('<h2 id="anchors"><a href="#anchors">Anchors</a></h2>'));
 		assert.ok(pages.kit.includes('<h3 id="deeper"><a href="#deeper">Deeper</a></h3>'));
 		const start = labelledBy(pages.kit, "nav", "Breadcrumb");
