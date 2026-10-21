@@ -633,4 +633,37 @@ describe("the design pass, built from content with only the data a page names", 
 			{ colorScheme: "dark" },
 		);
 	});
+
+	test("a callout is a raised panel with no bar and no tint, and its eyebrow label reads at AA on the panel for every variant in light and dark", async () => {
+		for (const colorScheme of ["light", "dark"]) {
+			await onPage(
+				"/callouts/",
+				async (page) => {
+					const raised = await rgbOf(page, await resolveColor(page, token("surface.raised"), "background-color"));
+					for (const id of ["note", "tip", "important", "warning", "caution"]) {
+						const panel = await page.locator(`#${id} > div`).evaluate((element) => ({ background: getComputedStyle(element).backgroundColor, bar: getComputedStyle(element).borderInlineStartWidth, label: getComputedStyle(element.querySelector("p")).color, transform: getComputedStyle(element.querySelector("p")).textTransform }));
+						assert.deepEqual(await rgbOf(page, panel.background), raised, `${colorScheme} ${id}: the raised fill`);
+						assert.equal(panel.bar, "0px", `${id}: no bar`);
+						assert.equal(panel.transform, "uppercase", `${id}: an eyebrow`);
+						const value = ratio(await rgbOf(page, panel.label), raised);
+						assert.ok(value >= 4.5, `${colorScheme} ${id}: the label is ${value.toFixed(2)}:1`);
+					}
+				},
+				{ colorScheme },
+			);
+		}
+	});
+
+	test("in forced colors a callout's panel has a border, since its fill is replaced", async () => {
+		await onPage(
+			"/callouts/",
+			async (page) => {
+				for (const id of ["note", "warning"]) {
+					const panel = await page.locator(`#${id} > div`).evaluate((element) => ({ style: getComputedStyle(element).borderTopStyle, width: getComputedStyle(element).borderTopWidth }));
+					assert.equal(`${panel.style} ${panel.width}`, "solid 1px", id);
+				}
+			},
+			{ colorScheme: "light", forcedColors: "active" },
+		);
+	});
 });

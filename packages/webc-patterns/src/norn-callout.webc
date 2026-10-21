@@ -7,13 +7,13 @@
  */
 
 /**
- * An aside within prose: a note, tip, important point, warning, or caution, with an icon and a title, and the body in the default slot.
- * The kinds match GitHub's alerts. `callouts` in `@allons-y/webc-patterns/markdown` writes the same markup for a Markdown `> [!NOTE]` blockquote. Its role is `note`: it is not a landmark.
+ * An aside in long-form text, set apart like a pull quote: a short label with an icon over the body, on a quiet raised panel. Use it for a fun fact, a tip, or a point worth a pause. It is not a status message: use `norn-notice` for one.
+ * The kinds match GitHub's alerts and differ only in the label's color, its default text, and its icon. `callouts` in `@allons-y/webc-patterns/markdown` writes the same markup for a Markdown `> [!NOTE]` blockquote. Its role is `note`: it is not a landmark.
  * @prop {string} [variant] - `note`, `tip`, `important`, `warning`, or `caution`. Falls back to `note`.
- * @slot heading - The title, as one element, such as `<span slot="heading">Careful</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
+ * @slot heading - The label over the body, as one element, such as `<span slot="heading">Did you know?</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
  * @slot - The body.
- * @cssprop --norn-callout-color - The bar, icon, and title color. Falls back to a status color per variant, and to --norn-text-accent for `important`.
- * @cssprop --norn-callout-bg - Background. Falls back to a tint of the color.
+ * @cssprop --norn-callout-color - The label, icon, and rule color. Falls back to --norn-text-accent for `note` and `important`, and to a status color for the others.
+ * @cssprop --norn-callout-bg - Background. Falls back to --norn-surface-raised.
  * @category container
  */
 --->
@@ -30,15 +30,11 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 <style>
 	@layer norn.components {
 		norn-callout {
-			--_color: var(--norn-callout-color, var(--norn-status-info, t('status.info')));
+			--_color: var(--norn-callout-color, var(--norn-text-accent, t('text.accent')));
 			display: block;
 
 			&:has(> [data-variant="tip"]) {
 				--_color: var(--norn-callout-color, var(--norn-status-success, t('status.success')));
-			}
-
-			&:has(> [data-variant="important"]) {
-				--_color: var(--norn-callout-color, var(--norn-text-accent, t('text.accent')));
 			}
 
 			&:has(> [data-variant="warning"]) {
@@ -49,41 +45,62 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 				--_color: var(--norn-callout-color, var(--norn-status-danger, t('status.danger')));
 			}
 
-			/* A tint and a bar, as in norn-notice. */
+			/* A quiet raised panel: a short rule, a small label, then the body set like a pull quote. */
 			& > div {
 				display: grid;
 				grid-template-columns: minmax(0, 1fr);
-				gap: var(--norn-space-2xs, t('space.2xs'));
-				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
+				gap: var(--norn-space-s, t('space.s'));
+				padding: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
 				overflow-wrap: anywhere;
-				border-inline-start: 3px solid var(--_color);
-				border-start-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				border-end-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-callout-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base'))));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-callout-bg, var(--norn-surface-raised, t('surface.raised')));
+				color: var(--norn-text-base, t('text.base'));
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+				line-height: 1.4;
+				text-wrap: pretty;
+
+				&::before {
+					content: "";
+					inline-size: 2rem;
+					block-size: 2px;
+					background: var(--_color);
+				}
 			}
 
 			& > div > p:first-child {
 				display: flex;
-				align-items: start;
+				align-items: center;
 				gap: var(--norn-space-xs, t('space.xs'));
 				margin: 0;
 				color: var(--_color);
+				font-family: var(--norn-font-body, t('font.body'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 				font-weight: 600;
+				letter-spacing: 0.08em;
+				line-height: 1.15;
+				text-transform: uppercase;
 			}
 
 			& > div > p:first-child > norn-icon {
-				--norn-icon-size: var(--norn-ui-icon-m, t('ui.icon.m'));
 				flex: none;
-				margin-block-start: calc((1lh - var(--norn-ui-icon-m, t('ui.icon.m'))) / 2);
 			}
 
 			& > div > :not(:first-child) {
 				margin: 0;
 			}
 
+			/* A fill that forced colors replaces still shows as a border. */
 			@media (forced-colors: active) {
 				& > div {
-					border-inline-start-color: CanvasText;
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				& > div {
+					border: 1px solid currentcolor;
+					background: none;
 				}
 			}
 		}

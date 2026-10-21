@@ -90,10 +90,12 @@ describe("the component fixes, built from content with only the data a page name
 
 	test("a callout or a notice inside another keeps its own color, and the one around it keeps its", async () => {
 		await onPage("/nested/", async (page) => {
+			// A callout draws its color in the label, a notice in its bar.
 			const rule = (selector) => computed(page, selector, ["borderInlineStartColor"]);
-			assert.deepEqual(await rule("#note-outer > div"), await rule("#note-alone > div"), "a note around a tip is still a note");
-			assert.deepEqual(await rule("#tip-inner > div"), await rule("#tip-alone > div"), "and the tip inside it is a tip");
-			assert.notDeepEqual(await rule("#note-alone > div"), await rule("#tip-alone > div"), "the two differ");
+			const label = (selector) => computed(page, `${selector} > div > p:first-child`, ["color"]);
+			assert.deepEqual(await label("#note-outer"), await label("#note-alone"), "a note around a tip is still a note");
+			assert.deepEqual(await label("#tip-inner"), await label("#tip-alone"), "and the tip inside it is a tip");
+			assert.notDeepEqual(await label("#note-alone"), await label("#tip-alone"), "the two differ");
 			assert.deepEqual(await rule("#info-outer > div"), await rule("#info-alone > div"), "information around a warning is still information");
 			assert.deepEqual(await rule("#warning-inner > div"), await rule("#warning-alone > div"), "and the warning inside it is a warning");
 			assert.notDeepEqual(await rule("#info-alone > div"), await rule("#warning-alone > div"), "the two differ");

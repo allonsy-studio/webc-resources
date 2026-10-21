@@ -221,17 +221,22 @@ test("the base styles draw one focus ring from the focus tokens, with no narrowe
 	assert.ok(!/(^|[ }])p \{/.test(base), "the paragraph takes the body's line height");
 });
 
-test("norn-callout and norn-notice share the status tokens and one recipe: a tint and a 3px bar, with no border on the notice", () => {
+test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-callout is a quiet raised panel with an eyebrow label", () => {
 	const [callout, notice] = ["norn-callout", "norn-notice"].map((name) => squash(styles(sources.find(({ file }) => file === `webc-patterns/src/${name}.webc`).text)));
-	for (const [label, css] of [["norn-callout", callout], ["norn-notice", notice]]) {
-		assert.ok(!/light-dark\(#/.test(css), `${label}: no hard-coded color pair`);
-		assert.ok(css.includes("border-inline-start: 3px solid var(--_color)"), `${label}: the bar`);
-		assert.ok(css.includes("color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base,"), `${label}: the tint`);
-		assert.ok(!/border: |border-inline-start-width|border-color/.test(css.replace(/@media \(forced-colors: active\) \{.*$/, "")), `${label}: no other border`);
-	}
-	for (const status of ["info", "success", "warning", "danger"]) assert.ok(callout.includes(`t('status.${status}')`), `norn-callout reads status.${status}`);
+	assert.ok(!/light-dark\(#/.test(notice), "norn-notice: no hard-coded color pair");
+	assert.ok(notice.includes("border-inline-start: 3px solid var(--_color)"), "norn-notice: the bar");
+	assert.ok(notice.includes("color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base,"), "norn-notice: the tint");
+	assert.ok(!/border: |border-inline-start-width|border-color/.test(notice.replace(/@media \(forced-colors: active\) \{.*$/, "")), "norn-notice: no other border");
 	for (const status of ["info", "success", "warning", "danger"]) assert.ok(notice.includes(`t('status.${status}')`), `norn-notice reads status.${status}`);
-	assert.ok(callout.includes("--norn-text-accent, t('text.accent')") && !callout.includes("#6b2fc2"), "important maps to the accent");
+	const screen = callout.replace(/\/\*.*?\*\//g, "").replace(/@media print \{.*$/, "").replace(/@media \(forced-colors: active\) \{.*?\} \}/, "");
+	assert.ok(!screen.includes("3px"), "norn-callout: no bar");
+	assert.ok(!/color-mix\(/.test(screen), "norn-callout: no tint");
+	assert.ok(!/(?:^|[;{ ])border(?!-radius)[a-z-]*:/.test(screen), "norn-callout: no border");
+	assert.ok(callout.includes("background: var(--norn-callout-bg, var(--norn-surface-raised, t('surface.raised')))"), "norn-callout: the raised fill");
+	assert.ok(/text-transform: uppercase/.test(callout) && callout.includes("font-size: var(--norn-font-size-s, t('font.size.s'))") && callout.includes("font-weight: 600"), "norn-callout: the eyebrow label");
+	assert.ok(callout.includes("font-size: var(--norn-font-size-l, t('font.size.l'))"), "norn-callout: the body at the large step");
+	assert.ok(callout.includes("--norn-text-accent, t('text.accent')") && !callout.includes("#6b2fc2"), "note and important take the accent");
+	for (const status of ["success", "warning", "danger"]) assert.ok(callout.includes(`t('status.${status}')`), `norn-callout reads status.${status}`);
 });
 
 /** A source's CSS, squashed, by component name. */

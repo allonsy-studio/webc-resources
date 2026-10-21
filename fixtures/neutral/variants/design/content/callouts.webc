@@ -1,0 +1,13 @@
+---
+layout: norn-base.webc
+title: Callouts
+name: Design pass
+---
+<h1>Callouts</h1>
+<norn-rich-text>
+	<norn-callout id="note"><span slot="heading">Did you know?</span><p>A fact worth a pause.</p></norn-callout>
+	<norn-callout id="tip" @variant="tip"><p>A faster way.</p></norn-callout>
+	<norn-callout id="important" @variant="important"><p>Something to know.</p></norn-callout>
+	<norn-callout id="warning" @variant="warning"><p>Needs attention.</p></norn-callout>
+	<norn-callout id="caution" @variant="caution"><p>Cannot be undone.</p></norn-callout>
+</norn-rich-text>

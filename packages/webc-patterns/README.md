@@ -376,7 +376,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-copy-button` | `@value` or `@source` (an id), `:@compact`, slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |
 | `norn-simple-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, with a shadow at the edge that has more, and a tab stop named by the caption while it scrolls |
 | `norn-notice` | `@severity` (`info`, `success`, `warning`, `error`), `:@live`, default slot, slots `prefix` and `action` | A message about the page, with an icon and a severity word read first |
-| `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | A note within prose, as `role="note"` |
+| `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | An aside in long-form text, set like a pull quote on a raised panel with an eyebrow label, as `role="note"`. For a status message, use `norn-notice` |
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
 | `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view. Folds under its title when `--norn-toc-fold: on` is set |
