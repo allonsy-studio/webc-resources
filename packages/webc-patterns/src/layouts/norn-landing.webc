@@ -34,7 +34,7 @@ layout: norn-base.webc
 		<span id="norn-landing-actions" hidden @text="nornComponentStrings?.('norn-landing', 'actions', $data.page) || 'Get started'"></span>
 		<ul role="list">
 			<li webc:if="$data.norn.install"><norn-link-button @href="#install"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'start', $data.page) || 'Get started'"></span></norn-link-button></li>
-			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.install ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.install ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-landing', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
 	<norn-fact-list>

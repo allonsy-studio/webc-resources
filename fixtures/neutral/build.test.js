@@ -238,7 +238,7 @@ describe("neutral fixture build", () => {
 		const [, actions] = pages.index.match(/<nav aria-label="Get started">([\s\S]*?)<\/nav>/);
 		assert.equal((actions.match(/<a /g) ?? []).length, 2);
 		assert.ok(actions.includes('<a href="#features" data-variant="primary">Get started</a>'));
-		assert.ok(actions.includes('<a href="https://example.com/source" data-variant="quiet">View the source</a>'));
+		assert.ok(actions.includes('<a href="https://example.com/source" data-variant="secondary">View the source</a>'));
 		assert.ok(pages.index.includes("<li>Free &amp; open source</li>") || pages.index.includes("<li>Free & open source</li>"));
 	});
 

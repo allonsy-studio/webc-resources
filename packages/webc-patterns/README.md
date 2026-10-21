@@ -369,7 +369,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-sidebar-layout` | slot `nav`, default slot (the body, from its h1) | Navigation column beside a page body. The navigation stays in view; the columns stack below 37.5rem |
 | `norn-rich-text` | default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
-| `norn-link-button` | `@href`, `@variant` (`primary` or `quiet`), default slot | A link styled as a button, for a call to action |
+| `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), default slot | A link styled as a button, for a call to action |
 | `norn-fact-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |
 | `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The thumb slides unless motion is reduced |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |

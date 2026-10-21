@@ -29,7 +29,7 @@
 	</div>
 	<ul role="list">
 		<li><norn-link-button @href="https://scheduler.zoom.us/allonsy-studio/discovery">Book a discovery call</norn-link-button></li>
-		<li><norn-link-button @href="mailto:consulting@allons-y.studio" @variant="quiet">Email the studio</norn-link-button></li>
+		<li><norn-link-button @href="mailto:consulting@allons-y.studio" @variant="secondary">Email the studio</norn-link-button></li>
 	</ul>
 </section>
 <style>
@@ -43,7 +43,6 @@
 			--norn-link-button-on-accent: var(--oss-navy);
 			--norn-link-button-link: var(--oss-link);
 			--norn-link-button-border: var(--oss-link);
-			--norn-link-button-border-width: 2px;
 			display: block;
 			container-type: inline-size;
 			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), 64rem);

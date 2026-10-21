@@ -30,7 +30,7 @@ layout: norn-base.webc
 		<span id="norn-workspaces-home-actions" hidden @text="nornComponentStrings?.('norn-workspaces-home', 'actions', $data.page) || 'Get started'"></span>
 		<ul role="list">
 			<li webc:if="$data.norn.workspaces.length"><norn-link-button @href="#packages"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces-home', 'browse', $data.page) || 'Browse packages'"></span></norn-link-button></li>
-			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.workspaces.length ? 'quiet' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.workspaces.length ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
 	<template webc:nokeep>

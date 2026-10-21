@@ -110,7 +110,7 @@ test("the brand tokens set only custom properties, in the norn.oss layer", () =>
 	assert.ok(css.trim().startsWith("@layer norn.oss {\n\t:root {"));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
 	assert.ok(declarations.length > 8 && declarations.every((name) => name.startsWith("--norn-")), declarations.join(", "));
-	for (const name of ["--norn-font-mono", "--norn-feature-1", "--norn-code-block-dot-1", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
+	for (const name of ["--norn-font-mono", "--norn-feature-1", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
 });
 
 test("fonts: a forward-slash folder holding the four woff2 files", () => {

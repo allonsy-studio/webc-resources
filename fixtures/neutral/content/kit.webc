@@ -19,7 +19,7 @@ description: The small components, one of each.
 <h2>Link buttons</h2>
 <p>
 	<norn-link-button @href="/docs/one/">Read the docs <norn-icon @name="arrow-end"></norn-icon></norn-link-button>
-	<norn-link-button @href="https://example.com/source" @variant="quiet">Source</norn-link-button>
+	<norn-link-button @href="https://example.com/source" @variant="secondary">Source</norn-link-button>
 </p>
 <h2>Tags</h2>
 <norn-fact-list>

@@ -45,7 +45,7 @@ describe("the catalog", () => {
 
 	test("parses props, slots, and custom properties out of the JSDoc", () => {
 		const button = catalog.components.find(({ name }) => name === "norn-link-button");
-		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent, or <code>quiet</code>, an outline. Falls back to <code>primary</code>." });
+		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border. Falls back to <code>primary</code>." });
 		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
 		assert.ok(button.cssprops.some(({ name }) => name === "--norn-link-button-accent"));
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
@@ -113,7 +113,7 @@ describe("the preview build", () => {
 
 	test("a component page shows its docs, each from the JSDoc", () => {
 		const html = pageFor(output, "/components/patterns/norn-link-button/");
-		assert.ok(html.includes("<code>@variant</code>") && html.includes("a filled accent, or <code>quiet</code>, an outline."));
+		assert.ok(html.includes("<code>@variant</code>") && html.includes("a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border."));
 		assert.ok(html.includes("<code>--norn-link-button-accent</code>"));
 		assert.ok(pageFor(output, "/components/patterns/norn-footer/").includes("<code>colophon</code>"));
 		assert.ok(html.includes("<norn-code-block"), "the source is shown with norn-code-block");
@@ -467,7 +467,7 @@ describe("the preview in a browser", () => {
 		const height = (selector) => page.locator(selector).first().evaluate((element) => element.getBoundingClientRect().height);
 		assert.equal(Math.round(await height("preview-nav a")), 29, "nav links");
 		assert.ok((await height("preview-canvas p a")) < 24, "open on its own");
-		assert.equal(await height("preview-canvas norn-segmented-control label"), 36, "toolbar options");
+		assert.equal(await height("preview-canvas norn-segmented-control fieldset"), 36, "toolbar options");
 		assert.equal(await height("preview-canvas button"), 36, "the check button");
 		await page.close();
 	});
@@ -510,25 +510,26 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	test("the scheme thumb slides to the selection, and holds still when motion is reduced", async () => {
-		for (const [reducedMotion, transition] of [["no-preference", "translate"], ["reduce", "all"]]) {
-			const context = await browser.newContext({ reducedMotion, viewport: { width: 1280, height: 900 } });
-			const page = await context.newPage();
-			await page.goto(server.url + "/components/patterns/norn-card/");
-			const canvas = page.locator("preview-canvas").first();
-			const thumb = () => canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => getComputedStyle(fieldset, "::before"));
-			assert.equal((await thumb()).transitionProperty, transition, reducedMotion);
-			const offset = () => canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => Number(getComputedStyle(fieldset).getPropertyValue("--_index")));
-			const system = await offset();
-			await pick(canvas, "scheme", "Dark");
-			await page.waitForTimeout(300);
-			const dark = await offset();
-			await pick(canvas, "scheme", "Light");
-			await page.waitForTimeout(300);
-			const light = await offset();
-			assert.deepEqual([light, system, dark], [0, 1, 2], "the thumb's slot follows the checked option");
-			await context.close();
-		}
+	test("the scheme control tints the selected option and follows the selection, with no thumb", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		const canvas = page.locator("preview-canvas").first();
+		assert.ok(["none", "normal"].includes(await canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => getComputedStyle(fieldset, "::before").content)), "no thumb");
+		/** The options that have a tint behind them, by title. */
+		const tinted = () =>
+			canvas.locator('[data-group="scheme"] label').evaluateAll((labels) =>
+				labels.filter((label) => !/(, 0|\/ 0)\)$/.test(getComputedStyle(label).backgroundColor)).map((label) => label.title),
+			);
+		assert.deepEqual(await tinted(), ["System"]);
+		await pick(canvas, "scheme", "Dark");
+		await page.mouse.move(0, 0);
+		await page.waitForTimeout(300);
+		assert.deepEqual(await tinted(), ["Dark"]);
+		await pick(canvas, "scheme", "Light");
+		await page.mouse.move(0, 0);
+		await page.waitForTimeout(300);
+		assert.deepEqual(await tinted(), ["Light"]);
+		await page.close();
 	});
 
 	test("the scheme control sets the frame's color scheme, and System clears it", async () => {

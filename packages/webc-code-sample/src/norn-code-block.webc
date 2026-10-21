@@ -8,7 +8,7 @@
 
 /**
  * Code sample tokenized at build time. Its script registers `norn-code-block` as a custom element that adds the highlight colors; without the script the markup is the whole sample.
- * A `norn-copy-button` from `@allons-y/webc-patterns` sits in the caption row, above the code, and copies the code without any leading `$ ` prompts. The code reads left to right in any page direction.
+ * A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. A caption, when there is one, sits above the code. The code reads left to right in any page direction.
  * Needs `tokenRanges` registered as the `nornTokenRanges` JavaScript function, and the patterns package's components.
  * The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button.
  * Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.
@@ -22,15 +22,10 @@
  * @slot failed - The copy button's text when the copy fails. Falls back to "Copy failed".
  * @cssprop --norn-code-block-bg - Background. Falls back to --norn-surface-code.
  * @cssprop --norn-code-block-fg - Text color. Falls back to --norn-text-base.
- * @cssprop --norn-code-block-border - Border color. Falls back to --norn-ui-border-color.
  * @cssprop --norn-code-block-radius - Corner radius. Falls back to --norn-ui-border-radius.
  * @cssprop --norn-code-block-padding - Inner spacing. Falls back to --norn-space-m.
  * @cssprop --norn-code-block-font - Font stack. Falls back to --norn-font-mono.
- * @cssprop --norn-code-block-shadow - Terminal frame shadow. Falls back to --norn-ui-shadow.
- * @cssprop --norn-code-block-dot-1 - First terminal dot. Falls back to GrayText.
- * @cssprop --norn-code-block-dot-2 - Second terminal dot. Falls back to GrayText.
- * @cssprop --norn-code-block-dot-3 - Third terminal dot. Falls back to GrayText.
- * @cssprop --norn-chrome - Inherited. Set to `terminal` on an ancestor for the window-bar frame.
+ * @cssprop --norn-chrome - Inherited. Set to `terminal` on an ancestor for the frame with a header bar for the caption.
  * @cssprop --norn-code-comment - Syntax color, with a light-dark default.
  * @cssprop --norn-code-string - Syntax color, with a light-dark default.
  * @cssprop --norn-code-keyword - Syntax color, with a light-dark default.
@@ -56,7 +51,7 @@ const nameOf = (language, label) =>
 </script>
 <figure>
 	<figcaption webc:if="caption" @text="caption"></figcaption>
-	<norn-copy-button :@value="pasteable(code)" :@strings="'norn-code-block-' + uid"></norn-copy-button>
+	<norn-copy-button :@value="pasteable(code)" :@strings="'norn-code-block-' + uid" :@compact="true"></norn-copy-button>
 	<pre dir="ltr" :data-language="typeof language === 'string' && language ? language : undefined"><code :data-tokens="nornTokenRanges(code, language)" @text="code"></code></pre>
 	<span hidden :id="'norn-code-block-' + uid">
 		<span data-string="label" :id="'norn-code-block-' + uid + '-copy'"><slot name="copy-label"><span webc:nokeep @text="nornComponentStrings?.('norn-code-block', 'copy-label', $data.page) || 'Copy {name} to clipboard'"></span></slot></span>
@@ -71,11 +66,10 @@ const nameOf = (language, label) =>
 		norn-code-block {
 			display: block;
 
-			/* The caption and the copy button share the first row; the code spans the second. */
+			/* The caption sits above the code. The copy button shares the code's cell, over its top end corner. */
 			& figure {
 				display: grid;
-				grid-template-columns: minmax(0, 1fr) auto;
-				align-items: end;
+				grid-template-columns: minmax(0, 1fr);
 				margin: 0;
 			}
 
@@ -84,30 +78,29 @@ const nameOf = (language, label) =>
 				margin-block-end: var(--norn-space-xs, t('space.xs'));
 				color: var(--norn-text-muted, t('text.muted'));
 				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
-				font-size: 0.85rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& norn-copy-button {
-				grid-area: 1 / 2;
+				--norn-copy-button-bg: var(--norn-code-block-bg, var(--norn-surface-code, t('surface.code')));
+				grid-area: 2 / 1;
+				z-index: 1;
 				justify-self: end;
-
-				&:has(button:not([hidden])) {
-					margin-block-end: var(--norn-space-xs, t('space.xs'));
-				}
+				align-self: start;
+				margin: var(--norn-space-2xs, t('space.2xs'));
 			}
 
 			& pre {
 				box-sizing: border-box;
-				grid-area: 2 / 1 / 3 / 3;
+				grid-area: 2 / 1;
 				margin: 0;
 				overflow-x: auto;
 				padding: var(--norn-code-block-padding, var(--norn-space-m, t('space.m')));
-				border: 1px solid var(--norn-code-block-border, var(--norn-ui-border-color, t('ui.border.color')));
 				border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
 				background: var(--norn-code-block-bg, var(--norn-surface-code, t('surface.code')));
 				color: var(--norn-code-block-fg, var(--norn-text-base, t('text.base')));
 				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
-				font-size: 0.9rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 				line-height: 1.5;
 			}
 
@@ -117,43 +110,24 @@ const nameOf = (language, label) =>
 				font: inherit;
 			}
 
-			/* Window-bar frame, set with `--norn-chrome: terminal` on an ancestor. */
+			/* A frame with a header bar for the caption, set with `--norn-chrome: terminal` on an ancestor. */
 			@container style(--norn-chrome: terminal) {
 				& figure {
-					box-sizing: border-box;
-					inline-size: min(100%, 40rem);
-					justify-self: start;
 					overflow: hidden;
-					border: 1px solid var(--norn-code-block-border, var(--norn-ui-border-color, t('ui.border.color')));
 					border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-					box-shadow: var(--norn-code-block-shadow, var(--norn-ui-shadow, t('ui.shadow')));
-
-					&::before {
-						box-sizing: border-box;
-						content: "";
-						grid-area: 1 / 1 / 2 / 3;
-						block-size: 2.25rem;
-						border-block-end: 1px solid var(--norn-code-block-border, var(--norn-ui-border-color, t('ui.border.color')));
-						background: radial-gradient(circle 0.35rem at 1.1rem 50%, var(--norn-code-block-dot-1, GrayText) calc(100% - 1px), transparent),
-							radial-gradient(circle 0.35rem at 2.1rem 50%, var(--norn-code-block-dot-2, GrayText) calc(100% - 1px), transparent),
-							radial-gradient(circle 0.35rem at 3.1rem 50%, var(--norn-code-block-dot-3, GrayText) calc(100% - 1px), transparent),
-							var(--norn-surface-raised, t('surface.raised'));
-					}
 				}
 
 				& figcaption {
-					align-self: center;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					block-size: 2rem;
 					margin: 0;
-					padding-inline-start: 4.25rem;
-				}
-
-				& norn-copy-button:has(button:not([hidden])) {
-					align-self: center;
-					margin: 0 var(--norn-space-xs, t('space.xs'));
+					padding-inline: var(--norn-space-s, t('space.s'));
+					background: var(--norn-surface-raised, t('surface.raised'));
 				}
 
 				& pre {
-					border: 0;
 					border-radius: 0;
 				}
 			}

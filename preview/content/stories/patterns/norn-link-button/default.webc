@@ -1,8 +1,9 @@
 ---
-title: Primary and quiet
+title: Primary, secondary, and quiet
 order: 1
 ---
 <p>
 	<norn-link-button @href="#start">Get started</norn-link-button>
-	<norn-link-button @href="#source" @variant="quiet">View the source</norn-link-button>
+	<norn-link-button @href="#source" @variant="secondary">View the source</norn-link-button>
+	<norn-link-button @href="#changes" @variant="quiet">Read the changes</norn-link-button>
 </p>

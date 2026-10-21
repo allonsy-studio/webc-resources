@@ -86,7 +86,6 @@ The Allons-y Studio SVGs are inlined into the three locked components when the p
 | --- | --- |
 | `--norn-font-mono` | PT Mono, Allons-y Studio's locked monospace |
 | `--norn-feature-1` to `--norn-feature-4` | The card accents: the project's accent, then Allons-y Studio orange, teal, and yellow |
-| `--norn-code-block-dot-1` to `--norn-code-block-dot-3` | A code sample's window-bar dots: magenta, orange, and yellow |
 | `--norn-header-stripe` | The four-color strip along the header bar |
 | `--norn-footer-name`, `--norn-footer-name-face`, `--norn-footer-name-size` | The footer's project name in the accent color and the mono face |
 

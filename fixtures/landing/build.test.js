@@ -35,7 +35,7 @@ describe("landing fixture with the OSS site layer", () => {
 		assert.ok(hero.includes("<span>A fixture landing site for the OSS WebC packages</span>"));
 		assert.ok(hero.includes("A fixture landing site that exercises every section of the OSS site page bodies."));
 		const actions = namedBetween(hero, "nav", "Get started", "</nav>");
-		assert.ok(actions.includes('<a href="#install" data-variant="primary">Get started</a>') && actions.includes(`<a href="${REPO}" data-variant="quiet">View on GitHub</a>`));
+		assert.ok(actions.includes('<a href="#install" data-variant="primary">Get started</a>') && actions.includes(`<a href="${REPO}" data-variant="secondary">View on GitHub</a>`));
 		const chips = [...between(hero, "<norn-fact-list>", "</norn-fact-list>").matchAll(/<li>([\s\S]*?)<\/li>/g)].map((match) => match[1].replace(/<norn-icon>[\s\S]*?<\/norn-icon>|<\/?span>/g, "").trim());
 		assert.deepEqual(chips, ["Free &amp; open source", "License: MPL-2.0", "Node 22+"]);
 		assert.ok(hero.includes('<norn-code-block id="usage">') && hero.includes("<figcaption>example.js</figcaption>"));

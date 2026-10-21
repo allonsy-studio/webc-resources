@@ -213,6 +213,64 @@ test("norn-callout and norn-notice share the status tokens and one recipe: a tin
 	assert.ok(callout.includes("--norn-text-accent, t('text.accent')") && !callout.includes("#6b2fc2"), "important maps to the accent");
 });
 
+/** A source's CSS, squashed, by component name. */
+const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
+
+test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
+	const css = cssOf("norn-segmented-control");
+	assert.ok(!/::before|::after/.test(css), "no pseudo-element");
+	assert.ok(!/--_(index|count)|translate|nth-of-type/.test(css), "no thumb math, so no cap on the options");
+	assert.ok(!/outline: 3px/.test(css) && css.includes("outline: var(--norn-ui-focus-width,"), "the one ring, inset");
+	const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
+	assert.match(forced, /label:has\(input:checked\) \{ background-color: Highlight; color: HighlightText; forced-color-adjust: none;/, "the label itself is filled");
+	assert.ok(css.includes("--norn-segmented-control-current") && !css.includes("--norn-segmented-control-thumb") && !css.includes("--norn-segmented-control-border"), "the tint replaces the thumb and the border");
+});
+
+test("norn-link-button has primary, secondary, and quiet, and any other value is primary", async () => {
+	for (const [variant, expected] of [["primary", "primary"], ["secondary", "secondary"], ["quiet", "quiet"], ["outline", "primary"], [undefined, "primary"]]) {
+		const html = await render(`<norn-link-button @href="/" ${variant ? `@variant="${variant}"` : ""}>Go</norn-link-button>`);
+		assert.ok(html.includes(`<a href="/" data-variant="${expected}">Go</a>`), `${variant}: ${html}`);
+	}
+	const css = cssOf("norn-link-button");
+	assert.ok(!/text-decoration: underline/.test(css), "no underline on hover or focus");
+	assert.ok(!/outline-width/.test(css), "the ring is the base ring");
+	assert.match(css, /a\[data-variant="primary"\] \{ border-color: LinkText; background-color: LinkText; color: Canvas; forced-color-adjust: none;/, "primary stays filled in forced colors");
+	assert.ok(css.includes("&:active"), "a pressed state");
+});
+
+test("norn-copy-button has no border, stacks its icons and texts in one cell, and swaps to a check tinted with the success color", async () => {
+	const css = cssOf("norn-copy-button");
+	assert.ok(!/border: 1px|--norn-copy-button-border/.test(css), "no border");
+	assert.ok(css.includes("--norn-status-success") && css.includes('[data-state="copied"]'), "the success tint");
+	const html = unid(await render('<norn-copy-button @value="x"></norn-copy-button>'));
+	assert.ok(html.includes("<span data-icons><norn-icon") && (html.match(/<svg /g) ?? []).length === 2, "the copy icon and the check");
+	assert.ok(html.includes("data-label"), "one holder for the texts");
+	assert.ok(!html.includes("data-compact"), "not compact by default");
+	assert.ok(unid(await render('<norn-copy-button @value="x" @compact></norn-copy-button>')).includes("data-compact"), "compact when asked");
+});
+
+test("norn-code-block overlays a compact copy button, and its terminal frame is flat, with no dots, no shadow, and no border", async () => {
+	const css = cssOf("norn-code-block");
+	assert.ok(!/border: 1px|--norn-code-block-border|radial-gradient|box-shadow|--norn-code-block-(dot|shadow)|::before/.test(css), "no border, dots, or shadow");
+	assert.ok(css.includes("@container style(--norn-chrome: terminal)"), "the frame is still there for whoever sets it");
+	assert.ok(css.includes("block-size: 2rem"), "a 2rem header");
+	assert.match(css, /norn-copy-button \{[^}]*grid-area: 2 \/ 1;[^}]*justify-self: end;[^}]*align-self: start;/, "over the top end corner of the code");
+	assert.ok(unid(await render('<norn-code-block @language="js" @code="x"></norn-code-block>')).includes("<norn-copy-button"), "the button is still part of the sample");
+	assert.ok((await render('<norn-code-block @language="js" @code="x"></norn-code-block>')).includes("data-compact"), "and compact");
+	assert.ok(!cssOf("norn-hero").includes("--norn-chrome"), "a hero no longer turns the frame on");
+});
+
+test("norn-search has a field edge from the strong border, a leading magnifier, and floating results on the raised surface with the shadow and no border", async () => {
+	const css = cssOf("norn-search");
+	assert.ok(css.includes("var(--norn-search-border, var(--norn-ui-border-strong,"), "the field's edge is 3:1");
+	const results = css.match(/& ol \{[^}]*\}/)[0];
+	assert.ok(results.includes("box-shadow: var(--norn-ui-shadow,"), "the results float on a shadow");
+	assert.ok(!/border:/.test(results), "and have no border");
+	assert.ok(results.includes("background: var(--norn-search-results, var(--norn-surface-raised,"), "on the raised surface");
+	const html = unid(await render("<norn-search></norn-search>"));
+	assert.match(html, /<label>\s*<span>[^]*?<\/span>\s*<norn-icon>[^]*?<\/norn-icon>\s*<input type="search"/, "the magnifier is in the label, before the field");
+});
+
 test("the JSDoc never names a token with a stray number after it", () => {
 	for (const { file, text } of components) assert.ok(!/--norn-[a-z0-9-]+\.\d/.test(text), `${file}: a token name runs into a decimal`);
 });
@@ -682,10 +740,10 @@ test("a layout renders norn-code-block with the code sample, and <pre><code> wit
 
 test("a layout takes its texts from componentStrings under its own name, then English", async () => {
 	const english = await render(layoutText("norn-landing"), { data: { norn: LANDING } });
-	assert.ok(english.includes("<span>License: MIT</span>") && english.includes('data-variant="quiet">View on GitHub</a>') && english.includes('<span id="norn-landing-actions" hidden>Get started</span>'));
+	assert.ok(english.includes("<span>License: MIT</span>") && english.includes('data-variant="secondary">View on GitHub</a>') && english.includes('<span id="norn-landing-actions" hidden>Get started</span>'));
 	const strings = { "norn-landing": { license: "Licence : {license}", repo: "Voir le dépôt", actions: "Pour commencer" } };
 	const french = await render(layoutText("norn-landing"), { data: { norn: LANDING }, strings });
-	assert.ok(french.includes("<span>Licence : MIT</span>") && french.includes('data-variant="quiet">Voir le dépôt</a>') && french.includes('<span id="norn-landing-actions" hidden>Pour commencer</span>'));
+	assert.ok(french.includes("<span>Licence : MIT</span>") && french.includes('data-variant="secondary">Voir le dépôt</a>') && french.includes('<span id="norn-landing-actions" hidden>Pour commencer</span>'));
 	assert.ok(!/View on GitHub|License:/.test(french));
 });
 

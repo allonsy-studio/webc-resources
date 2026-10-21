@@ -16,9 +16,6 @@
  * @cssprop --norn-feature-2 - Second card accent: Allons-y Studio orange.
  * @cssprop --norn-feature-3 - Third card accent: Allons-y Studio teal.
  * @cssprop --norn-feature-4 - Fourth card accent: Allons-y Studio yellow.
- * @cssprop --norn-code-block-dot-1 - First dot of a code sample's window bar: Allons-y Studio magenta.
- * @cssprop --norn-code-block-dot-2 - Second dot: Allons-y Studio orange.
- * @cssprop --norn-code-block-dot-3 - Third dot: Allons-y Studio yellow.
  * @cssprop --norn-header-stripe - The four-color strip along the header bar.
  * @cssprop --norn-footer-name - The footer's project name, in the accent color.
  * @cssprop --norn-footer-name-face - The footer's project name, in the mono face.

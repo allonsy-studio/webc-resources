@@ -9,7 +9,7 @@
 /**
  * A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value.
  * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
- * A thumb slides to the checked option, unless motion is reduced. Up to eight options, drawn at equal widths.
+ * The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths.
  * A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.
  * @prop {boolean} [icon-only] - Hides the option text visually; it stays the radio's name. On for `@icon-only`, `@icon-only="true"`, or `:@icon-only="true"`.
  * @prop {string} [legend] - The group's name, when the `legend` slot is empty.
@@ -17,11 +17,9 @@
  * @prop {{ value: string, label: string, icon?: string, checked?: boolean }[]} [options] - The options, in place of the default slot. Each label is also its `title`.
  * @slot legend - The group's name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden.
  * @slot - The option labels, when there are no `options`.
- * @cssprop --norn-segmented-control-thumb - Checked option background. Falls back to --norn-text-accent.
- * @cssprop --norn-segmented-control-on-thumb - Checked option text. Falls back to --norn-surface-base.
- * @cssprop --norn-segmented-control-border - Outline. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-segmented-control-current - Checked option text, and the tint behind it. Falls back to --norn-text-accent.
+ * @cssprop --norn-segmented-control-bg - Track background. Falls back to --norn-surface-raised.
  * @cssprop --norn-segmented-control-radius - Corner radius. Falls back to --norn-ui-border-radius.
- * @cssprop --norn-segmented-control-duration - Thumb slide time. Falls back to 180ms.
  * @category component
  */
 --->
@@ -47,14 +45,12 @@ const grouped = (options, name) => {
 	@layer norn.components {
 		norn-segmented-control {
 			--_gap: 2px;
-			--_count: 1;
-			--_index: 0;
+			--_current: var(--norn-segmented-control-current, var(--norn-text-accent, t('text.accent')));
 			display: inline-flex;
 			max-inline-size: 100%;
 
 			& fieldset {
 				box-sizing: border-box;
-				position: relative;
 				display: grid;
 				grid-auto-columns: minmax(0, 1fr);
 				grid-auto-flow: column;
@@ -62,76 +58,9 @@ const grouped = (options, name) => {
 				min-inline-size: 0;
 				margin: 0;
 				padding: var(--_gap);
-				border: 1px solid var(--norn-segmented-control-border, var(--norn-ui-border-color, t('ui.border.color')));
+				border: 0;
 				border-radius: var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-
-				/* The thumb: one option wide, moved along by the index of the checked one. */
-				&:has(input:checked)::before {
-					content: "";
-					position: absolute;
-					inset-block: var(--_gap);
-					inset-inline-start: var(--_gap);
-					inline-size: calc((100% - var(--_gap) * (var(--_count) + 1)) / var(--_count));
-					border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) - var(--_gap));
-					background: var(--norn-segmented-control-thumb, var(--norn-text-accent, t('text.accent')));
-					translate: calc(var(--_index) * (100% + var(--_gap))) 0;
-				}
-
-				&:has(> label:nth-of-type(2)) {
-					--_count: 2;
-				}
-
-				&:has(> label:nth-of-type(3)) {
-					--_count: 3;
-				}
-
-				&:has(> label:nth-of-type(4)) {
-					--_count: 4;
-				}
-
-				&:has(> label:nth-of-type(5)) {
-					--_count: 5;
-				}
-
-				&:has(> label:nth-of-type(6)) {
-					--_count: 6;
-				}
-
-				&:has(> label:nth-of-type(7)) {
-					--_count: 7;
-				}
-
-				&:has(> label:nth-of-type(8)) {
-					--_count: 8;
-				}
-
-				&:has(> label:nth-of-type(2) input:checked) {
-					--_index: 1;
-				}
-
-				&:has(> label:nth-of-type(3) input:checked) {
-					--_index: 2;
-				}
-
-				&:has(> label:nth-of-type(4) input:checked) {
-					--_index: 3;
-				}
-
-				&:has(> label:nth-of-type(5) input:checked) {
-					--_index: 4;
-				}
-
-				&:has(> label:nth-of-type(6) input:checked) {
-					--_index: 5;
-				}
-
-				&:has(> label:nth-of-type(7) input:checked) {
-					--_index: 6;
-				}
-
-				&:has(> label:nth-of-type(8) input:checked) {
-					--_index: 7;
-				}
+				background: var(--norn-segmented-control-bg, var(--norn-surface-raised, t('surface.raised')));
 			}
 
 			& legend,
@@ -145,51 +74,44 @@ const grouped = (options, name) => {
 				white-space: nowrap;
 			}
 
-			&:dir(rtl) fieldset::before {
-				translate: calc(var(--_index) * (-100% - var(--_gap))) 0;
-			}
-
-			@media (prefers-reduced-motion: no-preference) {
-				& fieldset::before {
-					transition: translate var(--norn-segmented-control-duration, 180ms) ease-out;
-				}
-
-				& label {
-					transition: color var(--norn-segmented-control-duration, 180ms) ease-out;
-				}
-			}
-
 			/* The radio covers its label, so a click anywhere on the option selects it, and the native control keeps the focus. */
 			& label {
+				--_state: 0%;
+				--_tint: transparent;
 				box-sizing: border-box;
 				position: relative;
 				z-index: 0;
 				display: inline-flex;
 				align-items: center;
 				justify-content: center;
-				gap: 0.4em;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 				min-inline-size: 2.5rem;
-				min-block-size: 2.25rem;
-				padding-inline: 0.6rem;
+				min-block-size: calc(var(--norn-ui-control-height, t('ui.control.height')) - 2 * var(--_gap));
+				padding-inline: var(--norn-space-s, t('space.s'));
 				border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) - var(--_gap));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
 				color: var(--norn-text-muted, t('text.muted'));
 				cursor: pointer;
 				overflow-wrap: anywhere;
 				text-align: center;
 
 				&:hover {
-					background: var(--norn-surface-raised, t('surface.raised'));
-					color: var(--norn-text-base, t('text.base'));
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
 				}
 
 				&:has(input:checked) {
-					background: transparent;
-					color: var(--norn-segmented-control-on-thumb, var(--norn-surface-base, t('surface.base')));
+					--_tint: color-mix(in oklab, var(--_current) 14%, transparent);
+					color: var(--_current);
 				}
 
+				/* The ring sits inside the option, clear of the track's edge. */
 				&:has(input:focus-visible) {
-					outline: 3px solid var(--norn-text-accent, t('text.accent'));
-					outline-offset: 2px;
+					outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
 				}
 			}
 
@@ -204,17 +126,32 @@ const grouped = (options, name) => {
 			}
 
 			& norn-icon {
-				--norn-icon-size: 1.25rem;
+				--norn-icon-size: var(--norn-ui-icon-m, t('ui.icon.m'));
 			}
 
-			@media (forced-colors: active) {
-				& fieldset::before {
-					background: Highlight;
+			@media (pointer: coarse) {
+				& label {
+					min-block-size: 2.75rem;
 				}
+			}
 
+			@media (prefers-reduced-motion: no-preference) {
+				& label {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing')),
+						color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* The checked option fills itself, since the browser replaces the tint. */
+			@media (forced-colors: active) {
 				& label:has(input:checked) {
+					background-color: Highlight;
 					color: HighlightText;
 					forced-color-adjust: none;
+				}
+
+				& label:has(input:focus-visible) {
+					outline-color: CanvasText;
 				}
 			}
 		}

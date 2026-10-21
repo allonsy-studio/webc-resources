@@ -42,7 +42,7 @@ describe("docs fixture", () => {
 	test("the home page links the first docs page and indexes every page with its description", () => {
 		const html = pages["/"];
 		const hero = between(html, "<norn-hero>", "</norn-hero>");
-		assert.ok(hero.includes('<a href="/getting-started/" data-variant="primary">Read the docs</a>') && hero.includes(`<a href="${REPO}" data-variant="quiet">View on GitHub</a>`));
+		assert.ok(hero.includes('<a href="/getting-started/" data-variant="primary">Read the docs</a>') && hero.includes(`<a href="${REPO}" data-variant="secondary">View on GitHub</a>`));
 		assert.ok(hero.includes('<norn-code-block id="install">') && hero.includes("npm install fixture-docs"));
 		const index = between(html, '<norn-section id="docs"', "</norn-section>");
 		assert.ok(index.includes("<h2>Documentation</h2>"));
@@ -200,7 +200,7 @@ describe("docs fixture in a browser", () => {
 		const button = page.locator("norn-code-block button").first();
 		await button.click();
 		assert.equal(await page.evaluate(() => navigator.clipboard.readText()), "npm install @allons-y/fixture-docs\n");
-		assert.equal((await button.textContent()).trim(), "Copied");
+		assert.equal((await button.innerText()).trim(), "Copied", "the one text that shows");
 		assert.equal(await page.locator("norn-code-block norn-copy-button [role=status]").first().textContent(), "Copied");
 		await context.close();
 	});
@@ -279,14 +279,14 @@ export async function debouncedSearch() {
 		await context.close();
 	});
 
-	test("the copy button sits above the code, never over it, and the code reads left to right in a right-to-left page", async () => {
+	test("the copy button sits over the top end corner of the code, on the left in a right-to-left page, and the code reads left to right", async () => {
 		const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"], viewport: { width: 1280, height: 800 } });
 		const page = await context.newPage();
 		await page.goto(server.url + "/getting-started/");
 		await page.evaluate(() => document.documentElement.setAttribute("dir", "rtl"));
 		for (const sample of await page.locator("norn-code-block").all()) {
 			const [button, pre] = [await sample.locator("button").boundingBox(), await sample.locator("pre").boundingBox()];
-			assert.ok(button.y + button.height <= pre.y, "above the code");
+			assert.ok(button.y >= pre.y && button.y - pre.y < 24 && button.x >= pre.x && button.x - pre.x < 24, "over the top end corner, which is the left");
 			assert.equal(await sample.locator("pre").evaluate((pre) => getComputedStyle(pre).direction), "ltr");
 		}
 		await context.close();

@@ -10,7 +10,7 @@ bleed: true
 	<nav aria-label="Get started">
 		<ul role="list">
 			<li><norn-link-button @href="#install">Get started</norn-link-button></li>
-			<li><norn-link-button @href="https://example.com/" @variant="quiet">View on GitHub</norn-link-button></li>
+			<li><norn-link-button @href="https://example.com/" @variant="secondary">View on GitHub</norn-link-button></li>
 		</ul>
 	</nav>
 	<norn-fact-list>

@@ -82,7 +82,7 @@ The Norn layouts meet these. A layout of the project's own:
 
 ### Without JavaScript
 
-The code stays readable plain text, and is not a tab stop: the script makes it a named, focusable region only while it scrolls sideways. The highlight colors need the CSS Custom Highlight API and a script. The copy button sits in the caption row, above the code, and needs a script and the Clipboard API, which browsers expose only on secure origins (HTTPS or localhost): elsewhere it stays hidden. The code always reads left to right, in a right-to-left page too. The script registers `norn-code-block` as a custom element, so a sample added to the page later is enhanced too.
+The code stays readable plain text, and is not a tab stop: the script makes it a named, focusable region only while it scrolls sideways. The highlight colors need the CSS Custom Highlight API and a script. The copy button is an icon over the top end corner of the code, which names itself when the pointer or focus is on it, and needs a script and the Clipboard API, which browsers expose only on secure origins (HTTPS or localhost): elsewhere it stays hidden. The code always reads left to right, in a right-to-left page too. The script registers `norn-code-block` as a custom element, so a sample added to the page later is enhanced too.
 
 ### Customizing
 
@@ -91,11 +91,10 @@ Custom properties, each falling back to a shared token, which falls back to its 
 | Property | Controls |
 | --- | --- |
 | `--norn-code-block-bg`, `--norn-code-block-fg` | Surface and text colors |
-| `--norn-code-block-border`, `--norn-code-block-radius`, `--norn-code-block-padding`, `--norn-code-block-shadow` | Frame, and the window-bar frame's shadow |
+| `--norn-code-block-radius`, `--norn-code-block-padding` | Corner radius and inner spacing |
 | `--norn-code-block-font` | Font stack |
-| `--norn-code-block-dot-1`, `--norn-code-block-dot-2`, `--norn-code-block-dot-3` | Terminal window dots |
 | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` | Syntax colors |
-| `--norn-chrome: terminal` | Set on an ancestor for the window-bar frame |
+| `--norn-chrome: terminal` | Set on an ancestor for the frame with a header bar for the caption |
 
 ## Exports
 

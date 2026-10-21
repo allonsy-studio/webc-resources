@@ -35,7 +35,7 @@ facts:
 	<p>A page frame and content components.</p>
 	<nav aria-label="Get started">
 		<ul role="list">
-			<li webc:for="(action, index) of actions"><norn-link-button :@href="action.href" :@variant="index ? 'quiet' : 'primary'" @text="action.text"></norn-link-button></li>
+			<li webc:for="(action, index) of actions"><norn-link-button :@href="action.href" :@variant="index ? 'secondary' : 'primary'" @text="action.text"></norn-link-button></li>
 		</ul>
 	</nav>
 	<norn-fact-list>

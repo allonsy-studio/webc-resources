@@ -9,18 +9,18 @@
 /**
  * A button that copies text to the clipboard: `@value`, or the text of the element whose id is `@source`.
  * It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do.
- * After a click its label reads the `copied` or `failed` text for two seconds, and a status message says the same to a screen reader.
+ * After a click its label reads the `copied` or `failed` text for two seconds, the icon turns to a check tinted in the success color, and a status message says the same to a screen reader. The button keeps its width, since the three texts share one cell.
  * The texts are in the page, hidden, and the script shows them: the button only exists with a script.
  * @prop {string} [value] - The text to copy.
  * @prop {string} [source] - The id of the element whose text to copy, when there is no `value`.
+ * @prop {boolean} [compact] - Show only the icon until the pointer or focus is on the button, for a button laid over a corner, as `norn-code-block` does. On for `@compact`, `@compact="true"`, or `:@compact="true"`.
  * @prop {string} [strings] - The id of an element that holds the texts in place of the slots, for a component that wraps the button, as `norn-code-block` does. It holds one element per slot, marked `data-string="label"`, `"copy"`, `"copied"`, and `"failed"`; the `label` one needs an id.
  * @slot label - The button's accessible name, such as "Copy the install command", as one element. Without it, the visible text names the button.
  * @slot copy - The visible text, as one element. Falls back to the site's `componentStrings`, then "Copy".
  * @slot copied - The text after a copy. Falls back to the site's `componentStrings`, then "Copied".
  * @slot failed - The text when the copy fails. Falls back to the site's `componentStrings`, then "Copy failed".
- * @cssprop --norn-copy-button-bg - Background. Falls back to --norn-surface-base.
- * @cssprop --norn-copy-button-fg - Text color. Falls back to --norn-text-base.
- * @cssprop --norn-copy-button-border - Border color. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-copy-button-bg - Background. Falls back to none, so the button sits on its surroundings.
+ * @cssprop --norn-copy-button-fg - Text color. Falls back to --norn-text-muted.
  * @cssprop --norn-copy-button-radius - Corner radius. Falls back to --norn-ui-border-radius.
  * @category component
  */
@@ -37,7 +37,8 @@
 	:data-value="typeof value === 'string' ? value : undefined"
 	:data-source="typeof source === 'string' ? source : undefined"
 	:data-strings="typeof strings === 'string' && strings ? strings : undefined"
-><norn-icon @name="copy"></norn-icon><span></span></button>
+	:data-compact="compact === true || compact === '' || compact === 'true' ? '' : undefined"
+><span data-icons><norn-icon @name="copy"></norn-icon><norn-icon @name="check"></norn-icon></span><span data-label></span></button>
 <span role="status"></span>
 <style>
 	@layer norn.components {
@@ -46,19 +47,19 @@
 			max-inline-size: 100%;
 
 			& button {
+				--_state: 0%;
 				box-sizing: border-box;
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4em;
-				min-block-size: 2rem;
-				padding: 0.25rem 0.7rem;
-				border: 1px solid var(--norn-copy-button-border, var(--norn-ui-border-color, t('ui.border.color')));
-				border-radius: var(--norn-copy-button-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				background: var(--norn-copy-button-bg, var(--norn-surface-base, t('surface.base')));
-				color: var(--norn-copy-button-fg, var(--norn-text-base, t('text.base')));
-				font: inherit;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
 				max-inline-size: 100%;
-				font-size: 0.85rem;
+				padding: 0 var(--norn-space-xs, t('space.xs'));
+				border: 0;
+				border-radius: var(--norn-copy-button-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-copy-button-bg, transparent));
+				color: var(--norn-copy-button-fg, var(--norn-text-muted, t('text.muted')));
+				font: inherit;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 				overflow-wrap: anywhere;
 				text-align: start;
 				cursor: pointer;
@@ -67,9 +68,50 @@
 					display: none;
 				}
 
-				&:is(:hover, :focus-visible) {
-					border-color: var(--norn-text-accent, t('text.accent'));
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
 				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[data-state="copied"] {
+					color: var(--norn-status-success, t('status.success'));
+				}
+
+				&[data-state="failed"] {
+					color: var(--norn-status-danger, t('status.danger'));
+				}
+			}
+
+			/* The copy icon and the check share a cell, and so do the three texts, so the button is as wide for one as for another. */
+			& [data-icons],
+			& [data-label] {
+				display: inline-grid;
+			}
+
+			& [data-icons] > norn-icon,
+			& [data-label] > span {
+				grid-area: 1 / 1;
+			}
+
+			& [data-label] {
+				margin-inline-start: var(--norn-space-2xs, t('space.2xs'));
+			}
+
+			& button:not([data-state="copied"]) [data-icons] > norn-icon:last-child,
+			& button[data-state="copied"] [data-icons] > norn-icon:first-child,
+			& [data-label] > span:not([data-active]) {
+				visibility: hidden;
+			}
+
+			/* A compact button is only its icon until the pointer or focus is on it, or it has a result to show. */
+			& button[data-compact]:not(:hover, :focus-visible, [data-state]) [data-label] {
+				inline-size: 0;
+				margin: 0;
+				overflow: hidden;
+				white-space: nowrap;
 			}
 
 			& [role="status"] {
@@ -79,6 +121,18 @@
 				overflow: hidden;
 				clip-path: inset(50%);
 				white-space: nowrap;
+			}
+
+			@media (pointer: coarse) {
+				& button {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
 			}
 
 			@media print {
@@ -103,7 +157,7 @@
 				const name = this.#string(button, "label");
 				this.#name = name?.id && name.textContent.trim() ? name.id : "";
 				if (this.#name) button.setAttribute("aria-labelledby", this.#name);
-				button.querySelector("span").textContent = this.#text(button, "copy");
+				this.#build(button);
 				button.hidden = false;
 				if (this.#wired) return;
 				this.#wired = true;
@@ -124,8 +178,27 @@
 				return this.#string(button, key)?.textContent.trim() ?? "";
 			}
 
+			/** The three texts in one cell, so the button is as wide for any of them. Safe to run again. */
+			#build(button) {
+				button.querySelector("[data-label]").replaceChildren(
+					...["copy", "copied", "failed"].map((key) => {
+						const text = document.createElement("span");
+						text.dataset.text = key;
+						text.textContent = this.#text(button, key);
+						return text;
+					}),
+				);
+				this.#show(button, "copy");
+			}
+
+			/** Show one text, and mark the button with the result so the icon and color follow. */
+			#show(button, key) {
+				for (const text of button.querySelectorAll("[data-label] > span")) text.toggleAttribute("data-active", text.dataset.text === key);
+				if (key === "copy") delete button.dataset.state;
+				else button.dataset.state = key;
+			}
+
 			async #copy(button) {
-				const label = button.querySelector("span");
 				const status = this.querySelector('[role="status"]');
 				const { value, source } = button.dataset;
 				let ok = true;
@@ -134,14 +207,14 @@
 				} catch {
 					ok = false;
 				}
-				const said = this.#text(button, ok ? "copied" : "failed");
-				label.textContent = said;
-				status.textContent = said;
+				const result = ok ? "copied" : "failed";
+				this.#show(button, result);
+				status.textContent = this.#text(button, result);
 				// The visible text is the name while it shows the result, so the name always holds the words on the button.
 				button.removeAttribute("aria-labelledby");
 				clearTimeout(this.#timer);
 				this.#timer = setTimeout(() => {
-					label.textContent = this.#text(button, "copy");
+					this.#show(button, "copy");
 					status.textContent = "";
 					if (this.#name) button.setAttribute("aria-labelledby", this.#name);
 				}, CONFIRMATION_MS);

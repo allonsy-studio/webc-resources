@@ -13,11 +13,6 @@
 		--norn-feature-3: #1f91ad;
 		--norn-feature-4: #ffd36b;
 
-		/* The window-bar dots of a code sample. */
-		--norn-code-block-dot-1: #d22d6f;
-		--norn-code-block-dot-2: #ff944d;
-		--norn-code-block-dot-3: #ffd36b;
-
 		/* The four-color strip along the header bar. */
 		--norn-header-stripe: linear-gradient(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%);
 

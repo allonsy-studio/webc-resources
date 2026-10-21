@@ -9,6 +9,7 @@
 /**
  * Site search: a search landmark with a field that lists results as the visitor types, from a Pagefind index.
  * Without a script, or before the index is built, it is a plain form that searches the site on the web: `@action` with the query as `q`, limited to `@site`.
+ * The field has a magnifier at its start, and its label as the placeholder once the script runs. The results float over the page on a raised surface.
  * The status texts are in the page, hidden, and the script shows them. Each falls back to the site's `componentStrings`, then English.
  * The script picks the status for a count by the plural rules of the nearest `lang`, with `Intl.PluralRules`, and formats the number for it. An empty form falls back to `results-other`.
  * Build the index with Pagefind after Eleventy. Results read their title and excerpt from the index; the excerpt keeps only Pagefind's `<mark>` highlights.
@@ -23,8 +24,9 @@
  * @slot results-two - The status for the `two` category.
  * @slot results-few - The status for the `few` category.
  * @slot results-many - The status for the `many` category.
- * @cssprop --norn-search-bg - Field and results background. Falls back to --norn-surface-base.
- * @cssprop --norn-search-border - Field and results border. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-search-bg - Field background. Falls back to --norn-surface-base.
+ * @cssprop --norn-search-border - Field border. Falls back to --norn-ui-border-strong.
+ * @cssprop --norn-search-results - Results background. Falls back to --norn-surface-raised.
  * @category component
  */
 --->
@@ -32,6 +34,7 @@
 	<form :action="action || 'https://duckduckgo.com/'" method="get">
 		<label>
 			<span :id="'norn-search-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'label', $data.page) || 'Search'"></span></slot></span>
+			<norn-icon @name="search"></norn-icon>
 			<input type="search" name="q" autocomplete="off" spellcheck="false" />
 		</label>
 		<input webc:if="site" type="hidden" name="sites" :value="site" />
@@ -56,6 +59,7 @@
 			container-type: inline-size;
 
 			& search {
+				position: relative;
 				display: grid;
 				grid-template-columns: minmax(0, 1fr);
 				gap: var(--norn-space-xs, t('space.xs'));
@@ -68,6 +72,7 @@
 			}
 
 			& label {
+				position: relative;
 				display: grid;
 				flex: 1;
 				min-inline-size: 0;
@@ -82,27 +87,57 @@
 				white-space: nowrap;
 			}
 
+			/* The magnifier sits in the field, at its start, and lets a click through to it. */
+			& label > norn-icon {
+				position: absolute;
+				inset-block-start: 50%;
+				inset-inline-start: var(--norn-space-xs, t('space.xs'));
+				translate: 0 -50%;
+				color: var(--norn-text-muted, t('text.muted'));
+				pointer-events: none;
+			}
+
 			& :is(input, button) {
 				box-sizing: border-box;
-				min-block-size: 2.25rem;
-				padding: 0.3rem 0.6rem;
-				border: 1px solid var(--norn-search-border, var(--norn-ui-border-color, t('ui.border.color')));
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				border: 0;
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
 				color: var(--norn-text-base, t('text.base'));
 				font: inherit;
 			}
 
 			& input {
 				inline-size: 100%;
-				border-color: var(--norn-search-border, var(--norn-ui-border-strong, t('ui.border.strong')));
+				padding: 0 var(--norn-space-s, t('space.s')) 0 calc(var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-xs, t('space.xs')));
+				border: 1px solid var(--norn-search-border, var(--norn-ui-border-strong, t('ui.border.strong')));
+				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
+			}
+
+			& input:dir(rtl) {
+				padding: 0 calc(var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-xs, t('space.xs'))) 0 var(--norn-space-s, t('space.s'));
 			}
 
 			& button {
+				--_state: 0%;
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4em;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding: 0 var(--norn-space-s, t('space.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
 				cursor: pointer;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+			}
+
+			/* The button's own icon is for a field too narrow for its text. */
+			& button > norn-icon {
+				display: none;
 			}
 
 			/* With live results, the button is only a fallback. */
@@ -111,6 +146,10 @@
 			}
 
 			@container (max-width: 16rem) {
+				& button > norn-icon {
+					display: inline-flex;
+				}
+
 				& button > span {
 					position: absolute;
 					inline-size: 1px;
@@ -124,18 +163,25 @@
 			& [role="status"] {
 				margin: 0;
 				color: var(--norn-text-muted, t('text.muted'));
-				font-size: 0.85rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
+			/* The results float over what is below the field. */
 			& ol {
+				position: absolute;
+				inset-inline: 0;
+				inset-block-start: calc(100% + var(--norn-space-2xs, t('space.2xs')));
+				z-index: 10;
 				display: grid;
 				grid-template-columns: minmax(0, 1fr);
 				gap: var(--norn-space-s, t('space.s'));
+				max-block-size: min(60dvh, 24rem);
 				margin: 0;
 				padding: var(--norn-space-s, t('space.s'));
-				border: 1px solid var(--norn-search-border, var(--norn-ui-border-color, t('ui.border.color')));
+				overflow-y: auto;
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
+				background: var(--norn-search-results, var(--norn-surface-raised, t('surface.raised')));
+				box-shadow: var(--norn-ui-shadow, t('ui.shadow'));
 				list-style: none;
 
 				&[hidden] {
@@ -146,19 +192,37 @@
 			& li {
 				display: grid;
 				grid-template-columns: minmax(0, 1fr);
-				gap: 0.15rem;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 			}
 
 			& li p {
 				margin: 0;
 				color: var(--norn-text-muted, t('text.muted'));
-				font-size: 0.88rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& mark {
 				background: none;
 				color: var(--norn-text-base, t('text.base'));
 				font-weight: 700;
+			}
+
+			@media (pointer: coarse) {
+				& :is(input, button) {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& ol {
+					border: 1px solid CanvasText;
+				}
 			}
 		}
 	}
@@ -189,6 +253,9 @@
 			async connectedCallback() {
 				if (this.#wired) return;
 				this.#wired = true;
+				// The label names the field, and the placeholder says the same in the field.
+				const input = this.querySelector('input[type="search"]');
+				input.placeholder = this.querySelector("label > span")?.textContent.trim() ?? "";
 				const search = this.querySelector("search");
 				try {
 					this.#pagefind = await import(new URL(search.dataset.bundle, document.baseURI).href);
@@ -197,7 +264,6 @@
 					return;
 				}
 				this.dataset.live = "";
-				const input = this.querySelector('input[type="search"]');
 				input.addEventListener("input", () => this.#search(input.value));
 				this.querySelector("form").addEventListener("submit", (event) => {
 					event.preventDefault();
