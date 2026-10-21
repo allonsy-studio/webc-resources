@@ -1,0 +1,86 @@
+@layer norn.components {
+		norn-accordion {
+			display: block;
+			interpolate-size: allow-keywords;
+			overflow-wrap: anywhere;
+
+			& > div > details {
+				border-block-end: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+
+				&:first-child {
+					border-block-start: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				}
+
+				&[open] > summary::after {
+					rotate: 225deg;
+					translate: 0 0.15em;
+				}
+
+				&::details-content {
+					block-size: 0;
+					overflow: hidden;
+				}
+
+				&[open]::details-content {
+					block-size: auto;
+				}
+			}
+
+			& > div > details > summary {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-s, 0.75rem);
+				padding-block: var(--norn-space-s, 0.75rem);
+				font-weight: 600;
+				list-style: none;
+				cursor: pointer;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				/* A chevron drawn with two borders, pointing down when closed and up when open. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					margin-inline-end: 0.25em;
+					border-block-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					border-inline-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					rotate: 45deg;
+					translate: 0 -0.15em;
+				}
+			}
+
+			& > div > details > :not(summary) {
+				margin-block: 0 var(--norn-space-s, 0.75rem);
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary::after {
+					transition: rotate var(--norn-accordion-duration, 200ms) ease-out, translate var(--norn-accordion-duration, 200ms) ease-out;
+				}
+
+				& > div > details::details-content {
+					transition: block-size var(--norn-accordion-duration, 200ms) ease-out,
+						content-visibility var(--norn-accordion-duration, 200ms) allow-discrete;
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > div > details::details-content {
+					block-size: auto;
+					content-visibility: visible;
+				}
+			}
+		}
+	}

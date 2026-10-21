@@ -1,0 +1,226 @@
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-icon-size, 1em);
+				block-size: var(--norn-icon-size, 1em);
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: var(--norn-icon-stroke, 2);
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-segmented-control {
+			--_gap: 2px;
+			--_count: 1;
+			--_index: 0;
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& fieldset {
+				box-sizing: border-box;
+				position: relative;
+				display: grid;
+				grid-auto-columns: minmax(0, 1fr);
+				grid-auto-flow: column;
+				gap: var(--_gap);
+				min-inline-size: 0;
+				margin: 0;
+				padding: var(--_gap);
+				border: 1px solid var(--norn-segmented-control-border, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				border-radius: var(--norn-segmented-control-radius, var(--norn-ui-border-radius, 6px));
+
+				/* The thumb: one option wide, moved along by the index of the checked one. */
+				&:has(input:checked)::before {
+					content: "";
+					position: absolute;
+					inset-block: var(--_gap);
+					inset-inline-start: var(--_gap);
+					inline-size: calc((100% - var(--_gap) * (var(--_count) + 1)) / var(--_count));
+					border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, 6px)) - var(--_gap));
+					background: var(--norn-segmented-control-thumb, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					translate: calc(var(--_index) * (100% + var(--_gap))) 0;
+				}
+
+				&:has(> label:nth-of-type(2)) {
+					--_count: 2;
+				}
+
+				&:has(> label:nth-of-type(3)) {
+					--_count: 3;
+				}
+
+				&:has(> label:nth-of-type(4)) {
+					--_count: 4;
+				}
+
+				&:has(> label:nth-of-type(5)) {
+					--_count: 5;
+				}
+
+				&:has(> label:nth-of-type(6)) {
+					--_count: 6;
+				}
+
+				&:has(> label:nth-of-type(7)) {
+					--_count: 7;
+				}
+
+				&:has(> label:nth-of-type(8)) {
+					--_count: 8;
+				}
+
+				&:has(> label:nth-of-type(2) input:checked) {
+					--_index: 1;
+				}
+
+				&:has(> label:nth-of-type(3) input:checked) {
+					--_index: 2;
+				}
+
+				&:has(> label:nth-of-type(4) input:checked) {
+					--_index: 3;
+				}
+
+				&:has(> label:nth-of-type(5) input:checked) {
+					--_index: 4;
+				}
+
+				&:has(> label:nth-of-type(6) input:checked) {
+					--_index: 5;
+				}
+
+				&:has(> label:nth-of-type(7) input:checked) {
+					--_index: 6;
+				}
+
+				&:has(> label:nth-of-type(8) input:checked) {
+					--_index: 7;
+				}
+			}
+
+			& legend,
+			& [data-icon-only] label > span {
+				box-sizing: border-box;
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			&:dir(rtl) fieldset::before {
+				translate: calc(var(--_index) * (-100% - var(--_gap))) 0;
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& fieldset::before {
+					transition: translate var(--norn-segmented-control-duration, 180ms) ease-out;
+				}
+
+				& label {
+					transition: color var(--norn-segmented-control-duration, 180ms) ease-out;
+				}
+			}
+
+			/* The radio covers its label, so a click anywhere on the option selects it, and the native control keeps the focus. */
+			& label {
+				box-sizing: border-box;
+				position: relative;
+				z-index: 0;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.4em;
+				min-inline-size: 2.5rem;
+				min-block-size: 2.25rem;
+				padding-inline: 0.6rem;
+				border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, 6px)) - var(--_gap));
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				cursor: pointer;
+				overflow-wrap: anywhere;
+				text-align: center;
+
+				&:hover {
+					background: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%)));
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+
+				&:has(input:checked) {
+					background: transparent;
+					color: var(--norn-segmented-control-on-thumb, var(--norn-surface-base, light-dark(#ffffff, #101216)));
+				}
+
+				&:has(input:focus-visible) {
+					outline: 3px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+					outline-offset: 2px;
+				}
+			}
+
+			& input {
+				box-sizing: border-box;
+				position: absolute;
+				inset: 0;
+				z-index: 1;
+				margin: 0;
+				opacity: 0;
+				cursor: pointer;
+			}
+
+			& norn-icon {
+				--norn-icon-size: 1.25rem;
+			}
+
+			@media (forced-colors: active) {
+				& fieldset::before {
+					background: Highlight;
+				}
+
+				& label:has(input:checked) {
+					color: HighlightText;
+					forced-color-adjust: none;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-theme-toggle {
+			display: inline-flex;
+
+			&:not(:defined) {
+				display: none;
+			}
+		}
+	}

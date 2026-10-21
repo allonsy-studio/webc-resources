@@ -1,0 +1,109 @@
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-icon-size, 1em);
+				block-size: var(--norn-icon-size, 1em);
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: var(--norn-icon-stroke, 2);
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-notice {
+			--_color: var(--norn-notice-color, light-dark(#1b4fc4, #8fb0ff));
+			display: block;
+
+			&:has(> [data-severity="success"]) {
+				--_color: var(--norn-notice-color, light-dark(#0b6b3a, #7ed6a1));
+			}
+
+			&:has(> [data-severity="warning"]) {
+				--_color: var(--norn-notice-color, light-dark(#9a4a00, #ffb36b));
+			}
+
+			&:has(> [data-severity="error"]) {
+				--_color: var(--norn-notice-color, light-dark(#b42318, #ff8a80));
+			}
+
+			& > div {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				overflow-wrap: anywhere;
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				border: 1px solid var(--_color);
+				border-inline-start-width: 4px;
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background: var(--norn-notice-bg, color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, light-dark(#ffffff, #101216))));
+			}
+
+			& > div > norn-icon {
+				--norn-icon-size: 1.25rem;
+				flex: none;
+				align-self: start;
+				margin-block-start: 0.15em;
+				color: var(--_color);
+			}
+
+			& > div > div:first-of-type {
+				flex: 1 1 16rem;
+				min-inline-size: 0;
+			}
+
+			& > div > div:first-of-type > :is(p, ul, ol) {
+				margin: 0;
+			}
+
+			& > div > div:last-child:not(:has(*)) {
+				display: none;
+			}
+
+			& > div > div > [data-prefix] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (forced-colors: active) {
+				& > div {
+					border-color: CanvasText;
+				}
+			}
+		}
+	}

@@ -22,7 +22,7 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/Il1HKpSs24.css">
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/E18r6qlbOG.css">
 <script src="/webc-resources/preview/1/bundle/UakS5G-m4v.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-MtarE"><span data-label="" id="norn-header-webc-MtarE"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-FtYi9"><span data-label="" id="norn-header-webc-FtYi9"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -96,19 +96,19 @@
 		<summary>Container</summary>
 		<ul role="list">
 			<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-accordion-group/">norn-accordion-group</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-accordion/">norn-accordion</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-call-out/">norn-call-out</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-callout/">norn-callout</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-card/">norn-card</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-content-card/">norn-content-card</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
@@ -140,7 +140,13 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/">norn-copy-button</a>
 			</li>
 <li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-fact-list/">norn-fact-list</a>
+			</li>
+<li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+			</li>
+<li>
+				<a href="/webc-resources/preview/1/components/patterns/norn-icon/">norn-icon</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
@@ -153,12 +159,6 @@
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-svg-icon/">norn-svg-icon</a>
-			</li>
-<li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-tag-list/">norn-tag-list</a>
 			</li>
 <li>
 				<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
@@ -190,7 +190,7 @@
 				<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
 			</li>
 <li>
-				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces/">norn-workspaces</a>
+				<a href="/webc-resources/preview/1/components/patterns/norn-workspaces-home/">norn-workspaces-home</a>
 			</li>
 		</ul>
 	</details>
@@ -209,7 +209,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-side-nav</h1>
-<p class="lead">Sidebar navigation from a list of pages. Marks the current page with <code>aria-current="page"</code>, and a page holding it with <code>aria-current="true"</code>. An item may carry a <code>norn-svg-icon</code> name and child pages, which list under it with a rule down the start edge. In a sticky <code>norn-sidebar-layout</code> column only the list scrolls, so a search field in the <code>search</code> slot stays put.</p>
+<p class="lead">Sidebar navigation from a list of pages. Marks the current page with <code>aria-current="page"</code>, and a page holding it with <code>aria-current="true"</code>. An item may carry a <code>norn-icon</code> name and child pages, which list under it with a rule down the start edge. In a sticky <code>norn-sidebar-layout</code> column only the list scrolls, so a search field in the <code>search</code> slot stays put.</p>
 <p class="meta">
 	<code>&lt;norn-side-nav&gt;</code>
 	a <span>landmark</span>, from
@@ -230,28 +230,28 @@
 	
 	
 		
-		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
+		<label title="Light"><input type="radio" value="light"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
 </svg>
 
 
-</norn-svg-icon><span>Light</span></label>
-		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
 	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
 </svg>
 
 
-</norn-svg-icon><span>System</span></label>
-		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
 </svg>
 
 
-</norn-svg-icon><span>Dark</span></label>
+</norn-icon><span>Dark</span></label>
 	
 </fieldset>
 
@@ -262,67 +262,67 @@
 	
 	
 		
-		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
 </svg>
 
 
-</norn-svg-icon><span>Fill</span></label>
-		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M7 2h10v20H7zM11 18h2"></path>
 </svg>
 
 
-</norn-svg-icon><span>Phone, 320px</span></label>
-		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M4 3h16v18H4zM11 18h2"></path>
 </svg>
 
 
-</norn-svg-icon><span>Tablet, 768px</span></label>
-		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
 </svg>
 
 
-</norn-svg-icon><span>Desktop, 1024px</span></label>
+</norn-icon><span>Desktop, 1024px</span></label>
 	
 </fieldset>
 
 </norn-segmented-control>
 	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
-		<norn-svg-icon data-for="idle">
+		<norn-icon data-for="idle">
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
 </svg>
 
 
-</norn-svg-icon>
-		<norn-svg-icon data-for="running">
+</norn-icon>
+		<norn-icon data-for="running">
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12a9 9 0 1 1-9-9"></path>
 </svg>
 
 
-</norn-svg-icon>
-		<norn-svg-icon data-for="pass">
+</norn-icon>
+		<norn-icon data-for="pass">
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
 </svg>
 
 
-</norn-svg-icon>
-		<norn-svg-icon data-for="fail">
+</norn-icon>
+		<norn-icon data-for="fail">
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
 </svg>
 
 
-</norn-svg-icon>
+</norn-icon>
 		Check accessibility
 	</button>
 </div>
@@ -346,13 +346,13 @@
 		{ url: '#usage', title: 'Usage' },
 		{ url: '#reference', title: 'Reference' }
 	]&quot;
-></norn-side-nav>" data-strings="norn-code-block-webc-8w5oU"><norn-svg-icon>
+></norn-side-nav>" data-strings="norn-code-block-webc-MPaHX"><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-svg-icon><span></span></button>
+</norn-icon><span></span></button>
 <span role="status"></span>
 
 
@@ -364,168 +364,8 @@
 		{ url: '#reference', title: 'Reference' }
 	]"
 &gt;&lt;/norn-side-nav&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-8w5oU">
-		<span data-string="label" id="norn-code-block-webc-8w5oU-copy">Copy {name} to clipboard</span>
-		<span data-string="copy">Copy</span>
-		<span data-string="copied">Copied</span>
-		<span data-string="failed">Copy failed</span>
-	</span>
-	<span data-name="" hidden=""><span data-default="">html code</span></span>
-</figure>
-
-
-</norn-code-block>
-		</details>
-	</div>
-<div class="story">
-		<h3>Right to left</h3>
-		<preview-canvas><div data-js="">
-	<norn-segmented-control data-group="scheme">
-<fieldset data-icon-only="">
-	<legend><span>Color scheme</span></legend>
-	
-	
-		
-		<label title="Light"><input type="radio" value="light"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
-</svg>
-
-
-</norn-svg-icon><span>Light</span></label>
-		<label title="System"><input type="radio" value="" checked=""><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
-	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
-</svg>
-
-
-</norn-svg-icon><span>System</span></label>
-		<label title="Dark"><input type="radio" value="dark"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
-</svg>
-
-
-</norn-svg-icon><span>Dark</span></label>
-	
-</fieldset>
-
-</norn-segmented-control>
-	<norn-segmented-control data-group="width">
-<fieldset data-icon-only="">
-	<legend><span>Width</span></legend>
-	
-	
-		
-		<label title="Fill"><input type="radio" value="" checked=""><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
-</svg>
-
-
-</norn-svg-icon><span>Fill</span></label>
-		<label title="Phone, 320px"><input type="radio" value="320px"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M7 2h10v20H7zM11 18h2"></path>
-</svg>
-
-
-</norn-svg-icon><span>Phone, 320px</span></label>
-		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M4 3h16v18H4zM11 18h2"></path>
-</svg>
-
-
-</norn-svg-icon><span>Tablet, 768px</span></label>
-		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
-</svg>
-
-
-</norn-svg-icon><span>Desktop, 1024px</span></label>
-	
-</fieldset>
-
-</norn-segmented-control>
-	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
-		<norn-svg-icon data-for="idle">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
-</svg>
-
-
-</norn-svg-icon>
-		<norn-svg-icon data-for="running">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12a9 9 0 1 1-9-9"></path>
-</svg>
-
-
-</norn-svg-icon>
-		<norn-svg-icon data-for="pass">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
-</svg>
-
-
-</norn-svg-icon>
-		<norn-svg-icon data-for="fail">
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
-</svg>
-
-
-</norn-svg-icon>
-		Check accessibility
-	</button>
-</div>
-<div data-stage="">
-	<iframe src="/webc-resources/preview/1/frames/patterns/norn-side-nav/rtl/" title="Right to left preview" loading="lazy"></iframe>
-</div>
-<p><a href="/webc-resources/preview/1/frames/patterns/norn-side-nav/rtl/">Open on its own</a></p>
-<div data-results="" role="status"></div>
-
-
-</preview-canvas>
-		<details>
-			<summary>Source</summary>
-			<norn-code-block>
-<figure>
-	
-	<norn-copy-button>
-<button type="button" hidden="" data-value="<div dir=&quot;rtl&quot; lang=&quot;ar&quot;>
-	<norn-side-nav
-		:@items=&quot;[
-			{ url: '/frames/patterns/norn-side-nav/rtl/', title: 'البدء' },
-			{ url: '#usage', title: 'الاستخدام' },
-			{ url: '#reference', title: 'المرجع' }
-		]&quot;
-	></norn-side-nav>
-</div>" data-strings="norn-code-block-webc-jwTrd"><norn-svg-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
-	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
-</svg>
-
-
-</norn-svg-icon><span></span></button>
-<span role="status"></span>
-
-
-</norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,4],[&quot;keyword&quot;,4,5],[&quot;function&quot;,5,8],[&quot;punctuation&quot;,8,9],[&quot;punctuation&quot;,9,10],[&quot;string&quot;,10,13],[&quot;punctuation&quot;,13,14],[&quot;keyword&quot;,14,15],[&quot;function&quot;,15,19],[&quot;punctuation&quot;,19,20],[&quot;punctuation&quot;,20,21],[&quot;string&quot;,21,23],[&quot;punctuation&quot;,23,24],[&quot;punctuation&quot;,24,25],[&quot;punctuation&quot;,27,28],[&quot;keyword&quot;,28,41],[&quot;keyword&quot;,41,44],[&quot;function&quot;,44,51],[&quot;punctuation&quot;,51,52],[&quot;punctuation&quot;,52,53],[&quot;string&quot;,53,209],[&quot;punctuation&quot;,209,210],[&quot;keyword&quot;,210,212],[&quot;punctuation&quot;,212,213],[&quot;punctuation&quot;,213,215],[&quot;keyword&quot;,215,228],[&quot;punctuation&quot;,228,229],[&quot;punctuation&quot;,230,232],[&quot;keyword&quot;,232,235],[&quot;punctuation&quot;,235,236]]">&lt;div dir="rtl" lang="ar"&gt;
-	&lt;norn-side-nav
-		:@items="[
-			{ url: '/frames/patterns/norn-side-nav/rtl/', title: 'البدء' },
-			{ url: '#usage', title: 'الاستخدام' },
-			{ url: '#reference', title: 'المرجع' }
-		]"
-	&gt;&lt;/norn-side-nav&gt;
-&lt;/div&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-jwTrd">
-		<span data-string="label" id="norn-code-block-webc-jwTrd-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-MPaHX">
+		<span data-string="label" id="norn-code-block-webc-MPaHX-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
