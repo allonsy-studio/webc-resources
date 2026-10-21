@@ -9,9 +9,8 @@
 /**
  * Page intro, in the default slot: an h1, a lede, the actions, the facts, and anything after, such as an install `norn-code-block`.
  * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-fact-list`.
- * Sets `--norn-chrome: terminal` so a code sample inside takes the window-bar frame.
  * @slot - The h1, lede, actions, facts, and extras, in that order.
- * @cssprop --norn-hero-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-hero-width - Content width. Falls back to --norn-layout-width.
  * @cssprop --norn-hero-link - Tagline color. Falls back to --norn-text-accent.
  * @category container
  */
@@ -20,7 +19,6 @@
 <style>
 	@layer norn.components {
 		norn-hero {
-			--norn-chrome: terminal;
 			display: block;
 
 			& > header {
@@ -28,7 +26,7 @@
 				grid-auto-flow: row;
 				align-content: start;
 				gap: var(--norn-space-m, t('space.m'));
-				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-hero-width, 64rem));
+				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-hero-width, var(--norn-layout-width, t('layout.width'))));
 				margin-inline: auto;
 				padding-block: var(--norn-space-xl, t('space.xl')) var(--norn-space-l, t('space.l'));
 			}
@@ -51,6 +49,7 @@
 
 			& > header > h1 > :last-child:not(:first-child) {
 				color: var(--norn-hero-link, var(--norn-text-accent, t('text.accent')));
+				font-size: 0.55em;
 				font-weight: 400;
 			}
 
@@ -58,7 +57,7 @@
 				max-inline-size: var(--norn-text-measure, t('text.measure'));
 				margin: 0;
 				color: var(--norn-text-muted, t('text.muted'));
-				font-size: 1.2rem;
+				font-size: var(--norn-font-size-l, t('font.size.l'));
 				text-wrap: pretty;
 			}
 

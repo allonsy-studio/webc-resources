@@ -148,7 +148,7 @@ describe("neutral fixture build", () => {
 		for (const name of ["norn-hero", "norn-link-button", "norn-fact-list", "norn-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
 		assert.ok(!/norn-sidebar-layout|norn-pager|norn-side-nav/.test(cards));
 		assert.equal((cards.match(/norn-card \{/g) ?? []).length, 1);
-		assert.ok(cards.includes("--norn-chrome: terminal"));
+		assert.ok(!cards.includes("--norn-chrome"), "the hero no longer turns on the terminal frame");
 		const [docs] = bundles(output, pages.one);
 		for (const name of ["norn-sidebar-layout", "norn-side-nav", "norn-pager", "norn-header"]) assert.ok(docs.includes(`${name} {`), name);
 		assert.ok(!/norn-card|norn-card-grid|norn-hero/.test(docs));

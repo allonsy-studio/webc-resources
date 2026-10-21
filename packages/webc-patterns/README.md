@@ -245,12 +245,14 @@ The accent drives the link color (`--norn-text-accent`) and the text on an accen
 
 | Group | Tokens |
 | --- | --- |
-| `ui` | `--norn-ui-accent`, `--norn-ui-border-color`, `--norn-ui-border-radius`, `--norn-ui-shadow` |
+| `ui` | `--norn-ui-accent`, `--norn-ui-border-color`, `--norn-ui-border-strong`, `--norn-ui-border-radius`, `--norn-ui-radius-s`, `--norn-ui-focus-width`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-ui-icon-s`, `--norn-ui-icon-m`, `--norn-ui-shadow` |
 | `surface` | `--norn-surface-base`, `--norn-surface-raised`, `--norn-surface-code` |
 | `text` | `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-text-on-accent`, `--norn-text-measure` |
-| `font` | `--norn-font-body`, `--norn-font-heading`, `--norn-font-mono` |
+| `font` | `--norn-font-body`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-s`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-font-size-xl` |
 | `code` | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` |
-| `space` | `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl` |
+| `space` | `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl` |
+| `layout` | `--norn-layout-width` |
+| `status` | `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger` |
 
 A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, the card accents, and the header stripe in the `norn.oss` layer, and its plugin fills all four hooks:
 

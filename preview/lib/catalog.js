@@ -38,15 +38,20 @@ export const inline = (text) => escapeHtml(text).replace(/`([^`]+)`/g, "<code>$1
 /** What a shared token looks like, so a page can show a swatch or a sample, and a custom property that falls back to it has a type. */
 export const kindOf = (tokenPath) => {
 	if (tokenPath.startsWith("space.")) return "space";
+	if (tokenPath.startsWith("font.size.")) return "length";
 	if (tokenPath.startsWith("font.")) return "font";
-	if (tokenPath === "ui.border.radius") return "radius";
+	if (tokenPath === "ui.border.radius" || tokenPath === "ui.radius.s") return "radius";
 	if (tokenPath === "ui.shadow") return "shadow";
-	if (tokenPath === "text.measure") return "measure";
+	if (tokenPath === "text.measure" || tokenPath === "layout.width") return "measure";
+	if (["ui.focus.width", "ui.focus.offset", "ui.control.height", "ui.icon.s", "ui.icon.m"].includes(tokenPath)) return "length";
+	if (tokenPath.startsWith("ui.state.")) return "percentage";
+	if (tokenPath === "ui.motion.duration") return "time";
+	if (tokenPath === "ui.motion.easing") return "easing";
 	return "color";
 };
 
 /** The CSS type each kind of shared token has. */
-const KIND_TYPES = { color: "<color>", space: "<length>", radius: "<length>", measure: "<length>", font: "<font-family>", shadow: "<shadow>" };
+const KIND_TYPES = { color: "<color>", space: "<length>", length: "<length>", radius: "<length>", measure: "<length>", percentage: "<percentage>", time: "<time>", font: "<font-family>", shadow: "<shadow>" };
 
 /**
  * The shared tokens in tokens.json, by custom property, with their defaults.

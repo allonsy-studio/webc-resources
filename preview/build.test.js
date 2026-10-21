@@ -465,7 +465,7 @@ describe("the preview in a browser", () => {
 		await page.goto(server.url + "/components/patterns/norn-card/");
 		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), false);
 		const height = (selector) => page.locator(selector).first().evaluate((element) => element.getBoundingClientRect().height);
-		assert.equal(Math.round(await height("preview-nav a")), 31, "nav links");
+		assert.equal(Math.round(await height("preview-nav a")), 29, "nav links");
 		assert.ok((await height("preview-canvas p a")) < 24, "open on its own");
 		assert.equal(await height("preview-canvas norn-segmented-control label"), 36, "toolbar options");
 		assert.equal(await height("preview-canvas button"), 36, "the check button");

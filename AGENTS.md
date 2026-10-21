@@ -156,6 +156,24 @@ preview/           the component preview: an Eleventy site with a page and stori
     `components.test.js` checks that the registry, the slots, and the JSDoc agree.
 18. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
 
+## Lightweight baseline
+
+Norn is lightweight and modern: less chrome, native elements, tokens, and clear but subtle states. Every component follows these rules. `components.test.js` and `fixtures/neutral/design.test.js` check the ones a test can reach.
+
+1. One focus ring: `outline: var(--norn-ui-focus-width) solid var(--norn-text-accent)` at `var(--norn-ui-focus-offset)`, set once in `css/base.css`. A tab, a track, or a row that the ring would clip draws it inset, at the negative of the offset. No component sets another width.
+2. One state-layer recipe. A hover mixes `currentcolor` into the background at `--norn-ui-state-hover` (8%), a press at `--norn-ui-state-press` (12%), and a selected or current item mixes the accent at 12% (14% for a checked segmented option). Write it as `background-color: color-mix(in oklab, currentcolor var(--_state), transparent)` with `--_state` set per state, so it works over any base color and transitions. Change the background, never the border or the text color. Every interactive element has a hover, a press, and a focus-visible state.
+3. A border only where it carries meaning: the edge of a control at 3:1 (`--norn-ui-border-strong`), and a hairline between rows or sections. A container uses a fill.
+4. One container signal: a fill or an outline, not both. A status box is a tint and a 3px bar in a status color (`--norn-status-info`, `-success`, `-warning`, `-danger`), and `important` takes the accent.
+5. Two radii: `--norn-ui-radius-s` for parts inside a component and for inline code, `--norn-ui-border-radius` for components.
+6. Five type steps: `--norn-font-size-m` (1rem), `-s` (0.875rem), `-l` (1.25rem), `-xl` (1.5rem), and display sizes by `clamp()`. Body line height is 1.5, headings 1.15. A size in `em` follows its parent.
+7. Spacing comes from the `--norn-space-*` tokens, and a page's width from `--norn-layout-width`.
+8. One control height: `--norn-ui-control-height` (2.25rem), raised to 2.75rem under `pointer: coarse`.
+9. Motion has a purpose: state layers take `--norn-ui-motion-duration` (150ms), opening and closing take 200ms, all use `--norn-ui-motion-easing`, and all of it is off under `prefers-reduced-motion`.
+10. Flat by default. A shadow (`--norn-ui-shadow`) is for something that floats, such as the search results.
+11. In forced colors, a selected, current, or focused item uses a system color or an outline. Nothing relies on a pseudo-element background, which the browser replaces. A filled control that must stay filled sets `forced-color-adjust: none` on itself with `Canvas` and `LinkText` or `Highlight` and `HighlightText`.
+
+Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in a navigation landmark, a header, a footer, or a card heading has no underline at rest, and gains one on hover and focus.
+
 ## The plugin, the layouts, and themes
 
 - **The plugin.** `config.addPlugin(norn, { props, layouts, components, exclude, strings, markdown, defaults, icons })`, from

@@ -30,13 +30,13 @@
 				padding: 0;
 				list-style: none;
 				color: var(--norn-fact-list-fg, var(--norn-text-muted, t('text.muted')));
-				font-size: 0.95rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& li {
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4em;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 				max-inline-size: 100%;
 				line-height: 1.5;
 				overflow-wrap: anywhere;

@@ -163,6 +163,56 @@ test("the shipped stylesheets each sit in one layer: reset in norn.reset, base i
 	}
 });
 
+test("the baseline tokens are in tokens.json, each with the value the components expect", () => {
+	const expected = {
+		"ui.border.strong": "light-dark(#7a8194, #6f7789)",
+		"ui.focus.width": "2px",
+		"ui.focus.offset": "2px",
+		"ui.state.hover": "8%",
+		"ui.state.press": "12%",
+		"ui.radius.s": "4px",
+		"ui.motion.duration": "150ms",
+		"ui.motion.easing": "cubic-bezier(0.2, 0, 0, 1)",
+		"ui.control.height": "2.25rem",
+		"ui.icon.s": "1em",
+		"ui.icon.m": "1.25rem",
+		"status.info": "light-dark(#1b4fc4, #8fb0ff)",
+		"status.success": "light-dark(#0b6b3a, #7ed6a1)",
+		"status.warning": "light-dark(#9a4a00, #ffb36b)",
+		"status.danger": "light-dark(#b42318, #ff8a80)",
+		"font.size.s": "0.875rem",
+		"font.size.m": "1rem",
+		"font.size.l": "1.25rem",
+		"font.size.xl": "1.5rem",
+		"space.2xs": "0.25rem",
+		"layout.width": "64rem",
+	};
+	for (const [tokenPath, value] of Object.entries(expected)) assert.equal(byPath.get(tokenPath)?.resolved, value, tokenPath);
+	for (const tokenPath of ["ui.accent", "ui.border.color", "ui.border.radius", "ui.shadow", "space.xs", "space.s", "space.m", "space.l", "space.xl"]) assert.ok(byPath.has(tokenPath), `${tokenPath} stays`);
+});
+
+test("the base styles draw one focus ring from the focus tokens, with no narrower exception, and one body line height", () => {
+	const base = squash(stylesheets.find(({ file }) => file === "webc-patterns/css/base.css").text);
+	assert.ok(base.includes("outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent,"), "the ring reads the width token");
+	assert.ok(base.includes("outline-offset: var(--norn-ui-focus-offset, 2px)"), "and the offset token");
+	assert.ok(!/outline-width/.test(base), "no ring of another width");
+	assert.equal([...base.matchAll(/line-height: ([\d.]+)/g)].map(([, value]) => value).join(" "), "1.5 1.15", "the body 1.5, the headings 1.15, and no other");
+	assert.ok(!/(^|[ }])p \{/.test(base), "the paragraph takes the body's line height");
+});
+
+test("norn-callout and norn-notice share the status tokens and one recipe: a tint and a 3px bar, with no border on the notice", () => {
+	const [callout, notice] = ["norn-callout", "norn-notice"].map((name) => squash(styles(sources.find(({ file }) => file === `webc-patterns/src/${name}.webc`).text)));
+	for (const [label, css] of [["norn-callout", callout], ["norn-notice", notice]]) {
+		assert.ok(!/light-dark\(#/.test(css), `${label}: no hard-coded color pair`);
+		assert.ok(css.includes("border-inline-start: 3px solid var(--_color)"), `${label}: the bar`);
+		assert.ok(css.includes("color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base,"), `${label}: the tint`);
+		assert.ok(!/border: |border-inline-start-width|border-color/.test(css.replace(/@media \(forced-colors: active\) \{.*$/, "")), `${label}: no other border`);
+	}
+	for (const status of ["info", "success", "warning", "danger"]) assert.ok(callout.includes(`t('status.${status}')`), `norn-callout reads status.${status}`);
+	for (const status of ["info", "success", "warning", "danger"]) assert.ok(notice.includes(`t('status.${status}')`), `norn-notice reads status.${status}`);
+	assert.ok(callout.includes("--norn-text-accent, t('text.accent')") && !callout.includes("#6b2fc2"), "important maps to the accent");
+});
+
 test("the JSDoc never names a token with a stray number after it", () => {
 	for (const { file, text } of components) assert.ok(!/--norn-[a-z0-9-]+\.\d/.test(text), `${file}: a token name runs into a decimal`);
 });

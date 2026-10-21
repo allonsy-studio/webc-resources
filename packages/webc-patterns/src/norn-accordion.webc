@@ -34,7 +34,6 @@
 
 				&[open] > summary::after {
 					rotate: 225deg;
-					translate: 0 0.15em;
 				}
 
 				&::details-content {
@@ -48,17 +47,35 @@
 			}
 
 			& > div > details > summary {
+				--_state: 0%;
+				box-sizing: border-box;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				gap: var(--norn-space-s, t('space.s'));
-				padding-block: var(--norn-space-s, t('space.s'));
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-xs, t('space.xs'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
 				font-weight: 600;
 				list-style: none;
 				cursor: pointer;
 
 				&::-webkit-details-marker {
 					display: none;
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring sits inside the summary, clear of the rules above and below. */
+				&:focus-visible {
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
 				}
 
 				/* A chevron drawn with two borders, pointing down when closed and up when open. */
@@ -68,25 +85,35 @@
 					flex: none;
 					inline-size: 0.5em;
 					block-size: 0.5em;
-					margin-inline-end: 0.25em;
+					margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
 					border-block-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, t('text.accent')));
 					border-inline-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, t('text.accent')));
 					rotate: 45deg;
-					translate: 0 -0.15em;
 				}
 			}
 
 			& > div > details > :not(summary) {
 				margin-block: 0 var(--norn-space-s, t('space.s'));
+				padding-inline: var(--norn-space-xs, t('space.xs'));
+			}
+
+			@media (pointer: coarse) {
+				& > div > details > summary {
+					min-block-size: 2.75rem;
+				}
 			}
 
 			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+
 				& > div > details > summary::after {
-					transition: rotate var(--norn-accordion-duration, 200ms) ease-out, translate var(--norn-accordion-duration, 200ms) ease-out;
+					transition: rotate var(--norn-accordion-duration, 200ms) var(--norn-ui-motion-easing, t('ui.motion.easing'));
 				}
 
 				& > div > details::details-content {
-					transition: block-size var(--norn-accordion-duration, 200ms) ease-out,
+					transition: block-size var(--norn-accordion-duration, 200ms) var(--norn-ui-motion-easing, t('ui.motion.easing')),
 						content-visibility var(--norn-accordion-duration, 200ms) allow-discrete;
 				}
 			}

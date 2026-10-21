@@ -15,7 +15,7 @@
  * Directional icons (`arrow-start`, `arrow-end`, `chevron-end`, and a project icon set to `mirror`) mirror in a right-to-left context.
  * @prop {string} name - A built-in icon or a project icon. The built-in names are: accessibility, arrow-end, arrow-start, book, caution, check, chevron-down, chevron-end, copy, desktop, error, external, fill, hash, important, info, link, loading, moon, phone, search, success, sun, system, tablet, tip, warning.
  * @slot label - The icon's name, as one element, read but not shown. Leave it out for a decorative icon.
- * @cssprop --norn-icon-size - Width and height. Falls back to 1em.
+ * @cssprop --norn-icon-size - Width and height. Falls back to --norn-ui-icon-s, which is 1em. A component sets it to --norn-ui-icon-m beside a title.
  * @cssprop --norn-icon-stroke - Line weight of a built-in icon. Falls back to 2.
  * @category component
  */
@@ -97,8 +97,8 @@ function drawing(name) {
 			vertical-align: -0.125em;
 
 			& svg {
-				inline-size: var(--norn-icon-size, 1em);
-				block-size: var(--norn-icon-size, 1em);
+				inline-size: var(--norn-icon-size, var(--norn-ui-icon-s, t('ui.icon.s')));
+				block-size: var(--norn-icon-size, var(--norn-ui-icon-s, t('ui.icon.s')));
 
 				&:not([data-project]) {
 					fill: none;
