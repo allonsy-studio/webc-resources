@@ -9,17 +9,21 @@
 
 /**
  * The component list, grouped by category. Marks the page being shown with aria-current.
+ * Wide, the groups are the sidebar. Narrow, they sit in one closed disclosure with the count, so the page comes first.
  * @prop {{ id: string, title: string, components: { name: string, url: string }[] }[]} categories
  */
 --->
 <nav aria-label="Components">
-	<details webc:for="category of categories" open>
-		<summary @text="category.title"></summary>
-		<ul role="list">
-			<li webc:for="component of category.components">
-				<a :href="component.url" :aria-current="component.url === $data.page.url ? 'page' : undefined" @text="component.name"></a>
-			</li>
-		</ul>
+	<details>
+		<summary>Components <span @text="'(' + categories.reduce((total, category) => total + category.components.length, 0) + ')'"></span></summary>
+		<details webc:for="category of categories" open>
+			<summary @text="category.title"></summary>
+			<ul role="list">
+				<li webc:for="component of category.components">
+					<a :href="component.url" :aria-current="component.url === $data.page.url ? 'page' : undefined" @text="component.name"></a>
+				</li>
+			</ul>
+		</details>
 	</details>
 </nav>
 <style>
@@ -29,8 +33,20 @@
 			font-size: 0.95rem;
 		}
 
-		preview-nav details + details {
+		preview-nav details details + details {
 			margin-block-start: var(--norn-space-s);
+		}
+
+		/* The disclosure around the groups: a bar the width of the column, with the page below it. */
+		preview-nav > nav > details > summary {
+			padding: 0.5rem var(--norn-space-s);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav > nav > details[open] > summary {
+			margin-block-end: var(--norn-space-s);
 		}
 
 		preview-nav summary {
@@ -65,6 +81,32 @@
 			font-weight: 700;
 		}
 
+		/* Wide, the groups are the sidebar: no bar, and the groups show whether the disclosure is open, with a script or without. Without ::details-content the bar stays and still works. */
+		@media (width > 48rem) {
+			@supports selector(::details-content) {
+				preview-nav > nav > details > summary {
+					display: none;
+				}
+
+				preview-nav > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-nav a {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
+
+			preview-nav summary {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
+		}
+
 		@media print {
 			preview-nav {
 				display: none;
@@ -72,3 +114,26 @@
 		}
 	}
 </style>
+<script>
+	{
+		/** The component list. Wide, its disclosure stays open, so the links are open in the page for every tool that reads it. Narrow, it closes. */
+		class PreviewNav extends HTMLElement {
+			#wide = window.matchMedia("(width > 48rem)");
+			#sync = () => {
+				const disclosure = this.querySelector(":scope > nav > details");
+				if (disclosure) disclosure.open = this.#wide.matches;
+			};
+
+			connectedCallback() {
+				this.#wide.addEventListener("change", this.#sync);
+				this.#sync();
+			}
+
+			disconnectedCallback() {
+				this.#wide.removeEventListener("change", this.#sync);
+			}
+		}
+
+		if (!customElements.get("preview-nav")) customElements.define("preview-nav", PreviewNav);
+	}
+</script>

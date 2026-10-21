@@ -24,9 +24,9 @@
 	<tbody>
 		<tr webc:if="editable">
 			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
-			<td data-col="type"><code>&lt;color&gt;</code></td>
-			<td><code>#2346d4</code></td>
-			<td>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>#2346d4</code></td>
+			<td data-label="Override">
 				<span data-field>
 					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent" />
 					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled>Reset</button>
@@ -35,15 +35,15 @@
 		</tr>
 		<tr webc:for="prop of cssprops">
 			<th scope="row"><code @text="prop.name"></code><small webc:if="prop.description" @html="prop.description"></small></th>
-			<td data-col="type"><code webc:if="prop.type" @text="prop.type"></code><span webc:else>none</span></td>
-			<td>
+			<td data-col="type" data-label="Type"><code webc:if="prop.type" @text="prop.type"></code><span webc:else>none</span></td>
+			<td data-label="Default">
 				<template webc:if="prop.fallback" webc:nokeep>
 					<code @text="prop.fallback"></code>
 					<small webc:if="prop.fallbackValue" @text="prop.fallbackValue"></small>
 				</template>
 				<span webc:else>none</span>
 			</td>
-			<td webc:if="editable">
+			<td webc:if="editable" data-label="Override">
 				<span data-field>
 					<input type="text" :data-prop="prop.name" :aria-label="'Override ' + prop.name" autocomplete="off" spellcheck="false" />
 					<button type="button" data-action="reset" :data-prop="prop.name" :aria-label="'Reset ' + prop.name" disabled>Reset</button>
@@ -120,6 +120,16 @@
 		preview-props button:disabled {
 			color: var(--norn-text-muted);
 			cursor: default;
+		}
+
+		@media (pointer: coarse) {
+			preview-props :is(button, input[type="text"]) {
+				min-block-size: 2.75rem;
+			}
+
+			preview-props input[type="color"] {
+				block-size: 2.75rem;
+			}
 		}
 	}
 </style>

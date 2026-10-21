@@ -255,6 +255,9 @@ describe("the preview in a browser", () => {
 		return handle.contentFrame();
 	}
 
+	/** The bar that opens the component list on a phone. */
+	const NAV_BAR = "preview-nav > nav > details > summary";
+
 	test("every page passes axe in light, dark, and forced colors, and keeps its list semantics", async () => {
 		assert.deepEqual(await audit(browser, server.url, pagesOf(output)), []);
 		const page = await browser.newPage();
@@ -266,13 +269,206 @@ describe("the preview in a browser", () => {
 	});
 
 	test("no preview page scrolls sideways on a phone: the foundations table scrolls in its own box", async () => {
-		const page = await browser.newPage({ viewport: { width: 390, height: 800 } });
-		for (const url of pagesOf(output).filter((entry) => !entry.startsWith("/frames/"))) {
-			await page.goto(server.url + url);
-			assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390), url);
+		for (const width of [390, 320]) {
+			const page = await browser.newPage({ viewport: { width, height: 800 } });
+			for (const url of pagesOf(output).filter((entry) => !entry.startsWith("/frames/"))) {
+				await page.goto(server.url + url);
+				assert.ok(await page.evaluate((limit) => document.documentElement.scrollWidth <= limit, width), `${url} at ${width}`);
+			}
+			await page.goto(server.url + "/foundations/");
+			assert.ok(await page.$eval("preview-tokens norn-data-table > div", (box) => box.scrollWidth > box.clientWidth), `${width}: the table scrolls instead`);
+			await page.close();
 		}
-		await page.goto(server.url + "/foundations/");
-		assert.ok(await page.$eval("preview-tokens norn-data-table > div", (box) => box.scrollWidth > box.clientWidth), "the table scrolls instead");
+	});
+
+	test("on a phone the pages pass axe with the component list closed and open", async () => {
+		const pages = ["/", "/foundations/", "/components/patterns/norn-callout/", "/components/patterns/norn-card/", "/components/patterns/norn-docs/", "/components/oss-site/oss-head/"];
+		assert.deepEqual(await audit(browser, server.url, pages, { width: 390 }), [], "closed");
+		assert.deepEqual(await audit(browser, server.url, pages, { width: 390, prepare: (page) => page.locator(NAV_BAR).click() }), [], "open");
+	});
+
+	test("on a phone the component list is one closed disclosure, and the page's heading is on the first screen", async () => {
+		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+		for (const url of ["/", "/components/patterns/norn-callout/", "/foundations/"]) {
+			await page.goto(server.url + url);
+			const bar = page.locator(NAV_BAR);
+			assert.equal((await bar.textContent()).replace(/\s+/g, " ").trim(), `Components (${catalog.components.length})`, url);
+			assert.equal(await page.locator("preview-nav > nav > details").evaluate((details) => details.open), false, `${url}: closed`);
+			assert.equal(await page.locator("preview-nav a").first().isHidden(), true, `${url}: no link shows while it is closed`);
+			assert.ok((await page.locator("main h1").boundingBox()).y < 844, `${url}: the heading is within the first screen`);
+		}
+		await page.goto(server.url + "/components/patterns/norn-callout/");
+		await page.locator(NAV_BAR).click();
+		assert.equal(await page.locator("preview-nav details details").evaluateAll((groups) => groups.every((group) => group.open)), true, "the groups are open inside it");
+		const current = page.locator('preview-nav a[aria-current="page"]');
+		assert.equal(await current.count(), 1);
+		assert.equal(await current.textContent(), "norn-callout");
+		assert.equal(await current.isVisible(), true);
+		assert.equal(await page.locator("norn-skip-link a").getAttribute("href"), "#main");
+		assert.equal(await page.locator("#main").count(), 1);
+		await page.close();
+	});
+
+	test("the component list closes when the screen narrows and opens when it widens", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-callout/");
+		const open = () => page.locator("preview-nav > nav > details").evaluate((details) => details.open);
+		assert.equal(await open(), true);
+		await page.setViewportSize({ width: 390, height: 844 });
+		assert.equal(await open(), false);
+		await page.setViewportSize({ width: 1280, height: 900 });
+		assert.equal(await open(), true);
+		await page.close();
+	});
+
+	test("without a script the component list is the same disclosure on a phone, and works", async () => {
+		const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/components/patterns/norn-callout/");
+		assert.equal(await page.locator("preview-nav a").first().isHidden(), true);
+		await page.locator(NAV_BAR).click();
+		assert.equal(await page.locator("preview-nav a").first().isVisible(), true);
+		await context.close();
+	});
+
+	test("on a wide screen the component list is the sidebar: the groups show, with no bar of their own", async () => {
+		for (const javaScriptEnabled of [true, false]) {
+			const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 1280, height: 900 } });
+			const page = await context.newPage();
+			await page.goto(server.url + "/components/patterns/norn-callout/");
+			assert.equal(await page.locator(NAV_BAR).isHidden(), true, "no bar");
+			const groups = page.locator("preview-nav details details");
+			assert.equal(await groups.count(), 6);
+			for (const group of await groups.all()) {
+				assert.equal(await group.locator("> summary").isVisible(), true);
+				assert.equal(await group.locator("a").first().isVisible(), true);
+			}
+			assert.equal(await page.locator("preview-nav a:visible").count(), catalog.components.length);
+			if (javaScriptEnabled) assert.equal(await page.locator("preview-nav > nav > details").evaluate((details) => details.open), true, "open, so its links are in the page for every tool");
+			await context.close();
+		}
+	});
+
+	/** The props and slots tables of a component page: every table in the page but the custom properties one. */
+	const SPEC_TABLES = "main table:not(preview-props table)";
+
+	test("on a phone the props and slots tables stack, no word splits across lines, and no table pushes the page sideways", async () => {
+		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+		for (const url of ["/components/patterns/norn-callout/", "/components/patterns/norn-card/", "/components/patterns/norn-docs/", "/components/patterns/norn-segmented-control/"]) {
+			await page.goto(server.url + url);
+			assert.ok(await page.locator(SPEC_TABLES).count() >= 1, `${url}: a props or a slots table`);
+			const split = await page.evaluate((tables) => {
+				const found = [];
+				for (const cell of document.querySelectorAll(`${tables} :is(th, td)`)) {
+					const walker = document.createTreeWalker(cell, window.NodeFilter.SHOW_TEXT);
+					for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+						for (const word of node.data.matchAll(/[\w@:$]+/g)) {
+							const range = document.createRange();
+							range.setStart(node, word.index);
+							range.setEnd(node, word.index + word[0].length);
+							if (range.getClientRects().length > 1) found.push(word[0]);
+						}
+					}
+				}
+				return found;
+			}, SPEC_TABLES);
+			assert.deepEqual(split, [], `${url}: words split across lines`);
+			assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390), `${url}: the page holds still`);
+		}
+		await page.goto(server.url + "/components/patterns/norn-callout/");
+		const type = page.locator(`${SPEC_TABLES} td code`, { hasText: /^string$/ }).first();
+		assert.ok((await type.boundingBox()).height < 30, "string sits on one line");
+		const [name, cell] = await Promise.all(["th", "td"].map((selector) => type.locator("xpath=ancestor::tr").locator(selector).first().boundingBox()));
+		assert.ok(name.y + name.height <= cell.y, "the type sits under the name");
+		await page.close();
+	});
+
+	test("on a phone a custom property is a block: name, type, default, then its field and reset, all inside the screen", async () => {
+		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		const row = page.locator("preview-props tbody tr", { has: page.locator('input[data-prop="--norn-card-radius"]') });
+		const [name, type, fallback, field] = await Promise.all(["th", "td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"].map((selector) => row.locator(selector).boundingBox()));
+		assert.ok(name.y < type.y && type.y < fallback.y && fallback.y < field.y, "one under the other");
+		for (const box of [name, type, fallback, field]) assert.ok(box.x >= 0 && box.x + box.width <= 390, "inside the screen");
+		const reset = await row.getByRole("button", { name: "Reset --norn-card-radius" }).boundingBox();
+		assert.ok(reset.x + reset.width <= 390 - 1, "the reset is in reach");
+		assert.equal(await page.locator("preview-props").evaluate((box) => box.scrollWidth <= box.clientWidth), true, "nothing to scroll");
+		await row.locator("input").fill("1px");
+		assert.equal(await row.getByRole("button", { name: "Reset --norn-card-radius" }).isEnabled(), true);
+		await page.close();
+	});
+
+	/** The canvas toolbar's rows: how many lines its visible parts fall on. */
+	const toolbarRows = (page) =>
+		page.locator("preview-canvas").first().evaluate((canvas) => {
+			const parts = [...canvas.firstElementChild.children].map((part) => part.getBoundingClientRect()).filter((box) => box.height > 0);
+			const rows = [];
+			for (const box of parts) {
+				const row = rows.find((other) => box.top < other.bottom && box.bottom > other.top);
+				if (row) {
+					row.top = Math.min(row.top, box.top);
+					row.bottom = Math.max(row.bottom, box.bottom);
+				} else rows.push({ top: box.top, bottom: box.bottom });
+			}
+			return rows.length;
+		});
+
+	test("on a phone the width control is gone, the toolbar is one row, and the frame fills its box", async () => {
+		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		const canvas = page.locator("preview-canvas").first();
+		assert.equal(await canvas.locator('[data-group="width"]').isHidden(), true);
+		assert.equal(await canvas.locator('[data-group="scheme"]').isVisible(), true);
+		assert.equal(await canvas.locator('[data-action="axe"]').isVisible(), true);
+		assert.equal(await toolbarRows(page), 1);
+		await page.close();
+	});
+
+	test("a width chosen on a wide screen leaves the frame no wider than its box once the screen is narrow", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		const canvas = page.locator("preview-canvas").first();
+		await pick(canvas, "width", "Desktop, 1024px");
+		const widths = () => canvas.evaluate((element) => ({ frame: element.querySelector("iframe").getBoundingClientRect().width, stage: element.querySelector("[data-stage]").clientWidth }));
+		assert.equal(Math.round((await widths()).frame), 1024);
+		await page.setViewportSize({ width: 390, height: 844 });
+		const narrow = await widths();
+		assert.ok(narrow.frame <= narrow.stage, `${narrow.frame} in ${narrow.stage}`);
+		assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= 390), true);
+		await page.setViewportSize({ width: 1280, height: 900 });
+		assert.equal(Math.round((await widths()).frame), 1024, "the choice is still there on a wide screen");
+		await page.close();
+	});
+
+	test("on a touch screen the nav, the toolbar, and the link to open a frame are 44px targets", async () => {
+		const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), true);
+		await page.locator(NAV_BAR).click();
+		const heights = (selector) => page.locator(selector).evaluateAll((elements) => elements.filter((element) => element.getBoundingClientRect().height > 0).map((element) => element.getBoundingClientRect().height));
+		const small = async (selector) => {
+			const found = await heights(selector);
+			assert.ok(found.length > 0, selector);
+			return found.filter((height) => height < 44);
+		};
+		assert.deepEqual(await small("preview-nav a"), [], "nav links");
+		assert.deepEqual(await small("preview-nav summary"), [], "nav groups");
+		assert.deepEqual(await small("preview-canvas norn-segmented-control label"), [], "toolbar options");
+		assert.deepEqual(await small("preview-canvas button"), [], "the check button");
+		assert.deepEqual(await small("preview-canvas p a"), [], "open on its own");
+		await context.close();
+	});
+
+	test("with a mouse the sizes stay as they were", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), false);
+		const height = (selector) => page.locator(selector).first().evaluate((element) => element.getBoundingClientRect().height);
+		assert.equal(Math.round(await height("preview-nav a")), 31, "nav links");
+		assert.ok((await height("preview-canvas p a")) < 24, "open on its own");
+		assert.equal(await height("preview-canvas norn-segmented-control label"), 36, "toolbar options");
+		assert.equal(await height("preview-canvas button"), 36, "the check button");
 		await page.close();
 	});
 

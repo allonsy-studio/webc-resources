@@ -24,14 +24,16 @@ Head components (`norn-head`, `oss-head`) have no canvas, since every frame rend
 
 The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document.
 
+On a phone (48rem and narrower) the navigation is one closed disclosure, "Components" with the count, above the page. On a wide screen the groups are the sidebar, and the disclosure's bar is hidden where the browser supports `::details-content`. A touch screen gets 44px targets for the navigation and the canvas controls.
+
 ### Canvas controls
 
 | Control | Does |
 | --- | --- |
 | Color scheme | Three icon buttons, a sun for light, a half-filled circle for the system setting, and a moon for dark. They are radio buttons, so one is on at a time. |
-| Width | Device icons for fill, phone (320px), tablet (768px), and desktop (1024px), also radio buttons |
+| Width | Device icons for fill, phone (320px), tablet (768px), and desktop (1024px), also radio buttons. Hidden on a phone (40rem and narrower), where the frame always fills its box |
 | Check accessibility | Loads axe-core into the frame and runs the WCAG 2.0, 2.1, and 2.2 A and AA rules and axe's best practices on the frame as it is now: the scheme, the width, and any overrides. It lists each violation with its rule, impact, and how many elements fail, or says there are none. |
-| Custom properties | A table of the component's properties: name, type, default, and an override field in the same row |
+| Custom properties | A table of the component's properties: name, type, default, and an override field in the same row. On a narrow screen each property stacks as a block |
 
 ## Try the tokens
 
