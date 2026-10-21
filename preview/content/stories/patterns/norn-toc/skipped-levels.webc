@@ -1,16 +1,28 @@
 ---
 title: Skipped levels
 order: 3
+ownH1: true
+bleed: true
 ---
-<norn-toc
-	:@items="[
-		{ id: 'overview', text: 'Overview', level: 3 },
-		{ id: 'setup', text: 'Setup', level: 2 },
-		{ id: 'tokens', text: 'Design tokens', level: 4 },
-		{ id: 'usage', text: 'Usage', level: 2 }
-	]"
-></norn-toc>
-<p id="overview">Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
-<p id="setup">Setup: a level 2 heading.</p>
-<p id="tokens">Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
-<p id="usage">Usage: a level 2 heading.</p>
+<norn-sidebar-layout>
+	<norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'overview', text: 'Overview', level: 3 },
+			{ id: 'setup', text: 'Setup', level: 2 },
+			{ id: 'tokens', text: 'Design tokens', level: 4 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]"
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p id="overview">Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p id="setup">Setup: a level 2 heading.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p id="tokens">Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p id="usage">Usage: a level 2 heading.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>
