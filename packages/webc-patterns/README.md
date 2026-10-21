@@ -332,7 +332,7 @@ config.amendLibrary("md", headingAnchors);
 config.addJavaScriptFunction("nornHeadings", headings);
 ```
 
-- `scrollTables` wraps each table in `norn-data-table`.
+- `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
 - `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does.
 - `headings(html)` lists the anchored headings of rendered HTML for `norn-toc`. Register it as `nornHeadings`.
@@ -374,7 +374,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The checked option is tinted in the accent |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |
 | `norn-copy-button` | `@value` or `@source` (an id), `:@compact`, slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |
-| `norn-data-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, with a shadow at the edge that has more, and a named tab stop while it scrolls |
+| `norn-simple-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, with a shadow at the edge that has more, and a tab stop named by the caption while it scrolls |
 | `norn-notice` | `@severity` (`info`, `success`, `warning`, `error`), `:@live`, default slot, slots `prefix` and `action` | A message about the page, with an icon and a severity word read first |
 | `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | A note within prose, as `role="note"` |
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
@@ -433,7 +433,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 - Text only a script shows sits in the page as hidden elements that the script reads: `norn-copy-button`'s texts, `norn-search`'s statuses, `norn-theme-toggle`'s names, and `norn-code-tabs`'s fallback tab name.
 - `norn-search` picks `results-one`, `results-other`, or another plural form with `Intl.PluralRules` for the nearest `lang`, and formats the count for it. `{count}` stands in for the number. An empty form falls back to `results-other`.
 - `norn-notice`'s `prefix` carries its own punctuation, as in `"Remarque : "`.
-- `norn-data-table` without a caption or a `label` slot names its scroll box from the column headings, so it needs no string of its own.
+- `norn-simple-table` without a caption or a `label` slot names its scroll box from the column headings, so it needs no string of its own.
 - Markdown callouts take their titles from `componentStrings`, like any callout: the Markdown add-on writes no `heading` slot.
 - `norn-pager`'s arrows are drawn in CSS and point the other way in right-to-left text.
 
@@ -460,7 +460,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 
 | Export | Purpose |
 | --- | --- |
-| `scrollTables(md)` | markdown-it amend that wraps each table in `norn-data-table` |
+| `scrollTables(md)` | markdown-it amend that wraps each table in `norn-simple-table` |
 | `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
 | `headingAnchors(md, { levels })` | markdown-it amend that gives headings ids and links them to themselves; levels 2 and 3 by default |
 | `headings(html, { levels })` | The anchored headings of rendered HTML as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |

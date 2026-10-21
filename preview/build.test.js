@@ -297,7 +297,7 @@ describe("the preview in a browser", () => {
 				assert.ok(await page.evaluate((limit) => document.documentElement.scrollWidth <= limit, width), `${url} at ${width}`);
 			}
 			await page.goto(server.url + "/foundations/");
-			assert.ok(await page.$eval("preview-tokens norn-data-table > div", (box) => box.scrollWidth > box.clientWidth), `${width}: the table scrolls instead`);
+			assert.ok(await page.$eval("preview-tokens norn-simple-table > div", (box) => box.scrollWidth > box.clientWidth), `${width}: the table scrolls instead`);
 			await page.close();
 		}
 	});

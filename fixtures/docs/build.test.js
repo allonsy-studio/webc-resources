@@ -208,12 +208,12 @@ describe("docs fixture in a browser", () => {
 	test("a wide Markdown table scrolls in its own named box, and the page never scrolls sideways", async () => {
 		const page = await browser.newPage({ viewport: { width: 320, height: 800 } });
 		await page.goto(server.url + "/reference/");
-		await page.$eval("norn-data-table table tr", (row) => row.append(...Array.from({ length: 6 }, () => Object.assign(document.createElement("td"), { textContent: "a_long_option_name" }))));
-		await page.waitForFunction(() => document.querySelector("norn-data-table > div").getAttribute("role") === "region", null, { timeout: 5000 });
-		assert.deepEqual(await page.$eval("norn-data-table > div", (box) => [box.tabIndex, box.getAttribute("aria-label")]), [0, "Option, Default"]);
+		await page.$eval("norn-simple-table table tr", (row) => row.append(...Array.from({ length: 6 }, () => Object.assign(document.createElement("td"), { textContent: "a_long_option_name" }))));
+		await page.waitForFunction(() => document.querySelector("norn-simple-table > div").getAttribute("role") === "region", null, { timeout: 5000 });
+		assert.deepEqual(await page.$eval("norn-simple-table > div", (box) => [box.tabIndex, box.getAttribute("aria-label")]), [0, "Option, Default"]);
 		assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth));
-		await page.$$eval("norn-data-table td", (cells) => cells.filter((cell) => cell.textContent === "a_long_option_name").forEach((cell) => cell.remove()));
-		await page.waitForFunction(() => !document.querySelector("norn-data-table > div").hasAttribute("tabindex"), null, { timeout: 5000 });
+		await page.$$eval("norn-simple-table td", (cells) => cells.filter((cell) => cell.textContent === "a_long_option_name").forEach((cell) => cell.remove()));
+		await page.waitForFunction(() => !document.querySelector("norn-simple-table > div").hasAttribute("tabindex"), null, { timeout: 5000 });
 		await page.close();
 	});
 

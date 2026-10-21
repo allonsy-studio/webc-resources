@@ -11,12 +11,12 @@ description: Every string a visitor sees or hears, in another language.
 	<span slot="results-other">{count} résultats</span>
 </norn-search>
 <norn-notice lang="fr"><span slot="prefix">Remarque : </span><p>Le site change bientôt.</p></norn-notice>
-<norn-data-table id="headed" lang="fr">
+<norn-simple-table id="headed" lang="fr">
 	<table>
 		<thead><tr><th>Nom</th><th>Valeur</th><th>Description</th></tr></thead>
 		<tbody><tr><td>largeur</td><td>100</td><td><code>une-valeur-assez-longue-pour-faire-défiler-le-tableau</code></td></tr></tbody>
 	</table>
-</norn-data-table>
+</norn-simple-table>
 <div dir="rtl" lang="ar">
 	<norn-pager :@prev="({ url: '/docs/one/', title: 'السابق' })" :@next="({ url: '/docs/two/', title: 'التالي' })"><span slot="label">الصفحات</span></norn-pager>
 </div>

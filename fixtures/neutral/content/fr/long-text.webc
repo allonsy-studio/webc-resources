@@ -82,7 +82,7 @@ frame:
 			<norn-code-block data-tab="Électroencéphalographiquement" @language="sh" @code="pnpm add @example/long"></norn-code-block>
 		</norn-code-tabs>
 		<norn-heading-anchor @slug="sous-titre" :@level="3">Un sous-titre tout aussi long que les autres entrées du sommaire</norn-heading-anchor>
-		<norn-data-table>
+		<norn-simple-table>
 			<span slot="label">Tableau large défilant dans sa propre boîte, avec un nom très long</span>
 			<table>
 				<thead>
@@ -92,7 +92,7 @@ frame:
 					<tr><td><code>unNomDOptionExtraordinairementLongPourTesterLeDebordement</code></td><td><code>string</code></td><td><code>"_site"</code></td><td>Où le build écrit ses pages, avec une explication bien trop détaillée pour une cellule.</td></tr>
 				</tbody>
 			</table>
-		</norn-data-table>
+		</norn-simple-table>
 		<p id="commande">npm install @example/un-paquet-dont-le-nom-est-vraiment-tres-long</p>
 		<norn-copy-button @source="commande">
 			<span slot="label">Copier la commande d’installation complète dans le presse-papiers</span>

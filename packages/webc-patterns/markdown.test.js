@@ -17,11 +17,11 @@ test("the main entry exports nothing for Markdown", () => {
 	for (const name of ["callouts", "headingAnchors", "headings", "scrollTables", "slugify"]) assert.equal(name in main, false, name);
 });
 
-test("scrollTables: wraps each Markdown table in norn-data-table, and leaves other blocks alone", () => {
+test("scrollTables: wraps each Markdown table in norn-simple-table, and leaves other blocks alone", () => {
 	const md = markdownIt();
 	scrollTables(md);
 	const html = md.render("| a | b |\n| - | - |\n| 1 | 2 |\n\nText.\n");
-	assert.match(html, /^<norn-data-table><table>\n<thead>[\s\S]*<\/table>\n<\/norn-data-table>\n<p>Text\.<\/p>\n$/);
+	assert.match(html, /^<norn-simple-table><table>\n<thead>[\s\S]*<\/table>\n<\/norn-simple-table>\n<p>Text\.<\/p>\n$/);
 });
 
 test("callouts: a marked blockquote renders as norn-callout, with the marker gone", () => {

@@ -16,7 +16,7 @@ description: The shared design tokens, from tokens.json.
 	other that is open.
 </p>
 <preview-tokens>
-	<norn-data-table>
+	<norn-simple-table>
 	<table>
 		<thead>
 			<tr><th scope="col">Token</th><th scope="col">Group</th><th scope="col">Preview</th><th scope="col">Default</th><th scope="col">Override</th><th scope="col">Use</th></tr>
@@ -39,5 +39,5 @@ description: The shared design tokens, from tokens.json.
 			</tr>
 		</tbody>
 	</table>
-	</norn-data-table>
+	</norn-simple-table>
 </preview-tokens>

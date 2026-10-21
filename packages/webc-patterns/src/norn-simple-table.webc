@@ -9,26 +9,26 @@
 /**
  * A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way.
  * Pass the `<table>` in the default slot, with a `<caption>` when it can have one. Cells and code in them wrap between words, never mid-word.
- * Its script makes the box a named, focusable region only while it scrolls, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables.
+ * While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables.
  * @slot - The table.
  * @slot label - The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.
- * @cssprop --norn-data-table-rule - Row rules. Falls back to --norn-ui-border-color.
- * @cssprop --norn-data-table-head - Header row background. Unset, there is none.
- * @cssprop --norn-data-table-bg - The surface the table sits on, which the scroll shadows are drawn against. Falls back to --norn-surface-base.
+ * @cssprop --norn-simple-table-rule - Row rules. Falls back to --norn-ui-border-color.
+ * @cssprop --norn-simple-table-head - Header row background. Unset, there is none.
+ * @cssprop --norn-simple-table-bg - The surface the table sits on, which the scroll shadows are drawn against. Falls back to --norn-surface-base.
  * @category container
  */
 --->
-<span hidden :id="'norn-data-table-' + uid"><slot name="label"></slot></span>
+<span hidden :id="'norn-simple-table-' + uid"><slot name="label"></slot></span>
 <div><slot></slot></div>
 <style>
 	@layer norn.components {
-		norn-data-table {
+		norn-simple-table {
 			display: block;
 			min-inline-size: 0;
 
 			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
 			& > div {
-				--_bg: var(--norn-data-table-bg, var(--norn-surface-base, t('surface.base')));
+				--_bg: var(--norn-simple-table-bg, var(--norn-surface-base, t('surface.base')));
 				--_shadow: color-mix(in oklab, var(--norn-text-base, t('text.base')) 18%, transparent);
 				overflow-x: auto;
 				background:
@@ -41,7 +41,7 @@
 			& > div > table {
 				min-inline-size: 100%;
 				border-collapse: collapse;
-				border-block-end: 1px solid var(--norn-data-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
 			}
 
 			& > div > table > caption {
@@ -51,13 +51,13 @@
 			}
 
 			& > div > table > thead {
-				background: var(--norn-data-table-head, none);
+				background: var(--norn-simple-table-head, none);
 			}
 
 			& > div > table :is(th, td) {
 				min-inline-size: 7rem;
 				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
-				border-block-end: 1px solid var(--norn-data-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
 				text-align: start;
 				vertical-align: top;
 			}
@@ -89,7 +89,7 @@
 <script>
 	{
 		/** A table box that is a named tab stop only while it scrolls. */
-		class DataTable extends HTMLElement {
+		class SimpleTable extends HTMLElement {
 			#observer;
 
 			connectedCallback() {
@@ -131,6 +131,6 @@
 			}
 		}
 
-		if (!customElements.get("norn-data-table")) customElements.define("norn-data-table", DataTable);
+		if (!customElements.get("norn-simple-table")) customElements.define("norn-simple-table", SimpleTable);
 	}
 </script>

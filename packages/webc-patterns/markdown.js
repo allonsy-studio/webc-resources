@@ -11,7 +11,7 @@
  */
 
 /**
- * markdown-it amend: wrap each Markdown table in `<norn-data-table>`, so a wide one scrolls in its own box.
+ * markdown-it amend: wrap each Markdown table in `<norn-simple-table>`, so a wide one scrolls in its own box.
  *
  * @param {import("markdown-it").default} md
  */
@@ -19,8 +19,8 @@ export function scrollTables(md) {
 	const render = (tokens, index, options, env, self) => self.renderToken(tokens, index, options);
 	const open = md.renderer.rules.table_open ?? render;
 	const close = md.renderer.rules.table_close ?? render;
-	md.renderer.rules.table_open = (...args) => `<norn-data-table>${open(...args)}`;
-	md.renderer.rules.table_close = (...args) => `${close(...args)}</norn-data-table>\n`;
+	md.renderer.rules.table_open = (...args) => `<norn-simple-table>${open(...args)}`;
+	md.renderer.rules.table_close = (...args) => `${close(...args)}</norn-simple-table>\n`;
 }
 
 const CALLOUT = /^\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/i;

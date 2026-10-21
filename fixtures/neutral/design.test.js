@@ -364,12 +364,12 @@ describe("the design pass, built from content with only the data a page names", 
 		await onPage(
 			"/table/",
 			async (page) => {
-				const cells = await page.locator("norn-data-table th, norn-data-table td").evaluateAll((all) => all.map((cell) => cell.getBoundingClientRect().width));
+				const cells = await page.locator("norn-simple-table th, norn-simple-table td").evaluateAll((all) => all.map((cell) => cell.getBoundingClientRect().width));
 				assert.ok(cells.length >= 16, "the cells are there");
 				assert.ok(Math.min(...cells) >= 100, `no cell is crushed: ${Math.min(...cells)}px`);
-				const box = await page.locator("norn-data-table > div").evaluate((element) => ({ scrolls: element.scrollWidth > element.clientWidth, page: document.documentElement.scrollWidth <= document.documentElement.clientWidth }));
+				const box = await page.locator("norn-simple-table > div").evaluate((element) => ({ scrolls: element.scrollWidth > element.clientWidth, page: document.documentElement.scrollWidth <= document.documentElement.clientWidth }));
 				assert.deepEqual(box, { scrolls: true, page: true });
-				const shadow = await page.locator("norn-data-table > div").evaluate((element) => getComputedStyle(element).backgroundAttachment);
+				const shadow = await page.locator("norn-simple-table > div").evaluate((element) => getComputedStyle(element).backgroundAttachment);
 				assert.equal(shadow, "local, local, scroll, scroll", "shadows at the edges that scroll");
 			},
 			{ viewport: { width: 390, height: 800 } },

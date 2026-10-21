@@ -89,7 +89,7 @@ describe("neutral fixture build", () => {
 		assert.equal((html.match(/<norn-callout>/g) ?? []).length, 1);
 		assert.match(html, /<norn-code-block>\s*<figure>/);
 		assert.equal((html.match(/<norn-code-block>/g) ?? []).length, 1);
-		assert.match(html, /<norn-data-table>\s*<span hidden id="[^"]+"><\/span>\s*<div><table>/);
+		assert.match(html, /<norn-simple-table>\s*<span hidden id="[^"]+"><\/span>\s*<div><table>/);
 		assert.ok(!/<norn-[a-z-]+[^>]*\s@[a-z]+=/.test(html), "no prop left on a kept tag");
 		assert.ok(!html.includes("[!TIP]"));
 	});
@@ -553,7 +553,7 @@ describe("neutral fixture in a browser", () => {
 		await page.close();
 	});
 
-	test("norn-data-table names its scroll box from its column headings, without a caption or a label", async () => {
+	test("norn-simple-table names its scroll box from its column headings, without a caption or a label", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 800 } });
 		await page.goto(server.url + "/translated/");
 		await page.waitForFunction(() => document.querySelector("#headed > div").hasAttribute("tabindex"));
