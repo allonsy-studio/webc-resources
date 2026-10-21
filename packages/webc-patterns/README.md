@@ -249,7 +249,7 @@ The accent drives the link color (`--norn-text-accent`) and the text on an accen
 | `surface` | `--norn-surface-base`, `--norn-surface-raised`, `--norn-surface-code` |
 | `text` | `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-text-on-accent`, `--norn-text-measure` |
 | `font` | `--norn-font-body`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-s`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-font-size-xl` |
-| `code` | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` |
+| `code` | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number`, `--norn-code-flag` |
 | `space` | `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl` |
 | `layout` | `--norn-layout-width` |
 | `status` | `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger` |

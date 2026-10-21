@@ -209,7 +209,7 @@ test("the dark raised and code surfaces step up from the page by at least 1.25:1
 	assert.ok(ratio(dark("surface.raised"), dark("surface.base")) >= 1.25, `raised on base ${ratio(dark("surface.raised"), dark("surface.base")).toFixed(2)}:1`);
 	assert.ok(ratio(dark("surface.code"), dark("surface.base")) >= 1.25, "code on base");
 	for (const name of ["text.base", "text.muted"]) assert.ok(ratio(dark(name), dark("surface.raised")) >= 4.5, `${name} on raised`);
-	for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number"]) assert.ok(ratio(dark(name), dark("surface.code")) >= 4.5, `${name} on code`);
+	for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number", "code.flag"]) assert.ok(ratio(dark(name), dark("surface.code")) >= 4.5, `${name} on code`);
 });
 
 test("the base styles draw one focus ring from the focus tokens, with no narrower exception, and one body line height", () => {

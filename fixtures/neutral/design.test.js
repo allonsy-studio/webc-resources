@@ -625,7 +625,7 @@ describe("the design pass, built from content with only the data a page names", 
 					const value = ratio(await read(name), raised);
 					assert.ok(value >= 4.5, `${name} on raised ${value.toFixed(2)}:1`);
 				}
-				for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number"]) {
+				for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number", "code.flag"]) {
 					const value = ratio(await read(name), code);
 					assert.ok(value >= 4.5, `${name} on code ${value.toFixed(2)}:1`);
 				}

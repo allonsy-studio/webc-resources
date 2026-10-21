@@ -55,3 +55,84 @@ test("tokenRanges: plain text inside a token inherits the token's group", () => 
 	);
 });
 
+
+test("tokenRanges: a shell command, its subcommand, and its argument are three groups", () => {
+	assert.deepEqual(slices("npm install @example/project", "sh"), [
+		["function", "npm"],
+		["keyword", "install"],
+		["string", "@example/project"],
+	]);
+	assert.deepEqual(slices("yarn add @example/project", "bash"), [
+		["function", "yarn"],
+		["keyword", "add"],
+		["string", "@example/project"],
+	]);
+});
+
+test("tokenRanges: a shell flag is a flag, never a number", () => {
+	const found = slices("pnpm add -D @example/project", "shell");
+	assert.deepEqual(found, [
+		["function", "pnpm"],
+		["keyword", "add"],
+		["flag", "-D"],
+		["string", "@example/project"],
+	]);
+	assert.ok(!found.some(([group]) => group === "number"));
+	assert.deepEqual(slices("npm run build -- --watch", "sh"), [
+		["function", "npm"],
+		["keyword", "run"],
+		["string", "build"],
+		["punctuation", "--"],
+		["flag", "--watch"],
+	]);
+	assert.deepEqual(slices("ls --color=auto", "sh").slice(1), [
+		["flag", "--color"],
+		["punctuation", "="],
+		["string", "auto"],
+	]);
+});
+
+test("tokenRanges: a prompt is punctuation, a trailing comment is a comment, and a quoted string is a string", () => {
+	assert.deepEqual(slices("$ npm install --save-dev x # then build", "sh"), [
+		["punctuation", "$"],
+		["function", "npm"],
+		["keyword", "install"],
+		["flag", "--save-dev"],
+		["string", "x"],
+		["comment", "# then build"],
+	]);
+	assert.deepEqual(slices('echo "a b" | grep a', "sh"), [
+		["function", "echo"],
+		["string", '"a b"'],
+		["punctuation", "|"],
+		["function", "grep"],
+		["keyword", "a"],
+	]);
+});
+
+test("tokenRanges: each line of a script has its own command, and a continued line stays one", () => {
+	const script = "#!/bin/sh\nset -e\nnpm run build \\\n  --silent\nFOO=1 node cli.js\n";
+	assert.deepEqual(slices(script, "sh").map(([group, text]) => `${group}:${text}`), [
+		"comment:#!/bin/sh",
+		"function:set",
+		"flag:-e",
+		"function:npm",
+		"keyword:run",
+		"string:build",
+		"punctuation:\\",
+		"flag:--silent",
+		"punctuation:=",
+		"number:1",
+		"function:node",
+		"keyword:cli.js",
+	]);
+});
+
+test("tokenRanges: a shell session colors only the lines that start with a prompt", () => {
+	assert.deepEqual(slices("$ npm i\nadded 1 package\n$ ls -la", "shell-session").map(([group, text]) => `${group}:${text}`), ["punctuation:$", "function:npm", "keyword:i", "punctuation:$", "function:ls", "flag:-la"]);
+});
+
+test("tokenRanges: the aliases of the loaded languages have grammars", () => {
+	const samples = { sh: "ls", shell: "ls", "shell-session": "$ ls", ts: "const a: number = 1;", html: "<a>t</a>", md: "# Title", markdown: "**b**", yml: "a: 1", js: "const a = 1;" };
+	for (const [language, code] of Object.entries(samples)) assert.equal(typeof tokenRanges(code, language), "string", `${language} has a grammar`);
+});

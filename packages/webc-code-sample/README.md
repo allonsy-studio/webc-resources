@@ -93,7 +93,7 @@ Custom properties, each falling back to a shared token, which falls back to its 
 | `--norn-code-block-bg`, `--norn-code-block-fg` | Surface and text colors |
 | `--norn-code-block-radius`, `--norn-code-block-padding` | Corner radius and inner spacing |
 | `--norn-code-block-font` | Font stack |
-| `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number` | Syntax colors |
+| `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number`, `--norn-code-flag` | Syntax colors |
 | `--norn-chrome: terminal` | Set on an ancestor for the frame with a header bar for the caption |
 
 ## Exports
@@ -101,7 +101,7 @@ Custom properties, each falling back to a shared token, which falls back to its 
 | Export | Purpose |
 | --- | --- |
 | `codeBlock` | Absolute path to `components/norn-code-block.webc` |
-| `tokenRanges(code, language)` | Prism tokens as `[group, start, end][]` character offsets. The plugin registers it as `nornTokenRanges` |
+| `tokenRanges(code, language)` | Prism tokens as `[group, start, end][]` character offsets, in the groups `comment`, `string`, `keyword`, `function`, `number`, `flag`, and `punctuation`. For `sh`, `bash`, `shell`, and `shell-session`, the command is a `function`, its subcommand a `keyword`, a flag a `flag`, and an argument a `string`. The plugin registers it as `nornTokenRanges` |
 | `loadLanguages(names)` | Prism's loader, for languages beyond the defaults |
 
 `@allons-y/webc-code-sample/markdown` exports `highlightFences(md)`, a markdown-it amend that renders fenced code as `<norn-code-block>`.

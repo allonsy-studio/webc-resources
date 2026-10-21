@@ -269,6 +269,26 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
+	test("each sample of the code tabs story is highlighted in at least three groups, with the tokens registered for its own text", async () => {
+		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/frames/patterns/norn-code-tabs/default/");
+		await page.waitForFunction(() => CSS.highlights.size > 0);
+		const found = await page.evaluate(() =>
+			[...document.querySelectorAll("norn-code-block code")].map((code) => {
+				const groups = new Set();
+				for (const [name, highlight] of CSS.highlights) for (const range of highlight) if (code.contains(range.startContainer) && range.toString().trim()) groups.add(name.replace("tok-", ""));
+				return [...groups].sort();
+			}),
+		);
+		assert.equal(found.length, 3, "three samples");
+		for (const groups of found) {
+			assert.ok(groups.length >= 3, `groups: ${groups}`);
+			for (const group of ["function", "keyword", "flag", "string"]) assert.ok(groups.includes(group), `${group} in ${groups}`);
+		}
+		await context.close();
+	});
+
 	test("no preview page scrolls sideways on a phone: the foundations table scrolls in its own box", async () => {
 		for (const width of [390, 320]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });

@@ -11,6 +11,7 @@ import { test } from "node:test";
 import MarkdownIt from "markdown-it";
 
 import * as main from "./index.js";
+import { tokenRanges } from "./index.js";
 import { highlightFences } from "./markdown.js";
 
 test("the main entry exports nothing for Markdown", () => {
@@ -42,4 +43,12 @@ test("highlightFences: uses the first word of the info string", () => {
 test("highlightFences: writes no slots, and ignores a strings argument, so the component's fallbacks supply the texts", () => {
 	const md = new MarkdownIt().use(highlightFences, { label: "code {language}", copy: "Copier" });
 	assert.equal(md.render("```js\nx\n```"), '<norn-code-block @code="x\n" @language="js"></norn-code-block>\n');
+});
+
+test("highlightFences: a fenced sh block highlights as the shell path does, with the command, subcommand, flag, and argument apart", () => {
+	const md = new MarkdownIt().use(highlightFences);
+	const html = md.render("```sh\npnpm add -D @example/project\n```");
+	const [, code, language] = html.match(/@code="([^"]*)" @language="([^"]*)"/);
+	const ranges = JSON.parse(tokenRanges(md.utils.unescapeAll(code.replaceAll("&quot;", '"').replaceAll("&amp;", "&")), language));
+	assert.deepEqual(ranges.map(([group]) => group), ["function", "keyword", "flag", "string"]);
 });
