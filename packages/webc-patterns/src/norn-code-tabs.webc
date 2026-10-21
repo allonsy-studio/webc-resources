@@ -100,9 +100,17 @@
 				}
 			}
 
+			/* A clear border would be drawn in the text color, so only the selected tab has one. */
 			@media (forced-colors: active) {
+				& > div > [role="tablist"] > [role="tab"] {
+					border-block-end-width: 0;
+					padding-block-end: 2px;
+				}
+
 				& > div > [role="tablist"] > [role="tab"][aria-selected="true"] {
+					border-block-end-width: 2px;
 					border-block-end-color: Highlight;
+					padding-block-end: 0;
 				}
 			}
 

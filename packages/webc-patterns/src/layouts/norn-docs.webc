@@ -11,6 +11,7 @@ layout: norn-base.webc
 
 /**
  * A docs page: the sticky docs sidebar with site search above its list, the page title, its contents when it has two or more sections, the body in `norn-rich-text`, and the pager. Extends `norn-base`.
+ * When the page is 60rem wide or more, the contents are a sticky column at the end of the body. Narrower, they fold under their title, and the sidebar folds into a closed `<details>` under the sidebar's name.
  * The search is live from a Pagefind index at `pagefind/`, or a web search of the site's host without one. Only the page body is indexed.
  * The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings.
  * The sidebar's name ("Documentation") and the search label ("Search the docs") come from `componentStrings` under `norn-docs`, then English.
@@ -22,6 +23,7 @@ layout: norn-base.webc
  */
 --->
 <norn-sidebar-layout>
+	<span slot="summary" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
 	<norn-side-nav slot="nav" :@items="$data.norn.docs">
 		<span slot="label" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
 		<norn-search
@@ -42,14 +44,30 @@ layout: norn-base.webc
 </norn-sidebar-layout>
 <style>
 	@layer norn.layout {
-		/* The page title and the body's line length. The base styles set the title's face and wrapping. */
-		norn-sidebar-layout {
-			--norn-rich-text-measure: none;
+		/* The contents sit beside the body once the page is 60rem wide, and fold under their title until then. */
+		@container (width < 60rem) {
+			norn-sidebar-layout > div > article > norn-toc {
+				--norn-toc-fold: on;
+			}
+		}
 
-			& > div > article > h1 {
-				margin: 0;
-				font-size: clamp(1.9rem, 4vw, 2.5rem);
-				overflow-wrap: anywhere;
+		@container (width >= 60rem) {
+			norn-sidebar-layout > div > article:has(> norn-toc > nav) {
+				--norn-sidebar-layout-columns: minmax(0, 1fr) 12rem;
+			}
+
+			norn-sidebar-layout > div > article > * {
+				grid-column: 1;
+			}
+
+			norn-sidebar-layout > div > article > norn-toc {
+				grid-column: 2;
+				grid-row: 1 / span 2;
+				position: sticky;
+				inset-block-start: var(--norn-space-m, t('space.m'));
+				align-self: start;
+				max-block-size: calc(100dvh - 2 * var(--norn-space-m, t('space.m')));
+				overflow-y: auto;
 			}
 		}
 	}

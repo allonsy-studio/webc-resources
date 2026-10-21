@@ -36,9 +36,10 @@ const WIDE_FONT = "* { font-family: 'DejaVu Serif', Verdana, Georgia, serif !imp
 /** The widths that also run with the wide face: the narrowest, where one long word is most of a line. */
 const WIDE_WIDTHS = [320];
 
-/** Puts the page in its widest state: the skip link showing, search results listed, a section open, the copy button used. */
+/** Puts the page in its widest state: the skip link showing, the menu open, search results listed, a section open, the copy button used. */
 async function widest(page) {
 	await page.keyboard.press("Tab");
+	await page.locator("norn-sidebar-layout > div > details").evaluateAll((all) => all.forEach((details) => (details.open = true)));
 	await page.locator("norn-search input[type=search]").fill("composant");
 	await page.locator("norn-search ol a").first().waitFor();
 	await page.locator("norn-accordion details").first().evaluate((details) => (details.open = true));

@@ -101,6 +101,7 @@ const STRINGS = {
 		"results-other": "{count} results",
 	},
 	"norn-side-nav": { label: "Pages" },
+	"norn-sidebar-layout": { summary: "Menu" },
 	"norn-skip-link": { label: "Skip to content" },
 	"norn-theme-toggle": { label: "Color scheme", light: "Light", system: "System", dark: "Dark" },
 };

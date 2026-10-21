@@ -55,7 +55,7 @@ export function sharedChecks({ test, assert, getPages, getOutput }) {
 	test("the OSS site layer renders: banner, call to action, and credit, all with accessible names", () => {
 		for (const html of Object.values(getPages())) {
 			assert.ok(html.includes('<svg role="img" aria-label="Brought to you by Allons-y Studio" width="500" height="64"'), "banner");
-			assert.equal((html.match(/<svg role="img" aria-label="Brought to you by Allons-y Studio" width="300" height="135" xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="273 0 334 150"/g) ?? []).length, 2, "credit, light and dark, cropped to the art");
+			assert.equal((html.match(/<svg role="img" aria-label="Brought to you by Allons-y Studio" width="300" height="135" xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="273 0 334 150"/g) ?? []).length, 1, "credit, one lockup for both schemes, cropped to the art");
 			assert.ok(html.includes('<svg aria-hidden="true" width="72" height="72"'), "mark");
 			assert.ok(html.includes("Let's build something great together"));
 		}

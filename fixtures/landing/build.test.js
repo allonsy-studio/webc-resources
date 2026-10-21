@@ -282,25 +282,30 @@ describe("landing fixture in a browser", () => {
 		}
 	});
 
+	/** The paint of the credit's circle, which is a light fill in a light scheme and a dark one in a dark scheme. */
+	const circle = (page) => page.$eval("oss-credit svg circle[style]", (element) => [getComputedStyle(element).fill, getComputedStyle(element).stroke]);
+
 	test("the credit follows the scheme the page uses, even when CSS overrides the visitor's", async () => {
-		for (const [forced, visible] of [["light", 0], ["dark", 1]]) {
-			const context = await browser.newContext({ colorScheme: forced === "light" ? "dark" : "light" });
+		const colors = {};
+		for (const [forced, visitor] of [["light", "dark"], ["dark", "light"]]) {
+			const context = await browser.newContext({ colorScheme: visitor });
 			const page = await context.newPage();
 			await page.goto(server.url + "/");
 			await page.addStyleTag({ content: `html { color-scheme: ${forced}; }` });
-			const shown = await page.$$eval("oss-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
-			assert.equal(shown, visible, `${forced} forced over the visitor's preference`);
+			colors[forced] = await circle(page);
 			await context.close();
 		}
+		assert.deepEqual(colors.light, ["rgb(239, 235, 223)", "rgb(51, 57, 78)"], "light forced over a dark preference");
+		assert.deepEqual(colors.dark, ["rgb(51, 57, 78)", "rgb(251, 249, 243)"], "dark forced over a light preference");
 	});
 
-	test("the credit shows the dark lockup under a dark scheme and the light one otherwise", async () => {
-		for (const [colorScheme, visible] of [["light", 0], ["dark", 1]]) {
+	test("the credit shows the dark lockup under a dark scheme and the light one otherwise, and holds one SVG", async () => {
+		for (const [colorScheme, fill] of [["light", "rgb(239, 235, 223)"], ["dark", "rgb(51, 57, 78)"]]) {
 			const context = await browser.newContext({ colorScheme });
 			const page = await context.newPage();
 			await page.goto(server.url + "/");
-			const shown = await page.$$eval("oss-credit svg", (svgs) => svgs.findIndex((svg) => getComputedStyle(svg).display !== "none"));
-			assert.equal(shown, visible, colorScheme);
+			assert.equal(await page.locator("oss-credit svg").count(), 1);
+			assert.equal((await circle(page))[0], fill, colorScheme);
 			await context.close();
 		}
 	});

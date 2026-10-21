@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* global document, getComputedStyle */
+/* global document, getComputedStyle, matchMedia */
 
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -290,5 +290,192 @@ describe("the design pass, built from content with only the data a page names", 
 			},
 			{ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } },
 		);
+	});
+
+	test("a card grid with no theme draws no band and uses no system color, and a card has a fill and no border", async () => {
+		await onPage("/cards/", async (page) => {
+			const found = await page.evaluate(() => {
+				const probe = document.createElement("span");
+				document.body.append(probe);
+				const resolve = (color) => {
+					probe.style.color = color;
+					return getComputedStyle(probe).color;
+				};
+				const system = new Set(["ActiveText", "VisitedText", "GrayText"].map(resolve));
+				probe.remove();
+				const used = [];
+				for (const element of document.querySelectorAll("norn-card-grid, norn-card-grid *")) {
+					for (const pseudo of [null, "::before", "::after"]) {
+						const style = getComputedStyle(element, pseudo);
+						for (const property of ["color", "backgroundColor", "borderTopColor", "outlineColor"]) if (system.has(style[property])) used.push(`${element.localName}${pseudo ?? ""} ${property} ${style[property]}`);
+					}
+				}
+				const article = document.querySelector("norn-card article");
+				const style = getComputedStyle(article);
+				return { used, before: getComputedStyle(article, "::before").content, border: style.borderTopWidth, fill: style.backgroundColor, bar: getComputedStyle(article, "::before").height };
+			});
+			assert.deepEqual(found.used, [], "no ActiveText, VisitedText, or GrayText");
+			assert.ok(["none", "normal"].includes(found.before), `no band: ${found.before}`);
+			assert.equal(found.border, "0px", "no border, since no accent is set");
+			assert.notEqual(found.fill, "rgba(0, 0, 0, 0)", "a fill");
+		});
+	});
+
+	test("a card is one link target: the pointer anywhere over it takes a hover layer, and a click follows the heading link", async () => {
+		await onPage("/cards/", async (page) => {
+			const article = page.locator("norn-card article").first();
+			const rest = await article.evaluate((element) => getComputedStyle(element).backgroundColor);
+			const box = await article.boundingBox();
+			await page.mouse.move(box.x + box.width - 8, box.y + box.height - 8);
+			await page.waitForTimeout(250);
+			assert.notEqual(await article.evaluate((element) => getComputedStyle(element).backgroundColor), rest, "a hover layer over the card, away from the heading");
+			assert.equal(await page.locator("norn-card a").first().evaluate((link) => getComputedStyle(link).textDecorationLine), "underline", "the link shows it is the target");
+			await Promise.all([page.waitForURL("**/docs/"), page.mouse.click(box.x + box.width - 8, box.y + box.height - 8)]);
+		});
+		await onPage("/cards/", async (page) => {
+			assert.equal(await page.locator("norn-card a").first().evaluate((link) => getComputedStyle(link).textDecorationLine), "none", "no underline at rest");
+		});
+	});
+
+	test("a heading anchor's # is hidden at rest where the pointer can hover, and shows on hover and focus", async () => {
+		await onPage("/docs/", async (page) => {
+			const heading = page.locator("norn-rich-text h2:has(> a)").first();
+			const mark = () => heading.evaluate((element) => getComputedStyle(element, "::before").opacity);
+			assert.equal(await page.evaluate(() => matchMedia("(hover: hover)").matches), true);
+			assert.equal(await mark(), "0", "hidden at rest");
+			await heading.hover();
+			await page.waitForTimeout(250);
+			assert.equal(await mark(), "1", "shown on hover");
+			await page.mouse.move(0, 0);
+			await page.waitForTimeout(250);
+			assert.equal(await mark(), "0");
+			await heading.locator("a").focus();
+			await page.waitForTimeout(250);
+			assert.equal(await mark(), "1", "shown on focus");
+			assert.equal(await heading.locator("a").evaluate((link) => getComputedStyle(link).textDecorationLine), "underline", "the link underlines with focus");
+		});
+		await onPage("/docs/", async (page) => {
+			const mark = await page.locator("norn-rich-text h2:has(> a)").first().evaluate((element) => getComputedStyle(element, "::before").opacity);
+			assert.equal(mark, "1", "with no hover to reveal it, it stays");
+		}, { hasTouch: true, isMobile: true });
+	});
+
+	test("at 390px a data table keeps every cell readable and scrolls in its box", async () => {
+		await onPage(
+			"/table/",
+			async (page) => {
+				const cells = await page.locator("norn-data-table th, norn-data-table td").evaluateAll((all) => all.map((cell) => cell.getBoundingClientRect().width));
+				assert.ok(cells.length >= 16, "the cells are there");
+				assert.ok(Math.min(...cells) >= 100, `no cell is crushed: ${Math.min(...cells)}px`);
+				const box = await page.locator("norn-data-table > div").evaluate((element) => ({ scrolls: element.scrollWidth > element.clientWidth, page: document.documentElement.scrollWidth <= document.documentElement.clientWidth }));
+				assert.deepEqual(box, { scrolls: true, page: true });
+				const shadow = await page.locator("norn-data-table > div").evaluate((element) => getComputedStyle(element).backgroundAttachment);
+				assert.equal(shadow, "local, local, scroll, scroll", "shadows at the edges that scroll");
+			},
+			{ viewport: { width: 390, height: 800 } },
+		);
+	});
+
+	test("the navigation sits in a closed details on a narrow page, and is a plain column on a wide one", async () => {
+		await onPage(
+			"/docs/",
+			async (page) => {
+				const nav = page.locator("norn-sidebar-layout norn-side-nav");
+				assert.equal(await nav.evaluate((element) => element.closest("details")?.open), false, "inside a closed details");
+				assert.equal(await nav.isVisible(), false, "so it is hidden");
+				const summary = page.locator("norn-sidebar-layout > div > details > summary");
+				assert.equal((await summary.textContent()).trim(), "Documentation", "named for the navigation");
+				const heading = (await page.locator("h1").boundingBox()).y;
+				assert.ok((await summary.boundingBox()).y < heading, "the control sits above the title");
+				await summary.click();
+				assert.equal(await nav.isVisible(), true, "and opens it");
+			},
+			{ viewport: { width: 390, height: 800 } },
+		);
+		await onPage("/docs/", async (page) => {
+			assert.equal(await page.locator("norn-sidebar-layout norn-side-nav").isVisible(), true, "the column shows without a click");
+			assert.equal(await page.locator("norn-sidebar-layout > div > details > summary").isVisible(), false, "with no control");
+		});
+	});
+
+	test("in norn-docs the contents are a sticky column from 60rem, and fold under their title below it", async () => {
+		await onPage("/docs/", async (page) => {
+			const toc = page.locator("norn-toc");
+			const body = await page.locator("norn-rich-text").boundingBox();
+			const column = await toc.boundingBox();
+			assert.ok(column.x >= body.x + body.width, "beside the prose, at its end");
+			assert.equal(await toc.evaluate((element) => getComputedStyle(element).position), "sticky");
+			assert.equal(await toc.locator("ol").first().isVisible(), true);
+			assert.equal(await toc.locator("summary").evaluate((element) => getComputedStyle(element, "::after").display), "none", "no fold control");
+		});
+		await onPage(
+			"/docs/",
+			async (page) => {
+				const toc = page.locator("norn-toc");
+				assert.equal(await toc.evaluate((element) => getComputedStyle(element).position), "static");
+				assert.equal(await toc.locator("details").evaluate((element) => element.open), false, "a closed details");
+				assert.equal(await toc.locator("ol").first().isVisible(), false);
+				assert.equal((await toc.locator("summary").textContent()).trim(), "On this page");
+				await toc.locator("summary").click();
+				assert.equal(await toc.locator("ol").first().isVisible(), true);
+			},
+			{ viewport: { width: 900, height: 800 } },
+		);
+	});
+
+	test("the current page in the side navigation is a tint and the accent, with no bar and no weight change, and a hover is a lighter layer", async () => {
+		await onPage("/docs/", async (page) => {
+			const current = await paint(page, 'norn-side-nav a[aria-current="page"]');
+			const other = await paint(page, "norn-side-nav a:not([aria-current])");
+			assert.equal(current.color, await resolveColor(page, token("text.accent")), "accent text");
+			assert.notEqual(current.background, other.background, "a tint");
+			const weights = await page.locator("norn-side-nav a").evaluateAll((links) => links.map((link) => [getComputedStyle(link).fontWeight, getComputedStyle(link).boxShadow]));
+			assert.deepEqual([...new Set(weights.map(([weight]) => weight))].length, 1, "one weight");
+			assert.deepEqual([...new Set(weights.map(([, shadow]) => shadow))], ["none"], "no bar");
+			const link = page.locator("norn-side-nav a:not([aria-current])").first();
+			const rest = await link.evaluate((element) => getComputedStyle(element).backgroundColor);
+			await link.hover();
+			await page.waitForTimeout(250);
+			assert.notEqual(await link.evaluate((element) => getComputedStyle(element).backgroundColor), rest);
+			assert.notEqual(await link.evaluate((element) => getComputedStyle(element).backgroundColor), current.background, "not the current page's tint");
+		});
+	});
+
+	test("the header's links are muted with no underline until hover, and the current page has the text color and an accent line", async () => {
+		await onPage("/docs/", async (page) => {
+			const header = page.locator("norn-header nav a");
+			const [here, other] = [header.nth(0), header.nth(1)];
+			assert.equal(await other.evaluate((element) => getComputedStyle(element).textDecorationLine), "none");
+			assert.equal(await other.evaluate((element) => getComputedStyle(element).color), await resolveColor(page, token("text.muted")));
+			assert.equal(await here.getAttribute("aria-current"), "page");
+			assert.equal(await here.evaluate((element) => getComputedStyle(element).color), await resolveColor(page, token("text.base")));
+			assert.equal(await here.evaluate((element) => getComputedStyle(element).borderBottomColor), await resolveColor(page, token("text.accent")));
+			assert.equal(await page.locator("norn-header > header").evaluate((element) => getComputedStyle(element).borderBottomWidth), "0px", "a fill, and no rule under it");
+			await other.hover();
+			await page.waitForTimeout(250);
+			assert.equal(await other.evaluate((element) => getComputedStyle(element).color), await resolveColor(page, token("text.base")), "darker on hover");
+		});
+	});
+
+	test("the footer's navigation links have no underline until hover or focus, and a link in a sentence keeps its own", async () => {
+		await onPage("/docs/", async (page) => {
+			const link = page.locator("norn-footer nav a").first();
+			assert.equal(await link.evaluate((element) => getComputedStyle(element).textDecorationLine), "none");
+			await link.hover();
+			assert.equal(await link.evaluate((element) => getComputedStyle(element).textDecorationLine), "underline");
+			assert.equal(await page.locator("norn-rich-text p a").first().evaluate((element) => getComputedStyle(element).textDecorationLine), "underline", "a link in prose");
+		});
+	});
+
+	test("the pager has arrow icons and no rule above it, and its links take a hover layer", async () => {
+		await onPage("/docs/", async (page) => {
+			assert.equal(await page.locator("norn-pager nav").evaluate((element) => getComputedStyle(element).borderTopWidth), "0px");
+			assert.equal(await page.locator("norn-pager a norn-icon svg").count(), 2, "an icon each");
+			const link = page.locator("norn-pager a").first();
+			const rest = await link.evaluate((element) => getComputedStyle(element).backgroundColor);
+			await link.hover();
+			await page.waitForTimeout(250);
+			assert.notEqual(await link.evaluate((element) => getComputedStyle(element).backgroundColor), rest);
+		});
 	});
 });

@@ -10,18 +10,23 @@
  * A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and sets `--norn-rich-text-measure`, as `norn-docs` and `norn-workspace` do.
  * Wrap prose in `norn-rich-text`.
  * Pass the navigation as one element in the `nav` slot, such as `<norn-side-nav slot="nav" …>`, and the body, starting with its h1, in the default slot.
- * The navigation stays in view while the page scrolls, and a long list scrolls inside it. The columns stack, and the navigation scrolls with the page, when the frame is narrower than 37.5rem.
+ * The navigation stays in view while the page scrolls, and a long list scrolls inside it. When the frame is narrower than 37.5rem the columns stack, and the navigation folds into a closed `<details>` above the body, under the `summary` text. A browser without `::details-content` always shows the fold.
  * Sections and articles inside the body stack with a small gap.
  * @slot nav - The navigation, as one element.
+ * @slot summary - The text of the control that opens the navigation on a narrow frame, as one element. Falls back to the site's `componentStrings`, then "Menu". A layout passes the navigation's own name.
  * @slot - The page body, starting with its h1.
  * @cssprop --norn-sidebar-layout-nav - Navigation column width. Falls back to 14rem.
- * @cssprop --norn-sidebar-layout-width - Overall width. Falls back to 64rem.
+ * @cssprop --norn-sidebar-layout-width - Overall width. Falls back to --norn-layout-width.
  * @cssprop --norn-sidebar-layout-gap - Space between the navigation and the body. Falls back to --norn-space-l.
+ * @cssprop --norn-sidebar-layout-columns - The body's grid columns. Falls back to one column. A page sets it on the body's `article` to put something beside its prose, as `norn-docs` does with its contents.
  * @category layout
  */
 --->
 <div>
-	<slot name="nav"></slot>
+	<details>
+		<summary><slot name="summary"><span webc:nokeep @text="nornComponentStrings?.('norn-sidebar-layout', 'summary', $data.page) || 'Menu'"></span></slot></summary>
+		<slot name="nav"></slot>
+	</details>
 	<article><slot></slot></article>
 </div>
 <style>
@@ -29,7 +34,7 @@
 		norn-sidebar-layout {
 			display: block;
 			container-type: inline-size;
-			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-sidebar-layout-width, 64rem));
+			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-sidebar-layout-width, var(--norn-layout-width, t('layout.width'))));
 			margin-inline: auto;
 			padding-block: var(--norn-space-l, t('space.l'));
 
@@ -40,18 +45,27 @@
 				gap: var(--norn-sidebar-layout-gap, var(--norn-space-l, t('space.l')));
 			}
 
-			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. */
-			& > div > :first-child:not(article) {
+			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. The details is only a column here: its summary is hidden, and its content always shows. */
+			& > div > details {
 				position: sticky;
 				inset-block-start: var(--norn-space-m, t('space.m'));
 				display: flex;
 				flex-direction: column;
 				max-block-size: calc(100dvh - 2 * var(--norn-space-m, t('space.m')));
+
+				&::details-content {
+					content-visibility: visible;
+					display: contents;
+				}
+			}
+
+			& > div > details > summary {
+				display: none;
 			}
 
 			& > div > article {
 				display: grid;
-				grid-template-columns: minmax(0, 1fr);
+				grid-template-columns: var(--norn-sidebar-layout-columns, minmax(0, 1fr));
 				align-content: start;
 				gap: var(--norn-space-m, t('space.m'));
 				min-inline-size: 0;
@@ -65,14 +79,85 @@
 				min-inline-size: 0;
 			}
 
+			/* Narrow, the columns stack and the navigation is a control that opens it. */
 			@container (max-width: 37.5rem) {
 				& > div {
 					grid-template-columns: minmax(0, 1fr);
 				}
 
-				& > div > :first-child:not(article) {
+				& > div > details {
 					position: static;
+					display: block;
 					max-block-size: none;
+
+					&:not([open])::details-content {
+						content-visibility: hidden;
+					}
+
+					&::details-content {
+						display: block;
+					}
+				}
+
+				& > div > details > summary {
+					--_state: 0%;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: var(--norn-space-s, t('space.s'));
+					min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+					margin-block-end: var(--norn-space-xs, t('space.xs'));
+					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+					border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+					font-weight: 600;
+					list-style: none;
+					cursor: pointer;
+
+					&::-webkit-details-marker {
+						display: none;
+					}
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, t('ui.state.press'));
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+					}
+
+					/* A chevron drawn with two borders, pointing down when closed and up when open. */
+					&::after {
+						box-sizing: border-box;
+						content: "";
+						flex: none;
+						inline-size: 0.5em;
+						block-size: 0.5em;
+						border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						rotate: 45deg;
+					}
+				}
+
+				& > div > details[open] > summary::after {
+					rotate: 225deg;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
 				}
 			}
 
@@ -80,6 +165,21 @@
 				& > div {
 					grid-template-columns: minmax(0, 1fr);
 				}
+
+				& > div > details > summary {
+					display: none;
+				}
+			}
+		}
+
+		/* Without ::details-content a closed details can't show its content, so the control is always there. */
+		@supports not selector(::details-content) {
+			norn-sidebar-layout > div > details > summary {
+				display: flex;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				align-items: center;
+				font-weight: 600;
+				cursor: pointer;
 			}
 		}
 	}

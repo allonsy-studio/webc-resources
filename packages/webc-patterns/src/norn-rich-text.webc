@@ -7,7 +7,7 @@
  */
 
 /**
- * Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code.
+ * Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself shows its `#` while it is hovered or has focus, where the pointer can hover.
  * Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`.
  * @slot - The prose, as rendered HTML.
  * @cssprop --norn-rich-text-measure - Line length. Falls back to --norn-text-measure.
@@ -27,10 +27,13 @@
 			max-inline-size: var(--norn-rich-text-measure, var(--norn-text-measure, t('text.measure')));
 		}
 
-		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
+		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. The rules are flat: the build writes the @supports not at-rule(@scope) copy for older browsers from them. */
 		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
 			h2,
-			h3 {
+			h3,
+			h4,
+			h5,
+			h6 {
 				margin: var(--norn-space-s, t('space.s')) 0 0;
 				font-family: var(--norn-font-heading, t('font.heading'));
 				line-height: 1.15;
@@ -38,31 +41,55 @@
 			}
 
 			/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
-			norn-heading-anchor:has(> :is(h2, h3)) {
+			norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6)) {
 				margin-block-start: var(--norn-space-s, t('space.s'));
 			}
 
-			:is(h1, h2, h3, h4, h5, h6) {
-				/* A heading that links to itself is marked with a #, and its link takes the text color. */
-				&:has(> a)::before {
-					content: "#" / "";
-					margin-inline-end: 0.25em;
-				}
-
-				& > a {
-					display: inline-block;
-					min-block-size: 1.5rem;
-					color: inherit;
-					text-underline-offset: 0.1em;
-				}
-			}
-
 			h2 {
-				font-size: 1.5rem;
+				font-size: var(--norn-font-size-xl, t('font.size.xl'));
 			}
 
 			h3 {
-				font-size: 1.2rem;
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+			}
+
+			h4,
+			h5,
+			h6 {
+				font-size: var(--norn-font-size-m, t('font.size.m'));
+			}
+
+			/* A heading that links to itself is marked with a #, and its link takes the text color. */
+			:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
+				content: "#" / "";
+				margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
+				color: var(--norn-text-muted, t('text.muted'));
+			}
+
+			:is(h1, h2, h3, h4, h5, h6) > a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-decoration: none;
+				text-underline-offset: 0.1em;
+			}
+
+			:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible) {
+				text-decoration: underline;
+			}
+
+			/* Where the pointer can hover, the # hangs in the margin and shows with the heading's hover and focus. */
+			@media (hover: hover) {
+				:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
+					display: inline-block;
+					inline-size: 1ch;
+					margin-inline: -1.25ch 0.25ch;
+					opacity: 0;
+				}
+
+				:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a)::before {
+					opacity: 1;
+				}
 			}
 
 			p {
@@ -73,9 +100,9 @@
 			ul,
 			ol {
 				display: grid;
-				gap: 0.4rem;
+				gap: var(--norn-space-xs, t('space.xs'));
 				margin: 0;
-				padding-inline-start: 1.25rem;
+				padding-inline-start: var(--norn-space-m, t('space.m'));
 				list-style: revert;
 			}
 
@@ -107,94 +134,10 @@
 
 			:not(pre) > code {
 				padding: 0.1em 0.35em;
-				border-radius: 0.25rem;
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
 				background: var(--norn-rich-text-code-bg, var(--norn-surface-code, t('surface.code')));
 				font-family: var(--norn-font-mono, t('font.mono'));
-				font-size: 0.9em;
-			}
-		}
-
-		/* Without @scope the same rules reach every descendant at zero specificity, and a slotted component's own styles win where they set the property. */
-		@supports not at-rule(@scope) {
-			norn-rich-text {
-				& :where(h2, h3) {
-					margin: var(--norn-space-s, t('space.s')) 0 0;
-					font-family: var(--norn-font-heading, t('font.heading'));
-					line-height: 1.15;
-					text-wrap: balance;
-				}
-
-				/* A heading that links to itself is marked with a #, and its link takes the text color. */
-				& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
-					content: "#" / "";
-					margin-inline-end: 0.25em;
-				}
-
-				& :where(:is(h1, h2, h3, h4, h5, h6) > a) {
-					display: inline-block;
-					min-block-size: 1.5rem;
-					color: inherit;
-					text-underline-offset: 0.1em;
-				}
-
-				& :where(h2) {
-					font-size: 1.5rem;
-				}
-
-				& :where(h3) {
-					font-size: 1.2rem;
-				}
-
-				& :where(p) {
-					margin: 0;
-					text-wrap: pretty;
-				}
-
-				& :where(ul, ol) {
-					display: grid;
-					gap: 0.4rem;
-					margin: 0;
-					padding-inline-start: 1.25rem;
-					list-style: revert;
-				}
-
-				& :where(blockquote) {
-					margin: 0;
-					padding-inline-start: var(--norn-space-m, t('space.m'));
-					border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, t('ui.border.color')));
-					color: var(--norn-text-muted, t('text.muted'));
-				}
-
-				& :where(table) {
-					border-collapse: collapse;
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, t('ui.border.color')));
-				}
-
-				& :where(th, td) {
-					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, t('ui.border.color')));
-					text-align: start;
-				}
-
-				& :where(hr) {
-					box-sizing: border-box;
-					width: 100%;
-					border: 0;
-					border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, t('ui.border.color')));
-				}
-
-				& :where(:not(pre) > code) {
-					padding: 0.1em 0.35em;
-					border-radius: 0.25rem;
-					background: var(--norn-rich-text-code-bg, var(--norn-surface-code, t('surface.code')));
-					font-family: var(--norn-font-mono, t('font.mono'));
-					font-size: 0.9em;
-				}
-
-				/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
-				& :where(norn-heading-anchor:has(> :is(h2, h3))) {
-					margin-block-start: var(--norn-space-s, t('space.s'));
-				}
+				font-size: 0.875em;
 			}
 		}
 	}

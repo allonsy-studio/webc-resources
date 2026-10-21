@@ -1,0 +1,19 @@
+---
+title: With an accent line
+order: 5
+---
+<h2>Cards</h2>
+<norn-card-grid>
+	<li style="--norn-card-accent: var(--norn-ui-accent, #2346d4)">
+		<norn-card>
+			<h3><a href="https://example.com/">An accent line</a></h3>
+			<p>Set --norn-card-accent on the card or its list item to draw a 2px line along the top.</p>
+		</norn-card>
+	</li>
+	<li>
+		<norn-card>
+			<h3><a href="https://example.com/">No accent</a></h3>
+			<p>Unset, the card has only its fill.</p>
+		</norn-card>
+	</li>
+</norn-card-grid>

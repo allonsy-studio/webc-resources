@@ -7,7 +7,7 @@
  */
 
 /**
- * A heading that links to itself, so a reader can copy a link to the section. The heading text is the link, marked with a `#` before it.
+ * A heading that links to itself, so a reader can copy a link to the section. The heading text is the link, with a `#` before it. Where the pointer can hover, the `#` hangs in the margin and shows while the heading is hovered or has focus; elsewhere it stays in line, since there is no hover to reveal it.
  * The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown headings.
  * @prop {string} slug - The heading's id, and the link's fragment. Required: the build fails without it.
  * @prop {number} [level] - 2 to 6. Falls back to 2.
@@ -39,7 +39,7 @@ const required = (value) => {
 
 				&::before {
 					content: "#" / "";
-					margin-inline-end: 0.25em;
+					margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
 					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, t('text.muted')));
 				}
 			}
@@ -49,7 +49,31 @@ const required = (value) => {
 				display: inline-block;
 				min-block-size: 1.5rem;
 				color: inherit;
+				text-decoration: none;
 				text-underline-offset: 0.1em;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration: underline;
+				}
+			}
+
+			@media (hover: hover) {
+				& > :is(h2, h3, h4, h5, h6)::before {
+					display: inline-block;
+					inline-size: 1ch;
+					margin-inline: -1.25ch 0.25ch;
+					opacity: 0;
+				}
+
+				& > :is(h2, h3, h4, h5, h6):is(:hover, :focus-within)::before {
+					opacity: 1;
+				}
+			}
+
+			@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+				& > :is(h2, h3, h4, h5, h6)::before {
+					transition: opacity var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
 			}
 		}
 	}

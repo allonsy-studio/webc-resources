@@ -109,8 +109,8 @@ test("the brand tokens set only custom properties, in the norn.oss layer", () =>
 	const css = fs.readFileSync(tokens, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 	assert.ok(css.trim().startsWith("@layer norn.oss {\n\t:root {"));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
-	assert.ok(declarations.length > 8 && declarations.every((name) => name.startsWith("--norn-")), declarations.join(", "));
-	for (const name of ["--norn-font-mono", "--norn-feature-1", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
+	assert.ok(declarations.length > 4 && declarations.every((name) => name.startsWith("--norn-")), declarations.join(", "));
+	for (const name of ["--norn-font-mono", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
 });
 
 test("fonts: a forward-slash folder holding the four woff2 files", () => {
@@ -126,7 +126,8 @@ test("each OSS component inlines its SVGs with an accessible name or a decorativ
 	const read = (name) => fs.readFileSync(path.join(COMPONENTS, `${name}.webc`), "utf8");
 	const label = 'role="img" aria-label="Brought to you by Allons-y Studio"';
 	assert.equal((read("oss-bar").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1);
-	assert.equal((read("oss-credit").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 2);
+	assert.equal((read("oss-credit").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1, "one lockup that follows the scheme");
+	assert.ok(/style="fill:light-dark\(#EFEBDF,#33394E\);stroke:light-dark\(#33394E,#FBF9F3\)"/.test(read("oss-credit")), "its paint reads the scheme");
 	assert.equal((read("oss-cta").match(/<svg aria-hidden="true" width="72" height="72"/g) ?? []).length, 1);
 	for (const name of ["oss-bar", "oss-cta", "oss-credit"]) assert.ok(!/<svg[^>]*>\s*<\/svg>/.test(read(name)), `${name} has no empty placeholder`);
 });

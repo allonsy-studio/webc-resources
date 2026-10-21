@@ -271,6 +271,68 @@ test("norn-search has a field edge from the strong border, a leading magnifier, 
 	assert.match(html, /<label>\s*<span>[^]*?<\/span>\s*<norn-icon>[^]*?<\/norn-icon>\s*<input type="search"/, "the magnifier is in the label, before the field");
 });
 
+test("no source draws a focus ring of its own: a ring reads the focus tokens, and the rest only move it or turn it off", () => {
+	for (const { file, text } of sources) {
+		for (const [, property, value] of styles(text, file).matchAll(/\boutline(-width)?\s*:\s*([^;]+);/g)) {
+			assert.ok(/^var\(--norn-ui-focus-width,/.test(value) || value.trim() === "none", `${file}: outline${property ?? ""}: ${value}`);
+		}
+	}
+});
+
+test("type sizes come from the scale: no source sets a font size in rem outside a clamp", () => {
+	for (const { file, text } of sources) {
+		for (const [, value] of styles(text, file).matchAll(/font-size:\s*([^;]+);/g)) {
+			assert.ok(!/\d(\.\d+)?rem/.test(value) || value.startsWith("clamp(") || value.startsWith("var(--norn-font-size-"), `${file}: font-size: ${value}`);
+		}
+	}
+});
+
+test("norn-card has a fill and no band, border, or underline at rest, and its heading link covers the card", async () => {
+	const css = cssOf("norn-card");
+	assert.ok(!/::before/.test(css), "no band");
+	assert.ok(!/border: 1px|--norn-card-border/.test(css.replace(/@media \(forced-colors: active\) \{.*$/, "")), "no border, but in forced colors, which drop the fill");
+	assert.ok(css.includes("border-block-start: 2px solid var(--norn-card-accent);"), "a set accent draws a 2px line, and unset draws nothing");
+	assert.ok(css.includes("&::after { content: \"\"; position: absolute; inset: 0; }"), "the link reaches over the card");
+	assert.ok(css.includes("&:has(a:hover)") && css.includes("&:has(a:focus-visible)"), "the card takes the hover layer and the ring");
+	assert.match(css, /a \{ color: var\(--norn-card-link, [^;]+; text-decoration: none;/, "no underline at rest");
+	const grid = cssOf("norn-card-grid");
+	assert.ok(!/ActiveText|VisitedText|GrayText|accent|feature/.test(grid + sources.find(({ file }) => file.endsWith("/norn-card-grid.webc")).text), "no accent cycle and no system color");
+});
+
+test("the build writes the @supports not at-rule(@scope) copy of norn-rich-text from its @scope rules, pseudo-elements outside the :where()", () => {
+	const source = sources.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text;
+	assert.ok(!/@supports/.test(styles(source).replace(/\/\*[\s\S]*?\*\//g, "")), "the source holds only the @scope");
+	const compiled = squash(styles(components.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text));
+	const fallback = compiled.slice(compiled.lastIndexOf("@supports not at-rule(@scope)"));
+	assert.ok(fallback.startsWith("@supports not at-rule(@scope) { norn-rich-text { & :where(h2), & :where(h3)"), "the copy follows the scope");
+	assert.ok(fallback.includes("& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {"), "a pseudo-element stays outside");
+	assert.ok(/@media \(hover: hover\) \{ & :where\(:is\(h1, h2, h3, h4, h5, h6\):has\(> a\)\)::before/.test(fallback), "an at-rule inside is copied with its rules moved");
+	const scoped = compiled.slice(0, compiled.lastIndexOf("@supports not at-rule(@scope)"));
+	const rules = (css) => [...css.matchAll(/\{ ([^{}]*?) \}/g)].length;
+	assert.equal(rules(fallback.slice(fallback.indexOf("norn-rich-text {"))), rules(scoped.slice(scoped.indexOf("@scope"))) , "a rule for each rule");
+});
+
+test("the docs layouts share one title rule in norn-base, and norn-docs-home lists its contents with no rules between them", () => {
+	for (const name of ["norn-docs", "norn-workspace"]) assert.ok(!/h1|--norn-rich-text-measure/.test(squash(styles(sources.find(({ file }) => file.endsWith(`/layouts/${name}.webc`)).text))), `${name} sets no title rule`);
+	assert.equal((squash(styles(sources.find(({ file }) => file.endsWith("/layouts/norn-base.webc")).text)).match(/article > h1 \{/g) ?? []).length, 1, "norn-base holds the title rule");
+	const home = squash(styles(sources.find(({ file }) => file.endsWith("/layouts/norn-docs-home.webc")).text));
+	assert.ok(!/border-block-end|padding-block-end/.test(home), "no rule per item");
+	assert.ok(home.includes("gap: var(--norn-space-s,") && home.includes("dt a { text-decoration: none; &::after { content: \"\"; position: absolute; inset: 0;"), "a gap, and a link that fills its row");
+});
+
+test("norn-sidebar-layout folds its navigation into a closed details with a summary from the slot, the registry, then English", async () => {
+	const html = unid(await render("<norn-sidebar-layout><norn-side-nav slot=\"nav\" :@items=\"[]\"></norn-side-nav><h1>T</h1></norn-sidebar-layout>"));
+	assert.match(html, /<details>\s*<summary>Menu<\/summary>\s*<norn-side-nav/, "closed, and named in English");
+	assert.ok(unid(await render("<norn-sidebar-layout><span slot=\"summary\">Pages</span></norn-sidebar-layout>")).includes("<summary><span>Pages</span></summary>"), "the slot");
+	assert.ok(unid(await render("<norn-sidebar-layout></norn-sidebar-layout>", { strings: { "norn-sidebar-layout": { summary: "Navigation" } } })).includes("<summary>Navigation</summary>"), "the registry");
+	assert.equal(defaultStrings["norn-sidebar-layout"].summary, "Menu");
+});
+
+test("norn-toc folds under its title through a details, and the title names the landmark", async () => {
+	const html = unid(await render("<norn-toc :@items=\"[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]\"></norn-toc>"));
+	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);
+});
+
 test("the JSDoc never names a token with a stray number after it", () => {
 	for (const { file, text } of components) assert.ok(!/--norn-[a-z0-9-]+\.\d/.test(text), `${file}: a token name runs into a decimal`);
 });
@@ -581,7 +643,7 @@ test("componentStrings fills every component's slot fallbacks from one table", a
 	const items = "[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]";
 	const toc = await render(`<norn-toc :@items="${items}"></norn-toc>`, { strings });
 	const [, tocId] = toc.match(/<nav aria-labelledby="([^"]+)">/);
-	assert.ok(toc.includes(`<p id="${tocId}">Sur cette page</p>`), "the title names the landmark");
+	assert.ok(toc.includes(`<span id="${tocId}">Sur cette page</span>`), "the title names the landmark");
 	const search = unid(await render("<norn-search></norn-search>", { strings }));
 	assert.ok(search.includes("<span>Rechercher</span>") && search.includes('<span data-string="none">Aucun résultat</span>'));
 	assert.ok(search.includes('<span data-string="results-one">{count} résultat</span>') && search.includes('<span data-string="results-other">{count} résultats</span>'));

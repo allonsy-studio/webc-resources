@@ -7,12 +7,6 @@
 		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
 		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-		/* Card accents, in order: the project color, then the Allons-y Studio palette. */
-		--norn-feature-1: var(--norn-ui-accent, t('ui.accent'));
-		--norn-feature-2: #ff944d;
-		--norn-feature-3: #1f91ad;
-		--norn-feature-4: #ffd36b;
-
 		/* The four-color strip along the header bar. */
 		--norn-header-stripe: linear-gradient(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%);
 

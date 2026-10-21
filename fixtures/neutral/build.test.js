@@ -114,7 +114,8 @@ describe("neutral fixture build", () => {
 
 	test("norn-side-nav marks only the current page", () => {
 		for (const [name, url] of [["one", "/docs/one/"], ["two", "/docs/two/"], ["three", "/docs/three/"]]) {
-			assert.equal((pages[name].match(/aria-current="page"/g) ?? []).length, 1);
+			const nav = pages[name].slice(pages[name].indexOf("<norn-side-nav>"), pages[name].indexOf("</norn-side-nav>"));
+			assert.equal((nav.match(/aria-current="page"/g) ?? []).length, 1);
 			assert.ok(pages[name].includes(`<a href="${url}" aria-current="page">`));
 		}
 	});
@@ -146,7 +147,7 @@ describe("neutral fixture build", () => {
 	test("each page's own CSS holds only the components on it, each once", () => {
 		const [cards] = bundles(output, pages.index);
 		for (const name of ["norn-hero", "norn-link-button", "norn-fact-list", "norn-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
-		assert.ok(!/norn-sidebar-layout|norn-pager|norn-side-nav/.test(cards));
+		assert.ok(!/norn-sidebar-layout \{[^}]*container-type|norn-pager|norn-side-nav/.test(cards), "no component rule of one the page lacks");
 		assert.equal((cards.match(/norn-card \{/g) ?? []).length, 1);
 		assert.ok(!cards.includes("--norn-chrome"), "the hero no longer turns on the terminal frame");
 		const [docs] = bundles(output, pages.one);
@@ -389,7 +390,7 @@ describe("neutral fixture in a browser", () => {
 		for (const [width, position] of [[1280, "sticky"], [400, "static"]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			await page.goto(server.url + "/docs/one/");
-			assert.equal(await page.$eval("norn-sidebar-layout norn-side-nav", (nav) => getComputedStyle(nav).position), position, `${width}px`);
+			assert.equal(await page.$eval("norn-sidebar-layout > div > details", (nav) => getComputedStyle(nav).position), position, `${width}px`);
 			await page.close();
 		}
 	});
@@ -563,11 +564,11 @@ describe("neutral fixture in a browser", () => {
 	test("norn-pager's arrows point the other way in right-to-left text", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/translated/");
-		const arrow = (rel, pseudo) => page.$eval(`norn-pager a[rel="${rel}"]`, (link, which) => getComputedStyle(link, which).content, pseudo);
-		assert.match(await arrow("prev", "::before"), /→/);
-		assert.match(await arrow("next", "::after"), /←/);
+		const arrow = (rel) => page.$eval(`norn-pager a[rel="${rel}"] svg`, (icon) => getComputedStyle(icon).transform);
+		assert.equal(await arrow("prev"), "matrix(-1, 0, 0, 1, 0, 0)");
+		assert.equal(await arrow("next"), "matrix(-1, 0, 0, 1, 0, 0)");
 		await page.goto(server.url + "/docs/two/");
-		assert.match(await arrow("prev", "::before"), /←/);
+		assert.equal(await arrow("prev"), "none");
 		await page.close();
 	});
 
@@ -668,7 +669,7 @@ describe("the layouts without a props mapping", () => {
 	test("read the page's same-named data, and take anything other than a list where a list goes as empty", () => {
 		const html = read(output, "index.html");
 		assert.ok(html.includes("<title>Plain data: Plain name</title>") && html.includes('<html lang="en" dir="ltr">'));
-		assert.ok(html.includes('<a href="/">Plain home</a>'), "the nav from front matter");
+		assert.ok(/<a href="\/"( aria-current="page")?><span>Plain home<\/span><\/a>|<a href="\/"( aria-current="page")?>Plain home<\/a>/.test(html), "the nav from front matter");
 		assert.ok(html.includes("<p><strong>Plain name</strong></p>") && html.includes("<p>Read off the page data</p>"), "the footer lead, with a footer that is not an object");
 		const docs = read(output, "docs", "index.html");
 		assert.ok(docs.includes('<a href="/docs/" aria-current="page"><span>A docs page</span></a>') && docs.includes('rel="prev" href="/"'), "the docs list and the pager from front matter");

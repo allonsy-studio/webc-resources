@@ -49,25 +49,62 @@ layout: norn-base.webc
 </norn-section>
 <style>
 	@layer norn.layout {
-		/* Contents: a title and its description, in two columns when wide. */
+		/* Contents: a title and its description, in two columns when wide. Each row is one link, with no rules between them. */
 		[data-norn-contents] {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
-			gap: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
-			margin: 0;
+			gap: var(--norn-space-s, t('space.s'));
+			/* The rows are padded, so the text lines up with the heading above. */
+			margin: 0 calc(-1 * var(--norn-space-m, t('space.m')));
 
 			& > div {
+				--_state: 0%;
+				position: relative;
 				display: grid;
 				align-content: start;
-				gap: 0.25rem;
-				padding-block-end: var(--norn-space-s, t('space.s'));
-				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring goes around the row, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+				}
 			}
 
 			& dt {
 				font-family: var(--norn-font-heading, t('font.heading'));
-				font-size: 1.1rem;
+				font-size: var(--norn-font-size-m, t('font.size.m'));
 				font-weight: 700;
+			}
+
+			/* The link reaches over the whole row. */
+			& dt a {
+				text-decoration: none;
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
+				}
 			}
 
 			& dd {

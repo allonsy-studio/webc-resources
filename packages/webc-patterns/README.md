@@ -145,7 +145,7 @@ A docs page: the sidebar with site search, the title, the contents, the body in 
 | `prev`, `next` | `{ url, title }` | the neighbors in `docs` | The `norn-pager` |
 | `search` | `{ bundle?, site? }` or `false` | the Pagefind script at `/pagefind/pagefind.js`, and the host of `url` | `norn-search` above the sidebar list. `false` leaves it out |
 
-The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors.
+The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors. A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
 
 #### `norn-docs-home.webc`
 
@@ -254,13 +254,13 @@ The accent drives the link color (`--norn-text-accent`) and the text on an accen
 | `layout` | `--norn-layout-width` |
 | `status` | `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger` |
 
-A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, the card accents, and the header stripe in the `norn.oss` layer, and its plugin fills all four hooks:
+A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, the header stripe, and the footer name in the `norn.oss` layer, and its plugin fills all four hooks:
 
 ```css
 @layer norn.oss {
 	:root {
 		--norn-font-mono: "PT Mono", ui-monospace, monospace;
-		--norn-feature-2: #ff944d;
+		--norn-header-stripe: linear-gradient(90deg, #d22d6f, #ff944d);
 	}
 }
 ```
@@ -363,23 +363,23 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
 | `norn-section` | `id` on the host, default slot (the h2, then content) | Section with an anchor. Not a landmark: the heading carries the outline |
 | `norn-hero` | default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
-| `norn-card` | default slot (a heading, then the body) | Card with a colored band along the top |
-| `norn-card-grid` | default slot (`<li>` cards), `:@mono="true"` | Responsive grid of cards, each taking the next accent |
+| `norn-card` | default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and `--norn-card-accent` draws a 2px line along the top |
+| `norn-card-grid` | default slot (`<li>` cards), `:@mono="true"` | Responsive grid of cards |
 | `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
-| `norn-sidebar-layout` | slot `nav`, default slot (the body, from its h1) | Navigation column beside a page body. The navigation stays in view; the columns stack below 37.5rem |
+| `norn-sidebar-layout` | slots `nav` and `summary`, default slot (the body, from its h1) | Navigation column beside a page body. The navigation stays in view; below 37.5rem the columns stack and the navigation folds into a closed `<details>` |
 | `norn-rich-text` | default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
 | `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), default slot | A link styled as a button, for a call to action |
 | `norn-fact-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |
-| `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The thumb slides unless motion is reduced |
+| `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The checked option is tinted in the accent |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |
-| `norn-copy-button` | `@value` or `@source` (an id), slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |
-| `norn-data-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, a named tab stop while it scrolls |
+| `norn-copy-button` | `@value` or `@source` (an id), `:@compact`, slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |
+| `norn-data-table` | default slot (a `<table>`), slot `label` | A wide table scrolls in its own box, with a shadow at the edge that has more, and a named tab stop while it scrolls |
 | `norn-notice` | `@severity` (`info`, `success`, `warning`, `error`), `:@live`, default slot, slots `prefix` and `action` | A message about the page, with an icon and a severity word read first |
 | `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | A note within prose, as `role="note"` |
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
-| `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view |
+| `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view. Folds under its title when `--norn-toc-fold: on` is set |
 | `norn-breadcrumb-nav` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |

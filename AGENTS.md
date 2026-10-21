@@ -59,7 +59,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    (`norn-footer > footer > div:first-child > :is(div, nav) > ul`). Where prose styles must reach a slot's markup, scope them with `@scope`
    and stop the scope at the components that style all their own markup (`norn-rich-text` uses
    `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list)`), with a `:where()` copy in
-   `@supports not at-rule(@scope)` for older browsers. `:where()` only yields to a property the slotted component sets, so it is
+   `@supports not at-rule(@scope)` for older browsers. The build writes that copy from the `@scope` rules, so a source holds only the `@scope`, in flat rules with no nesting. `:where()` only yields to a property the slotted component sets, so it is
    the fallback, not the first choice. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
    `norn.oss` for the OSS components and tokens. `norn-head` declares the order once, in an inline style ahead of the

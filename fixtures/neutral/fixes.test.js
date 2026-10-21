@@ -83,7 +83,7 @@ describe("the component fixes, built from content with only the data a page name
 		await onPage("/containers/", async (page) => {
 			assert.equal((await computed(page, "#grid > ul", ["display"])).display, "grid", "the card-grid's own list");
 			assert.equal((await computed(page, "#section > section", ["paddingBlockStart"])).paddingBlockStart, "32px", "the norn-section's own section");
-			assert.notEqual((await computed(page, "#card > article", ["borderBlockStartWidth"])).borderBlockStartWidth, "0px", "the card's own article");
+			assert.equal((await computed(page, "#card > article", ["paddingBlockStart"])).paddingBlockStart, "20px", "the card's own article");
 			assert.equal((await computed(page, "#footer > footer > div:first-child", ["display"])).display, "grid", "the footer's own columns");
 		});
 	});

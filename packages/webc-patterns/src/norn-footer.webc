@@ -17,7 +17,7 @@
  * @cssprop --norn-footer-strong - Headings and names. Falls back to --norn-text-base.
  * @cssprop --norn-footer-border - Rule above the footer. Falls back to --norn-ui-border-color.
  * @cssprop --norn-footer-hover - Link hover color. Falls back to --norn-text-accent.
- * @cssprop --norn-footer-width - Content width. Falls back to 64rem.
+ * @cssprop --norn-footer-width - Content width. Falls back to --norn-layout-width.
  * @cssprop --norn-footer-lead - Widest the lead column gets on a wide footer. Falls back to 25rem.
  * @cssprop --norn-footer-name - Color of the name, the lead column's first `strong`. Falls back to --norn-footer-strong.
  * @cssprop --norn-footer-name-face - Font family of the name. Inherited unless set.
@@ -42,11 +42,11 @@
 				padding: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
 				border-block-start: 1px solid var(--norn-footer-border, var(--norn-ui-border-color, t('ui.border.color')));
 				color: var(--norn-footer-fg, var(--norn-text-muted, t('text.muted')));
-				font-size: 0.95rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& > footer > div {
-				inline-size: min(100%, var(--norn-footer-width, 64rem));
+				inline-size: min(100%, var(--norn-footer-width, var(--norn-layout-width, t('layout.width'))));
 				margin-inline: auto;
 
 				/* A slot nobody filled leaves its wrapper empty: take it out of the grid. */
@@ -105,14 +105,14 @@
 			}
 
 			& :where(small) {
-				font-size: 0.9rem;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& > footer > div:first-child > :is(div, nav) > ul,
 			& > footer > div:first-child > nav > div > ul {
 				display: flex;
 				flex-direction: column;
-				gap: 0.4rem;
+				gap: var(--norn-space-xs, t('space.xs'));
 				margin: 0;
 				padding: 0;
 				list-style: none;
@@ -122,14 +122,20 @@
 				color: inherit;
 			}
 
+			/* A link in the navigation is quiet until the pointer or focus is on it. A link in a sentence keeps its underline. */
+			& :where(nav a) {
+				text-decoration: none;
+			}
+
 			& :where(a:is(:hover, :focus-visible)) {
 				color: var(--norn-footer-hover, var(--norn-text-accent, t('text.accent')));
+				text-decoration: underline;
 			}
 
 			& :where(a:has(norn-icon)) {
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4em;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 			}
 
 			@media print {

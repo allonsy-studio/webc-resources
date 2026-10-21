@@ -9,10 +9,12 @@
 /**
  * The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page.
  * Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing.
+ * The title is the summary of a `<details>`, shown open and unclickable until `--norn-toc-fold: on` is set on the host, as `norn-docs` does below 60rem: then the list folds away under the title. A browser without `::details-content` always shows the fold.
  * @prop {{ id: string, text: string, level: number }[]} items
  * @slot label - The landmark name and visible title, as one element. Falls back to the site's `componentStrings`, then "On this page".
  * @cssprop --norn-toc-link - Link color. Falls back to --norn-text-muted.
  * @cssprop --norn-toc-current - The current section's color and marker. Falls back to --norn-text-accent.
+ * @cssprop --norn-toc-fold - Inherited. Set to `on` to fold the list under its title.
  * @category landmark
  */
 --->
@@ -34,62 +36,171 @@ function outline(items) {
 }
 </script>
 <nav webc:if="items && items.length > 1" :aria-labelledby="'norn-toc-' + uid">
-	<p :id="'norn-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot></p>
-	<template webc:nokeep @raw="outline(items)"></template>
+	<details>
+		<summary><span :id="'norn-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot></span></summary>
+		<template webc:nokeep @raw="outline(items)"></template>
+	</details>
 </nav>
 <style>
 	@layer norn.components {
 		norn-toc {
 			display: block;
-			font-size: 0.92rem;
+			font-size: var(--norn-font-size-s, t('font.size.s'));
 
-			& nav {
-				display: grid;
+			& > nav > details > summary {
+				--_state: 0%;
+				--_fold: none;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
 				gap: var(--norn-space-xs, t('space.xs'));
-			}
-
-			& nav > p {
-				margin: 0;
+				margin-block-end: var(--norn-space-xs, t('space.xs'));
 				color: var(--norn-text-base, t('text.base'));
 				font-weight: 700;
+				list-style: none;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				/* A chevron drawn with two borders, shown only while the list folds. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					display: var(--_fold);
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					rotate: 45deg;
+				}
 			}
 
-			& nav > ol,
-			& nav > ol ol {
+			& > nav > details[open] > summary::after {
+				rotate: 225deg;
+			}
+
+			/* Open or not, the list shows, so the title is only a title. */
+			@supports selector(::details-content) {
+				& > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+
+			& > nav > details > ol,
+			& > nav > details > ol ol {
 				display: grid;
-				gap: 0.15rem;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 				margin: 0;
 				padding: 0;
 				list-style: none;
 			}
 
-			& nav > ol {
+			& > nav > details > ol {
 				border-inline-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
 			}
 
-			& nav > ol ol {
-				padding-inline-start: 0.75rem;
+			& > nav > details > ol ol {
+				padding-inline-start: var(--norn-space-s, t('space.s'));
 			}
 
-			& nav > ol li > a {
+			& > nav > details > ol li > a {
+				--_state: 0%;
 				box-sizing: border-box;
 				display: flex;
 				align-items: center;
 				min-block-size: 1.5rem;
 				margin-inline-start: -1px;
-				padding: 0.2rem 0.75rem;
+				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-s, t('space.s'));
 				border-inline-start: 2px solid transparent;
+				border-start-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				border-end-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
 				color: var(--norn-toc-link, var(--norn-text-muted, t('text.muted')));
 				text-decoration: none;
 
 				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
 					color: var(--norn-text-base, t('text.base'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
 				}
 
 				&[aria-current] {
 					border-inline-start-color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
 					color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
-					font-weight: 600;
+				}
+			}
+
+			/* Folded, the title is a control that opens the list. */
+			@container style(--norn-toc-fold: on) {
+				& > nav > details > summary {
+					--_fold: block;
+					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+					border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+					cursor: pointer;
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, t('ui.state.press'));
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+					}
+				}
+
+				@supports selector(::details-content) {
+					& > nav > details:not([open])::details-content {
+						content-visibility: hidden;
+					}
+				}
+			}
+
+			/* Without ::details-content a closed fold can't show its list, so the title always works as a control. */
+			@supports not selector(::details-content) {
+				& > nav > details > summary {
+					--_fold: block;
+					cursor: pointer;
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > nav > details > ol li > a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > nav > details > ol li > a,
+				& > nav > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > nav > details > summary::after {
+					border-color: CanvasText;
+				}
+
+				/* A clear border would be drawn in the text color, so only the current link has one. */
+				& > nav > details > ol li > a {
+					border-inline-start-width: 0;
+					padding-inline-start: calc(var(--norn-space-s, t('space.s')) + 2px);
+				}
+
+				& > nav > details > ol li > a[aria-current] {
+					border-inline-start-width: 2px;
+					border-inline-start-color: Highlight;
+					padding-inline-start: var(--norn-space-s, t('space.s'));
 				}
 			}
 

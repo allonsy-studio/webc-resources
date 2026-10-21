@@ -8,16 +8,14 @@
 
 /**
  * Sidebar navigation from a list of pages. Marks the current page with `aria-current="page"`, and a page holding it with `aria-current="true"`.
- * An item may carry a `norn-icon` name and child pages, which list under it with a rule down the start edge.
+ * An item may carry a `norn-icon` name and child pages, which list under it, indented. The current page takes a tint of the accent and the accent as its text color, and the pointer takes a lighter layer.
  * In a sticky `norn-sidebar-layout` column only the list scrolls, so a search field in the `search` slot stays put.
  * @prop {{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]} items
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
  * @slot search - A search field above the list, as one element.
  * @cssprop --norn-side-nav-link - Link color. Falls back to --norn-text-muted.
  * @cssprop --norn-side-nav-icon - Icon color. Falls back to --norn-text-accent.
- * @cssprop --norn-side-nav-hover - Hover and current page background. Falls back to --norn-surface-raised.
- * @cssprop --norn-side-nav-current - Current page color. Falls back to --norn-text-accent.
- * @cssprop --norn-side-nav-marker - Current page bar. Falls back to --norn-ui-accent.
+ * @cssprop --norn-side-nav-current - Current page text, and the tint behind it. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
@@ -44,7 +42,7 @@
 			display: flex;
 			flex-direction: column;
 			min-block-size: 0;
-			font-size: 0.92rem;
+			font-size: var(--norn-font-size-s, t('font.size.s'));
 
 			& nav {
 				display: flex;
@@ -66,7 +64,7 @@
 			& nav > ul ul {
 				display: flex;
 				flex-direction: column;
-				gap: 0.15rem;
+				gap: var(--norn-space-2xs, t('space.2xs'));
 				margin: 0;
 				padding: 0;
 				list-style: none;
@@ -83,49 +81,69 @@
 			}
 
 			& nav > ul ul {
-				margin-block: 0.15rem 0.5rem;
-				margin-inline: 0.5rem 0;
-				padding-inline-start: 0.75rem;
-				border-inline-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				margin-block: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
+				margin-inline: var(--norn-space-s, t('space.s')) 0;
 			}
 
 			& nav > ul a {
+				--_state: 0%;
+				--_tint: transparent;
+				box-sizing: border-box;
 				display: flex;
-				align-items: baseline;
-				gap: 0.55rem;
-				padding: 0.25rem 0.5rem;
-				border-start-end-radius: 4px;
-				border-end-end-radius: 4px;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
 				color: var(--norn-side-nav-link, var(--norn-text-muted, t('text.muted')));
 				text-decoration: none;
 				overflow-wrap: anywhere;
 
 				&:hover {
-					background: var(--norn-side-nav-hover, var(--norn-surface-raised, t('surface.raised')));
-					color: var(--norn-text-base, t('text.base'));
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
 				}
 
 				&[aria-current="page"] {
-					background: var(--norn-side-nav-hover, var(--norn-surface-raised, t('surface.raised')));
-					box-shadow: inset 3px 0 0 var(--norn-side-nav-marker, var(--norn-ui-accent, t('ui.accent')));
+					--_tint: color-mix(in oklab, var(--norn-side-nav-current, var(--norn-text-accent, t('text.accent'))) var(--norn-ui-state-press, t('ui.state.press')), transparent);
 					color: var(--norn-side-nav-current, var(--norn-text-accent, t('text.accent')));
-					font-weight: 600;
 				}
 			}
 
 			& nav > ul norn-icon {
 				flex: none;
-				align-self: center;
 				color: var(--norn-side-nav-icon, var(--norn-text-accent, t('text.accent')));
 			}
 
-			&:dir(rtl) nav > ul a[aria-current="page"] {
-				box-shadow: inset -3px 0 0 var(--norn-side-nav-marker, var(--norn-ui-accent, t('ui.accent')));
+			@media (pointer: coarse) {
+				& nav > ul a {
+					min-block-size: 2.75rem;
+				}
 			}
 
+			@media (prefers-reduced-motion: no-preference) {
+				& nav > ul a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* The current page fills itself, since the browser replaces the tint. */
 			@media (forced-colors: active) {
 				& nav > ul a[aria-current="page"] {
-					outline: 1px solid CanvasText;
+					background-color: Highlight;
+					color: HighlightText;
+					forced-color-adjust: none;
+
+					& norn-icon {
+						color: HighlightText;
+					}
+				}
+
+				& nav > ul a:focus-visible {
+					outline-color: CanvasText;
 				}
 			}
 

@@ -13,7 +13,6 @@
  * @slot label - The link text, as one element, such as `<span slot="label">Aller au contenu</span>`. Falls back to the site's `componentStrings`, then "Skip to content".
  * @cssprop --norn-skip-link-bg - Background. Falls back to --norn-surface-raised.
  * @cssprop --norn-skip-link-fg - Text color. Falls back to --norn-text-base.
- * @cssprop --norn-skip-link-border - Border color. Falls back to --norn-ui-border-color.
  * @cssprop --norn-skip-link-radius - Corner radius. Falls back to --norn-ui-border-radius.
  * @category component
  */
@@ -30,13 +29,18 @@
 				inset-inline-start: var(--norn-space-m, t('space.m'));
 				z-index: 10;
 				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
-				border: 1px solid var(--norn-skip-link-border, var(--norn-ui-border-color, t('ui.border.color')));
 				border-radius: var(--norn-skip-link-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
 				background: var(--norn-skip-link-bg, var(--norn-surface-raised, t('surface.raised')));
 				color: var(--norn-skip-link-fg, var(--norn-text-base, t('text.base')));
 
 				&:focus {
 					inset-block-start: var(--norn-space-xs, t('space.xs'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& a {
+					border: 1px solid CanvasText;
 				}
 			}
 

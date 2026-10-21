@@ -9,19 +9,18 @@
 /**
  * Links to the pages before and after this one. Renders nothing when both are missing.
  * Get the pages from `adjacent`, registered as `nornAdjacent`, at the call site.
- * The arrows are drawn in CSS, not read, and point the other way in right-to-left text.
+ * The arrows are `norn-icon`s, which point the other way in right-to-left text.
  * @prop {{ url: string, title: string }} [prev]
  * @prop {{ url: string, title: string }} [next]
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pager".
- * @cssprop --norn-pager-border - Rule above the links. Falls back to --norn-ui-border-color.
  * @cssprop --norn-pager-link - Link color. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
 <nav :aria-labelledby="'norn-pager-' + uid" webc:if="prev || next">
-	<a webc:if="prev" rel="prev" :href="prev.url" @text="prev.title"></a>
-	<a webc:if="next" rel="next" :href="next.url" @text="next.title"></a>
 	<span data-label :id="'norn-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-pager', 'label', $data.page) || 'Pager'"></span></slot></span>
+	<a webc:if="prev" rel="prev" :href="prev.url"><norn-icon @name="arrow-start"></norn-icon><span @text="prev.title"></span></a>
+	<a webc:if="next" rel="next" :href="next.url"><span @text="next.title"></span><norn-icon @name="arrow-end"></norn-icon></a>
 </nav>
 <style>
 	@layer norn.components {
@@ -32,8 +31,6 @@
 				display: flex;
 				justify-content: space-between;
 				gap: var(--norn-space-m, t('space.m'));
-				padding-block-start: var(--norn-space-m, t('space.m'));
-				border-block-start: 1px solid var(--norn-pager-border, var(--norn-ui-border-color, t('ui.border.color')));
 			}
 
 			& nav > [data-label] {
@@ -46,39 +43,35 @@
 			}
 
 			& nav > a {
+				--_state: 0%;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
 				color: var(--norn-pager-link, var(--norn-text-accent, t('text.accent')));
-				text-decoration: underline dotted;
-				text-decoration-thickness: 1px;
-				text-underline-offset: 0.2em;
+				text-decoration: none;
 				overflow-wrap: break-word;
 
-				&:is(:hover, :focus-visible) {
-					text-decoration-style: solid;
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
 				}
 
-				&[rel="prev"]::before {
-					content: "← ";
-					content: "← " / "";
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
 				}
 
 				&[rel="next"] {
 					margin-inline-start: auto;
-				}
-
-				&[rel="next"]::after {
-					content: " →";
-					content: " →" / "";
+					text-align: end;
 				}
 			}
 
-			&:dir(rtl) nav > a[rel="prev"]::before {
-				content: "→ ";
-				content: "→ " / "";
-			}
-
-			&:dir(rtl) nav > a[rel="next"]::after {
-				content: " ←";
-				content: " ←" / "";
+			@media (prefers-reduced-motion: no-preference) {
+				& nav > a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
 			}
 		}
 	}

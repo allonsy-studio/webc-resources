@@ -9,14 +9,13 @@
 /**
  * Site header: the brand link, then the primary navigation.
  * Pass the brand as one element in the `brand` slot, such as `<a slot="brand" rel="home" href="/">Name</a>`, holding text or an `<img>` logo with alt text. A logo is sized by `--norn-header-logo`.
- * The default slot holds the navigation links, each an `<a>` that may start with a `norn-icon`. Without links there is no navigation landmark.
+ * The default slot holds the navigation links, each an `<a>` that may start with a `norn-icon`. Without links there is no navigation landmark. The links are quiet until the pointer or focus is on one, and the one marked `aria-current` has the text color and a 2px accent line.
  * @slot brand - The brand link, as one element.
  * @slot label - The navigation landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Primary".
  * @slot - The navigation links.
  * @cssprop --norn-header-bg - Background. Falls back to --norn-surface-raised.
  * @cssprop --norn-header-fg - Brand color. Falls back to --norn-text-base.
- * @cssprop --norn-header-border - Rule below the bar. Falls back to --norn-ui-border-color.
- * @cssprop --norn-header-link - Navigation link color. Falls back to --norn-text-accent.
+ * @cssprop --norn-header-link - Navigation link color. Falls back to --norn-text-muted.
  * @cssprop --norn-header-logo - Logo height. Falls back to 2rem.
  * @cssprop --norn-header-stripe - A background (a color or gradient) for a strip along the bottom edge. Unset, there is no strip.
  * @cssprop --norn-header-stripe-size - Strip thickness. Falls back to 3px.
@@ -40,13 +39,12 @@
 				justify-content: space-between;
 				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
 				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
-				border-block-end: 1px solid var(--norn-header-border, var(--norn-ui-border-color, t('ui.border.color')));
 				background: var(--norn-header-bg, var(--norn-surface-raised, t('surface.raised')));
 
 				&::after {
 					content: "";
 					position: absolute;
-					inset: auto 0 -1px;
+					inset: auto 0 0;
 					block-size: var(--norn-header-stripe-size, 3px);
 					background: var(--norn-header-stripe, none);
 				}
@@ -58,7 +56,7 @@
 				gap: var(--norn-space-xs, t('space.xs'));
 				color: var(--norn-header-fg, var(--norn-text-base, t('text.base')));
 				font-family: var(--norn-font-heading, t('font.heading'));
-				font-size: 1.2rem;
+				font-size: var(--norn-font-size-l, t('font.size.l'));
 				font-weight: 700;
 				text-decoration: none;
 			}
@@ -77,8 +75,8 @@
 			& > header > nav {
 				display: flex;
 				flex-wrap: wrap;
-				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
-				font-size: 0.95rem;
+				gap: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
+				font-size: var(--norn-font-size-m, t('font.size.m'));
 			}
 
 			& > header > nav > [data-label] {
@@ -91,16 +89,54 @@
 			}
 
 			& > header > nav > a {
+				--_state: 0%;
+				box-sizing: border-box;
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4em;
-				color: var(--norn-header-link, var(--norn-text-accent, t('text.accent')));
-				text-decoration: underline dotted;
-				text-decoration-thickness: 1px;
-				text-underline-offset: 0.2em;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				padding-inline: var(--norn-space-xs, t('space.xs'));
+				border-block-end: 2px solid transparent;
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-header-link, var(--norn-text-muted, t('text.muted')));
+				text-decoration: none;
 
-				&:is(:hover, :focus-visible) {
-					text-decoration-style: solid;
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					color: var(--norn-text-base, t('text.base'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[aria-current] {
+					border-block-end-color: var(--norn-text-accent, t('text.accent'));
+					color: var(--norn-text-base, t('text.base'));
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > header > nav > a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > header > nav > a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* A clear border would be drawn in the text color, so the links that aren't current take the page's. */
+			@media (forced-colors: active) {
+				& > header > nav > a {
+					border-block-end-color: Canvas;
+				}
+
+				& > header > nav > a[aria-current] {
+					border-block-end-color: Highlight;
 				}
 			}
 

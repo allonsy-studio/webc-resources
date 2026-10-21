@@ -7,16 +7,16 @@
  */
 
 /**
- * A card: a heading, then its text, on a raised surface with a colored band along the top.
+ * A card: a heading, then its text, on a raised surface. A heading link makes the whole card a link, and a card with an accent has a 2px line along its top.
  * Pass the heading and body in the default slot, as in `<norn-card><h3><a href="…">Title</a></h3><p>…</p></norn-card>`. Pick the heading level for the outline: h3 under an h2.
+ * A link in the heading is stretched over the card, so the card is one target. The pointer over the card takes a hover layer, and focus on the link draws the ring around the card. The link is not underlined until the pointer is over it.
  * `norn-card-grid` sets the inherited `--norn-card-rows` to `subgrid` for its cards. It is not a setting: leave it alone elsewhere.
  * In a `norn-card-grid` the first child, the second, and the third (a footer, such as a link) each take a row shared with the neighboring cards, so they line up. A card with a fourth child lays out on its own.
  * @slot - The heading, then the body.
  * @cssprop --norn-card-bg - Background. Falls back to --norn-surface-raised.
- * @cssprop --norn-card-border - Border color. Falls back to --norn-ui-border-color.
  * @cssprop --norn-card-radius - Corner radius. Falls back to --norn-ui-border-radius.
  * @cssprop --norn-card-padding - Inner spacing. Falls back to --norn-space-m.
- * @cssprop --norn-card-accent - Top band color. Falls back to --norn-ui-accent. norn-card-grid sets it per item. Set it on a card to override, or use --norn-card-grid-accent-1 to -4 for a grid's colors.
+ * @cssprop --norn-card-accent - Color of a 2px line along the top. Unset, there is none. Set it on a card, or on the `<li>` of a card in a grid.
  * @cssprop --norn-card-link - Heading link color. Falls back to --norn-text-accent.
  * @cssprop --norn-card-title-face - Inherited. Set to `mono` for a heading in the mono face.
  * @category container
@@ -33,6 +33,7 @@
 
 			/* In a norn-card-grid the card spans three rows, one each for the heading, the body, and a footer, so they line up across a row. */
 			& > article {
+				--_state: 0%;
 				box-sizing: border-box;
 				position: relative;
 				display: grid;
@@ -43,23 +44,28 @@
 				row-gap: 0;
 				block-size: 100%;
 				padding: var(--norn-card-padding, var(--norn-space-m, t('space.m')));
-				border: 1px solid var(--norn-card-border, var(--norn-ui-border-color, t('ui.border.color')));
+				/* Unset, the accent leaves the declaration invalid, so there is no line and no space for one. */
+				border-block-start: 2px solid var(--norn-card-accent);
 				border-radius: var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				background: var(--norn-card-bg, var(--norn-surface-raised, t('surface.raised')));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-card-bg, var(--norn-surface-raised, t('surface.raised'))));
 
 				/* A fourth child has no row to take, so a card with more than a heading, a body, and a footer lays out on its own. */
 				&:has(> :nth-child(4)) {
 					grid-template-rows: none;
 				}
 
-				&::before {
-					content: "";
-					position: absolute;
-					inset: -1px;
-					inline-size: calc(100% + 2px);
-					block-size: 0.6em;
-					border-radius: var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) var(--norn-card-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) 0 0;
-					background: var(--norn-card-accent, var(--norn-ui-accent, t('ui.accent')));
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring goes around the card, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: var(--norn-ui-focus-offset, t('ui.focus.offset'));
 				}
 			}
 
@@ -74,7 +80,7 @@
 			& > article > :is(h2, h3, h4, h5, h6),
 			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
 				font-family: var(--norn-font-heading, t('font.heading'));
-				font-size: 1.2rem;
+				font-size: var(--norn-font-size-l, t('font.size.l'));
 				line-height: 1.15;
 				text-wrap: balance;
 			}
@@ -82,13 +88,22 @@
 			& > article > :is(h2, h3, h4, h5, h6) a,
 			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) a {
 				color: var(--norn-card-link, var(--norn-text-accent, t('text.accent')));
-				text-decoration: underline dotted;
-				text-decoration-thickness: 1px;
-				text-underline-offset: 0.2em;
+				text-decoration: none;
 				overflow-wrap: anywhere;
 
-				&:is(:hover, :focus-visible) {
-					text-decoration-style: solid;
+				/* The link reaches over the whole card. */
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
 				}
 			}
 
@@ -101,8 +116,20 @@
 				& > article > :is(h2, h3, h4, h5, h6),
 				& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
 					font-family: var(--norn-font-mono, t('font.mono'));
-					font-size: 1rem;
+					font-size: var(--norn-font-size-m, t('font.size.m'));
 					font-weight: 700;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > article {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > article {
+					border: 1px solid CanvasText;
 				}
 			}
 

@@ -460,6 +460,31 @@ describe("the preview in a browser", () => {
 		await context.close();
 	});
 
+	test("on a touch screen every card on the index is one target at least 44px tall: its center and corners resolve to the heading link", async () => {
+		const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
+		const page = await context.newPage();
+		await page.goto(server.url + "/");
+		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), true);
+		const misses = await page.evaluate(() => {
+			const found = [];
+			const cards = [...document.querySelectorAll("norn-card article")];
+			for (const article of cards) {
+				article.scrollIntoView({ block: "center", behavior: "instant" });
+				const box = article.getBoundingClientRect();
+				const link = article.querySelector("h3 a");
+				if (box.height < 44) found.push(`${link.textContent}: the card is ${box.height}px tall`);
+				const inset = 8;
+				for (const [x, y] of [[box.x + box.width / 2, box.y + box.height / 2], [box.x + inset, box.y + inset], [box.right - inset, box.y + inset], [box.x + inset, box.bottom - inset], [box.right - inset, box.bottom - inset]]) {
+					if (document.elementFromPoint(x, y) !== link) found.push(`${link.textContent}: ${Math.round(x)},${Math.round(y)} is not the link`);
+				}
+			}
+			return { cards: cards.length, found };
+		});
+		assert.ok(misses.cards > 20, "the index lists the components");
+		assert.deepEqual(misses.found, []);
+		await context.close();
+	});
+
 	test("with a mouse the sizes stay as they were", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(server.url + "/components/patterns/norn-card/");
@@ -606,7 +631,7 @@ describe("the preview in a browser", () => {
 		const color = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-card-bg"]') });
 		assert.equal(await color.locator('[data-col="type"]').textContent(), "<color>");
 		assert.match(await color.locator("td").nth(1).textContent(), /--norn-surface-raised\s+light-dark\(hsl\(40, 14%, 96%\), hsl\(0, 0%, 11%\)\)/);
-		assert.equal(await table.locator("tbody tr").count(), 1 + 7, "the shared accent, then the component's seven");
+		assert.equal(await table.locator("tbody tr").count(), 1 + 6, "the shared accent, then the component's six");
 		await page.close();
 	});
 
@@ -694,7 +719,16 @@ describe("the preview in a browser", () => {
 			},
 			[light, dark],
 		);
-	const band = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article"), "::before").backgroundColor);
+	/** The sRGB channels of the primary button's fill, which is the accent, whatever color space the browser mixed it in. */
+	const accentFill = (frame) =>
+		frame.evaluate(() => {
+			const context = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+			context.fillStyle = getComputedStyle(document.querySelector('norn-link-button a[data-variant="primary"]')).backgroundColor;
+			context.fillRect(0, 0, 1, 1);
+			return [...context.getImageData(0, 0, 1, 1).data].slice(0, 3);
+		});
+	/** Whether two sets of channels are the same color, within a unit of rounding. */
+	const near = (found, expected) => found.every((value, index) => Math.abs(value - expected[index]) <= 1);
 	const rootToken = (page, token) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), token);
 
 	test("an override set on Foundations is saved, and every kind of preview page applies it", async () => {
@@ -705,9 +739,9 @@ describe("the preview in a browser", () => {
 		assert.deepEqual(JSON.parse(await page.evaluate(() => localStorage.getItem("norn-preview-tokens"))), { "--norn-ui-accent": "light-dark(#c2185b, #00897b)" });
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "this page, at once");
 
-		await page.goto(server.url + "/frames/patterns/norn-card/default/");
+		await page.goto(server.url + "/frames/patterns/norn-link-button/default/");
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a plain frame");
-		assert.equal(await band(page), "rgb(194, 24, 91)", "the light value, in a light scheme");
+		assert.ok(near(await accentFill(page), [194, 24, 91]), "the light value, in a light scheme");
 
 		await page.goto(server.url + "/frames/oss-site/oss-cta/default/");
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "an OSS frame");
@@ -725,8 +759,8 @@ describe("the preview in a browser", () => {
 		const context = await browser.newContext({ colorScheme: "dark" });
 		const page = await context.newPage();
 		await page.addInitScript(() => localStorage.setItem("norn-preview-tokens", JSON.stringify({ "--norn-ui-accent": "light-dark(#c2185b, #00897b)" })));
-		await page.goto(server.url + "/frames/patterns/norn-card/default/");
-		assert.equal(await band(page), "rgb(0, 137, 123)");
+		await page.goto(server.url + "/frames/patterns/norn-link-button/default/");
+		assert.ok(near(await accentFill(page), [0, 137, 123]), "the dark value");
 		await context.close();
 	});
 

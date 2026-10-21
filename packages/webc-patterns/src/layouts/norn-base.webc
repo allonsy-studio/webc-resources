@@ -62,6 +62,22 @@
 		<style>/* norn: css/print.css */</style>
 		<style>
 			@layer norn.layout {
+				/* The page title and the body's line length in a page with a navigation column, for norn-docs and norn-workspace. The base styles set the title's face and wrapping. */
+				norn-sidebar-layout {
+					--norn-rich-text-measure: none;
+
+					& > div > article > h1 {
+						margin: 0;
+						font-size: clamp(1.9rem, 4vw, 2.5rem);
+						overflow-wrap: anywhere;
+					}
+
+					/* Prose holds to the measure, and code, tables, and callouts take the width. */
+					& > div > article > norn-rich-text > :is(p, ul, ol, blockquote, h2, h3, h4, h5, h6, norn-heading-anchor) {
+						max-inline-size: var(--norn-text-measure, t('text.measure'));
+					}
+				}
+
 				norn-footer {
 					& [data-badges] {
 						display: flex;
@@ -86,7 +102,7 @@
 				<img webc:if="$data.norn.logo" :src="$data.norn.logo.src" :alt="$data.norn.logo.alt || $data.norn.name || ''" />
 				<span webc:else @text="$data.norn.name || ''"></span>
 			</a>
-			<a webc:for="link of $data.norn.nav" :href="link.url"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
+			<a webc:for="link of $data.norn.nav" :href="link.url" :aria-current="link.url === $data.page.url ? 'page' : undefined"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
 		</norn-header>
 		<main id="main" tabindex="-1"><template webc:if="/^norn-base(\.webc)?$/.test(String($data.layout)) && !String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
 		<norn-footer>

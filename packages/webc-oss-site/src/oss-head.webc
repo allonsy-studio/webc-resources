@@ -12,10 +12,6 @@
  * The `@font-face` rules look for the fonts at `assets/fonts`, one level up from the bundle: the OSS site plugin copies the package's `fonts` folder there.
  * The brand tokens it goes with, in `css/tokens.css` and the `norn.oss` layer, are below. A project's unlayered `tokens.css` still wins over them.
  * @cssprop --norn-font-mono - Set to PT Mono, Allons-y Studio's locked monospace.
- * @cssprop --norn-feature-1 - First card accent: the project's accent.
- * @cssprop --norn-feature-2 - Second card accent: Allons-y Studio orange.
- * @cssprop --norn-feature-3 - Third card accent: Allons-y Studio teal.
- * @cssprop --norn-feature-4 - Fourth card accent: Allons-y Studio yellow.
  * @cssprop --norn-header-stripe - The four-color strip along the header bar.
  * @cssprop --norn-footer-name - The footer's project name, in the accent color.
  * @cssprop --norn-footer-name-face - The footer's project name, in the mono face.
