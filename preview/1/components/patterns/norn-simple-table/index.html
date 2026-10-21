@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-simple-table: Norn</title>
+<meta name="description" content="A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-simple-table: Norn">
+<meta property="og:description" content="A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/dMaucoBmoG.css">
+<script src="/webc-resources/preview/1/bundle/VjHHbZ-mqH.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/1/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/1/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/1/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/1/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<details>
+		<summary>Menu</summary>
+		<nav aria-labelledby="norn-header-webc-vi03V"><span data-label="" id="norn-header-webc-vi03V"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/1/">Components</a>
+			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
+		</nav>
+	</details>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/1/foundations/">Edit on Foundations</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details>
+		<summary>Components <span>(37)</span></summary>
+		<details open="">
+			<summary>Layout</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-sidebar-layout/">norn-sidebar-layout</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Landmark</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumbs/">norn-breadcrumbs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-header/">norn-header</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-pager/">norn-pager</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-side-nav/">norn-side-nav</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-toc/">norn-toc</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Container</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-accordion/">norn-accordion</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-callout/">norn-callout</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-card/">norn-card</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-card-grid/">norn-card-grid</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-hero/">norn-hero</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-notice/">norn-notice</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-simple-table/" aria-current="page">norn-simple-table</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Component</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/code-sample/norn-code-block/">norn-code-block</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-copy-button/">norn-copy-button</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-fact-list/">norn-fact-list</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-icon/">norn-icon</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-link-button/">norn-link-button</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-search/">norn-search</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-segmented-control/">norn-segmented-control</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-skip-link/">norn-skip-link</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Template</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-base/">norn-base</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-docs/">norn-docs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-docs-home/">norn-docs-home</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-landing/">norn-landing</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-workspace/">norn-workspace</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-workspaces-home/">norn-workspaces-home</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Document</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/patterns/norn-head/">norn-head</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>OSS site</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
+				</li>
+			</ul>
+		</details>
+	</details>
+</nav>
+
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-simple-table</h1>
+<p class="lead">A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way. Pass the <code>&lt;table&gt;</code> in the default slot, with a <code>&lt;caption&gt;</code> when it can have one. Cells and code in them wrap between words, never mid-word. While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. <code>scrollTables</code> in <code>@allons-y/webc-patterns/markdown</code> writes the same markup for Markdown tables.</p>
+<p class="meta">
+	<code>&lt;norn-simple-table&gt;</code>
+	a <span>container</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-simple-table/default/" title="Wide table preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-simple-table/default/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-simple-table>
+	<table>
+		<caption>Options</caption>
+		<thead>
+			<tr><th scope=&quot;col&quot;>Option</th><th scope=&quot;col&quot;>Type</th><th scope=&quot;col&quot;>Default</th><th scope=&quot;col&quot;>Description</th></tr>
+		</thead>
+		<tbody>
+			<tr><td><code>outputDirectory</code></td><td><code>string</code></td><td><code>&quot;_site&quot;</code></td><td>Where the build writes its pages.</td></tr>
+			<tr><td><code>pathPrefix</code></td><td><code>string</code></td><td><code>&quot;/&quot;</code></td><td>A path every URL starts with, for a site in a subfolder.</td></tr>
+			<tr><td><code>dropEmptyBundleTags</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes a link or script whose bundle came out empty.</td></tr>
+		</tbody>
+	</table>
+</norn-simple-table>" data-strings="norn-code-block-webc-rwQ7s" data-compact=""><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,21,22],[&quot;keyword&quot;,22,27],[&quot;punctuation&quot;,27,28],[&quot;punctuation&quot;,31,32],[&quot;keyword&quot;,32,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,47,49],[&quot;keyword&quot;,49,56],[&quot;punctuation&quot;,56,57],[&quot;punctuation&quot;,60,61],[&quot;keyword&quot;,61,66],[&quot;punctuation&quot;,66,67],[&quot;punctuation&quot;,71,72],[&quot;keyword&quot;,72,74],[&quot;punctuation&quot;,74,75],[&quot;punctuation&quot;,75,76],[&quot;keyword&quot;,76,78],[&quot;keyword&quot;,78,79],[&quot;function&quot;,79,84],[&quot;punctuation&quot;,84,85],[&quot;punctuation&quot;,85,86],[&quot;string&quot;,86,89],[&quot;punctuation&quot;,89,90],[&quot;punctuation&quot;,90,91],[&quot;punctuation&quot;,97,99],[&quot;keyword&quot;,99,101],[&quot;punctuation&quot;,101,102],[&quot;punctuation&quot;,102,103],[&quot;keyword&quot;,103,105],[&quot;keyword&quot;,105,106],[&quot;function&quot;,106,111],[&quot;punctuation&quot;,111,112],[&quot;punctuation&quot;,112,113],[&quot;string&quot;,113,116],[&quot;punctuation&quot;,116,117],[&quot;punctuation&quot;,117,118],[&quot;punctuation&quot;,122,124],[&quot;keyword&quot;,124,126],[&quot;punctuation&quot;,126,127],[&quot;punctuation&quot;,127,128],[&quot;keyword&quot;,128,130],[&quot;keyword&quot;,130,131],[&quot;function&quot;,131,136],[&quot;punctuation&quot;,136,137],[&quot;punctuation&quot;,137,138],[&quot;string&quot;,138,141],[&quot;punctuation&quot;,141,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,150,152],[&quot;keyword&quot;,152,154],[&quot;punctuation&quot;,154,155],[&quot;punctuation&quot;,155,156],[&quot;keyword&quot;,156,158],[&quot;keyword&quot;,158,159],[&quot;function&quot;,159,164],[&quot;punctuation&quot;,164,165],[&quot;punctuation&quot;,165,166],[&quot;string&quot;,166,169],[&quot;punctuation&quot;,169,170],[&quot;punctuation&quot;,170,171],[&quot;punctuation&quot;,182,184],[&quot;keyword&quot;,184,186],[&quot;punctuation&quot;,186,187],[&quot;punctuation&quot;,187,189],[&quot;keyword&quot;,189,191],[&quot;punctuation&quot;,191,192],[&quot;punctuation&quot;,195,197],[&quot;keyword&quot;,197,202],[&quot;punctuation&quot;,202,203],[&quot;punctuation&quot;,206,207],[&quot;keyword&quot;,207,212],[&quot;punctuation&quot;,212,213],[&quot;punctuation&quot;,217,218],[&quot;keyword&quot;,218,220],[&quot;punctuation&quot;,220,221],[&quot;punctuation&quot;,221,222],[&quot;keyword&quot;,222,224],[&quot;punctuation&quot;,224,225],[&quot;punctuation&quot;,225,226],[&quot;keyword&quot;,226,230],[&quot;punctuation&quot;,230,231],[&quot;punctuation&quot;,246,248],[&quot;keyword&quot;,248,252],[&quot;punctuation&quot;,252,253],[&quot;punctuation&quot;,253,255],[&quot;keyword&quot;,255,257],[&quot;punctuation&quot;,257,258],[&quot;punctuation&quot;,258,259],[&quot;keyword&quot;,259,261],[&quot;punctuation&quot;,261,262],[&quot;punctuation&quot;,262,263],[&quot;keyword&quot;,263,267],[&quot;punctuation&quot;,267,268],[&quot;punctuation&quot;,274,276],[&quot;keyword&quot;,276,280],[&quot;punctuation&quot;,280,281],[&quot;punctuation&quot;,281,283],[&quot;keyword&quot;,283,285],[&quot;punctuation&quot;,285,286],[&quot;punctuation&quot;,286,287],[&quot;keyword&quot;,287,289],[&quot;punctuation&quot;,289,290],[&quot;punctuation&quot;,290,291],[&quot;keyword&quot;,291,295],[&quot;punctuation&quot;,295,296],[&quot;punctuation&quot;,303,305],[&quot;keyword&quot;,305,309],[&quot;punctuation&quot;,309,310],[&quot;punctuation&quot;,310,312],[&quot;keyword&quot;,312,314],[&quot;punctuation&quot;,314,315],[&quot;punctuation&quot;,315,316],[&quot;keyword&quot;,316,318],[&quot;punctuation&quot;,318,319],[&quot;punctuation&quot;,352,354],[&quot;keyword&quot;,354,356],[&quot;punctuation&quot;,356,357],[&quot;punctuation&quot;,357,359],[&quot;keyword&quot;,359,361],[&quot;punctuation&quot;,361,362],[&quot;punctuation&quot;,366,367],[&quot;keyword&quot;,367,369],[&quot;punctuation&quot;,369,370],[&quot;punctuation&quot;,370,371],[&quot;keyword&quot;,371,373],[&quot;punctuation&quot;,373,374],[&quot;punctuation&quot;,374,375],[&quot;keyword&quot;,375,379],[&quot;punctuation&quot;,379,380],[&quot;punctuation&quot;,390,392],[&quot;keyword&quot;,392,396],[&quot;punctuation&quot;,396,397],[&quot;punctuation&quot;,397,399],[&quot;keyword&quot;,399,401],[&quot;punctuation&quot;,401,402],[&quot;punctuation&quot;,402,403],[&quot;keyword&quot;,403,405],[&quot;punctuation&quot;,405,406],[&quot;punctuation&quot;,406,407],[&quot;keyword&quot;,407,411],[&quot;punctuation&quot;,411,412],[&quot;punctuation&quot;,418,420],[&quot;keyword&quot;,420,424],[&quot;punctuation&quot;,424,425],[&quot;punctuation&quot;,425,427],[&quot;keyword&quot;,427,429],[&quot;punctuation&quot;,429,430],[&quot;punctuation&quot;,430,431],[&quot;keyword&quot;,431,433],[&quot;punctuation&quot;,433,434],[&quot;punctuation&quot;,434,435],[&quot;keyword&quot;,435,439],[&quot;punctuation&quot;,439,440],[&quot;punctuation&quot;,443,445],[&quot;keyword&quot;,445,449],[&quot;punctuation&quot;,449,450],[&quot;punctuation&quot;,450,452],[&quot;keyword&quot;,452,454],[&quot;punctuation&quot;,454,455],[&quot;punctuation&quot;,455,456],[&quot;keyword&quot;,456,458],[&quot;punctuation&quot;,458,459],[&quot;punctuation&quot;,515,517],[&quot;keyword&quot;,517,519],[&quot;punctuation&quot;,519,520],[&quot;punctuation&quot;,520,522],[&quot;keyword&quot;,522,524],[&quot;punctuation&quot;,524,525],[&quot;punctuation&quot;,529,530],[&quot;keyword&quot;,530,532],[&quot;punctuation&quot;,532,533],[&quot;punctuation&quot;,533,534],[&quot;keyword&quot;,534,536],[&quot;punctuation&quot;,536,537],[&quot;punctuation&quot;,537,538],[&quot;keyword&quot;,538,542],[&quot;punctuation&quot;,542,543],[&quot;punctuation&quot;,562,564],[&quot;keyword&quot;,564,568],[&quot;punctuation&quot;,568,569],[&quot;punctuation&quot;,569,571],[&quot;keyword&quot;,571,573],[&quot;punctuation&quot;,573,574],[&quot;punctuation&quot;,574,575],[&quot;keyword&quot;,575,577],[&quot;punctuation&quot;,577,578],[&quot;punctuation&quot;,578,579],[&quot;keyword&quot;,579,583],[&quot;punctuation&quot;,583,584],[&quot;punctuation&quot;,591,593],[&quot;keyword&quot;,593,597],[&quot;punctuation&quot;,597,598],[&quot;punctuation&quot;,598,600],[&quot;keyword&quot;,600,602],[&quot;punctuation&quot;,602,603],[&quot;punctuation&quot;,603,604],[&quot;keyword&quot;,604,606],[&quot;punctuation&quot;,606,607],[&quot;punctuation&quot;,607,608],[&quot;keyword&quot;,608,612],[&quot;punctuation&quot;,612,613],[&quot;punctuation&quot;,617,619],[&quot;keyword&quot;,619,623],[&quot;punctuation&quot;,623,624],[&quot;punctuation&quot;,624,626],[&quot;keyword&quot;,626,628],[&quot;punctuation&quot;,628,629],[&quot;punctuation&quot;,629,630],[&quot;keyword&quot;,630,632],[&quot;punctuation&quot;,632,633],[&quot;punctuation&quot;,686,688],[&quot;keyword&quot;,688,690],[&quot;punctuation&quot;,690,691],[&quot;punctuation&quot;,691,693],[&quot;keyword&quot;,693,695],[&quot;punctuation&quot;,695,696],[&quot;punctuation&quot;,699,701],[&quot;keyword&quot;,701,706],[&quot;punctuation&quot;,706,707],[&quot;punctuation&quot;,709,711],[&quot;keyword&quot;,711,716],[&quot;punctuation&quot;,716,717],[&quot;punctuation&quot;,718,720],[&quot;keyword&quot;,720,737],[&quot;punctuation&quot;,737,738]]">&lt;norn-simple-table&gt;
+	&lt;table&gt;
+		&lt;caption&gt;Options&lt;/caption&gt;
+		&lt;thead&gt;
+			&lt;tr&gt;&lt;th scope="col"&gt;Option&lt;/th&gt;&lt;th scope="col"&gt;Type&lt;/th&gt;&lt;th scope="col"&gt;Default&lt;/th&gt;&lt;th scope="col"&gt;Description&lt;/th&gt;&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;outputDirectory&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"_site"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Where the build writes its pages.&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;pathPrefix&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"/"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;A path every URL starts with, for a site in a subfolder.&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;dropEmptyBundleTags&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Removes a link or script whose bundle came out empty.&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+&lt;/norn-simple-table&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-rwQ7s">
+		<span data-string="label" id="norn-code-block-webc-rwQ7s-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+
+
+	<h2>Slots</h2>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-ooCOR"></span>
+<div>
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row"><code>default</code></th>
+					<td>The table.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>label</code></th>
+					<td>The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+</norn-simple-table>
+
+
+
+	<h2>Custom properties</h2>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Property</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>#2346d4</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-simple-table-rule</code><small>Row rules.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default">
+				
+					<code>--norn-ui-border-color</code>
+					<small>light-dark(#d3d8e2, #2d323e)</small>
+				
+				
+			</td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-simple-table-rule" aria-label="Override --norn-simple-table-rule" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-simple-table-rule" aria-label="Reset --norn-simple-table-rule" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-simple-table-head</code><small>Header row background. Unset, there is none.</small></th>
+			<td data-col="type" data-label="Type"><span>none</span></td>
+			<td data-label="Default">
+				
+				<span>none</span>
+			</td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-simple-table-head" aria-label="Override --norn-simple-table-head" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-simple-table-head" aria-label="Reset --norn-simple-table-head" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-simple-table-bg</code><small>The surface the table sits on, which the scroll shadows are drawn against.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default">
+				
+					<code>--norn-surface-base</code>
+					<small>light-dark(#ffffff, #101216)</small>
+				
+				
+			</td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-simple-table-bg" aria-label="Override --norn-simple-table-bg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-simple-table-bg" aria-label="Reset --norn-simple-table-bg" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>

@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/7uOYa064a1.css">
-<script src="/webc-resources/preview/1/bundle/jOqe81ftKC.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/ORT02dMV2y.css">
+<script src="/webc-resources/preview/1/bundle/Q01Teg5VeV.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,12 +42,15 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-vUT6B"><span data-label="" id="norn-header-webc-vUT6B"><span>Preview</span></span>
+	<details>
+		<summary>Menu</summary>
+		<nav aria-labelledby="norn-header-webc-VBHOA"><span data-label="" id="norn-header-webc-VBHOA"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
 			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
 		</nav>
+	</details>
 </header>
 
 </norn-header>
@@ -62,7 +65,7 @@
 		<div class="app">
 			<preview-nav><nav aria-label="Components">
 	<details>
-		<summary>Components <span>(38)</span></summary>
+		<summary>Components <span>(37)</span></summary>
 		<details open="">
 			<summary>Layout</summary>
 			<ul role="list">
@@ -75,7 +78,7 @@
 			<summary>Landmark</summary>
 			<ul role="list">
 				<li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+					<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumbs/">norn-breadcrumbs</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
@@ -113,9 +116,6 @@
 					<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
 				</li>
 <li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
-				</li>
-<li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-hero/">norn-hero</a>
 				</li>
 <li>
@@ -125,10 +125,7 @@
 					<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
 				</li>
 <li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-section/">norn-section</a>
-				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+					<a href="/webc-resources/preview/1/components/patterns/norn-simple-table/">norn-simple-table</a>
 				</li>
 			</ul>
 		</details>
@@ -165,12 +162,6 @@
 <li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
 				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
-				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
-				</li>
 			</ul>
 		</details>
 <details open="">
@@ -202,6 +193,20 @@
 				<li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-head/">norn-head</a>
 				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>OSS site</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+				</li>
 <li>
 					<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
 				</li>
@@ -213,7 +218,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-base</h1>
-<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own <code>layout</code> and <code>page.inputPath</code>, which a layout chain leaves alone. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
+<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own <code>layout</code> and <code>page.inputPath</code>, which a layout chain leaves alone. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. A <code>&lt;section&gt;</code> directly in <code>main</code> is a centered column at <code>--norn-layout-width</code> with block padding and a gap, and its <code>h2</code> takes the section heading size. The <code>id</code> on the section is the anchor. The rule is in the <code>norn.layout</code> layer under <code>:where(main)</code>, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
 <p class="meta">
 	<code>layout: norn-base.webc</code>
 	a <span>template</span>, from
@@ -348,10 +353,10 @@ title: Default
 order: 1
 layout: norn-base.webc
 ---
-<norn-section>
+<section>
 	<h1>A page on the base layout</h1>
 	<p>The header, the footer, and the hooks around a page body of its own.</p>
-</norn-section>" data-strings="norn-code-block-webc-dXuko" data-compact=""><span data-icons=""><norn-icon>
+</section>" data-strings="norn-code-block-webc-5LwLo" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -368,17 +373,190 @@ layout: norn-base.webc
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,55,56],[&quot;keyword&quot;,56,68],[&quot;punctuation&quot;,68,69],[&quot;punctuation&quot;,71,72],[&quot;keyword&quot;,72,74],[&quot;punctuation&quot;,74,75],[&quot;punctuation&quot;,100,102],[&quot;keyword&quot;,102,104],[&quot;punctuation&quot;,104,105],[&quot;punctuation&quot;,107,108],[&quot;keyword&quot;,108,109],[&quot;punctuation&quot;,109,110],[&quot;punctuation&quot;,178,180],[&quot;keyword&quot;,180,181],[&quot;punctuation&quot;,181,182],[&quot;punctuation&quot;,183,185],[&quot;keyword&quot;,185,197],[&quot;punctuation&quot;,197,198]]">---
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,55,56],[&quot;keyword&quot;,56,63],[&quot;punctuation&quot;,63,64],[&quot;punctuation&quot;,66,67],[&quot;keyword&quot;,67,69],[&quot;punctuation&quot;,69,70],[&quot;punctuation&quot;,95,97],[&quot;keyword&quot;,97,99],[&quot;punctuation&quot;,99,100],[&quot;punctuation&quot;,102,103],[&quot;keyword&quot;,103,104],[&quot;punctuation&quot;,104,105],[&quot;punctuation&quot;,173,175],[&quot;keyword&quot;,175,176],[&quot;punctuation&quot;,176,177],[&quot;punctuation&quot;,178,180],[&quot;keyword&quot;,180,187],[&quot;punctuation&quot;,187,188]]">---
 title: Default
 order: 1
 layout: norn-base.webc
 ---
-&lt;norn-section&gt;
+&lt;section&gt;
 	&lt;h1&gt;A page on the base layout&lt;/h1&gt;
 	&lt;p&gt;The header, the footer, and the hooks around a page body of its own.&lt;/p&gt;
-&lt;/norn-section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-dXuko">
-		<span data-string="label" id="norn-code-block-webc-dXuko-copy">Copy {name} to clipboard</span>
+&lt;/section&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-5LwLo">
+		<span data-string="label" id="norn-code-block-webc-5LwLo-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-base/sections/" title="Sections preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-base/sections/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="---
+title: Sections
+order: 2
+layout: norn-base.webc
+---
+<section id=&quot;install&quot;>
+	<h1>Sections on the base layout</h1>
+	<p>A section directly in the page is a centered column at the layout width. Its <code>id</code> is the anchor, and its heading carries the outline.</p>
+</section>
+<section id=&quot;usage&quot;>
+	<h2>Usage</h2>
+	<p>The next section has the same width and the same padding. It is not a landmark, so it takes no name.</p>
+</section>" data-strings="norn-code-block-webc-Hr89L" data-compact=""><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,56,57],[&quot;keyword&quot;,57,64],[&quot;keyword&quot;,64,65],[&quot;function&quot;,65,67],[&quot;punctuation&quot;,67,68],[&quot;punctuation&quot;,68,69],[&quot;string&quot;,69,76],[&quot;punctuation&quot;,76,77],[&quot;punctuation&quot;,77,78],[&quot;punctuation&quot;,80,81],[&quot;keyword&quot;,81,83],[&quot;punctuation&quot;,83,84],[&quot;punctuation&quot;,111,113],[&quot;keyword&quot;,113,115],[&quot;punctuation&quot;,115,116],[&quot;punctuation&quot;,118,119],[&quot;keyword&quot;,119,120],[&quot;punctuation&quot;,120,121],[&quot;punctuation&quot;,198,199],[&quot;keyword&quot;,199,203],[&quot;punctuation&quot;,203,204],[&quot;punctuation&quot;,206,208],[&quot;keyword&quot;,208,212],[&quot;punctuation&quot;,212,213],[&quot;punctuation&quot;,265,267],[&quot;keyword&quot;,267,268],[&quot;punctuation&quot;,268,269],[&quot;punctuation&quot;,270,272],[&quot;keyword&quot;,272,279],[&quot;punctuation&quot;,279,280],[&quot;punctuation&quot;,281,282],[&quot;keyword&quot;,282,289],[&quot;keyword&quot;,289,290],[&quot;function&quot;,290,292],[&quot;punctuation&quot;,292,293],[&quot;punctuation&quot;,293,294],[&quot;string&quot;,294,299],[&quot;punctuation&quot;,299,300],[&quot;punctuation&quot;,300,301],[&quot;punctuation&quot;,303,304],[&quot;keyword&quot;,304,306],[&quot;punctuation&quot;,306,307],[&quot;punctuation&quot;,312,314],[&quot;keyword&quot;,314,316],[&quot;punctuation&quot;,316,317],[&quot;punctuation&quot;,319,320],[&quot;keyword&quot;,320,321],[&quot;punctuation&quot;,321,322],[&quot;punctuation&quot;,422,424],[&quot;keyword&quot;,424,425],[&quot;punctuation&quot;,425,426],[&quot;punctuation&quot;,427,429],[&quot;keyword&quot;,429,436],[&quot;punctuation&quot;,436,437]]">---
+title: Sections
+order: 2
+layout: norn-base.webc
+---
+&lt;section id="install"&gt;
+	&lt;h1&gt;Sections on the base layout&lt;/h1&gt;
+	&lt;p&gt;A section directly in the page is a centered column at the layout width. Its &lt;code&gt;id&lt;/code&gt; is the anchor, and its heading carries the outline.&lt;/p&gt;
+&lt;/section&gt;
+&lt;section id="usage"&gt;
+	&lt;h2&gt;Usage&lt;/h2&gt;
+	&lt;p&gt;The next section has the same width and the same padding. It is not a landmark, so it takes no name.&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-Hr89L">
+		<span data-string="label" id="norn-code-block-webc-Hr89L-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -396,7 +574,7 @@ layout: norn-base.webc
 	<h2>Props</h2>
 	<p>The plugin's <code>props</code> mapping sets them on each page, and the layout reads them as <code>$data.norn</code>.</p>
 	
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-ky9E-"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-CX1P7"></span>
 <div>
 		<table>
 			<thead>
@@ -493,7 +671,7 @@ layout: norn-base.webc
 	</div>
 
 
-</norn-data-table>
+</norn-simple-table>
 
 
 

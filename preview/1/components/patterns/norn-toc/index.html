@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
-<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/dMaucoBmoG.css">
+<script src="/webc-resources/preview/1/bundle/VjHHbZ-mqH.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,12 +42,15 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-xk9Bl"><span data-label="" id="norn-header-webc-xk9Bl"><span>Preview</span></span>
+	<details>
+		<summary>Menu</summary>
+		<nav aria-labelledby="norn-header-webc-jZi64"><span data-label="" id="norn-header-webc-jZi64"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
 			<a href="/webc-resources/preview/1/foundations/">Foundations</a>
 		</nav>
+	</details>
 </header>
 
 </norn-header>
@@ -62,7 +65,7 @@
 		<div class="app">
 			<preview-nav><nav aria-label="Components">
 	<details>
-		<summary>Components <span>(38)</span></summary>
+		<summary>Components <span>(37)</span></summary>
 		<details open="">
 			<summary>Layout</summary>
 			<ul role="list">
@@ -75,7 +78,7 @@
 			<summary>Landmark</summary>
 			<ul role="list">
 				<li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumb-nav/">norn-breadcrumb-nav</a>
+					<a href="/webc-resources/preview/1/components/patterns/norn-breadcrumbs/">norn-breadcrumbs</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-footer/">norn-footer</a>
@@ -113,9 +116,6 @@
 					<a href="/webc-resources/preview/1/components/patterns/norn-code-tabs/">norn-code-tabs</a>
 				</li>
 <li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-data-table/">norn-data-table</a>
-				</li>
-<li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-hero/">norn-hero</a>
 				</li>
 <li>
@@ -125,10 +125,7 @@
 					<a href="/webc-resources/preview/1/components/patterns/norn-rich-text/">norn-rich-text</a>
 				</li>
 <li>
-					<a href="/webc-resources/preview/1/components/patterns/norn-section/">norn-section</a>
-				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
+					<a href="/webc-resources/preview/1/components/patterns/norn-simple-table/">norn-simple-table</a>
 				</li>
 			</ul>
 		</details>
@@ -165,12 +162,6 @@
 <li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
 				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
-				</li>
-<li>
-					<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
-				</li>
 			</ul>
 		</details>
 <details open="">
@@ -201,6 +192,20 @@
 			<ul role="list">
 				<li>
 					<a href="/webc-resources/preview/1/components/patterns/norn-head/">norn-head</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>OSS site</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-bar/">oss-bar</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-credit/">oss-credit</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/1/components/oss-site/oss-cta/">oss-cta</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/1/components/oss-site/oss-head/">oss-head</a>
@@ -343,16 +348,30 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-toc
-	:@items=&quot;[
-		{ id: 'install', text: 'Install', level: 2 },
-		{ id: 'with-npm', text: 'With npm', level: 3 },
-		{ id: 'usage', text: 'Usage', level: 2 }
-	]&quot;
-></norn-toc>
-<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;usage&quot;>Usage</norn-heading-anchor>" data-strings="norn-code-block-webc-xnXrB" data-compact=""><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-sidebar-layout>
+	<norn-toc
+		slot=&quot;nav&quot;
+		:@items=&quot;[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]&quot;
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p>A page with a contents list in the navigation column. The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
+		<p>A third-level heading nests one list down. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug=&quot;usage&quot;>Usage</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-8D2bJ" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -369,18 +388,32 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,9],[&quot;keyword&quot;,9,11],[&quot;function&quot;,11,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,19,20],[&quot;string&quot;,20,165],[&quot;punctuation&quot;,165,166],[&quot;keyword&quot;,166,167],[&quot;punctuation&quot;,167,168],[&quot;punctuation&quot;,168,170],[&quot;keyword&quot;,170,178],[&quot;punctuation&quot;,178,179],[&quot;punctuation&quot;,180,181],[&quot;keyword&quot;,181,200],[&quot;keyword&quot;,200,201],[&quot;function&quot;,201,206],[&quot;punctuation&quot;,206,207],[&quot;punctuation&quot;,207,208],[&quot;string&quot;,208,215],[&quot;punctuation&quot;,215,216],[&quot;punctuation&quot;,216,217],[&quot;punctuation&quot;,224,226],[&quot;keyword&quot;,226,245],[&quot;punctuation&quot;,245,246],[&quot;punctuation&quot;,247,248],[&quot;keyword&quot;,248,267],[&quot;keyword&quot;,267,268],[&quot;function&quot;,268,273],[&quot;punctuation&quot;,273,274],[&quot;punctuation&quot;,274,275],[&quot;string&quot;,275,283],[&quot;punctuation&quot;,283,284],[&quot;keyword&quot;,284,285],[&quot;function&quot;,285,292],[&quot;punctuation&quot;,292,293],[&quot;punctuation&quot;,293,294],[&quot;string&quot;,294,295],[&quot;punctuation&quot;,295,296],[&quot;punctuation&quot;,296,297],[&quot;punctuation&quot;,305,307],[&quot;keyword&quot;,307,326],[&quot;punctuation&quot;,326,327],[&quot;punctuation&quot;,328,329],[&quot;keyword&quot;,329,348],[&quot;keyword&quot;,348,349],[&quot;function&quot;,349,354],[&quot;punctuation&quot;,354,355],[&quot;punctuation&quot;,355,356],[&quot;string&quot;,356,361],[&quot;punctuation&quot;,361,362],[&quot;punctuation&quot;,362,363],[&quot;punctuation&quot;,368,370],[&quot;keyword&quot;,370,389],[&quot;punctuation&quot;,389,390]]">&lt;norn-toc
-	:@items="[
-		{ id: 'install', text: 'Install', level: 2 },
-		{ id: 'with-npm', text: 'With npm', level: 3 },
-		{ id: 'usage', text: 'Usage', level: 2 }
-	]"
-&gt;&lt;/norn-toc&gt;
-&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="usage"&gt;Usage&lt;/norn-heading-anchor&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-xnXrB">
-		<span data-string="label" id="norn-code-block-webc-xnXrB-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,20],[&quot;punctuation&quot;,20,21],[&quot;punctuation&quot;,23,24],[&quot;keyword&quot;,24,32],[&quot;keyword&quot;,32,35],[&quot;function&quot;,35,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;string&quot;,41,44],[&quot;punctuation&quot;,44,45],[&quot;keyword&quot;,45,48],[&quot;function&quot;,48,55],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;string&quot;,57,206],[&quot;punctuation&quot;,206,207],[&quot;keyword&quot;,207,209],[&quot;punctuation&quot;,209,210],[&quot;punctuation&quot;,210,212],[&quot;keyword&quot;,212,220],[&quot;punctuation&quot;,220,221],[&quot;punctuation&quot;,223,224],[&quot;keyword&quot;,224,226],[&quot;punctuation&quot;,226,227],[&quot;punctuation&quot;,242,244],[&quot;keyword&quot;,244,246],[&quot;punctuation&quot;,246,247],[&quot;punctuation&quot;,249,250],[&quot;keyword&quot;,250,264],[&quot;punctuation&quot;,264,265],[&quot;punctuation&quot;,268,269],[&quot;keyword&quot;,269,270],[&quot;punctuation&quot;,270,271],[&quot;punctuation&quot;,486,488],[&quot;keyword&quot;,488,489],[&quot;punctuation&quot;,489,490],[&quot;punctuation&quot;,493,494],[&quot;keyword&quot;,494,513],[&quot;keyword&quot;,513,514],[&quot;function&quot;,514,519],[&quot;punctuation&quot;,519,520],[&quot;punctuation&quot;,520,521],[&quot;string&quot;,521,528],[&quot;punctuation&quot;,528,529],[&quot;punctuation&quot;,529,530],[&quot;punctuation&quot;,537,539],[&quot;keyword&quot;,539,558],[&quot;punctuation&quot;,558,559],[&quot;punctuation&quot;,562,563],[&quot;keyword&quot;,563,564],[&quot;punctuation&quot;,564,565],[&quot;punctuation&quot;,726,728],[&quot;keyword&quot;,728,729],[&quot;punctuation&quot;,729,730],[&quot;punctuation&quot;,733,734],[&quot;keyword&quot;,734,735],[&quot;punctuation&quot;,735,736],[&quot;punctuation&quot;,902,904],[&quot;keyword&quot;,904,905],[&quot;punctuation&quot;,905,906],[&quot;punctuation&quot;,909,910],[&quot;keyword&quot;,910,929],[&quot;keyword&quot;,929,930],[&quot;function&quot;,930,935],[&quot;punctuation&quot;,935,936],[&quot;punctuation&quot;,936,937],[&quot;string&quot;,937,945],[&quot;punctuation&quot;,945,946],[&quot;keyword&quot;,946,947],[&quot;function&quot;,947,954],[&quot;punctuation&quot;,954,955],[&quot;punctuation&quot;,955,956],[&quot;string&quot;,956,957],[&quot;punctuation&quot;,957,958],[&quot;punctuation&quot;,958,959],[&quot;punctuation&quot;,967,969],[&quot;keyword&quot;,969,988],[&quot;punctuation&quot;,988,989],[&quot;punctuation&quot;,992,993],[&quot;keyword&quot;,993,994],[&quot;punctuation&quot;,994,995],[&quot;punctuation&quot;,1204,1206],[&quot;keyword&quot;,1206,1207],[&quot;punctuation&quot;,1207,1208],[&quot;punctuation&quot;,1211,1212],[&quot;keyword&quot;,1212,1213],[&quot;punctuation&quot;,1213,1214],[&quot;punctuation&quot;,1375,1377],[&quot;keyword&quot;,1377,1378],[&quot;punctuation&quot;,1378,1379],[&quot;punctuation&quot;,1382,1383],[&quot;keyword&quot;,1383,1402],[&quot;keyword&quot;,1402,1403],[&quot;function&quot;,1403,1408],[&quot;punctuation&quot;,1408,1409],[&quot;punctuation&quot;,1409,1410],[&quot;string&quot;,1410,1415],[&quot;punctuation&quot;,1415,1416],[&quot;punctuation&quot;,1416,1417],[&quot;punctuation&quot;,1422,1424],[&quot;keyword&quot;,1424,1443],[&quot;punctuation&quot;,1443,1444],[&quot;punctuation&quot;,1447,1448],[&quot;keyword&quot;,1448,1449],[&quot;punctuation&quot;,1449,1450],[&quot;punctuation&quot;,1616,1618],[&quot;keyword&quot;,1618,1619],[&quot;punctuation&quot;,1619,1620],[&quot;punctuation&quot;,1623,1624],[&quot;keyword&quot;,1624,1625],[&quot;punctuation&quot;,1625,1626],[&quot;punctuation&quot;,1787,1789],[&quot;keyword&quot;,1789,1790],[&quot;punctuation&quot;,1790,1791],[&quot;punctuation&quot;,1794,1795],[&quot;keyword&quot;,1795,1796],[&quot;punctuation&quot;,1796,1797],[&quot;punctuation&quot;,1963,1965],[&quot;keyword&quot;,1965,1966],[&quot;punctuation&quot;,1966,1967],[&quot;punctuation&quot;,1969,1971],[&quot;keyword&quot;,1971,1985],[&quot;punctuation&quot;,1985,1986],[&quot;punctuation&quot;,1987,1989],[&quot;keyword&quot;,1989,2008],[&quot;punctuation&quot;,2008,2009]]">&lt;norn-sidebar-layout&gt;
+	&lt;norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]"
+	&gt;&lt;/norn-toc&gt;
+	&lt;h1&gt;Getting started&lt;/h1&gt;
+	&lt;norn-rich-text&gt;
+		&lt;p&gt;A page with a contents list in the navigation column. The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;A third-level heading nests one list down. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="usage"&gt;Usage&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+	&lt;/norn-rich-text&gt;
+&lt;/norn-sidebar-layout&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-8D2bJ">
+		<span data-string="label" id="norn-code-block-webc-8D2bJ-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -510,20 +543,33 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-toc
-	:@items=&quot;[
-		{ id: 'install', text: 'Install', level: 2 },
-		{ id: 'with-npm', text: 'With npm', level: 3 },
-		{ id: 'pinned', text: 'Pinned versions', level: 4 },
-		{ id: 'ranges', text: 'Version ranges', level: 5 },
-		{ id: 'carets', text: 'Caret ranges', level: 6 }
-	]&quot;
-></norn-toc>
-<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;pinned&quot; :@level=&quot;4&quot;>Pinned versions</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;ranges&quot; :@level=&quot;5&quot;>Version ranges</norn-heading-anchor>
-<norn-heading-anchor @slug=&quot;carets&quot; :@level=&quot;6&quot;>Caret ranges</norn-heading-anchor>" data-strings="norn-code-block-webc-dW2Uv" data-compact=""><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-sidebar-layout>
+	<norn-toc
+		slot=&quot;nav&quot;
+		:@items=&quot;[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'pinned', text: 'Pinned versions', level: 4 },
+			{ id: 'ranges', text: 'Version ranges', level: 5 },
+			{ id: 'carets', text: 'Caret ranges', level: 6 }
+		]&quot;
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p>The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug=&quot;pinned&quot; :@level=&quot;4&quot;>Pinned versions</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug=&quot;ranges&quot; :@level=&quot;5&quot;>Version ranges</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug=&quot;carets&quot; :@level=&quot;6&quot;>Caret ranges</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-f_gKa" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -540,22 +586,35 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,9],[&quot;keyword&quot;,9,11],[&quot;function&quot;,11,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,19,20],[&quot;string&quot;,20,282],[&quot;punctuation&quot;,282,283],[&quot;keyword&quot;,283,284],[&quot;punctuation&quot;,284,285],[&quot;punctuation&quot;,285,287],[&quot;keyword&quot;,287,295],[&quot;punctuation&quot;,295,296],[&quot;punctuation&quot;,297,298],[&quot;keyword&quot;,298,317],[&quot;keyword&quot;,317,318],[&quot;function&quot;,318,323],[&quot;punctuation&quot;,323,324],[&quot;punctuation&quot;,324,325],[&quot;string&quot;,325,332],[&quot;punctuation&quot;,332,333],[&quot;punctuation&quot;,333,334],[&quot;punctuation&quot;,341,343],[&quot;keyword&quot;,343,362],[&quot;punctuation&quot;,362,363],[&quot;punctuation&quot;,364,365],[&quot;keyword&quot;,365,384],[&quot;keyword&quot;,384,385],[&quot;function&quot;,385,390],[&quot;punctuation&quot;,390,391],[&quot;punctuation&quot;,391,392],[&quot;string&quot;,392,400],[&quot;punctuation&quot;,400,401],[&quot;keyword&quot;,401,402],[&quot;function&quot;,402,409],[&quot;punctuation&quot;,409,410],[&quot;punctuation&quot;,410,411],[&quot;string&quot;,411,412],[&quot;punctuation&quot;,412,413],[&quot;punctuation&quot;,413,414],[&quot;punctuation&quot;,422,424],[&quot;keyword&quot;,424,443],[&quot;punctuation&quot;,443,444],[&quot;punctuation&quot;,445,446],[&quot;keyword&quot;,446,465],[&quot;keyword&quot;,465,466],[&quot;function&quot;,466,471],[&quot;punctuation&quot;,471,472],[&quot;punctuation&quot;,472,473],[&quot;string&quot;,473,479],[&quot;punctuation&quot;,479,480],[&quot;keyword&quot;,480,481],[&quot;function&quot;,481,488],[&quot;punctuation&quot;,488,489],[&quot;punctuation&quot;,489,490],[&quot;string&quot;,490,491],[&quot;punctuation&quot;,491,492],[&quot;punctuation&quot;,492,493],[&quot;punctuation&quot;,508,510],[&quot;keyword&quot;,510,529],[&quot;punctuation&quot;,529,530],[&quot;punctuation&quot;,531,532],[&quot;keyword&quot;,532,551],[&quot;keyword&quot;,551,552],[&quot;function&quot;,552,557],[&quot;punctuation&quot;,557,558],[&quot;punctuation&quot;,558,559],[&quot;string&quot;,559,565],[&quot;punctuation&quot;,565,566],[&quot;keyword&quot;,566,567],[&quot;function&quot;,567,574],[&quot;punctuation&quot;,574,575],[&quot;punctuation&quot;,575,576],[&quot;string&quot;,576,577],[&quot;punctuation&quot;,577,578],[&quot;punctuation&quot;,578,579],[&quot;punctuation&quot;,593,595],[&quot;keyword&quot;,595,614],[&quot;punctuation&quot;,614,615],[&quot;punctuation&quot;,616,617],[&quot;keyword&quot;,617,636],[&quot;keyword&quot;,636,637],[&quot;function&quot;,637,642],[&quot;punctuation&quot;,642,643],[&quot;punctuation&quot;,643,644],[&quot;string&quot;,644,650],[&quot;punctuation&quot;,650,651],[&quot;keyword&quot;,651,652],[&quot;function&quot;,652,659],[&quot;punctuation&quot;,659,660],[&quot;punctuation&quot;,660,661],[&quot;string&quot;,661,662],[&quot;punctuation&quot;,662,663],[&quot;punctuation&quot;,663,664],[&quot;punctuation&quot;,676,678],[&quot;keyword&quot;,678,697],[&quot;punctuation&quot;,697,698]]">&lt;norn-toc
-	:@items="[
-		{ id: 'install', text: 'Install', level: 2 },
-		{ id: 'with-npm', text: 'With npm', level: 3 },
-		{ id: 'pinned', text: 'Pinned versions', level: 4 },
-		{ id: 'ranges', text: 'Version ranges', level: 5 },
-		{ id: 'carets', text: 'Caret ranges', level: 6 }
-	]"
-&gt;&lt;/norn-toc&gt;
-&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="pinned" :@level="4"&gt;Pinned versions&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="ranges" :@level="5"&gt;Version ranges&lt;/norn-heading-anchor&gt;
-&lt;norn-heading-anchor @slug="carets" :@level="6"&gt;Caret ranges&lt;/norn-heading-anchor&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-dW2Uv">
-		<span data-string="label" id="norn-code-block-webc-dW2Uv-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,20],[&quot;punctuation&quot;,20,21],[&quot;punctuation&quot;,23,24],[&quot;keyword&quot;,24,32],[&quot;keyword&quot;,32,35],[&quot;function&quot;,35,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;string&quot;,41,44],[&quot;punctuation&quot;,44,45],[&quot;keyword&quot;,45,48],[&quot;function&quot;,48,55],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;string&quot;,57,325],[&quot;punctuation&quot;,325,326],[&quot;keyword&quot;,326,328],[&quot;punctuation&quot;,328,329],[&quot;punctuation&quot;,329,331],[&quot;keyword&quot;,331,339],[&quot;punctuation&quot;,339,340],[&quot;punctuation&quot;,342,343],[&quot;keyword&quot;,343,345],[&quot;punctuation&quot;,345,346],[&quot;punctuation&quot;,361,363],[&quot;keyword&quot;,363,365],[&quot;punctuation&quot;,365,366],[&quot;punctuation&quot;,368,369],[&quot;keyword&quot;,369,383],[&quot;punctuation&quot;,383,384],[&quot;punctuation&quot;,387,388],[&quot;keyword&quot;,388,389],[&quot;punctuation&quot;,389,390],[&quot;punctuation&quot;,635,637],[&quot;keyword&quot;,637,638],[&quot;punctuation&quot;,638,639],[&quot;punctuation&quot;,642,643],[&quot;keyword&quot;,643,662],[&quot;keyword&quot;,662,663],[&quot;function&quot;,663,668],[&quot;punctuation&quot;,668,669],[&quot;punctuation&quot;,669,670],[&quot;string&quot;,670,677],[&quot;punctuation&quot;,677,678],[&quot;punctuation&quot;,678,679],[&quot;punctuation&quot;,686,688],[&quot;keyword&quot;,688,707],[&quot;punctuation&quot;,707,708],[&quot;punctuation&quot;,711,712],[&quot;keyword&quot;,712,713],[&quot;punctuation&quot;,713,714],[&quot;punctuation&quot;,875,877],[&quot;keyword&quot;,877,878],[&quot;punctuation&quot;,878,879],[&quot;punctuation&quot;,882,883],[&quot;keyword&quot;,883,902],[&quot;keyword&quot;,902,903],[&quot;function&quot;,903,908],[&quot;punctuation&quot;,908,909],[&quot;punctuation&quot;,909,910],[&quot;string&quot;,910,918],[&quot;punctuation&quot;,918,919],[&quot;keyword&quot;,919,920],[&quot;function&quot;,920,927],[&quot;punctuation&quot;,927,928],[&quot;punctuation&quot;,928,929],[&quot;string&quot;,929,930],[&quot;punctuation&quot;,930,931],[&quot;punctuation&quot;,931,932],[&quot;punctuation&quot;,940,942],[&quot;keyword&quot;,942,961],[&quot;punctuation&quot;,961,962],[&quot;punctuation&quot;,965,966],[&quot;keyword&quot;,966,967],[&quot;punctuation&quot;,967,968],[&quot;punctuation&quot;,1134,1136],[&quot;keyword&quot;,1136,1137],[&quot;punctuation&quot;,1137,1138],[&quot;punctuation&quot;,1141,1142],[&quot;keyword&quot;,1142,1161],[&quot;keyword&quot;,1161,1162],[&quot;function&quot;,1162,1167],[&quot;punctuation&quot;,1167,1168],[&quot;punctuation&quot;,1168,1169],[&quot;string&quot;,1169,1175],[&quot;punctuation&quot;,1175,1176],[&quot;keyword&quot;,1176,1177],[&quot;function&quot;,1177,1184],[&quot;punctuation&quot;,1184,1185],[&quot;punctuation&quot;,1185,1186],[&quot;string&quot;,1186,1187],[&quot;punctuation&quot;,1187,1188],[&quot;punctuation&quot;,1188,1189],[&quot;punctuation&quot;,1204,1206],[&quot;keyword&quot;,1206,1225],[&quot;punctuation&quot;,1225,1226],[&quot;punctuation&quot;,1229,1230],[&quot;keyword&quot;,1230,1231],[&quot;punctuation&quot;,1231,1232],[&quot;punctuation&quot;,1393,1395],[&quot;keyword&quot;,1395,1396],[&quot;punctuation&quot;,1396,1397],[&quot;punctuation&quot;,1400,1401],[&quot;keyword&quot;,1401,1420],[&quot;keyword&quot;,1420,1421],[&quot;function&quot;,1421,1426],[&quot;punctuation&quot;,1426,1427],[&quot;punctuation&quot;,1427,1428],[&quot;string&quot;,1428,1434],[&quot;punctuation&quot;,1434,1435],[&quot;keyword&quot;,1435,1436],[&quot;function&quot;,1436,1443],[&quot;punctuation&quot;,1443,1444],[&quot;punctuation&quot;,1444,1445],[&quot;string&quot;,1445,1446],[&quot;punctuation&quot;,1446,1447],[&quot;punctuation&quot;,1447,1448],[&quot;punctuation&quot;,1462,1464],[&quot;keyword&quot;,1464,1483],[&quot;punctuation&quot;,1483,1484],[&quot;punctuation&quot;,1487,1488],[&quot;keyword&quot;,1488,1489],[&quot;punctuation&quot;,1489,1490],[&quot;punctuation&quot;,1656,1658],[&quot;keyword&quot;,1658,1659],[&quot;punctuation&quot;,1659,1660],[&quot;punctuation&quot;,1663,1664],[&quot;keyword&quot;,1664,1683],[&quot;keyword&quot;,1683,1684],[&quot;function&quot;,1684,1689],[&quot;punctuation&quot;,1689,1690],[&quot;punctuation&quot;,1690,1691],[&quot;string&quot;,1691,1697],[&quot;punctuation&quot;,1697,1698],[&quot;keyword&quot;,1698,1699],[&quot;function&quot;,1699,1706],[&quot;punctuation&quot;,1706,1707],[&quot;punctuation&quot;,1707,1708],[&quot;string&quot;,1708,1709],[&quot;punctuation&quot;,1709,1710],[&quot;punctuation&quot;,1710,1711],[&quot;punctuation&quot;,1723,1725],[&quot;keyword&quot;,1725,1744],[&quot;punctuation&quot;,1744,1745],[&quot;punctuation&quot;,1748,1749],[&quot;keyword&quot;,1749,1750],[&quot;punctuation&quot;,1750,1751],[&quot;punctuation&quot;,1912,1914],[&quot;keyword&quot;,1914,1915],[&quot;punctuation&quot;,1915,1916],[&quot;punctuation&quot;,1919,1920],[&quot;keyword&quot;,1920,1921],[&quot;punctuation&quot;,1921,1922],[&quot;punctuation&quot;,2088,2090],[&quot;keyword&quot;,2090,2091],[&quot;punctuation&quot;,2091,2092],[&quot;punctuation&quot;,2094,2096],[&quot;keyword&quot;,2096,2110],[&quot;punctuation&quot;,2110,2111],[&quot;punctuation&quot;,2112,2114],[&quot;keyword&quot;,2114,2133],[&quot;punctuation&quot;,2133,2134]]">&lt;norn-sidebar-layout&gt;
+	&lt;norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'pinned', text: 'Pinned versions', level: 4 },
+			{ id: 'ranges', text: 'Version ranges', level: 5 },
+			{ id: 'carets', text: 'Caret ranges', level: 6 }
+		]"
+	&gt;&lt;/norn-toc&gt;
+	&lt;h1&gt;Getting started&lt;/h1&gt;
+	&lt;norn-rich-text&gt;
+		&lt;p&gt;The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="pinned" :@level="4"&gt;Pinned versions&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="ranges" :@level="5"&gt;Version ranges&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;norn-heading-anchor @slug="carets" :@level="6"&gt;Caret ranges&lt;/norn-heading-anchor&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+	&lt;/norn-rich-text&gt;
+&lt;/norn-sidebar-layout&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-f_gKa">
+		<span data-string="label" id="norn-code-block-webc-f_gKa-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -685,18 +744,28 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-toc
-	:@items=&quot;[
-		{ id: 'overview', text: 'Overview', level: 3 },
-		{ id: 'setup', text: 'Setup', level: 2 },
-		{ id: 'tokens', text: 'Design tokens', level: 4 },
-		{ id: 'usage', text: 'Usage', level: 2 }
-	]&quot;
-></norn-toc>
-<p id=&quot;overview&quot;>Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
-<p id=&quot;setup&quot;>Setup: a level 2 heading.</p>
-<p id=&quot;tokens&quot;>Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
-<p id=&quot;usage&quot;>Usage: a level 2 heading.</p>" data-strings="norn-code-block-webc-Uxnhy" data-compact=""><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-sidebar-layout>
+	<norn-toc
+		slot=&quot;nav&quot;
+		:@items=&quot;[
+			{ id: 'overview', text: 'Overview', level: 3 },
+			{ id: 'setup', text: 'Setup', level: 2 },
+			{ id: 'tokens', text: 'Design tokens', level: 4 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]&quot;
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p id=&quot;overview&quot;>Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p id=&quot;setup&quot;>Setup: a level 2 heading.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p id=&quot;tokens&quot;>Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p id=&quot;usage&quot;>Usage: a level 2 heading.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-wVmFQ" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -713,20 +782,30 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,9],[&quot;keyword&quot;,9,11],[&quot;function&quot;,11,18],[&quot;punctuation&quot;,18,19],[&quot;punctuation&quot;,19,20],[&quot;string&quot;,20,214],[&quot;punctuation&quot;,214,215],[&quot;keyword&quot;,215,216],[&quot;punctuation&quot;,216,217],[&quot;punctuation&quot;,217,219],[&quot;keyword&quot;,219,227],[&quot;punctuation&quot;,227,228],[&quot;punctuation&quot;,229,230],[&quot;keyword&quot;,230,231],[&quot;keyword&quot;,231,232],[&quot;function&quot;,232,234],[&quot;punctuation&quot;,234,235],[&quot;punctuation&quot;,235,236],[&quot;string&quot;,236,244],[&quot;punctuation&quot;,244,245],[&quot;punctuation&quot;,245,246],[&quot;punctuation&quot;,321,323],[&quot;keyword&quot;,323,324],[&quot;punctuation&quot;,324,325],[&quot;punctuation&quot;,326,327],[&quot;keyword&quot;,327,328],[&quot;keyword&quot;,328,329],[&quot;function&quot;,329,331],[&quot;punctuation&quot;,331,332],[&quot;punctuation&quot;,332,333],[&quot;string&quot;,333,338],[&quot;punctuation&quot;,338,339],[&quot;punctuation&quot;,339,340],[&quot;punctuation&quot;,365,367],[&quot;keyword&quot;,367,368],[&quot;punctuation&quot;,368,369],[&quot;punctuation&quot;,370,371],[&quot;keyword&quot;,371,372],[&quot;keyword&quot;,372,373],[&quot;function&quot;,373,375],[&quot;punctuation&quot;,375,376],[&quot;punctuation&quot;,376,377],[&quot;string&quot;,377,383],[&quot;punctuation&quot;,383,384],[&quot;punctuation&quot;,384,385],[&quot;punctuation&quot;,488,490],[&quot;keyword&quot;,490,491],[&quot;punctuation&quot;,491,492],[&quot;punctuation&quot;,493,494],[&quot;keyword&quot;,494,495],[&quot;keyword&quot;,495,496],[&quot;function&quot;,496,498],[&quot;punctuation&quot;,498,499],[&quot;punctuation&quot;,499,500],[&quot;string&quot;,500,505],[&quot;punctuation&quot;,505,506],[&quot;punctuation&quot;,506,507],[&quot;punctuation&quot;,532,534],[&quot;keyword&quot;,534,535],[&quot;punctuation&quot;,535,536]]">&lt;norn-toc
-	:@items="[
-		{ id: 'overview', text: 'Overview', level: 3 },
-		{ id: 'setup', text: 'Setup', level: 2 },
-		{ id: 'tokens', text: 'Design tokens', level: 4 },
-		{ id: 'usage', text: 'Usage', level: 2 }
-	]"
-&gt;&lt;/norn-toc&gt;
-&lt;p id="overview"&gt;Overview: a level 3 heading first, so it has no parent and sits at the top.&lt;/p&gt;
-&lt;p id="setup"&gt;Setup: a level 2 heading.&lt;/p&gt;
-&lt;p id="tokens"&gt;Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.&lt;/p&gt;
-&lt;p id="usage"&gt;Usage: a level 2 heading.&lt;/p&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-Uxnhy">
-		<span data-string="label" id="norn-code-block-webc-Uxnhy-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,20],[&quot;punctuation&quot;,20,21],[&quot;punctuation&quot;,23,24],[&quot;keyword&quot;,24,32],[&quot;keyword&quot;,32,35],[&quot;function&quot;,35,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;string&quot;,41,44],[&quot;punctuation&quot;,44,45],[&quot;keyword&quot;,45,48],[&quot;function&quot;,48,55],[&quot;punctuation&quot;,55,56],[&quot;punctuation&quot;,56,57],[&quot;string&quot;,57,256],[&quot;punctuation&quot;,256,257],[&quot;keyword&quot;,257,259],[&quot;punctuation&quot;,259,260],[&quot;punctuation&quot;,260,262],[&quot;keyword&quot;,262,270],[&quot;punctuation&quot;,270,271],[&quot;punctuation&quot;,273,274],[&quot;keyword&quot;,274,276],[&quot;punctuation&quot;,276,277],[&quot;punctuation&quot;,292,294],[&quot;keyword&quot;,294,296],[&quot;punctuation&quot;,296,297],[&quot;punctuation&quot;,299,300],[&quot;keyword&quot;,300,314],[&quot;punctuation&quot;,314,315],[&quot;punctuation&quot;,318,319],[&quot;keyword&quot;,319,320],[&quot;keyword&quot;,320,321],[&quot;function&quot;,321,323],[&quot;punctuation&quot;,323,324],[&quot;punctuation&quot;,324,325],[&quot;string&quot;,325,333],[&quot;punctuation&quot;,333,334],[&quot;punctuation&quot;,334,335],[&quot;punctuation&quot;,410,412],[&quot;keyword&quot;,412,413],[&quot;punctuation&quot;,413,414],[&quot;punctuation&quot;,417,418],[&quot;keyword&quot;,418,419],[&quot;punctuation&quot;,419,420],[&quot;punctuation&quot;,581,583],[&quot;keyword&quot;,583,584],[&quot;punctuation&quot;,584,585],[&quot;punctuation&quot;,588,589],[&quot;keyword&quot;,589,590],[&quot;keyword&quot;,590,591],[&quot;function&quot;,591,593],[&quot;punctuation&quot;,593,594],[&quot;punctuation&quot;,594,595],[&quot;string&quot;,595,600],[&quot;punctuation&quot;,600,601],[&quot;punctuation&quot;,601,602],[&quot;punctuation&quot;,627,629],[&quot;keyword&quot;,629,630],[&quot;punctuation&quot;,630,631],[&quot;punctuation&quot;,634,635],[&quot;keyword&quot;,635,636],[&quot;punctuation&quot;,636,637],[&quot;punctuation&quot;,803,805],[&quot;keyword&quot;,805,806],[&quot;punctuation&quot;,806,807],[&quot;punctuation&quot;,810,811],[&quot;keyword&quot;,811,812],[&quot;keyword&quot;,812,813],[&quot;function&quot;,813,815],[&quot;punctuation&quot;,815,816],[&quot;punctuation&quot;,816,817],[&quot;string&quot;,817,823],[&quot;punctuation&quot;,823,824],[&quot;punctuation&quot;,824,825],[&quot;punctuation&quot;,928,930],[&quot;keyword&quot;,930,931],[&quot;punctuation&quot;,931,932],[&quot;punctuation&quot;,935,936],[&quot;keyword&quot;,936,937],[&quot;punctuation&quot;,937,938],[&quot;punctuation&quot;,1099,1101],[&quot;keyword&quot;,1101,1102],[&quot;punctuation&quot;,1102,1103],[&quot;punctuation&quot;,1106,1107],[&quot;keyword&quot;,1107,1108],[&quot;keyword&quot;,1108,1109],[&quot;function&quot;,1109,1111],[&quot;punctuation&quot;,1111,1112],[&quot;punctuation&quot;,1112,1113],[&quot;string&quot;,1113,1118],[&quot;punctuation&quot;,1118,1119],[&quot;punctuation&quot;,1119,1120],[&quot;punctuation&quot;,1145,1147],[&quot;keyword&quot;,1147,1148],[&quot;punctuation&quot;,1148,1149],[&quot;punctuation&quot;,1152,1153],[&quot;keyword&quot;,1153,1154],[&quot;punctuation&quot;,1154,1155],[&quot;punctuation&quot;,1321,1323],[&quot;keyword&quot;,1323,1324],[&quot;punctuation&quot;,1324,1325],[&quot;punctuation&quot;,1327,1329],[&quot;keyword&quot;,1329,1343],[&quot;punctuation&quot;,1343,1344],[&quot;punctuation&quot;,1345,1347],[&quot;keyword&quot;,1347,1366],[&quot;punctuation&quot;,1366,1367]]">&lt;norn-sidebar-layout&gt;
+	&lt;norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'overview', text: 'Overview', level: 3 },
+			{ id: 'setup', text: 'Setup', level: 2 },
+			{ id: 'tokens', text: 'Design tokens', level: 4 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]"
+	&gt;&lt;/norn-toc&gt;
+	&lt;h1&gt;Getting started&lt;/h1&gt;
+	&lt;norn-rich-text&gt;
+		&lt;p id="overview"&gt;Overview: a level 3 heading first, so it has no parent and sits at the top.&lt;/p&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p id="setup"&gt;Setup: a level 2 heading.&lt;/p&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p id="tokens"&gt;Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.&lt;/p&gt;
+		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p id="usage"&gt;Usage: a level 2 heading.&lt;/p&gt;
+		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+	&lt;/norn-rich-text&gt;
+&lt;/norn-sidebar-layout&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-wVmFQ">
+		<span data-string="label" id="norn-code-block-webc-wVmFQ-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -744,7 +823,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-2Fdpw"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-4stRX"></span>
 <div>
 		<table>
 			<thead>
@@ -761,12 +840,12 @@
 	</div>
 
 
-</norn-data-table>
+</norn-simple-table>
 
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-qBnl3"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-kqWa-"></span>
 <div>
 		<table>
 			<thead>
@@ -782,7 +861,7 @@
 	</div>
 
 
-</norn-data-table>
+</norn-simple-table>
 
 
 

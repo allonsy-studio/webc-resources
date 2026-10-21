@@ -1,0 +1,999 @@
+@layer norn.components {
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& a[data-variant] {
+				--_state: 0%;
+				--_bg: transparent;
+				--_border: transparent;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding: var(--norn-space-2xs, 0.25rem) var(--norn-space-m, 1.25rem);
+				border: var(--norn-link-button-border-width, 1px) solid var(--_border);
+				border-radius: var(--norn-link-button-radius, var(--norn-ui-border-radius, 6px));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg));
+				color: var(--norn-link-button-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				font-weight: 600;
+				line-height: 1.3;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+			}
+
+			& a[data-variant="primary"] {
+				--_bg: var(--norn-link-button-accent, var(--norn-ui-accent, #2346d4));
+				color: var(--norn-link-button-on-accent, var(--norn-text-on-accent, color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1)))));
+			}
+
+			& a[data-variant="secondary"] {
+				--_border: var(--norn-link-button-border, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+			}
+
+			@media (pointer: coarse) {
+				& a[data-variant] {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& a[data-variant] {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			/* The primary button stays filled, since the browser would turn its fill into the page color. */
+			@media (forced-colors: active) {
+				& a[data-variant="primary"] {
+					border-color: LinkText;
+					background-color: LinkText;
+					color: Canvas;
+					forced-color-adjust: none;
+
+					&:focus-visible {
+						outline-color: CanvasText;
+					}
+				}
+
+				& a[data-variant="secondary"] {
+					border-color: LinkText;
+					color: LinkText;
+				}
+
+				/* A clear border would be drawn in the text color, so the quiet button's takes the page's. */
+				& a[data-variant="quiet"] {
+					border-color: Canvas;
+					color: LinkText;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+				block-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: var(--norn-icon-stroke, 2);
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-copy-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& button {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				max-inline-size: 100%;
+				padding: 0 var(--norn-space-xs, 0.5rem);
+				border: 0;
+				border-radius: var(--norn-copy-button-radius, var(--norn-ui-border-radius, 6px));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-copy-button-bg, transparent));
+				color: var(--norn-copy-button-fg, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				font: inherit;
+				font-size: var(--norn-font-size-s, 0.875rem);
+				overflow-wrap: anywhere;
+				text-align: start;
+				cursor: pointer;
+
+				&[hidden] {
+					display: none;
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				&[data-state="copied"] {
+					color: var(--norn-status-success, light-dark(#0b6b3a, #7ed6a1));
+				}
+
+				&[data-state="failed"] {
+					color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+				}
+			}
+
+			/* The copy icon and the check share a cell, and so do the three texts, so the button is as wide for one as for another. */
+			& [data-icons],
+			& [data-label] {
+				display: inline-grid;
+			}
+
+			& [data-icons] > norn-icon,
+			& [data-label] > span {
+				grid-area: 1 / 1;
+			}
+
+			& [data-label] {
+				margin-inline-start: var(--norn-space-2xs, 0.25rem);
+			}
+
+			& button:not([data-state="copied"]) [data-icons] > norn-icon:last-child,
+			& button[data-state="copied"] [data-icons] > norn-icon:first-child,
+			& [data-label] > span:not([data-active]) {
+				visibility: hidden;
+			}
+
+			/* A compact button is only its icon until the pointer or focus is on it, or it has a result to show. */
+			& button[data-compact]:not(:hover, :focus-visible, [data-state]) [data-label] {
+				inline-size: 0;
+				margin: 0;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			& [role="status"] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (pointer: coarse) {
+				& button {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		norn-code-block {
+			display: block;
+
+			/* The caption sits above the code. The copy button shares the code's cell, over its top end corner. */
+			& figure {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				margin: 0;
+			}
+
+			& figure:has(> figcaption) {
+				row-gap: var(--norn-space-xs, 0.5rem);
+			}
+
+			& figcaption {
+				grid-area: 1 / 1;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-family: var(--norn-code-block-font, var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace));
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& norn-copy-button {
+				--norn-copy-button-bg: var(--norn-code-block-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
+				grid-area: 2 / 1;
+				z-index: 1;
+				justify-self: end;
+				align-self: start;
+				margin: var(--norn-space-2xs, 0.25rem);
+			}
+
+			& pre {
+				box-sizing: border-box;
+				grid-area: 2 / 1;
+				margin: 0;
+				overflow-x: auto;
+				padding: var(--norn-code-block-padding, var(--norn-space-m, 1.25rem));
+				border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-code-block-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
+				color: var(--norn-code-block-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+				font-family: var(--norn-code-block-font, var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace));
+				font-size: var(--norn-font-size-s, 0.875rem);
+				line-height: 1.5;
+			}
+
+			/* With the copy button showing, the code's scrolling area stops short of it. A transparent border is outside the scrolling area and under the background, so no code runs beneath the button. The button sits at the figure's end, and the code is always left to right, so a right-to-left page takes the border on the other side. */
+			& figure:has(> norn-copy-button > button:not([hidden])) {
+				--_chip: calc(2 * var(--norn-space-xs, 0.5rem) + var(--norn-ui-icon-s, 1em) + var(--norn-space-2xs, 0.25rem) + var(--norn-space-xs, 0.5rem));
+			}
+
+			& figure:has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: var(--_chip) solid transparent;
+			}
+
+			& figure:dir(rtl):has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: 0;
+				border-inline-start: var(--_chip) solid transparent;
+			}
+
+			& code {
+				padding: 0;
+				background: none;
+				font: inherit;
+			}
+
+			/* A frame with a header bar for the caption, set with `--norn-chrome: terminal` on an ancestor. */
+			@container style(--norn-chrome: terminal) {
+				& figure,
+				& figure:has(> figcaption) {
+					overflow: hidden;
+					row-gap: 0;
+					border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, 6px));
+				}
+
+				& figcaption {
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					block-size: 2rem;
+					padding-inline: var(--norn-space-s, 0.75rem);
+					background: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+				}
+
+				& pre {
+					border-radius: 0;
+				}
+			}
+
+			/* Colors for the ranges the script registers. Plain text without Custom Highlight API support. */
+			&::highlight(tok-comment) {
+				color: var(--norn-code-comment, light-dark(#566070, #9aa3b5));
+			}
+
+			&::highlight(tok-string) {
+				color: var(--norn-code-string, light-dark(#0b6b3a, #7ed6a1));
+			}
+
+			&::highlight(tok-keyword) {
+				color: var(--norn-code-keyword, light-dark(#6b2fc2, #c4a3ff));
+			}
+
+			&::highlight(tok-function) {
+				color: var(--norn-code-function, light-dark(#1b4fc4, #8fb0ff));
+			}
+
+			&::highlight(tok-number) {
+				color: var(--norn-code-number, light-dark(#9a4a00, #ffb36b));
+			}
+
+			&::highlight(tok-flag) {
+				color: var(--norn-code-flag, light-dark(#00687a, #5ccfe0));
+			}
+
+			&::highlight(tok-punctuation) {
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+
+			@media print {
+				break-inside: avoid;
+
+				& pre {
+					white-space: pre-wrap;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-hero {
+			display: block;
+
+			& > header {
+				display: grid;
+				grid-auto-flow: row;
+				align-content: start;
+				gap: var(--norn-space-m, 1.25rem);
+				inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), var(--norn-hero-width, var(--norn-layout-width, 64rem)));
+				margin-inline: auto;
+				padding-block: var(--norn-space-xl, 4rem) var(--norn-space-l, 2rem);
+			}
+
+			& > header > h1 {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: clamp(2rem, 5vw, 3.25rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			& > header > h1 > :first-child {
+				font-size: 1.15em;
+			}
+
+			& > header > h1 > :last-child:not(:first-child) {
+				color: var(--norn-hero-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				font-size: 0.55em;
+				font-weight: 400;
+			}
+
+			& > header > p {
+				max-inline-size: var(--norn-text-measure, 40em);
+				margin: 0;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-size: var(--norn-font-size-l, 1.25rem);
+				text-wrap: pretty;
+			}
+
+			& > header > norn-fact-list {
+				--norn-fact-list-gap: var(--norn-space-l, 2rem) var(--norn-space-m, 1.25rem);
+			}
+
+			& > header > nav ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, 0.75rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+
+				& > header {
+					gap: var(--norn-space-s, 0.75rem);
+					padding-block: var(--norn-space-m, 1.25rem);
+				}
+			}
+		}
+	}
+@layer norn.layout {
+		/* Contents: a title and its description, in two columns when wide. Each row is one link, with no rules between them. */
+		[data-norn-contents] {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+			gap: var(--norn-space-s, 0.75rem);
+			/* The rows are padded, so the text lines up with the heading above. */
+			margin: 0 calc(-1 * var(--norn-space-m, 1.25rem));
+
+			& > div {
+				--_state: 0%;
+				position: relative;
+				display: grid;
+				align-content: start;
+				gap: var(--norn-space-2xs, 0.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				/* The ring goes around the row, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
+				}
+			}
+
+			& dt {
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: var(--norn-font-size-m, 1rem);
+				font-weight: 700;
+			}
+
+			/* The link reaches over the whole row. */
+			& dt a {
+				text-decoration: none;
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
+				}
+			}
+
+			& dd {
+				margin: 0;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+		}
+	}
+@layer norn.components {
+		norn-skip-link {
+			display: block;
+
+			& a {
+				position: absolute;
+				inset-block-start: -5rem;
+				inset-inline-start: var(--norn-space-m, 1.25rem);
+				z-index: 10;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-radius: var(--norn-skip-link-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-skip-link-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
+				color: var(--norn-skip-link-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+
+				&:focus {
+					inset-block-start: var(--norn-space-xs, 0.5rem);
+				}
+			}
+
+			@media (forced-colors: active) {
+				& a {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		norn-header {
+			display: block;
+			container-type: inline-size;
+
+			& > header {
+				position: relative;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				background: var(--norn-header-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: auto 0 0;
+					block-size: var(--norn-header-stripe-size, 3px);
+					background: var(--norn-header-stripe, none);
+				}
+			}
+
+			& > header > a[rel="home"] {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-header-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: var(--norn-font-size-l, 1.25rem);
+				font-weight: 700;
+				text-decoration: none;
+			}
+
+			& > header > [rel="home"] img {
+				display: block;
+				inline-size: auto;
+				max-inline-size: 100%;
+				block-size: var(--norn-header-logo, 2rem);
+			}
+
+			/* Wide, the details is only a wrapper: its summary is hidden, and the navigation sits in the row. */
+			& > header > details {
+				display: contents;
+
+				&::details-content {
+					content-visibility: visible;
+					display: contents;
+				}
+			}
+
+			& > header > details > summary {
+				display: none;
+			}
+
+			& > header > details > nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-2xs, 0.25rem) var(--norn-space-xs, 0.5rem);
+				font-size: var(--norn-font-size-m, 1rem);
+			}
+
+			& > header > details > nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& > header > details > nav > a {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, 0.25rem);
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding-inline: var(--norn-space-xs, 0.5rem);
+				border-block-end: 2px solid transparent;
+				border-radius: var(--norn-ui-radius-s, 4px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-header-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				&[aria-current] {
+					border-block-end-color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+			}
+
+			/* Narrow, the links fold into a control at the end of the brand's row. Open, they take the full width below it. */
+			@container (max-width: 40rem) {
+				& > header {
+					row-gap: 0;
+				}
+
+				& > header > details:not([open])::details-content {
+					content-visibility: hidden;
+				}
+
+				& > header > details::details-content {
+					display: block;
+					flex: 1 0 100%;
+				}
+
+				& > header > details > nav {
+					flex-direction: column;
+					padding-block-start: var(--norn-space-xs, 0.5rem);
+					flex-wrap: nowrap;
+					gap: 0;
+				}
+
+				& > header > details > nav > a {
+					padding-inline: var(--norn-space-s, 0.75rem);
+				}
+
+				& > header > details > summary {
+					--_state: 0%;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					gap: var(--norn-space-s, 0.75rem);
+					min-block-size: var(--norn-ui-control-height, 2.25rem);
+					margin-inline-start: auto;
+					padding-inline: var(--norn-space-s, 0.75rem);
+					border-radius: var(--norn-ui-radius-s, 4px);
+					background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+					font-weight: 600;
+					list-style: none;
+					cursor: pointer;
+
+					&::-webkit-details-marker {
+						display: none;
+					}
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, 8%);
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, 12%);
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
+					}
+
+					/* A chevron drawn with two borders, pointing down when closed and up when open. */
+					&::after {
+						box-sizing: border-box;
+						content: "";
+						flex: none;
+						inline-size: 0.5em;
+						block-size: 0.5em;
+						border-block-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+						border-inline-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+						rotate: 45deg;
+					}
+				}
+
+				& > header > details[open] > summary::after {
+					rotate: 225deg;
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > header > details > nav > a,
+				& > header > details > summary {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > header > details > nav > a,
+				& > header > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			/* A clear border would be drawn in the text color, so the links that aren't current take the page's. */
+			@media (forced-colors: active) {
+				& > header > details > nav > a {
+					border-block-end-color: Canvas;
+				}
+
+				& > header > details > nav > a[aria-current] {
+					border-block-end-color: Highlight;
+				}
+
+				& > header > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > header > details {
+					display: none;
+				}
+			}
+
+			/* Last, so a header with no links drops the whole control. */
+			& > header > details:not(:has(a)) {
+				display: none;
+			}
+		}
+
+		/* Without ::details-content a closed details can't show its links, so the control is always there. */
+		@supports not selector(::details-content) {
+			norn-header > header > details > summary {
+				display: flex;
+				align-items: center;
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				margin-inline-start: auto;
+				font-weight: 600;
+				cursor: pointer;
+			}
+		}
+	}
+@layer norn.components {
+		norn-footer {
+			display: block;
+			container-type: inline-size;
+
+			& > footer {
+				display: grid;
+				gap: var(--norn-space-l, 2rem);
+				padding: var(--norn-space-l, 2rem) var(--norn-space-m, 1.25rem);
+				border-block-start: 1px solid var(--norn-footer-border, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				color: var(--norn-footer-fg, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& > footer > div {
+				inline-size: min(100%, var(--norn-footer-width, var(--norn-layout-width, 64rem)));
+				margin-inline: auto;
+
+				/* A slot nobody filled leaves its wrapper empty: take it out of the grid. */
+				&:not(:has(*)) {
+					display: none;
+				}
+
+				&:first-child {
+					display: grid;
+					grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+					align-items: start;
+					gap: var(--norn-space-l, 2rem);
+				}
+
+				&:first-child > :is(div, nav) {
+					display: grid;
+					align-content: start;
+					gap: var(--norn-space-s, 0.75rem);
+				}
+
+				&:first-child > :first-child strong:first-of-type {
+					color: var(--norn-footer-name, var(--norn-footer-strong, var(--norn-text-base, light-dark(#16181d, #eceef3))));
+					font-family: var(--norn-footer-name-face, inherit);
+					font-size: var(--norn-footer-name-size, inherit);
+				}
+
+				/* A nav of several link groups: one landmark, a column per group. */
+				&:first-child > nav:has(> div) {
+					display: flex;
+					flex-wrap: wrap;
+					gap: var(--norn-space-l, 2rem);
+				}
+
+				&:first-child > nav > div {
+					display: grid;
+					align-content: start;
+					gap: var(--norn-space-s, 0.75rem);
+				}
+			}
+
+			@container (min-width: 60rem) {
+				& > footer > div:first-child {
+					grid-template-columns: minmax(0, var(--norn-footer-lead, 25rem));
+					grid-auto-columns: minmax(min-content, max-content);
+					grid-auto-flow: column;
+					justify-content: space-between;
+				}
+			}
+
+			& :where(p) {
+				margin-block: 0;
+			}
+
+			& :where(strong) {
+				color: var(--norn-footer-strong, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+			}
+
+			& :where(small) {
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& > footer > div:first-child > :is(div, nav) > ul,
+			& > footer > div:first-child > nav > div > ul {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& :where(a) {
+				color: inherit;
+			}
+
+			/* A link in the navigation is quiet until the pointer or focus is on it. A link in a sentence keeps its underline. */
+			& :where(nav a) {
+				text-decoration: none;
+			}
+
+			& :where(a:is(:hover, :focus-visible)) {
+				color: var(--norn-footer-hover, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				text-decoration: underline;
+			}
+
+			& :where(a:has(norn-icon)) {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, 0.25rem);
+			}
+
+			@media print {
+				& > footer {
+					gap: var(--norn-space-s, 0.75rem);
+				}
+			}
+		}
+	}
+/*
+ * Base styles for the page, in the norn.base layer: color-scheme and base typography.
+ * It defines no design tokens: every component carries each shared token as the fallback of its custom property, compiled from `tokens.json`.
+ * Adds one utility class, `.visually-hidden`: text that is read but not shown, and shows while it or a child has focus.
+ */
+@layer norn.base {
+	:root {
+		color-scheme: light dark;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		html {
+			scroll-behavior: smooth;
+		}
+	}
+
+	body {
+		min-block-size: 100dvh;
+		margin: 0;
+		background: var(--norn-surface-base, light-dark(#ffffff, #101216));
+		color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+		font-family: var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+		font-size: var(--norn-font-size-m, 1rem);
+		line-height: 1.5;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+		line-height: 1.15;
+		text-wrap: balance;
+	}
+
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
+	a {
+		color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+		text-decoration: underline dotted;
+		text-decoration-color: currentcolor;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+		overflow-wrap: break-word;
+
+		&:is(:hover, :focus-visible) {
+			text-decoration-style: solid;
+		}
+	}
+
+	/* The one focus ring. A component that the ring would clip draws it inset, at the negative of the offset. */
+	:focus-visible {
+		outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+		outline-offset: var(--norn-ui-focus-offset, 2px);
+	}
+
+	main:focus {
+		outline: none;
+	}
+
+	/* Off screen but still read. Shows while it, or a child, has focus. */
+	.visually-hidden:not(:focus-within, :active) {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}
+/* Print rules for the page, in the norn.print layer. Each component keeps its own in its `@media print` block. */
+@layer norn.print {
+	@media print {
+		html {
+			font-size: 12px;
+		}
+	}
+}
+@layer norn.layout {
+				/* A section directly in main is a centered column at the page width, its heading the second level. A section anywhere else is left alone. The :where() keeps the rule easy for a project to override. */
+				:where(main) > section {
+					display: grid;
+					grid-template-columns: minmax(0, 1fr);
+					align-content: start;
+					gap: var(--norn-space-m, 1.25rem);
+					inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), var(--norn-layout-width, 64rem));
+					margin-inline: auto;
+					padding-block: var(--norn-space-l, 2rem);
+					scroll-margin-block-start: var(--norn-space-m, 1.25rem);
+				}
+
+				:where(main) > section > h2,
+				:where(main) > section > norn-heading-anchor > h2 {
+					margin: 0;
+					font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+					font-size: var(--norn-font-size-xl, 1.5rem);
+					line-height: 1.15;
+					text-wrap: balance;
+				}
+
+				@media print {
+					:where(main) > section {
+						gap: var(--norn-space-s, 0.75rem);
+						padding-block: var(--norn-space-m, 1.25rem);
+					}
+				}
+
+				/* The page title and the body's line length in a page with a navigation column, for norn-docs and norn-workspace. The base styles set the title's face and wrapping. */
+				norn-sidebar-layout {
+					--norn-rich-text-measure: none;
+
+					& > div > article > h1 {
+						margin: 0;
+						font-size: clamp(1.9rem, 4vw, 2.5rem);
+						overflow-wrap: anywhere;
+					}
+
+					/* Prose holds to the measure, and code, tables, and callouts take the width. */
+					& > div > article > norn-rich-text > :is(p, ul, ol, blockquote, h2, h3, h4, h5, h6, norn-heading-anchor) {
+						max-inline-size: var(--norn-text-measure, 40em);
+					}
+				}
+
+				/* The space above the footer is the page's, not the footer's. */
+				norn-footer {
+					margin-block-start: var(--norn-space-xl, 4rem);
+
+					& [data-badges] {
+						display: flex;
+						flex-wrap: wrap;
+						gap: var(--norn-space-xs, 0.5rem);
+					}
+
+					& [data-badges] img {
+						display: block;
+						inline-size: auto;
+						block-size: 20px;
+					}
+				}
+			}

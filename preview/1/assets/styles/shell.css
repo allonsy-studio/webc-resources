@@ -89,7 +89,7 @@ main td code {
 }
 
 /* The tokens table scrolls in its own box on a narrow screen. On a wide one its values wrap, as in the other tables. */
-main norn-data-table td code {
+main norn-simple-table td code {
 	white-space: normal;
 }
 
@@ -105,9 +105,9 @@ main th[scope="row"] code {
 /*
  * Too narrow for the columns, the props, slots, and custom properties tables stack: each row is a block,
  * the name first, then the type, default, and field under their labels, then the description.
- * Their code wraps between words, never inside one. A box that still scrolls is norn-data-table's own.
+ * Their code wraps between words, never inside one. A box that still scrolls is norn-simple-table's own.
  */
-main :is(norn-data-table.spec, preview-props) {
+main :is(norn-simple-table.spec, preview-props) {
 	container-type: inline-size;
 }
 
@@ -138,7 +138,7 @@ main :is(norn-data-table.spec, preview-props) {
 		margin-block-start: var(--norn-space-xs);
 	}
 
-	main norn-data-table.spec :is(th, td) code {
+	main norn-simple-table.spec :is(th, td) code {
 		overflow-wrap: normal;
 	}
 

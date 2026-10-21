@@ -16,8 +16,8 @@
 	--norn-ui-icon-m: 1.25rem;
 	--norn-ui-shadow: 0 6px 20px light-dark(rgb(22 24 29 / 0.08), rgb(0 0 0 / 0.4));
 	--norn-surface-base: light-dark(#ffffff, #101216);
-	--norn-surface-raised: light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%));
-	--norn-surface-code: light-dark(hsl(40, 14%, 94%), hsl(0, 0%, 14%));
+	--norn-surface-raised: light-dark(hsl(40, 14%, 96%), #242932);
+	--norn-surface-code: light-dark(hsl(40, 14%, 94%), #2c313b);
 	--norn-text-base: light-dark(#16181d, #eceef3);
 	--norn-text-muted: light-dark(#4b5160, #a4abba);
 	--norn-text-accent: light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h));
@@ -35,6 +35,7 @@
 	--norn-code-keyword: light-dark(#6b2fc2, #c4a3ff);
 	--norn-code-function: light-dark(#1b4fc4, #8fb0ff);
 	--norn-code-number: light-dark(#9a4a00, #ffb36b);
+	--norn-code-flag: light-dark(#00687a, #5ccfe0);
 	--norn-space-2xs: 0.25rem;
 	--norn-space-xs: 0.5rem;
 	--norn-space-s: 0.75rem;
