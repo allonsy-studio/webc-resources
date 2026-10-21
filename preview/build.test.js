@@ -62,11 +62,16 @@ describe("the catalog", () => {
 	test("every component has a category, and the examples sit where they were asked for", () => {
 		const where = Object.fromEntries(catalog.categories.flatMap((category) => category.components.map((component) => [component.name, category.id])));
 		assert.equal(Object.keys(where).length, catalog.components.length, "each component in exactly one category");
-		assert.deepEqual(catalog.categories.map(({ id }) => id), ["layout", "landmark", "container", "component", "template", "document"]);
+		assert.deepEqual(catalog.categories.map(({ id }) => id), ["layout", "landmark", "container", "component", "template", "document", "oss-site"], "the OSS site group follows the categories");
+		assert.deepEqual(catalog.categories.at(-1).components.map(({ name }) => name), ["oss-bar", "oss-credit", "oss-cta", "oss-head"], "every OSS site component, by name, with no sub-grouping");
+		assert.ok(catalog.categories.slice(0, -1).every((category) => category.components.every(({ packageId }) => packageId !== "oss-site")), "and in no other group");
 		assert.equal(where["norn-card-grid"], "container");
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.equal(where[name], "landmark", name);
 		for (const name of ["norn-card"]) assert.equal(where[name], "container", name);
-		for (const name of ["norn-head", "oss-head"]) assert.equal(where[name], "document", name);
+		assert.equal(where["norn-head"], "document");
+		assert.equal(where["oss-head"], "oss-site", "grouped by package");
+		assert.equal(catalog.components.find(({ name }) => name === "oss-head").category, "document", "and still a document by its own JSDoc");
+		assert.ok(catalog.components.every(({ category }) => category), "every component keeps its category");
 		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces-home", "norn-workspace"]) assert.equal(where[name], "template", name);
 		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces-home"], "the layouts, and nothing else");
 	});
@@ -97,11 +102,13 @@ describe("the preview build", () => {
 		assert.ok(fs.existsSync(path.join(output, "index.html")) && fs.existsSync(path.join(output, "foundations", "index.html")));
 	});
 
-	test("the nav groups the components by category, in order", () => {
+	test("the nav groups the components by category, then lists the OSS site components in a group of their own", () => {
 		const html = pageFor(output, "/");
 		const nav = html.slice(html.indexOf('<nav aria-label="Components">'));
 		const groups = [...nav.matchAll(/<summary>([^<]+)<\/summary>/g)].map(([, title]) => title);
-		assert.deepEqual(groups, ["Layout", "Landmark", "Container", "Component", "Template", "Document"]);
+		assert.deepEqual(groups, ["Layout", "Landmark", "Container", "Component", "Template", "Document", "OSS site"]);
+		const oss = nav.slice(nav.indexOf("<summary>OSS site</summary>"));
+		for (const name of ["oss-bar", "oss-credit", "oss-cta", "oss-head"]) assert.ok(oss.includes(`>${name}</a>`), name);
 		const landmark = html.slice(html.indexOf("<summary>Landmark</summary>"), html.indexOf("<summary>Container</summary>"));
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.ok(landmark.includes(`>${name}</a>`), name);
 	});
@@ -361,7 +368,7 @@ describe("the preview in a browser", () => {
 			await page.goto(server.url + "/components/patterns/norn-callout/");
 			assert.equal(await page.locator(NAV_BAR).isHidden(), true, "no bar");
 			const groups = page.locator("preview-nav details details");
-			assert.equal(await groups.count(), 6);
+			assert.equal(await groups.count(), 7, "six categories and the OSS site group");
 			for (const group of await groups.all()) {
 				assert.equal(await group.locator("> summary").isVisible(), true);
 				assert.equal(await group.locator("a").first().isVisible(), true);

@@ -23,6 +23,9 @@ export const CATEGORIES = [
 	{ id: "document", title: "Document", description: "The head and the foundation styles, with no body markup." },
 ];
 
+/** The OSS site package's own group, after the categories: its components are listed together, by name, whatever their category. */
+const OSS_SITE = { id: "oss-site", title: "OSS site", description: "The OSS site theme: its bar, call to action, credit, and head, from one package." };
+
 /** Package folder to the heading the preview shows, in the order shown. */
 const PACKAGES = [
 	["webc-patterns", "Patterns"],
@@ -235,6 +238,11 @@ export function buildCatalog({ packagesDir, storiesDir }) {
 		return { id, title, name: pkg.name, version: pkg.version, description: pkg.description, components };
 	});
 	const components = packages.flatMap((pkg) => pkg.components);
-	const categories = CATEGORIES.map((category) => ({ ...category, components: components.filter((component) => component.category === category.id).sort((a, b) => a.name.localeCompare(b.name)) }));
+	const byName = (a, b) => a.name.localeCompare(b.name);
+	const own = components.filter((component) => component.packageId !== OSS_SITE.id);
+	const categories = [
+		...CATEGORIES.map((category) => ({ ...category, components: own.filter((component) => component.category === category.id).sort(byName) })),
+		{ ...OSS_SITE, components: components.filter((component) => component.packageId === OSS_SITE.id).sort(byName) },
+	];
 	return { packages, categories, components };
 }

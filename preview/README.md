@@ -22,7 +22,7 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 
 Head components (`norn-head`, `oss-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
 
-The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document.
+The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
 
 On a phone (48rem and narrower) the navigation is one closed disclosure, "Components" with the count, above the page. On a wide screen the groups are the sidebar, and the disclosure's bar is hidden where the browser supports `::details-content`. A touch screen gets 44px targets for the navigation and the canvas controls.
 
