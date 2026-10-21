@@ -13,7 +13,7 @@
 	<body>
 		<main id="main" tabindex="-1" :style="bleed ? 'padding: 0' : ''">
 			<h1 webc:if="!ownH1" class="sr-only" @text="title"></h1>
-			<template webc:nokeep @raw="content"></template>
+			<template webc:if="!String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @html="content"></template><template webc:if="String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @raw="content"></template>
 		</main>
 	</body>
 </html>

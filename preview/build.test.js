@@ -134,6 +134,7 @@ describe("the preview build", () => {
 				else if (styled) assert.ok(html.includes(`<${component.name}`), `${story.frameUrl} renders <${component.name}>`);
 				assert.ok(html.includes("<main"), `${story.frameUrl} has its page`);
 				assert.ok(!/<template|\sslot=|webc:/.test(html), `${story.frameUrl} has no leftover markup`);
+				assert.ok(!/<[a-z][^>]*\s[@:][a-z-]+=/.test(html), `${story.frameUrl} has no uncompiled WebC prop`);
 				assert.ok(!html.includes("undefined"), `${story.frameUrl} has no undefined`);
 			}
 		}
