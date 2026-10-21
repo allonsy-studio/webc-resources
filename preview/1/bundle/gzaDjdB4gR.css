@@ -1,0 +1,113 @@
+@layer norn.components {
+		norn-accordion {
+			display: block;
+			interpolate-size: allow-keywords;
+			overflow-wrap: anywhere;
+
+			& > div > details {
+				border-block-end: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+
+				&:first-child {
+					border-block-start: 1px solid var(--norn-accordion-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				}
+
+				&[open] > summary::after {
+					rotate: 225deg;
+				}
+
+				&::details-content {
+					block-size: 0;
+					overflow: hidden;
+				}
+
+				&[open]::details-content {
+					block-size: auto;
+				}
+			}
+
+			& > div > details > summary {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-s, 0.75rem);
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-xs, 0.5rem);
+				border-radius: var(--norn-ui-radius-s, 4px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				font-weight: 600;
+				list-style: none;
+				cursor: pointer;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				/* The ring sits inside the summary, clear of the rules above and below. */
+				&:focus-visible {
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
+				}
+
+				/* A chevron drawn with two borders, pointing down when closed and up when open. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					margin-inline-end: var(--norn-space-2xs, 0.25rem);
+					border-block-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					border-inline-end: 2px solid var(--norn-accordion-marker, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+					rotate: 45deg;
+				}
+			}
+
+			& > div > details > :not(summary) {
+				margin-block: 0 var(--norn-space-s, 0.75rem);
+				padding-inline: var(--norn-space-xs, 0.5rem);
+			}
+
+			@media (pointer: coarse) {
+				& > div > details > summary {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+
+				& > div > details > summary::after {
+					transition: rotate var(--norn-accordion-duration, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+
+				& > div > details::details-content {
+					transition: block-size var(--norn-accordion-duration, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)),
+						content-visibility var(--norn-accordion-duration, 200ms) allow-discrete;
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > div > details::details-content {
+					block-size: auto;
+					content-visibility: visible;
+				}
+			}
+		}
+	}

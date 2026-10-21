@@ -1,0 +1,120 @@
+@layer norn.components {
+		norn-header {
+			display: block;
+
+			& > header {
+				position: relative;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				background: var(--norn-header-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%))));
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: auto 0 0;
+					block-size: var(--norn-header-stripe-size, 3px);
+					background: var(--norn-header-stripe, none);
+				}
+			}
+
+			& > header > a[rel="home"] {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-header-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: var(--norn-font-size-l, 1.25rem);
+				font-weight: 700;
+				text-decoration: none;
+			}
+
+			& > header > [rel="home"] img {
+				display: block;
+				inline-size: auto;
+				max-inline-size: 100%;
+				block-size: var(--norn-header-logo, 2rem);
+			}
+
+			& > header > nav:not(:has(a)) {
+				display: none;
+			}
+
+			& > header > nav {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-2xs, 0.25rem) var(--norn-space-xs, 0.5rem);
+				font-size: var(--norn-font-size-m, 1rem);
+			}
+
+			& > header > nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& > header > nav > a {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, 0.25rem);
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding-inline: var(--norn-space-xs, 0.5rem);
+				border-block-end: 2px solid transparent;
+				border-radius: var(--norn-ui-radius-s, 4px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-header-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				&[aria-current] {
+					border-block-end-color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > header > nav > a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > header > nav > a {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			/* A clear border would be drawn in the text color, so the links that aren't current take the page's. */
+			@media (forced-colors: active) {
+				& > header > nav > a {
+					border-block-end-color: Canvas;
+				}
+
+				& > header > nav > a[aria-current] {
+					border-block-end-color: Highlight;
+				}
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+			}
+		}
+	}

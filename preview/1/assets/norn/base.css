@@ -20,12 +20,16 @@
 		background: var(--norn-surface-base, light-dark(#ffffff, #101216));
 		color: var(--norn-text-base, light-dark(#16181d, #eceef3));
 		font-family: var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
-		line-height: 1.6;
+		font-size: var(--norn-font-size-m, 1rem);
+		line-height: 1.5;
 	}
 
 	h1,
 	h2,
-	h3 {
+	h3,
+	h4,
+	h5,
+	h6 {
 		font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
 		line-height: 1.15;
 		text-wrap: balance;
@@ -34,10 +38,6 @@
 	p,
 	li {
 		text-wrap: pretty;
-	}
-
-	p {
-		line-height: 1.4;
 	}
 
 	a {
@@ -53,18 +53,10 @@
 		}
 	}
 
+	/* The one focus ring. A component that the ring would clip draws it inset, at the negative of the offset. */
 	:focus-visible {
-		outline: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-		outline-offset: 2px;
-	}
-
-	/* Links in running text take a hairline ring; headings, bold text, and controls keep 2px. */
-	:is(p, li, dd, td, th, small, figcaption, nav) a:focus-visible {
-		outline-width: 1px;
-	}
-
-	:is(h1, h2, h3, h4, h5, h6, strong) a:focus-visible {
-		outline-width: 2px;
+		outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+		outline-offset: var(--norn-ui-focus-offset, 2px);
 	}
 
 	main:focus {

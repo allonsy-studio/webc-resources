@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-WsIpd"><span data-label="" id="norn-header-webc-WsIpd"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-VqC_N"><span data-label="" id="norn-header-webc-VqC_N"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-card-grid</h1>
-<p class="lead">Responsive grid of cards. Each card takes the next accent color. Pass each card in an <code>&lt;li&gt;</code>, as in <code>&lt;li&gt;&lt;norn-card&gt;…&lt;/norn-card&gt;&lt;/li&gt;</code>. The list has <code>role="list"</code>, which Safari needs once the markers are gone. Each card spans three rows of the grid, with <code>grid-template-rows: subgrid</code>, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box.</p>
+<p class="lead">Responsive grid of cards. Pass each card in an <code>&lt;li&gt;</code>, as in <code>&lt;li&gt;&lt;norn-card&gt;…&lt;/norn-card&gt;&lt;/li&gt;</code>. The list has <code>role="list"</code>, which Safari needs once the markers are gone. Each card spans three rows of the grid, with <code>grid-template-rows: subgrid</code>, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box.</p>
 <p class="meta">
 	<code>&lt;norn-card-grid&gt;</code>
 	a <span>container</span>, from
@@ -347,30 +347,36 @@
 <norn-card-grid>
 	<li><norn-card><h3>Plain card</h3><p>A card with no link.</p></norn-card></li>
 	<li><norn-card><h3><a href=&quot;https://example.com/&quot;>Linked card</a></h3><p>A card whose heading links somewhere.</p></norn-card></li>
-	<li><norn-card><h3>Third card</h3><p>Cards take the next accent in turn.</p></norn-card></li>
-	<li><norn-card><h3>Fourth card</h3><p>The fourth accent, then the cycle repeats.</p></norn-card></li>
-	<li><norn-card><h3>Fifth card</h3><p>Back to the first accent.</p></norn-card></li>
-</norn-card-grid>" data-strings="norn-code-block-webc-OGce_"><norn-icon>
+	<li><norn-card><h3>Third card</h3><p>Cards share one fill, and a row lines up.</p></norn-card></li>
+	<li><norn-card><h3>Fourth card</h3><p>A fourth card wraps to the next row when the grid is narrow.</p></norn-card></li>
+	<li><norn-card><h3>Fifth card</h3><p>A fifth card, alone on its row at some widths.</p></norn-card></li>
+</norn-card-grid>" data-strings="norn-code-block-webc-VkNsg" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,3],[&quot;punctuation&quot;,3,4],[&quot;punctuation&quot;,12,14],[&quot;keyword&quot;,14,16],[&quot;punctuation&quot;,16,17],[&quot;punctuation&quot;,18,19],[&quot;keyword&quot;,19,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,36,37],[&quot;keyword&quot;,37,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;keyword&quot;,41,50],[&quot;punctuation&quot;,50,51],[&quot;punctuation&quot;,51,52],[&quot;keyword&quot;,52,54],[&quot;punctuation&quot;,54,55],[&quot;punctuation&quot;,65,67],[&quot;keyword&quot;,67,69],[&quot;punctuation&quot;,69,70],[&quot;punctuation&quot;,70,71],[&quot;keyword&quot;,71,72],[&quot;punctuation&quot;,72,73],[&quot;punctuation&quot;,93,95],[&quot;keyword&quot;,95,96],[&quot;punctuation&quot;,96,97],[&quot;punctuation&quot;,97,99],[&quot;keyword&quot;,99,108],[&quot;punctuation&quot;,108,109],[&quot;punctuation&quot;,109,111],[&quot;keyword&quot;,111,113],[&quot;punctuation&quot;,113,114],[&quot;punctuation&quot;,116,117],[&quot;keyword&quot;,117,119],[&quot;punctuation&quot;,119,120],[&quot;punctuation&quot;,120,121],[&quot;keyword&quot;,121,130],[&quot;punctuation&quot;,130,131],[&quot;punctuation&quot;,131,132],[&quot;keyword&quot;,132,134],[&quot;punctuation&quot;,134,135],[&quot;punctuation&quot;,135,136],[&quot;keyword&quot;,136,137],[&quot;keyword&quot;,137,138],[&quot;function&quot;,138,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,143,144],[&quot;string&quot;,144,164],[&quot;punctuation&quot;,164,165],[&quot;punctuation&quot;,165,166],[&quot;punctuation&quot;,177,179],[&quot;keyword&quot;,179,180],[&quot;punctuation&quot;,180,181],[&quot;punctuation&quot;,181,183],[&quot;keyword&quot;,183,185],[&quot;punctuation&quot;,185,186],[&quot;punctuation&quot;,186,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,226,228],[&quot;keyword&quot;,228,229],[&quot;punctuation&quot;,229,230],[&quot;punctuation&quot;,230,232],[&quot;keyword&quot;,232,241],[&quot;punctuation&quot;,241,242],[&quot;punctuation&quot;,242,244],[&quot;keyword&quot;,244,246],[&quot;punctuation&quot;,246,247],[&quot;punctuation&quot;,249,250],[&quot;keyword&quot;,250,252],[&quot;punctuation&quot;,252,253],[&quot;punctuation&quot;,253,254],[&quot;keyword&quot;,254,263],[&quot;punctuation&quot;,263,264],[&quot;punctuation&quot;,264,265],[&quot;keyword&quot;,265,267],[&quot;punctuation&quot;,267,268],[&quot;punctuation&quot;,278,280],[&quot;keyword&quot;,280,282],[&quot;punctuation&quot;,282,283],[&quot;punctuation&quot;,283,284],[&quot;keyword&quot;,284,285],[&quot;punctuation&quot;,285,286],[&quot;punctuation&quot;,321,323],[&quot;keyword&quot;,323,324],[&quot;punctuation&quot;,324,325],[&quot;punctuation&quot;,325,327],[&quot;keyword&quot;,327,336],[&quot;punctuation&quot;,336,337],[&quot;punctuation&quot;,337,339],[&quot;keyword&quot;,339,341],[&quot;punctuation&quot;,341,342],[&quot;punctuation&quot;,344,345],[&quot;keyword&quot;,345,347],[&quot;punctuation&quot;,347,348],[&quot;punctuation&quot;,348,349],[&quot;keyword&quot;,349,358],[&quot;punctuation&quot;,358,359],[&quot;punctuation&quot;,359,360],[&quot;keyword&quot;,360,362],[&quot;punctuation&quot;,362,363],[&quot;punctuation&quot;,374,376],[&quot;keyword&quot;,376,378],[&quot;punctuation&quot;,378,379],[&quot;punctuation&quot;,379,380],[&quot;keyword&quot;,380,381],[&quot;punctuation&quot;,381,382],[&quot;punctuation&quot;,424,426],[&quot;keyword&quot;,426,427],[&quot;punctuation&quot;,427,428],[&quot;punctuation&quot;,428,430],[&quot;keyword&quot;,430,439],[&quot;punctuation&quot;,439,440],[&quot;punctuation&quot;,440,442],[&quot;keyword&quot;,442,444],[&quot;punctuation&quot;,444,445],[&quot;punctuation&quot;,447,448],[&quot;keyword&quot;,448,450],[&quot;punctuation&quot;,450,451],[&quot;punctuation&quot;,451,452],[&quot;keyword&quot;,452,461],[&quot;punctuation&quot;,461,462],[&quot;punctuation&quot;,462,463],[&quot;keyword&quot;,463,465],[&quot;punctuation&quot;,465,466],[&quot;punctuation&quot;,476,478],[&quot;keyword&quot;,478,480],[&quot;punctuation&quot;,480,481],[&quot;punctuation&quot;,481,482],[&quot;keyword&quot;,482,483],[&quot;punctuation&quot;,483,484],[&quot;punctuation&quot;,509,511],[&quot;keyword&quot;,511,512],[&quot;punctuation&quot;,512,513],[&quot;punctuation&quot;,513,515],[&quot;keyword&quot;,515,524],[&quot;punctuation&quot;,524,525],[&quot;punctuation&quot;,525,527],[&quot;keyword&quot;,527,529],[&quot;punctuation&quot;,529,530],[&quot;punctuation&quot;,531,533],[&quot;keyword&quot;,533,547],[&quot;punctuation&quot;,547,548]]">&lt;h2&gt;Features&lt;/h2&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,3],[&quot;punctuation&quot;,3,4],[&quot;punctuation&quot;,12,14],[&quot;keyword&quot;,14,16],[&quot;punctuation&quot;,16,17],[&quot;punctuation&quot;,18,19],[&quot;keyword&quot;,19,33],[&quot;punctuation&quot;,33,34],[&quot;punctuation&quot;,36,37],[&quot;keyword&quot;,37,39],[&quot;punctuation&quot;,39,40],[&quot;punctuation&quot;,40,41],[&quot;keyword&quot;,41,50],[&quot;punctuation&quot;,50,51],[&quot;punctuation&quot;,51,52],[&quot;keyword&quot;,52,54],[&quot;punctuation&quot;,54,55],[&quot;punctuation&quot;,65,67],[&quot;keyword&quot;,67,69],[&quot;punctuation&quot;,69,70],[&quot;punctuation&quot;,70,71],[&quot;keyword&quot;,71,72],[&quot;punctuation&quot;,72,73],[&quot;punctuation&quot;,93,95],[&quot;keyword&quot;,95,96],[&quot;punctuation&quot;,96,97],[&quot;punctuation&quot;,97,99],[&quot;keyword&quot;,99,108],[&quot;punctuation&quot;,108,109],[&quot;punctuation&quot;,109,111],[&quot;keyword&quot;,111,113],[&quot;punctuation&quot;,113,114],[&quot;punctuation&quot;,116,117],[&quot;keyword&quot;,117,119],[&quot;punctuation&quot;,119,120],[&quot;punctuation&quot;,120,121],[&quot;keyword&quot;,121,130],[&quot;punctuation&quot;,130,131],[&quot;punctuation&quot;,131,132],[&quot;keyword&quot;,132,134],[&quot;punctuation&quot;,134,135],[&quot;punctuation&quot;,135,136],[&quot;keyword&quot;,136,137],[&quot;keyword&quot;,137,138],[&quot;function&quot;,138,142],[&quot;punctuation&quot;,142,143],[&quot;punctuation&quot;,143,144],[&quot;string&quot;,144,164],[&quot;punctuation&quot;,164,165],[&quot;punctuation&quot;,165,166],[&quot;punctuation&quot;,177,179],[&quot;keyword&quot;,179,180],[&quot;punctuation&quot;,180,181],[&quot;punctuation&quot;,181,183],[&quot;keyword&quot;,183,185],[&quot;punctuation&quot;,185,186],[&quot;punctuation&quot;,186,187],[&quot;keyword&quot;,187,188],[&quot;punctuation&quot;,188,189],[&quot;punctuation&quot;,226,228],[&quot;keyword&quot;,228,229],[&quot;punctuation&quot;,229,230],[&quot;punctuation&quot;,230,232],[&quot;keyword&quot;,232,241],[&quot;punctuation&quot;,241,242],[&quot;punctuation&quot;,242,244],[&quot;keyword&quot;,244,246],[&quot;punctuation&quot;,246,247],[&quot;punctuation&quot;,249,250],[&quot;keyword&quot;,250,252],[&quot;punctuation&quot;,252,253],[&quot;punctuation&quot;,253,254],[&quot;keyword&quot;,254,263],[&quot;punctuation&quot;,263,264],[&quot;punctuation&quot;,264,265],[&quot;keyword&quot;,265,267],[&quot;punctuation&quot;,267,268],[&quot;punctuation&quot;,278,280],[&quot;keyword&quot;,280,282],[&quot;punctuation&quot;,282,283],[&quot;punctuation&quot;,283,284],[&quot;keyword&quot;,284,285],[&quot;punctuation&quot;,285,286],[&quot;punctuation&quot;,327,329],[&quot;keyword&quot;,329,330],[&quot;punctuation&quot;,330,331],[&quot;punctuation&quot;,331,333],[&quot;keyword&quot;,333,342],[&quot;punctuation&quot;,342,343],[&quot;punctuation&quot;,343,345],[&quot;keyword&quot;,345,347],[&quot;punctuation&quot;,347,348],[&quot;punctuation&quot;,350,351],[&quot;keyword&quot;,351,353],[&quot;punctuation&quot;,353,354],[&quot;punctuation&quot;,354,355],[&quot;keyword&quot;,355,364],[&quot;punctuation&quot;,364,365],[&quot;punctuation&quot;,365,366],[&quot;keyword&quot;,366,368],[&quot;punctuation&quot;,368,369],[&quot;punctuation&quot;,380,382],[&quot;keyword&quot;,382,384],[&quot;punctuation&quot;,384,385],[&quot;punctuation&quot;,385,386],[&quot;keyword&quot;,386,387],[&quot;punctuation&quot;,387,388],[&quot;punctuation&quot;,448,450],[&quot;keyword&quot;,450,451],[&quot;punctuation&quot;,451,452],[&quot;punctuation&quot;,452,454],[&quot;keyword&quot;,454,463],[&quot;punctuation&quot;,463,464],[&quot;punctuation&quot;,464,466],[&quot;keyword&quot;,466,468],[&quot;punctuation&quot;,468,469],[&quot;punctuation&quot;,471,472],[&quot;keyword&quot;,472,474],[&quot;punctuation&quot;,474,475],[&quot;punctuation&quot;,475,476],[&quot;keyword&quot;,476,485],[&quot;punctuation&quot;,485,486],[&quot;punctuation&quot;,486,487],[&quot;keyword&quot;,487,489],[&quot;punctuation&quot;,489,490],[&quot;punctuation&quot;,500,502],[&quot;keyword&quot;,502,504],[&quot;punctuation&quot;,504,505],[&quot;punctuation&quot;,505,506],[&quot;keyword&quot;,506,507],[&quot;punctuation&quot;,507,508],[&quot;punctuation&quot;,554,556],[&quot;keyword&quot;,556,557],[&quot;punctuation&quot;,557,558],[&quot;punctuation&quot;,558,560],[&quot;keyword&quot;,560,569],[&quot;punctuation&quot;,569,570],[&quot;punctuation&quot;,570,572],[&quot;keyword&quot;,572,574],[&quot;punctuation&quot;,574,575],[&quot;punctuation&quot;,576,578],[&quot;keyword&quot;,578,592],[&quot;punctuation&quot;,592,593]]">&lt;h2&gt;Features&lt;/h2&gt;
 &lt;norn-card-grid&gt;
 	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Plain card&lt;/h3&gt;&lt;p&gt;A card with no link.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
 	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;&lt;a href="https://example.com/"&gt;Linked card&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;A card whose heading links somewhere.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Third card&lt;/h3&gt;&lt;p&gt;Cards take the next accent in turn.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Fourth card&lt;/h3&gt;&lt;p&gt;The fourth accent, then the cycle repeats.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
-	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Fifth card&lt;/h3&gt;&lt;p&gt;Back to the first accent.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Third card&lt;/h3&gt;&lt;p&gt;Cards share one fill, and a row lines up.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Fourth card&lt;/h3&gt;&lt;p&gt;A fourth card wraps to the next row when the grid is narrow.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;Fifth card&lt;/h3&gt;&lt;p&gt;A fifth card, alone on its row at some widths.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
 &lt;/norn-card-grid&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-OGce_">
-		<span data-string="label" id="norn-code-block-webc-OGce_-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-VkNsg">
+		<span data-string="label" id="norn-code-block-webc-VkNsg-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -504,13 +510,19 @@
 <norn-card-grid :@mono=&quot;true&quot;>
 	<li><norn-card><h3><a href=&quot;https://example.com/core&quot;>@example/core</a></h3><p>The core package.</p></norn-card></li>
 	<li><norn-card><h3><a href=&quot;https://example.com/cli&quot;>@example/cli</a></h3><p>The command line.</p></norn-card></li>
-</norn-card-grid>" data-strings="norn-code-block-webc-y4Pfp"><norn-icon>
+</norn-card-grid>" data-strings="norn-code-block-webc-mj1nS" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -520,8 +532,8 @@
 	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;&lt;a href="https://example.com/core"&gt;@example/core&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The core package.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
 	&lt;li&gt;&lt;norn-card&gt;&lt;h3&gt;&lt;a href="https://example.com/cli"&gt;@example/cli&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;The command line.&lt;/p&gt;&lt;/norn-card&gt;&lt;/li&gt;
 &lt;/norn-card-grid&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-y4Pfp">
-		<span data-string="label" id="norn-code-block-webc-y4Pfp-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-mj1nS">
+		<span data-string="label" id="norn-code-block-webc-mj1nS-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -673,13 +685,19 @@
 			<p>A card without a third child leaves its footer row empty.</p>
 		</norn-card>
 	</li>
-</norn-card-grid>" data-strings="norn-code-block-webc-f8eFd"><norn-icon>
+</norn-card-grid>" data-strings="norn-code-block-webc-kwQnz" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -707,8 +725,8 @@
 		&lt;/norn-card&gt;
 	&lt;/li&gt;
 &lt;/norn-card-grid&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-f8eFd">
-		<span data-string="label" id="norn-code-block-webc-f8eFd-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-kwQnz">
+		<span data-string="label" id="norn-code-block-webc-kwQnz-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -726,7 +744,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-bHZPz"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-XuNBC"></span>
 <div>
 		<table>
 			<thead>
@@ -748,7 +766,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-iqLkC"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-C7fbB"></span>
 <div>
 		<table>
 			<thead>
@@ -822,74 +840,6 @@
 				<span data-field="">
 					<input type="text" data-prop="--norn-card-grid-gap" aria-label="Override --norn-card-grid-gap" autocomplete="off" spellcheck="false">
 					<button type="button" data-action="reset" data-prop="--norn-card-grid-gap" aria-label="Reset --norn-card-grid-gap" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-card-grid-accent-1</code><small>First accent.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-feature-1, then --norn-ui-accent</code>
-					
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-card-grid-accent-1" aria-label="Override --norn-card-grid-accent-1" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-card-grid-accent-1" aria-label="Reset --norn-card-grid-accent-1" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-card-grid-accent-2</code><small>Second accent.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-feature-2, then ActiveText</code>
-					
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-card-grid-accent-2" aria-label="Override --norn-card-grid-accent-2" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-card-grid-accent-2" aria-label="Reset --norn-card-grid-accent-2" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-card-grid-accent-3</code><small>Third accent.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-feature-3, then VisitedText</code>
-					
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-card-grid-accent-3" aria-label="Override --norn-card-grid-accent-3" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-card-grid-accent-3" aria-label="Reset --norn-card-grid-accent-3" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-card-grid-accent-4</code><small>Fourth accent.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-feature-4, then GrayText</code>
-					
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-card-grid-accent-4" aria-label="Override --norn-card-grid-accent-4" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-card-grid-accent-4" aria-label="Reset --norn-card-grid-accent-4" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>

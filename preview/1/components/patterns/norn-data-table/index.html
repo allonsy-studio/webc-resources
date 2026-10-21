@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-GgEKE"><span data-label="" id="norn-header-webc-GgEKE"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-IBfBy"><span data-label="" id="norn-header-webc-IBfBy"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-data-table</h1>
-<p class="lead">A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. Pass the <code>&lt;table&gt;</code> in the default slot, with a <code>&lt;caption&gt;</code> when it can have one. Cells and code in them wrap between words, never mid-word. Its script makes the box a named, focusable region only while it scrolls, so a keyboard can scroll it. <code>scrollTables</code> in <code>@allons-y/webc-patterns/markdown</code> writes the same markup for Markdown tables.</p>
+<p class="lead">A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way. Pass the <code>&lt;table&gt;</code> in the default slot, with a <code>&lt;caption&gt;</code> when it can have one. Cells and code in them wrap between words, never mid-word. Its script makes the box a named, focusable region only while it scrolls, so a keyboard can scroll it. <code>scrollTables</code> in <code>@allons-y/webc-patterns/markdown</code> writes the same markup for Markdown tables.</p>
 <p class="meta">
 	<code>&lt;norn-data-table&gt;</code>
 	a <span>container</span>, from
@@ -356,13 +356,19 @@
 		</tbody>
 	</table>
 </norn-data-table>
-<p>Pick the phone width: the table scrolls in its own box, which becomes a tab stop named by the caption.</p>" data-strings="norn-code-block-webc-gNwl1"><norn-icon>
+<p>Pick the phone width: the table scrolls in its own box, which becomes a tab stop named by the caption.</p>" data-strings="norn-code-block-webc-Ms9NK" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -381,8 +387,8 @@
 	&lt;/table&gt;
 &lt;/norn-data-table&gt;
 &lt;p&gt;Pick the phone width: the table scrolls in its own box, which becomes a tab stop named by the caption.&lt;/p&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-gNwl1">
-		<span data-string="label" id="norn-code-block-webc-gNwl1-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-Ms9NK">
+		<span data-string="label" id="norn-code-block-webc-Ms9NK-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -400,7 +406,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-x64kX"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-JPD_U"></span>
 <div>
 		<table>
 			<thead>
@@ -475,6 +481,23 @@
 				<span data-field="">
 					<input type="text" data-prop="--norn-data-table-head" aria-label="Override --norn-data-table-head" autocomplete="off" spellcheck="false">
 					<button type="button" data-action="reset" data-prop="--norn-data-table-head" aria-label="Reset --norn-data-table-head" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-data-table-bg</code><small>The surface the table sits on, which the scroll shadows are drawn against.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default">
+				
+					<code>--norn-surface-base</code>
+					<small>light-dark(#ffffff, #101216)</small>
+				
+				
+			</td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-data-table-bg" aria-label="Override --norn-data-table-bg" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-data-table-bg" aria-label="Reset --norn-data-table-bg" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>

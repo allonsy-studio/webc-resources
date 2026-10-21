@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-UCE19"><span data-label="" id="norn-header-webc-UCE19"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-SMV4D"><span data-label="" id="norn-header-webc-SMV4D"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-copy-button</h1>
-<p class="lead">A button that copies text to the clipboard: <code>@value</code>, or the text of the element whose id is <code>@source</code>. It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do. After a click its label reads the <code>copied</code> or <code>failed</code> text for two seconds, and a status message says the same to a screen reader. The texts are in the page, hidden, and the script shows them: the button only exists with a script.</p>
+<p class="lead">A button that copies text to the clipboard: <code>@value</code>, or the text of the element whose id is <code>@source</code>. It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do. After a click its label reads the <code>copied</code> or <code>failed</code> text for two seconds, the icon turns to a check tinted in the success color, and a status message says the same to a screen reader. The button keeps its width, since the three texts share one cell. The texts are in the page, hidden, and the script shows them: the button only exists with a script.</p>
 <p class="meta">
 	<code>&lt;norn-copy-button&gt;</code>
 	a <span>component</span>, from
@@ -346,13 +346,19 @@
 <button type="button" hidden="" data-value="<p>
 	<code>npm install @example/project</code>
 	<norn-copy-button @value=&quot;npm install @example/project&quot;><span slot=&quot;label&quot;>Copy the install command</span></norn-copy-button>
-</p>" data-strings="norn-code-block-webc-OE4Ik"><norn-icon>
+</p>" data-strings="norn-code-block-webc-kN6xA" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -361,8 +367,8 @@
 	&lt;code&gt;npm install @example/project&lt;/code&gt;
 	&lt;norn-copy-button @value="npm install @example/project"&gt;&lt;span slot="label"&gt;Copy the install command&lt;/span&gt;&lt;/norn-copy-button&gt;
 &lt;/p&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-OE4Ik">
-		<span data-string="label" id="norn-code-block-webc-OE4Ik-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-kN6xA">
+		<span data-string="label" id="norn-code-block-webc-kN6xA-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -496,13 +502,19 @@
 <norn-copy-button @source=&quot;token&quot;>
 	<span slot=&quot;copy&quot;>Copy token</span>
 	<span slot=&quot;copied&quot;>Token copied</span>
-</norn-copy-button>" data-strings="norn-code-block-webc-m2bnx"><norn-icon>
+</norn-copy-button>" data-strings="norn-code-block-webc-Rpexy" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -512,8 +524,157 @@
 	&lt;span slot="copy"&gt;Copy token&lt;/span&gt;
 	&lt;span slot="copied"&gt;Token copied&lt;/span&gt;
 &lt;/norn-copy-button&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-m2bnx">
-		<span data-string="label" id="norn-code-block-webc-m2bnx-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-Rpexy">
+		<span data-string="label" id="norn-code-block-webc-Rpexy-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-copy-button/compact/" title="Compact preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-copy-button/compact/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-copy-button @value=&quot;npm install @example/core&quot; @compact=&quot;true&quot;></norn-copy-button>" data-strings="norn-code-block-webc-DSxP4" data-compact=""><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,17],[&quot;keyword&quot;,17,18],[&quot;function&quot;,18,24],[&quot;punctuation&quot;,24,25],[&quot;punctuation&quot;,25,26],[&quot;string&quot;,26,51],[&quot;punctuation&quot;,51,52],[&quot;keyword&quot;,52,53],[&quot;function&quot;,53,61],[&quot;punctuation&quot;,61,62],[&quot;punctuation&quot;,62,63],[&quot;string&quot;,63,67],[&quot;punctuation&quot;,67,68],[&quot;punctuation&quot;,68,69],[&quot;punctuation&quot;,69,71],[&quot;keyword&quot;,71,87],[&quot;punctuation&quot;,87,88]]">&lt;norn-copy-button @value="npm install @example/core" @compact="true"&gt;&lt;/norn-copy-button&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-DSxP4">
+		<span data-string="label" id="norn-code-block-webc-DSxP4-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -531,7 +692,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-wfHbm"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-2Bb2-"></span>
 <div>
 		<table>
 			<thead>
@@ -549,6 +710,11 @@
 					<td>The id of the element whose text to copy, when there is no <code>value</code>.</td>
 				</tr>
 <tr>
+					<th scope="row"><code>@compact</code></th>
+					<td data-label="Type"><code>boolean</code></td>
+					<td>Show only the icon until the pointer or focus is on the button, for a button laid over a corner, as <code>norn-code-block</code> does. On for <code>@compact</code>, <code>@compact="true"</code>, or <code>:@compact="true"</code>.</td>
+				</tr>
+<tr>
 					<th scope="row"><code>@strings</code></th>
 					<td data-label="Type"><code>string</code></td>
 					<td>The id of an element that holds the texts in place of the slots, for a component that wraps the button, as <code>norn-code-block</code> does. It holds one element per slot, marked <code>data-string="label"</code>, <code>"copy"</code>, <code>"copied"</code>, and <code>"failed"</code>; the <code>label</code> one needs an id.</td>
@@ -563,7 +729,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-G7yGi"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-fzYBy"></span>
 <div>
 		<table>
 			<thead>
@@ -620,11 +786,11 @@
 		</tr>
 		<tr>
 			<th scope="row"><code>--norn-copy-button-bg</code><small>Background.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-col="type" data-label="Type"><span>none</span></td>
 			<td data-label="Default">
 				
-					<code>--norn-surface-base</code>
-					<small>light-dark(#ffffff, #101216)</small>
+					<code>none, so the button sits on its surroundings</code>
+					
 				
 				
 			</td>
@@ -640,8 +806,8 @@
 			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
 			<td data-label="Default">
 				
-					<code>--norn-text-base</code>
-					<small>light-dark(#16181d, #eceef3)</small>
+					<code>--norn-text-muted</code>
+					<small>light-dark(#4b5160, #a4abba)</small>
 				
 				
 			</td>
@@ -649,23 +815,6 @@
 				<span data-field="">
 					<input type="text" data-prop="--norn-copy-button-fg" aria-label="Override --norn-copy-button-fg" autocomplete="off" spellcheck="false">
 					<button type="button" data-action="reset" data-prop="--norn-copy-button-fg" aria-label="Reset --norn-copy-button-fg" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-copy-button-border</code><small>Border color.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-ui-border-color</code>
-					<small>light-dark(#d3d8e2, #2d323e)</small>
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-copy-button-border" aria-label="Override --norn-copy-button-border" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-copy-button-border" aria-label="Reset --norn-copy-button-border" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>

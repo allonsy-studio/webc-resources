@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
 <title>norn-rich-text: Norn</title>
-<meta name="description" content="Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code.">
+<meta name="description" content="Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height.">
 
 <meta name="color-scheme" content="light dark">
 
@@ -15,15 +15,15 @@
 <meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="norn-rich-text: Norn">
-<meta property="og:description" content="Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code.">
+<meta property="og:description" content="Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height.">
 
 
 
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-VrOvX"><span data-label="" id="norn-header-webc-VrOvX"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-CnTj1"><span data-label="" id="norn-header-webc-CnTj1"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-rich-text</h1>
-<p class="lead">Prose styles for long-form content: h2 and h3, paragraphs, lists, quotes, tables, rules, and inline code. Wrap the content in it: <code>&lt;norn-rich-text&gt;&lt;template webc:nokeep @html="content"&gt;&lt;/template&gt;&lt;/norn-rich-text&gt;</code>.</p>
+<p class="lead">Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself shows its <code>#</code> while it is hovered or has focus, where the pointer can hover. Wrap the content in it: <code>&lt;norn-rich-text&gt;&lt;template webc:nokeep @html="content"&gt;&lt;/template&gt;&lt;/norn-rich-text&gt;</code>.</p>
 <p class="meta">
 	<code>&lt;norn-rich-text&gt;</code>
 	a <span>container</span>, from
@@ -365,13 +365,19 @@
 	</table>
 	<hr />
 	<p>After the rule.</p>
-</norn-rich-text>" data-strings="norn-code-block-webc-8rOIa"><norn-icon>
+</norn-rich-text>" data-strings="norn-code-block-webc-3qnvw" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -399,8 +405,8 @@
 	&lt;hr /&gt;
 	&lt;p&gt;After the rule.&lt;/p&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-8rOIa">
-		<span data-string="label" id="norn-code-block-webc-8rOIa-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-3qnvw">
+		<span data-string="label" id="norn-code-block-webc-3qnvw-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -535,13 +541,19 @@
 	<p>The heading anchor gives its own space above, and prose after it keeps the rhythm.</p>
 	<norn-heading-anchor @slug=&quot;second&quot; :@level=&quot;3&quot;>A linked third-level heading</norn-heading-anchor>
 	<p>The same space applies to the third level.</p>
-</norn-rich-text>" data-strings="norn-code-block-webc-8AGM1"><norn-icon>
+</norn-rich-text>" data-strings="norn-code-block-webc-RCho8" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -552,8 +564,8 @@
 	&lt;norn-heading-anchor @slug="second" :@level="3"&gt;A linked third-level heading&lt;/norn-heading-anchor&gt;
 	&lt;p&gt;The same space applies to the third level.&lt;/p&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-8AGM1">
-		<span data-string="label" id="norn-code-block-webc-8AGM1-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-RCho8">
+		<span data-string="label" id="norn-code-block-webc-RCho8-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -689,13 +701,19 @@
 		<source media=&quot;(min-width: 600px)&quot; srcset=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
 		<img alt=&quot;A wide gray bar&quot; src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
 	</picture>
-</norn-rich-text>" data-strings="norn-code-block-webc-iWe8J"><norn-icon>
+</norn-rich-text>" data-strings="norn-code-block-webc-LhLoG" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -707,8 +725,8 @@
 		&lt;img alt="A wide gray bar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" /&gt;
 	&lt;/picture&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-iWe8J">
-		<span data-string="label" id="norn-code-block-webc-iWe8J-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-LhLoG">
+		<span data-string="label" id="norn-code-block-webc-LhLoG-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -726,7 +744,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-s_1dY"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-nKWgf"></span>
 <div>
 		<table>
 			<thead>

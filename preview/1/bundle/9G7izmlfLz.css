@@ -1,0 +1,71 @@
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+				block-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: var(--norn-icon-stroke, 2);
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-fact-list {
+			display: block;
+
+			& ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-fact-list-gap, var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				color: var(--norn-fact-list-fg, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& li {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, 0.25rem);
+				max-inline-size: 100%;
+				line-height: 1.5;
+				overflow-wrap: anywhere;
+			}
+
+			& norn-icon {
+				color: var(--norn-fact-list-icon, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+			}
+		}
+	}

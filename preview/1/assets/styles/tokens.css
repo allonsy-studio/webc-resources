@@ -2,7 +2,18 @@
 :root {
 	--norn-ui-accent: #2346d4;
 	--norn-ui-border-color: light-dark(#d3d8e2, #2d323e);
+	--norn-ui-border-strong: light-dark(#7a8194, #6f7789);
 	--norn-ui-border-radius: 6px;
+	--norn-ui-radius-s: 4px;
+	--norn-ui-focus-width: 2px;
+	--norn-ui-focus-offset: 2px;
+	--norn-ui-state-hover: 8%;
+	--norn-ui-state-press: 12%;
+	--norn-ui-motion-duration: 150ms;
+	--norn-ui-motion-easing: cubic-bezier(0.2, 0, 0, 1);
+	--norn-ui-control-height: 2.25rem;
+	--norn-ui-icon-s: 1em;
+	--norn-ui-icon-m: 1.25rem;
 	--norn-ui-shadow: 0 6px 20px light-dark(rgb(22 24 29 / 0.08), rgb(0 0 0 / 0.4));
 	--norn-surface-base: light-dark(#ffffff, #101216);
 	--norn-surface-raised: light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%));
@@ -15,14 +26,24 @@
 	--norn-font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 	--norn-font-heading: var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
 	--norn-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	--norn-font-size-s: 0.875rem;
+	--norn-font-size-m: 1rem;
+	--norn-font-size-l: 1.25rem;
+	--norn-font-size-xl: 1.5rem;
 	--norn-code-comment: light-dark(#566070, #9aa3b5);
 	--norn-code-string: light-dark(#0b6b3a, #7ed6a1);
 	--norn-code-keyword: light-dark(#6b2fc2, #c4a3ff);
 	--norn-code-function: light-dark(#1b4fc4, #8fb0ff);
 	--norn-code-number: light-dark(#9a4a00, #ffb36b);
+	--norn-space-2xs: 0.25rem;
 	--norn-space-xs: 0.5rem;
 	--norn-space-s: 0.75rem;
 	--norn-space-m: 1.25rem;
 	--norn-space-l: 2rem;
 	--norn-space-xl: 4rem;
+	--norn-layout-width: 64rem;
+	--norn-status-info: light-dark(#1b4fc4, #8fb0ff);
+	--norn-status-success: light-dark(#0b6b3a, #7ed6a1);
+	--norn-status-warning: light-dark(#9a4a00, #ffb36b);
+	--norn-status-danger: light-dark(#b42318, #ff8a80);
 }

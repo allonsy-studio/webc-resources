@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
 <title>norn-card: Norn</title>
-<meta name="description" content="A card: a heading, then its text, on a raised surface with a colored band along the top.">
+<meta name="description" content="A card: a heading, then its text, on a raised surface.">
 
 <meta name="color-scheme" content="light dark">
 
@@ -15,15 +15,15 @@
 <meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
 <meta property="og:type" content="website">
 <meta property="og:title" content="norn-card: Norn">
-<meta property="og:description" content="A card: a heading, then its text, on a raised surface with a colored band along the top.">
+<meta property="og:description" content="A card: a heading, then its text, on a raised surface.">
 
 
 
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-Y93ut"><span data-label="" id="norn-header-webc-Y93ut"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-ahLC0"><span data-label="" id="norn-header-webc-ahLC0"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-card</h1>
-<p class="lead">A card: a heading, then its text, on a raised surface with a colored band along the top. Pass the heading and body in the default slot, as in <code>&lt;norn-card&gt;&lt;h3&gt;&lt;a href="…"&gt;Title&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/norn-card&gt;</code>. Pick the heading level for the outline: h3 under an h2. <code>norn-card-grid</code> sets the inherited <code>--norn-card-rows</code> to <code>subgrid</code> for its cards. It is not a setting: leave it alone elsewhere. In a <code>norn-card-grid</code> the first child, the second, and the third (a footer, such as a link) each take a row shared with the neighboring cards, so they line up. A card with a fourth child lays out on its own.</p>
+<p class="lead">A card: a heading, then its text, on a raised surface. A heading link makes the whole card a link, and a card with an accent has a 2px line along its top. Pass the heading and body in the default slot, as in <code>&lt;norn-card&gt;&lt;h3&gt;&lt;a href="…"&gt;Title&lt;/a&gt;&lt;/h3&gt;&lt;p&gt;…&lt;/p&gt;&lt;/norn-card&gt;</code>. Pick the heading level for the outline: h3 under an h2. A link in the heading is stretched over the card, so the card is one target. The pointer over the card takes a hover layer, and focus on the link draws the ring around the card. The link is not underlined until the pointer is over it. <code>norn-card-grid</code> sets the inherited <code>--norn-card-rows</code> to <code>subgrid</code> for its cards. It is not a setting: leave it alone elsewhere. In a <code>norn-card-grid</code> the first child, the second, and the third (a footer, such as a link) each take a row shared with the neighboring cards, so they line up. A card with a fourth child lays out on its own.</p>
 <p class="meta">
 	<code>&lt;norn-card&gt;</code>
 	a <span>container</span>, from
@@ -347,13 +347,19 @@
 <norn-card>
 	<h3>Plain card</h3>
 	<p>A card with a heading and a body, and no link.</p>
-</norn-card>" data-strings="norn-code-block-webc-BjIOS"><norn-icon>
+</norn-card>" data-strings="norn-code-block-webc-us40C" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -363,8 +369,8 @@
 	&lt;h3&gt;Plain card&lt;/h3&gt;
 	&lt;p&gt;A card with a heading and a body, and no link.&lt;/p&gt;
 &lt;/norn-card&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-BjIOS">
-		<span data-string="label" id="norn-code-block-webc-BjIOS-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-us40C">
+		<span data-string="label" id="norn-code-block-webc-us40C-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -498,13 +504,19 @@
 <norn-card>
 	<h3><a href=&quot;https://example.com/&quot;>Linked card</a></h3>
 	<p>Put a link in the heading to link the card.</p>
-</norn-card>" data-strings="norn-code-block-webc-XvIqB"><norn-icon>
+</norn-card>" data-strings="norn-code-block-webc-7jTr8" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -514,8 +526,8 @@
 	&lt;h3&gt;&lt;a href="https://example.com/"&gt;Linked card&lt;/a&gt;&lt;/h3&gt;
 	&lt;p&gt;Put a link in the heading to link the card.&lt;/p&gt;
 &lt;/norn-card&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-XvIqB">
-		<span data-string="label" id="norn-code-block-webc-XvIqB-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-7jTr8">
+		<span data-string="label" id="norn-code-block-webc-7jTr8-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -649,13 +661,19 @@
 <norn-card>
 	<h3>A heading that runs long enough to wrap onto a second line in a narrow frame</h3>
 	<p>The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-card-radius in the custom properties.</p>
-</norn-card>" data-strings="norn-code-block-webc-g-lDo"><norn-icon>
+</norn-card>" data-strings="norn-code-block-webc-_Vidg" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -665,8 +683,8 @@
 	&lt;h3&gt;A heading that runs long enough to wrap onto a second line in a narrow frame&lt;/h3&gt;
 	&lt;p&gt;The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-card-radius in the custom properties.&lt;/p&gt;
 &lt;/norn-card&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-g-lDo">
-		<span data-string="label" id="norn-code-block-webc-g-lDo-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-_Vidg">
+		<span data-string="label" id="norn-code-block-webc-_Vidg-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -813,13 +831,19 @@
 			<p><a href=&quot;https://example.com/&quot;>Read more</a></p>
 		</norn-card>
 	</li>
-</norn-card-grid>" data-strings="norn-code-block-webc-BsQkr"><norn-icon>
+</norn-card-grid>" data-strings="norn-code-block-webc-sT2UN" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -842,8 +866,185 @@
 		&lt;/norn-card&gt;
 	&lt;/li&gt;
 &lt;/norn-card-grid&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-BsQkr">
-		<span data-string="label" id="norn-code-block-webc-BsQkr-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-sT2UN">
+		<span data-string="label" id="norn-code-block-webc-sT2UN-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/1/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/1/frames/patterns/norn-card/accent/" title="With an accent line preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/1/frames/patterns/norn-card/accent/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<h2>Cards</h2>
+<norn-card-grid>
+	<li style=&quot;--norn-card-accent: var(--norn-ui-accent, #2346d4)&quot;>
+		<norn-card>
+			<h3><a href=&quot;https://example.com/&quot;>An accent line</a></h3>
+			<p>Set --norn-card-accent on the card or its list item to draw a 2px line along the top.</p>
+		</norn-card>
+	</li>
+	<li>
+		<norn-card>
+			<h3><a href=&quot;https://example.com/&quot;>No accent</a></h3>
+			<p>Unset, the card has only its fill.</p>
+		</norn-card>
+	</li>
+</norn-card-grid>" data-strings="norn-code-block-webc-K_i9_" data-compact=""><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,0,1],[&quot;keyword&quot;,1,3],[&quot;punctuation&quot;,3,4],[&quot;punctuation&quot;,9,11],[&quot;keyword&quot;,11,13],[&quot;punctuation&quot;,13,14],[&quot;punctuation&quot;,15,16],[&quot;keyword&quot;,16,30],[&quot;punctuation&quot;,30,31],[&quot;punctuation&quot;,33,34],[&quot;keyword&quot;,34,36],[&quot;keyword&quot;,36,37],[&quot;function&quot;,37,42],[&quot;punctuation&quot;,42,43],[&quot;punctuation&quot;,43,44],[&quot;function&quot;,44,62],[&quot;punctuation&quot;,62,63],[&quot;string&quot;,63,64],[&quot;function&quot;,64,67],[&quot;punctuation&quot;,67,68],[&quot;string&quot;,68,84],[&quot;punctuation&quot;,84,85],[&quot;string&quot;,85,93],[&quot;punctuation&quot;,93,94],[&quot;punctuation&quot;,94,95],[&quot;punctuation&quot;,95,96],[&quot;punctuation&quot;,99,100],[&quot;keyword&quot;,100,109],[&quot;punctuation&quot;,109,110],[&quot;punctuation&quot;,114,115],[&quot;keyword&quot;,115,117],[&quot;punctuation&quot;,117,118],[&quot;punctuation&quot;,118,119],[&quot;keyword&quot;,119,120],[&quot;keyword&quot;,120,121],[&quot;function&quot;,121,125],[&quot;punctuation&quot;,125,126],[&quot;punctuation&quot;,126,127],[&quot;string&quot;,127,147],[&quot;punctuation&quot;,147,148],[&quot;punctuation&quot;,148,149],[&quot;punctuation&quot;,163,165],[&quot;keyword&quot;,165,166],[&quot;punctuation&quot;,166,167],[&quot;punctuation&quot;,167,169],[&quot;keyword&quot;,169,171],[&quot;punctuation&quot;,171,172],[&quot;punctuation&quot;,176,177],[&quot;keyword&quot;,177,178],[&quot;punctuation&quot;,178,179],[&quot;punctuation&quot;,264,266],[&quot;keyword&quot;,266,267],[&quot;punctuation&quot;,267,268],[&quot;punctuation&quot;,271,273],[&quot;keyword&quot;,273,282],[&quot;punctuation&quot;,282,283],[&quot;punctuation&quot;,285,287],[&quot;keyword&quot;,287,289],[&quot;punctuation&quot;,289,290],[&quot;punctuation&quot;,292,293],[&quot;keyword&quot;,293,295],[&quot;punctuation&quot;,295,296],[&quot;punctuation&quot;,299,300],[&quot;keyword&quot;,300,309],[&quot;punctuation&quot;,309,310],[&quot;punctuation&quot;,314,315],[&quot;keyword&quot;,315,317],[&quot;punctuation&quot;,317,318],[&quot;punctuation&quot;,318,319],[&quot;keyword&quot;,319,320],[&quot;keyword&quot;,320,321],[&quot;function&quot;,321,325],[&quot;punctuation&quot;,325,326],[&quot;punctuation&quot;,326,327],[&quot;string&quot;,327,347],[&quot;punctuation&quot;,347,348],[&quot;punctuation&quot;,348,349],[&quot;punctuation&quot;,358,360],[&quot;keyword&quot;,360,361],[&quot;punctuation&quot;,361,362],[&quot;punctuation&quot;,362,364],[&quot;keyword&quot;,364,366],[&quot;punctuation&quot;,366,367],[&quot;punctuation&quot;,371,372],[&quot;keyword&quot;,372,373],[&quot;punctuation&quot;,373,374],[&quot;punctuation&quot;,408,410],[&quot;keyword&quot;,410,411],[&quot;punctuation&quot;,411,412],[&quot;punctuation&quot;,415,417],[&quot;keyword&quot;,417,426],[&quot;punctuation&quot;,426,427],[&quot;punctuation&quot;,429,431],[&quot;keyword&quot;,431,433],[&quot;punctuation&quot;,433,434],[&quot;punctuation&quot;,435,437],[&quot;keyword&quot;,437,451],[&quot;punctuation&quot;,451,452]]">&lt;h2&gt;Cards&lt;/h2&gt;
+&lt;norn-card-grid&gt;
+	&lt;li style="--norn-card-accent: var(--norn-ui-accent, #2346d4)"&gt;
+		&lt;norn-card&gt;
+			&lt;h3&gt;&lt;a href="https://example.com/"&gt;An accent line&lt;/a&gt;&lt;/h3&gt;
+			&lt;p&gt;Set --norn-card-accent on the card or its list item to draw a 2px line along the top.&lt;/p&gt;
+		&lt;/norn-card&gt;
+	&lt;/li&gt;
+	&lt;li&gt;
+		&lt;norn-card&gt;
+			&lt;h3&gt;&lt;a href="https://example.com/"&gt;No accent&lt;/a&gt;&lt;/h3&gt;
+			&lt;p&gt;Unset, the card has only its fill.&lt;/p&gt;
+		&lt;/norn-card&gt;
+	&lt;/li&gt;
+&lt;/norn-card-grid&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-K_i9_">
+		<span data-string="label" id="norn-code-block-webc-K_i9_-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -861,7 +1062,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-NdLHc"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-LAhwf"></span>
 <div>
 		<table>
 			<thead>
@@ -922,23 +1123,6 @@
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-card-border</code><small>Border color.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-ui-border-color</code>
-					<small>light-dark(#d3d8e2, #2d323e)</small>
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-card-border" aria-label="Override --norn-card-border" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-card-border" aria-label="Reset --norn-card-border" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
 			<th scope="row"><code>--norn-card-radius</code><small>Corner radius.</small></th>
 			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
 			<td data-label="Default">
@@ -973,14 +1157,11 @@
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-card-accent</code><small>Top band color.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<th scope="row"><code>--norn-card-accent</code><small>Color of a 2px line along the top. Unset, there is none. Set it on a card, or on the <code>&lt;li&gt;</code> of a card in a grid.</small></th>
+			<td data-col="type" data-label="Type"><span>none</span></td>
 			<td data-label="Default">
 				
-					<code>--norn-ui-accent. norn-card-grid sets it per item. Set it on a card to override, or use --norn-card-grid-accent-1 to -4 for a grid's colors</code>
-					
-				
-				
+				<span>none</span>
 			</td>
 			<td data-label="Override">
 				<span data-field="">

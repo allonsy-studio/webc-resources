@@ -22,8 +22,8 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/qxiTr34Ix_.css">
-<script src="/webc-resources/preview/1/bundle/NjyJXaw56C.js" defer=""></script>
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/OkzSxkdINo.css">
+<script src="/webc-resources/preview/1/bundle/wZ5AqnP81s.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/base.css">
@@ -42,7 +42,7 @@
 				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
 				Norn
 			</a>
-	<nav aria-labelledby="norn-header-webc-Ei1Y3"><span data-label="" id="norn-header-webc-Ei1Y3"><span>Preview</span></span>
+	<nav aria-labelledby="norn-header-webc-l3VDb"><span data-label="" id="norn-header-webc-l3VDb"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -213,7 +213,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-side-nav</h1>
-<p class="lead">Sidebar navigation from a list of pages. Marks the current page with <code>aria-current="page"</code>, and a page holding it with <code>aria-current="true"</code>. An item may carry a <code>norn-icon</code> name and child pages, which list under it with a rule down the start edge. In a sticky <code>norn-sidebar-layout</code> column only the list scrolls, so a search field in the <code>search</code> slot stays put.</p>
+<p class="lead">Sidebar navigation from a list of pages. Marks the current page with <code>aria-current="page"</code>, and a page holding it with <code>aria-current="true"</code>. An item may carry a <code>norn-icon</code> name and child pages, which list under it, indented. The current page takes a tint of the accent and the accent as its text color, and the pointer takes a lighter layer. In a sticky <code>norn-sidebar-layout</code> column only the list scrolls, so a search field in the <code>search</code> slot stays put.</p>
 <p class="meta">
 	<code>&lt;norn-side-nav&gt;</code>
 	a <span>landmark</span>, from
@@ -349,13 +349,19 @@
 		{ url: '#usage', title: 'Usage' },
 		{ url: '#reference', title: 'Reference' }
 	]&quot;
-></norn-side-nav>" data-strings="norn-code-block-webc-Mrt1-"><norn-icon>
+></norn-side-nav>" data-strings="norn-code-block-webc-VWzka" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
 
 
-</norn-icon><span></span></button>
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
 <span role="status"></span>
 
 
@@ -367,8 +373,8 @@
 		{ url: '#reference', title: 'Reference' }
 	]"
 &gt;&lt;/norn-side-nav&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-Mrt1-">
-		<span data-string="label" id="norn-code-block-webc-Mrt1--copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-VWzka">
+		<span data-string="label" id="norn-code-block-webc-VWzka-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -386,7 +392,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-5Tkwj"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-pVvW-"></span>
 <div>
 		<table>
 			<thead>
@@ -408,7 +414,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-UhqrK"></span>
+	<norn-data-table class="spec"><span hidden="" id="norn-data-table-webc-1NYaP"></span>
 <div>
 		<table>
 			<thead>
@@ -490,24 +496,7 @@
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-side-nav-hover</code><small>Hover and current page background.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-surface-raised</code>
-					<small>light-dark(hsl(40, 14%, 96%), hsl(0, 0%, 11%))</small>
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-side-nav-hover" aria-label="Override --norn-side-nav-hover" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-side-nav-hover" aria-label="Reset --norn-side-nav-hover" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-side-nav-current</code><small>Current page color.</small></th>
+			<th scope="row"><code>--norn-side-nav-current</code><small>Current page text, and the tint behind it.</small></th>
 			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
 			<td data-label="Default">
 				
@@ -520,23 +509,6 @@
 				<span data-field="">
 					<input type="text" data-prop="--norn-side-nav-current" aria-label="Override --norn-side-nav-current" autocomplete="off" spellcheck="false">
 					<button type="button" data-action="reset" data-prop="--norn-side-nav-current" aria-label="Reset --norn-side-nav-current" disabled="">Reset</button>
-				</span>
-			</td>
-		</tr>
-<tr>
-			<th scope="row"><code>--norn-side-nav-marker</code><small>Current page bar.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-ui-accent</code>
-					<small>#2346d4</small>
-				
-				
-			</td>
-			<td data-label="Override">
-				<span data-field="">
-					<input type="text" data-prop="--norn-side-nav-marker" aria-label="Override --norn-side-nav-marker" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-side-nav-marker" aria-label="Reset --norn-side-nav-marker" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>

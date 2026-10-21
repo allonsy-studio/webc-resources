@@ -1,0 +1,94 @@
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+				block-size: var(--norn-icon-size, var(--norn-ui-icon-s, 1em));
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: var(--norn-icon-stroke, 2);
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-breadcrumb-nav {
+			display: block;
+			font-size: var(--norn-font-size-s, 0.875rem);
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > ol {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--norn-space-2xs, 0.25rem) var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& nav > ol > li {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+			}
+
+			& nav > ol > li > norn-icon {
+				color: var(--norn-breadcrumb-nav-separator, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+			}
+
+			/* The links are quiet until the pointer or focus is on one. */
+			& nav > ol > li > a {
+				padding-block: var(--norn-space-2xs, 0.25rem);
+				color: var(--norn-breadcrumb-nav-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				text-decoration: none;
+
+				&:is(:hover, :focus-visible) {
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+					text-decoration: underline;
+				}
+
+				&[aria-current="page"] {
+					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+					text-decoration: none;
+				}
+			}
+		}
+	}
