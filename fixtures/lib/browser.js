@@ -33,6 +33,9 @@ export function token(tokenPath) {
 	return `var(${propertyName(tokenPath)}, ${found.resolved})`;
 }
 
+/** How many pages an audit loads at once. */
+const AUDIT_PAGES = 4;
+
 /** WCAG 2.2 AA, plus axe's best practices. */
 const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
 
@@ -118,17 +121,25 @@ export async function audit(browser, base, pages, { width = 1280, prepare } = {}
 	const violations = [];
 	for (const [scheme, options] of Object.entries(SCHEMES)) {
 		const context = await browser.newContext({ ...options, viewport: { width, height: 800 } });
-		for (const url of pages) {
-			const page = await context.newPage();
-			await page.goto(base + url);
-			await prepare?.(page);
-			await page.addScriptTag({ content: AXE });
-			const result = await page.evaluate(([tags, contrast]) => axe.run(document, { runOnly: { type: "tag", values: tags }, rules: { "color-contrast": { enabled: contrast } } }), [TAGS, scheme !== "forced"]);
-			for (const violation of result.violations) {
-				violations.push(`${scheme} ${url} ${violation.id}: ${violation.nodes.map((node) => node.html.slice(0, 80).replace(/\s+/g, " ")).join(" | ")}`);
+		const queue = [...pages];
+		const found = new Map();
+		// A few pages at once: each spends most of its time loading, so the audit is not bound by one page's wait.
+		const worker = async () => {
+			for (let url = queue.shift(); url !== undefined; url = queue.shift()) {
+				const page = await context.newPage();
+				await page.goto(base + url);
+				await prepare?.(page);
+				await page.addScriptTag({ content: AXE });
+				const result = await page.evaluate(([tags, contrast]) => axe.run(document, { runOnly: { type: "tag", values: tags }, rules: { "color-contrast": { enabled: contrast } } }), [TAGS, scheme !== "forced"]);
+				found.set(
+					url,
+					result.violations.map((violation) => `${scheme} ${url} ${violation.id}: ${violation.nodes.map((node) => node.html.slice(0, 80).replace(/\s+/g, " ")).join(" | ")}`),
+				);
+				await page.close();
 			}
-			await page.close();
-		}
+		};
+		await Promise.all(Array.from({ length: Math.min(AUDIT_PAGES, pages.length) }, worker));
+		for (const url of pages) violations.push(...(found.get(url) ?? []));
 		await context.close();
 	}
 	return violations;
