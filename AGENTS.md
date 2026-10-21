@@ -171,6 +171,7 @@ Norn is lightweight and modern: less chrome, native elements, tokens, and clear 
 9. Motion has a purpose: state layers take `--norn-ui-motion-duration` (150ms), opening and closing take 200ms, all use `--norn-ui-motion-easing`, and all of it is off under `prefers-reduced-motion`.
 10. Flat by default. A shadow (`--norn-ui-shadow`) is for something that floats, such as the search results.
 11. In forced colors, a selected, current, or focused item uses a system color or an outline. Nothing relies on a pseudo-element background, which the browser replaces. A filled control that must stay filled sets `forced-color-adjust: none` on itself with `Canvas` and `LinkText` or `Highlight` and `HighlightText`.
+12. Spacing between siblings is a `gap` on the parent (a grid or flex container), and a component sets no outer margin: the layout or the consumer owns the space around it. Margins stay for centering (`margin-inline: auto`), zeroing a browser default (`margin: 0`), negative-margin tricks with no gap equivalent, `scroll-margin-*`, and the few named exceptions in `BLOCK_MARGINS` in `components.test.js`, each with its reason. No owl selectors (`* + *`) for spacing.
 
 Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in a navigation landmark, a header, a footer, or a card heading has no underline at rest, and gains one on hover and focus.
 

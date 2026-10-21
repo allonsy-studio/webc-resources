@@ -3,18 +3,20 @@ title: Links with icons
 order: 2
 bleed: true
 ---
-<norn-footer>
-	<div>
-		<p><strong>Example project</strong></p>
-		<p>A short tagline.</p>
-	</div>
-	<nav aria-label="Footer">
+<div style="padding-block-start: 4rem">
+	<norn-footer>
 		<div>
-			<p><strong>Project</strong></p>
-			<ul>
-				<li><a href="https://example.com/"><norn-icon @name="external"></norn-icon> GitHub</a></li>
-				<li><a href="https://example.com/changelog"><norn-icon @name="book"></norn-icon> Changelog</a></li>
-			</ul>
+			<p><strong>Example project</strong></p>
+			<p>A short tagline.</p>
 		</div>
-	</nav>
-</norn-footer>
+		<nav aria-label="Footer">
+			<div>
+				<p><strong>Project</strong></p>
+				<ul>
+					<li><a href="https://example.com/"><norn-icon @name="external"></norn-icon> GitHub</a></li>
+					<li><a href="https://example.com/changelog"><norn-icon @name="book"></norn-icon> Changelog</a></li>
+				</ul>
+			</div>
+		</nav>
+	</norn-footer>
+</div>

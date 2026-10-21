@@ -75,9 +75,12 @@ const nameOf = (language, label) =>
 				margin: 0;
 			}
 
+			& figure:has(> figcaption) {
+				row-gap: var(--norn-space-xs, t('space.xs'));
+			}
+
 			& figcaption {
 				grid-area: 1 / 1;
-				margin-block-end: var(--norn-space-xs, t('space.xs'));
 				color: var(--norn-text-muted, t('text.muted'));
 				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
@@ -128,8 +131,10 @@ const nameOf = (language, label) =>
 
 			/* A frame with a header bar for the caption, set with `--norn-chrome: terminal` on an ancestor. */
 			@container style(--norn-chrome: terminal) {
-				& figure {
+				& figure,
+				& figure:has(> figcaption) {
 					overflow: hidden;
+					row-gap: 0;
 					border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
 				}
 
@@ -138,7 +143,6 @@ const nameOf = (language, label) =>
 					display: flex;
 					align-items: center;
 					block-size: 2rem;
-					margin: 0;
 					padding-inline: var(--norn-space-s, t('space.s'));
 					background: var(--norn-surface-raised, t('surface.raised'));
 				}

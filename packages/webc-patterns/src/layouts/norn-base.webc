@@ -107,7 +107,10 @@
 					}
 				}
 
+				/* The space above the footer is the page's, not the footer's. */
 				norn-footer {
+					margin-block-start: var(--norn-space-xl, t('space.xl'));
+
 					& [data-badges] {
 						display: flex;
 						flex-wrap: wrap;

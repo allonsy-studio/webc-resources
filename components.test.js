@@ -212,6 +212,64 @@ test("the dark raised and code surfaces step up from the page by at least 1.25:1
 	for (const name of ["text.base", "text.muted", "code.comment", "code.string", "code.keyword", "code.function", "code.number", "code.flag"]) assert.ok(ratio(dark(name), dark("surface.code")) >= 4.5, `${name} on code`);
 });
 
+/**
+ * Block-axis margins that stay, each with the reason a gap or a padding can't do the work. Spacing between siblings is a gap on the parent.
+ * The key is the source file and the property.
+ */
+const BLOCK_MARGINS = {
+	"webc-code-sample/src/norn-code-block.webc|margin": "the copy button's inset from the corner of the code it overlays, not a space between siblings",
+	"webc-oss-site/src/oss-cta.webc|margin": "the space above the call to action: the cta hook renders it with no wrapper that could carry a gap",
+	"webc-patterns/src/norn-accordion.webc|margin-block": "the space below a panel inside a native details, whose content has no box a gap could belong to without ::details-content",
+	"webc-patterns/src/norn-card-grid.webc|margin-block-end": "the subgrid rows have no gap, so a card with no footer leaves no blank space, and the space between cards is a margin taken back from the end of the list",
+	"webc-patterns/src/norn-card.webc|margin-block-end": "the same subgrid rows: a gap would leave blank space under a card with no footer",
+	"webc-patterns/src/norn-code-tabs.webc|margin-block-end": "a negative margin that lays the tab's line over the rule below it",
+	"webc-patterns/src/norn-notice.webc|margin-block-start": "centers the icon on the first line of text",
+	"webc-patterns/src/norn-rich-text.webc|margin": "headings in arbitrary Markdown HTML take space above, on top of the flow's gap",
+	"webc-patterns/src/norn-rich-text.webc|margin-block-start": "the same space above a heading anchor, which zeroes its heading's margin",
+	"webc-patterns/src/norn-side-nav.webc|margin": "a negative margin that keeps focus rings inside the scroll box",
+	"webc-patterns/src/norn-sidebar-layout.webc|margin-block-end": "the space under a folded summary: a gap would show while the details is closed",
+	"webc-patterns/src/norn-toc.webc|margin-block-end": "the space under a folded title: a gap would show while the details is closed",
+	"webc-patterns/src/layouts/norn-base.webc|margin-block-start": "the page, not the footer, owns the space above the footer",
+};
+
+/** The values of a CSS declaration, split on spaces outside parentheses. */
+const cssValues = (value) => {
+	const out = [];
+	let depth = 0;
+	let current = "";
+	for (const character of value.trim()) {
+		if (character === "(") depth++;
+		if (character === ")") depth--;
+		if (/\s/.test(character) && depth === 0) {
+			if (current) out.push(current);
+			current = "";
+		} else current += character;
+	}
+	if (current) out.push(current);
+	return out;
+};
+
+test("sources space siblings with a gap: no block margin outside a short list of named exceptions, and no owl selector", () => {
+	const found = new Set();
+	const problems = [];
+	for (const { file, text } of sources) {
+		const css = styles(withoutDocs(text), file).replace(/\/\*[\s\S]*?\*\//g, "");
+		for (const [, property, raw] of css.matchAll(/(?<![\w-])(margin(?:-block(?:-start|-end)?|-top|-bottom)?)\s*:\s*([^;}]+)[;}]/g)) {
+			const values = cssValues(raw);
+			let block;
+			if (["margin-block-start", "margin-block-end", "margin-top", "margin-bottom"].includes(property)) block = [values[0]];
+			else if (property === "margin-block") block = values.slice(0, 2);
+			else block = values.length < 3 ? [values[0]] : [values[0], values[2]];
+			if (block.every((value) => value === "0" || value === "auto")) continue;
+			found.add(`${file}|${property}`);
+			if (!BLOCK_MARGINS[`${file}|${property}`]) problems.push(`${file}: ${property}: ${raw.trim()}`);
+		}
+		for (const [, selector] of css.matchAll(/^[ \t]*([^@\n{}][^\n{}]*)\{/gm)) if (/\s\+\s|\*\s*\+\s*\*/.test(selector)) problems.push(`${file}: owl selector \`${selector.trim()}\``);
+	}
+	assert.deepEqual(problems, [], "space siblings with a gap on the parent, or add the reason to BLOCK_MARGINS");
+	assert.deepEqual(Object.keys(BLOCK_MARGINS).filter((key) => !found.has(key)), [], "an exception that no longer applies is removed from BLOCK_MARGINS");
+});
+
 test("the base styles draw one focus ring from the focus tokens, with no narrower exception, and one body line height", () => {
 	const base = squash(stylesheets.find(({ file }) => file === "webc-patterns/css/base.css").text);
 	assert.ok(base.includes("outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent,"), "the ring reads the width token");

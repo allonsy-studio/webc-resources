@@ -80,8 +80,15 @@
 				overscroll-behavior: contain;
 			}
 
+			/* An item with a nested list stacks them with the list's gap, and keeps a little room below. */
+			& nav > ul li:has(> ul) {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding-block-end: var(--norn-space-xs, t('space.xs'));
+			}
+
 			& nav > ul ul {
-				margin-block: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
 				margin-inline: var(--norn-space-s, t('space.s')) 0;
 			}
 

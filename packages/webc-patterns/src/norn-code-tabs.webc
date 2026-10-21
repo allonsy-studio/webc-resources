@@ -88,6 +88,10 @@
 				display: none;
 			}
 
+			& > div > [role="tabpanel"] figure:has(> figcaption) {
+				row-gap: 0;
+			}
+
 			@media (pointer: coarse) {
 				& > div > [role="tablist"] > [role="tab"] {
 					min-block-size: 2.75rem;
