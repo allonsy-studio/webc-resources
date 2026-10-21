@@ -313,11 +313,13 @@ describe("the preview in a browser", () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(server.url + "/components/patterns/norn-callout/");
 		const open = () => page.locator("preview-nav > nav > details").evaluate((details) => details.open);
+		/** The disclosure follows a media query listener, which runs after the resize, so wait for it. */
+		const becomes = (state) => page.waitForFunction((want) => document.querySelector("preview-nav > nav > details").open === want, state);
 		assert.equal(await open(), true);
 		await page.setViewportSize({ width: 390, height: 844 });
-		assert.equal(await open(), false);
+		await becomes(false);
 		await page.setViewportSize({ width: 1280, height: 900 });
-		assert.equal(await open(), true);
+		await becomes(true);
 		await page.close();
 	});
 
