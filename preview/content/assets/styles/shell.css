@@ -70,10 +70,6 @@ main > h2 {
 	gap: var(--norn-space-s);
 }
 
-.story h3 {
-	margin: 0;
-}
-
 main table {
 	inline-size: 100%;
 	border-collapse: collapse;

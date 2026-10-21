@@ -18,7 +18,6 @@
 <template webc:if="$data.component.stories.length" webc:nokeep>
 	<h2>Examples</h2>
 	<div class="story" webc:for="story of $data.component.stories">
-		<h3 @text="story.title"></h3>
 		<preview-canvas :@story="story"></preview-canvas>
 		<details>
 			<summary>Source</summary>
