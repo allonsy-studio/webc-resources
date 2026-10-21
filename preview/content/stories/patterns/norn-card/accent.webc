@@ -1,8 +1,8 @@
 ---
 title: With an accent line
 order: 5
+hiddenH2: true
 ---
-<h2>Cards</h2>
 <norn-card-grid>
 	<li style="--norn-card-accent: var(--norn-ui-accent, #2346d4)">
 		<norn-card>

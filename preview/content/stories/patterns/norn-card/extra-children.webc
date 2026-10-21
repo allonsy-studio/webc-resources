@@ -1,8 +1,8 @@
 ---
 title: More than three children
 order: 4
+hiddenH2: true
 ---
-<h2>Guides</h2>
 <norn-card-grid>
 	<li>
 		<norn-card>

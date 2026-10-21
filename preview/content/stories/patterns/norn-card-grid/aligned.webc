@@ -1,8 +1,8 @@
 ---
 title: Aligned rows
 order: 3
+hiddenH2: true
 ---
-<h2>Guides</h2>
 <norn-card-grid>
 	<li>
 		<norn-card>

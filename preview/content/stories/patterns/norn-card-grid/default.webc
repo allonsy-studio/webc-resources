@@ -1,8 +1,8 @@
 ---
 title: Accent cycle
 order: 1
+hiddenH2: true
 ---
-<h2>Features</h2>
 <norn-card-grid>
 	<li><norn-card><h3>Plain card</h3><p>A card with no link.</p></norn-card></li>
 	<li><norn-card><h3><a href="https://example.com/">Linked card</a></h3><p>A card whose heading links somewhere.</p></norn-card></li>

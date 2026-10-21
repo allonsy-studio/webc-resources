@@ -52,7 +52,7 @@ The component frames define no token, so they show the defaults compiled into ea
 
 ## Add a story
 
-Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding or `ownH1: true` when the component renders the page's h1. The file's body is the story: write the component the way a page would.
+Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding, `ownH1: true` when the component renders the page's h1, or `hiddenH2: true` for a component that starts at a third-level heading, which adds a hidden h2 after the frame's hidden h1. The file's body is the story: write the component the way a page would.
 
 ```webc
 ---
