@@ -318,6 +318,30 @@
 			padding-inline-start: 1.25rem;
 		}
 
+		/* A phone has no use for fixed widths: the frame always fills its box, whatever width was chosen on a wide screen. */
+		@media (max-width: 40rem) {
+			preview-canvas norn-segmented-control[data-group="width"] {
+				display: none;
+			}
+
+			preview-canvas iframe {
+				inline-size: 100%;
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-canvas :is(button, norn-segmented-control label) {
+				min-block-size: 2.75rem;
+			}
+
+			preview-canvas p a {
+				display: inline-flex;
+				align-items: center;
+				min-block-size: 2.75rem;
+			}
+		}
+
 		@media print {
 			preview-canvas [data-js] {
 				display: none;
@@ -496,75 +520,6 @@
 		}
 	}
 @layer norn.components {
-		preview-props {
-			display: block;
-			overflow-x: auto;
-		}
-
-		preview-props:not(:defined) :is(thead th:last-child, td:has([data-field])) {
-			display: none;
-		}
-
-		preview-props [data-col="type"] code {
-			overflow-wrap: normal;
-			white-space: nowrap;
-		}
-
-		preview-props th[scope="row"] {
-			font-weight: 400;
-		}
-
-		preview-props th[scope="row"] code {
-			font-weight: 700;
-			white-space: nowrap;
-		}
-
-		preview-props :is(th, td) small {
-			display: block;
-			color: var(--norn-text-muted);
-		}
-
-		preview-props [data-field] {
-			display: flex;
-			align-items: center;
-			gap: var(--norn-space-xs);
-		}
-
-		preview-props input[type="text"] {
-			inline-size: 100%;
-			min-inline-size: 8rem;
-			padding: 0.25rem 0.5rem;
-			border: 1px solid var(--norn-ui-border-color);
-			border-radius: var(--norn-ui-border-radius);
-			background: var(--norn-surface-base);
-			color: var(--norn-text-base);
-			font-family: var(--norn-font-mono);
-			font-size: 0.85rem;
-		}
-
-		preview-props input[type="color"] {
-			inline-size: 2.5rem;
-			block-size: 1.75rem;
-			padding: 0;
-		}
-
-		preview-props button {
-			padding: 0.25rem 0.6rem;
-			border: 1px solid var(--norn-ui-border-color);
-			border-radius: var(--norn-ui-border-radius);
-			background: var(--norn-surface-base);
-			color: var(--norn-text-base);
-			font: inherit;
-			font-size: 0.85rem;
-			cursor: pointer;
-		}
-
-		preview-props button:disabled {
-			color: var(--norn-text-muted);
-			cursor: default;
-		}
-	}
-@layer norn.components {
 		norn-skip-link {
 			display: block;
 
@@ -719,8 +674,20 @@
 			font-size: 0.95rem;
 		}
 
-		preview-nav details + details {
+		preview-nav details details + details {
 			margin-block-start: var(--norn-space-s);
+		}
+
+		/* The disclosure around the groups: a bar the width of the column, with the page below it. */
+		preview-nav > nav > details > summary {
+			padding: 0.5rem var(--norn-space-s);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav > nav > details[open] > summary {
+			margin-block-end: var(--norn-space-s);
 		}
 
 		preview-nav summary {
@@ -753,6 +720,32 @@
 			background: var(--norn-surface-raised);
 			color: var(--norn-text-base);
 			font-weight: 700;
+		}
+
+		/* Wide, the groups are the sidebar: no bar, and the groups show whether the disclosure is open, with a script or without. Without ::details-content the bar stays and still works. */
+		@media (width > 48rem) {
+			@supports selector(::details-content) {
+				preview-nav > nav > details > summary {
+					display: none;
+				}
+
+				preview-nav > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-nav a {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
+
+			preview-nav summary {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
 		}
 
 		@media print {

@@ -102,6 +102,62 @@ main th[scope="row"] code {
 	white-space: nowrap;
 }
 
+/*
+ * Too narrow for the columns, the props, slots, and custom properties tables stack: each row is a block,
+ * the name first, then the type, default, and field under their labels, then the description.
+ * Their code wraps between words, never inside one. A box that still scrolls is norn-data-table's own.
+ */
+main :is(norn-data-table.spec, preview-props) {
+	container-type: inline-size;
+}
+
+@container (width < 44rem) {
+	main :is(.spec, preview-props) :is(table, tbody, tr, th, td) {
+		display: block;
+	}
+
+	main :is(.spec, preview-props) thead {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	main :is(.spec, preview-props) tr {
+		padding-block: var(--norn-space-s);
+		border-block-end: 1px solid var(--norn-ui-border-color);
+	}
+
+	main :is(.spec, preview-props) :is(th, td) {
+		padding: 0;
+		border: 0;
+	}
+
+	main :is(.spec, preview-props) td {
+		margin-block-start: var(--norn-space-xs);
+	}
+
+	main norn-data-table.spec :is(th, td) code {
+		overflow-wrap: normal;
+	}
+
+	main :is(.spec, preview-props) td[data-label] {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr);
+		gap: var(--norn-space-xs);
+	}
+
+	main :is(.spec, preview-props) td[data-label]::before {
+		content: attr(data-label);
+		color: var(--norn-text-muted);
+	}
+
+	main :is(.spec, preview-props) td[data-label] > * {
+		grid-column: 2;
+	}
+}
+
 main :not(pre) > code {
 	padding: 0.1em 0.35em;
 	border-radius: 0.25rem;

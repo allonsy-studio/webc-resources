@@ -278,8 +278,20 @@
 			font-size: 0.95rem;
 		}
 
-		preview-nav details + details {
+		preview-nav details details + details {
 			margin-block-start: var(--norn-space-s);
+		}
+
+		/* The disclosure around the groups: a bar the width of the column, with the page below it. */
+		preview-nav > nav > details > summary {
+			padding: 0.5rem var(--norn-space-s);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav > nav > details[open] > summary {
+			margin-block-end: var(--norn-space-s);
 		}
 
 		preview-nav summary {
@@ -312,6 +324,32 @@
 			background: var(--norn-surface-raised);
 			color: var(--norn-text-base);
 			font-weight: 700;
+		}
+
+		/* Wide, the groups are the sidebar: no bar, and the groups show whether the disclosure is open, with a script or without. Without ::details-content the bar stays and still works. */
+		@media (width > 48rem) {
+			@supports selector(::details-content) {
+				preview-nav > nav > details > summary {
+					display: none;
+				}
+
+				preview-nav > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-nav a {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
+
+			preview-nav summary {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
 		}
 
 		@media print {

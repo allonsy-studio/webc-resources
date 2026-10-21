@@ -366,3 +366,24 @@
 
 		if (!customElements.get("preview-overrides")) customElements.define("preview-overrides", PreviewOverrides);
 	}
+{
+		/** The component list. Wide, its disclosure stays open, so the links are open in the page for every tool that reads it. Narrow, it closes. */
+		class PreviewNav extends HTMLElement {
+			#wide = window.matchMedia("(width > 48rem)");
+			#sync = () => {
+				const disclosure = this.querySelector(":scope > nav > details");
+				if (disclosure) disclosure.open = this.#wide.matches;
+			};
+
+			connectedCallback() {
+				this.#wide.addEventListener("change", this.#sync);
+				this.#sync();
+			}
+
+			disconnectedCallback() {
+				this.#wide.removeEventListener("change", this.#sync);
+			}
+		}
+
+		if (!customElements.get("preview-nav")) customElements.define("preview-nav", PreviewNav);
+	}

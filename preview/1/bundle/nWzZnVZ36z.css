@@ -1,4 +1,52 @@
 @layer norn.components {
+		norn-data-table {
+			display: block;
+			min-inline-size: 0;
+
+			& > div {
+				overflow-x: auto;
+			}
+
+			& > div > table {
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-data-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+			}
+
+			& > div > table > caption {
+				padding-block-end: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				text-align: start;
+			}
+
+			& > div > table > thead {
+				background: var(--norn-data-table-head, none);
+			}
+
+			& > div > table :is(th, td) {
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-block-end: 1px solid var(--norn-data-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				text-align: start;
+				vertical-align: top;
+			}
+
+			/* Wrap between words only: a token split across lines reads as two. */
+			& > div > table :is(th, td, code) {
+				overflow-wrap: normal;
+				word-break: normal;
+			}
+
+			& > div > table code {
+				white-space: nowrap;
+			}
+
+			@media print {
+				& > div {
+					overflow: visible;
+				}
+			}
+		}
+	}
+@layer norn.components {
 		norn-skip-link {
 			display: block;
 
@@ -153,8 +201,20 @@
 			font-size: 0.95rem;
 		}
 
-		preview-nav details + details {
+		preview-nav details details + details {
 			margin-block-start: var(--norn-space-s);
+		}
+
+		/* The disclosure around the groups: a bar the width of the column, with the page below it. */
+		preview-nav > nav > details > summary {
+			padding: 0.5rem var(--norn-space-s);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-raised);
+		}
+
+		preview-nav > nav > details[open] > summary {
+			margin-block-end: var(--norn-space-s);
 		}
 
 		preview-nav summary {
@@ -187,6 +247,32 @@
 			background: var(--norn-surface-raised);
 			color: var(--norn-text-base);
 			font-weight: 700;
+		}
+
+		/* Wide, the groups are the sidebar: no bar, and the groups show whether the disclosure is open, with a script or without. Without ::details-content the bar stays and still works. */
+		@media (width > 48rem) {
+			@supports selector(::details-content) {
+				preview-nav > nav > details > summary {
+					display: none;
+				}
+
+				preview-nav > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-nav a {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
+
+			preview-nav summary {
+				min-block-size: 2.75rem;
+				align-content: center;
+			}
 		}
 
 		@media print {
