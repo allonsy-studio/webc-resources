@@ -38,7 +38,7 @@ layout: norn-base.webc
 		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
 	</template>
 </norn-hero>
-<norn-section webc:if="$data.norn.docs.length" id="docs">
+<section webc:if="$data.norn.docs.length" id="docs">
 	<h2 @text="nornComponentStrings?.('norn-docs-home', 'contents', $data.page) || 'Documentation'"></h2>
 	<dl data-norn-contents>
 		<div webc:for="page of $data.norn.docs">
@@ -46,7 +46,7 @@ layout: norn-base.webc
 			<dd webc:if="page.description" @text="page.description"></dd>
 		</div>
 	</dl>
-</norn-section>
+</section>
 <style>
 	@layer norn.layout {
 		/* Contents: a title and its description, in two columns when wide. Each row is one link, with no rules between them. */

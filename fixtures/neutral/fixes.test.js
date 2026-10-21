@@ -63,13 +63,13 @@ describe("the component fixes, built from content with only the data a page name
 		}
 	}
 
-	test("a list, a section, an article, and a fact-list column inside card-grid, norn-section, card, and footer keep their standalone styles", async () => {
+	test("a list, a section, an article, and a fact-list column inside card-grid, a section in main, card, and footer keep their standalone styles", async () => {
 		await onPage("/containers/", async (page) => {
 			for (const [label, plain, nested] of [
 				["a list in a card of a card-grid", "#plain-ul", "#grid-ul"],
 				["its items", "#plain-li", "#grid-li"],
 				["and what the items hold", "#plain-span", "#grid-span"],
-				["a section in a norn-section", "#plain-section", "#section-section"],
+				["a section in a section", "#plain-section", "#section-section"],
 				["an article in a card", "#plain-article", "#card-article"],
 				["a fact-list column in a footer", "#plain-tags", "#footer-tags"],
 				["its list", "#plain-tags > ul", "#footer-tags > ul"],
@@ -82,7 +82,7 @@ describe("the component fixes, built from content with only the data a page name
 	test("the containers still style the markup they own", async () => {
 		await onPage("/containers/", async (page) => {
 			assert.equal((await computed(page, "#grid > ul", ["display"])).display, "grid", "the card-grid's own list");
-			assert.equal((await computed(page, "#section > section", ["paddingBlockStart"])).paddingBlockStart, "32px", "the norn-section's own section");
+			assert.equal((await computed(page, "#section", ["paddingBlockStart"])).paddingBlockStart, "32px", "a section in main has the section padding");
 			assert.equal((await computed(page, "#card > article", ["paddingBlockStart"])).paddingBlockStart, "20px", "the card's own article");
 			assert.equal((await computed(page, "#footer > footer > div:first-child", ["display"])).display, "grid", "the footer's own columns");
 		});
@@ -180,7 +180,7 @@ describe("the component fixes, built from content with only the data a page name
 		await onPage("/headings/", async (page) => {
 			const HEADING = ["fontSize", "fontFamily", "fontWeight", "lineHeight"];
 			const LINK = ["color", "fontSize", "textDecorationLine", "textDecorationStyle"];
-			assert.deepEqual(await computed(page, "#section-wrapped h2", HEADING), await computed(page, "#section-plain h2", HEADING), "norn-section");
+			assert.deepEqual(await computed(page, "#section-wrapped h2", HEADING), await computed(page, "#section-plain h2", HEADING), "a section in main");
 			for (const [label, plain, wrapped] of [
 				["card", "#card-plain", "#card-wrapped"],
 				["card in a mono card-grid", "#mono-plain", "#mono-wrapped"],

@@ -43,12 +43,12 @@ describe("landing fixture with the OSS site layer", () => {
 
 	test("the install, features, and packages sections follow, each under its own heading", () => {
 		const html = pages["/"];
-		assert.ok(html.includes('<norn-section id="install">') && html.includes("<h2>Install</h2>"));
+		assert.ok(html.includes('<section id="install">') && html.includes("<h2>Install</h2>"));
 		assert.ok(html.includes("npm install @allons-y/fixture-landing"));
-		assert.ok(html.includes('<norn-section id="features">'));
-		assert.ok(!/<(section|norn-section)\b[^>]*aria-labelledby/.test(html), "a section takes no name");
-		assert.equal((between(html, '<norn-section id="features"', "</norn-section>").match(/<norn-card>/g) ?? []).length, 4);
-		const packages = between(html, '<norn-section id="packages"', "</norn-section>");
+		assert.ok(html.includes('<section id="features">'));
+		assert.ok(!/<section\b[^>]*aria-labelledby/.test(html), "a section takes no name");
+		assert.equal((between(html, '<section id="features"', "</section>").match(/<norn-card>/g) ?? []).length, 4);
+		const packages = between(html, '<section id="packages"', "</section>");
 		assert.equal((packages.match(/<norn-card>/g) ?? []).length, 2);
 		assert.ok(packages.includes('style="--norn-card-title-face: mono"'));
 		assert.ok(packages.includes('<a href="https://example.com/core">@example/core</a>'));

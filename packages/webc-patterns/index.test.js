@@ -34,7 +34,7 @@ test("patterns: an unknown name throws and lists the available ones", () => {
 });
 
 test("patterns: ships the content components and the page frame, and no foundation stylesheet component", () => {
-	for (const name of ["norn-card", "norn-card-grid", "norn-side-nav", "norn-sidebar-layout", "norn-rich-text", "norn-pager", "norn-head", "norn-skip-link", "norn-header", "norn-footer", "norn-hero", "norn-section", "norn-icon", "norn-link-button", "norn-fact-list", "norn-segmented-control", "norn-copy-button", "norn-simple-table", "norn-theme-toggle", "norn-accordion", "norn-callout", "norn-notice", "norn-heading-anchor", "norn-toc", "norn-breadcrumbs"]) {
+	for (const name of ["norn-card", "norn-card-grid", "norn-side-nav", "norn-sidebar-layout", "norn-rich-text", "norn-pager", "norn-head", "norn-skip-link", "norn-header", "norn-footer", "norn-hero", "norn-icon", "norn-link-button", "norn-fact-list", "norn-segmented-control", "norn-copy-button", "norn-simple-table", "norn-theme-toggle", "norn-accordion", "norn-callout", "norn-notice", "norn-heading-anchor", "norn-toc", "norn-breadcrumbs"]) {
 		assert.ok(components.includes(name), name);
 	}
 	assert.ok(!components.includes("norn-page-styles"), "the base styles are files, embedded by norn-base");

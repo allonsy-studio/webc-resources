@@ -3,8 +3,8 @@ layout: norn-base.webc
 title: Headings
 ---
 <h1>Headings</h1>
-<norn-section id="section-plain"><h2 id="section-plain-heading">A heading</h2></norn-section>
-<norn-section id="section-wrapped"><norn-heading-anchor @slug="section-wrapped-heading">A heading</norn-heading-anchor></norn-section>
+<section id="section-plain"><h2 id="section-plain-heading">A heading</h2></section>
+<section id="section-wrapped"><norn-heading-anchor @slug="section-wrapped-heading">A heading</norn-heading-anchor></section>
 <norn-card id="card-plain"><h3><a href="#top">A heading</a></h3><p>Body.</p></norn-card>
 <norn-card id="card-wrapped"><norn-heading-anchor @slug="card-wrapped-heading" :@level="3">A heading</norn-heading-anchor><p>Body.</p></norn-card>
 <norn-card-grid :@mono="true">

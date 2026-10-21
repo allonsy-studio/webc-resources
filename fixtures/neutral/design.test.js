@@ -578,7 +578,7 @@ describe("the design pass, built from content with only the data a page names", 
 				.map((heading) => {
 					const style = getComputedStyle(heading, "::before");
 					const link = heading.querySelector(":scope > a").getBoundingClientRect();
-					const edge = heading.closest("norn-rich-text, norn-section, main").getBoundingClientRect();
+					const edge = heading.closest("norn-rich-text, section, main").getBoundingClientRect();
 					const hangs = parseFloat(style.marginLeft) < 0;
 					return { id: heading.id, left: hangs ? link.left - parseFloat(style.marginRight) - parseFloat(style.width) : heading.getBoundingClientRect().left, hangs, frame: edge.left };
 				}),
@@ -665,5 +665,19 @@ describe("the design pass, built from content with only the data a page names", 
 			},
 			{ colorScheme: "light", forcedColors: "active" },
 		);
+	});
+
+	test("a section directly in main is a centered column at the layout width, with the section padding and heading size, and a project rule overrides it", async () => {
+		await onPage("/sections/", async (page) => {
+			const box = (selector) => page.locator(selector).evaluate((element) => ({ width: element.getBoundingClientRect().width, left: element.getBoundingClientRect().left, padding: getComputedStyle(element).paddingBlockStart, gap: getComputedStyle(element).rowGap, display: getComputedStyle(element).display }));
+			const first = await box("#first");
+			assert.equal(first.width, 1024, "the layout width");
+			assert.equal(first.left, (1280 - 1024) / 2, "centered");
+			assert.deepEqual([first.padding, first.gap, first.display], ["32px", "20px", "grid"]);
+			assert.equal(await page.locator("#first > h2").evaluate((element) => getComputedStyle(element).fontSize), "24px", "the second-level size");
+			assert.equal((await box("#overridden")).padding, "5px", "a project rule wins without !important");
+			assert.equal((await box("#nested")).padding, "0px", "a section inside a card is left alone");
+		});
+		await onPage("/sections/", async (page) => assert.equal((await page.locator("#first").evaluate((element) => element.getBoundingClientRect().width)), 390 - 40, "narrow, the page margins"), { viewport: { width: 390, height: 800 } });
 	});
 });

@@ -223,8 +223,8 @@ describe("neutral fixture build", () => {
 		assert.ok(nav.includes('<a href="/"><span>Home</span></a>'));
 	});
 
-	test("norn-section takes its anchor from the host id, and the heading from the slot", () => {
-		assert.match(pages.index, /<norn-section id="features">\s*<section>\s*<h2>Features<\/h2>/);
+	test("a section takes its anchor from its own id, and the heading is its first child", () => {
+		assert.match(pages.index, /<section id="features">\s*<h2>Features<\/h2>/);
 	});
 
 	test("norn-footer fills its slots and leaves no slot markup behind", () => {

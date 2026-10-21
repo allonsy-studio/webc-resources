@@ -18,6 +18,7 @@
  * A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own `layout` and `page.inputPath`, which a layout chain leaves alone.
  * Props are `$data.norn`: the plugin's `props` mapping, or the same-named page data. Every list defaults to `[]`.
  * The head calls `norn-head`, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from `css/base.css` and `css/print.css`. A copy of this file pastes their text in.
+ * A `<section>` directly in `main` is a centered column at `--norn-layout-width` with block padding and a gap, and its `h2` takes the section heading size. The `id` on the section is the anchor. The rule is in the `norn.layout` layer under `:where(main)`, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it.
  * Four hooks take markup from `fillHooks`: `head` at the end of the head, `banner` before the header, `cta` at the end of `main`, and `credit` as the footer's last column.
  * The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from `componentStrings` under `norn-base`, then English.
  * @prop {string} [lang] - The page language. Falls back to `page.lang`, then `en`.
@@ -62,6 +63,34 @@
 		<style>/* norn: css/print.css */</style>
 		<style>
 			@layer norn.layout {
+				/* A section directly in main is a centered column at the page width, its heading the second level. A section anywhere else is left alone. The :where() keeps the rule easy for a project to override. */
+				:where(main) > section {
+					display: grid;
+					grid-template-columns: minmax(0, 1fr);
+					align-content: start;
+					gap: var(--norn-space-m, t('space.m'));
+					inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-layout-width, t('layout.width')));
+					margin-inline: auto;
+					padding-block: var(--norn-space-l, t('space.l'));
+					scroll-margin-block-start: var(--norn-space-m, t('space.m'));
+				}
+
+				:where(main) > section > h2,
+				:where(main) > section > norn-heading-anchor > h2 {
+					margin: 0;
+					font-family: var(--norn-font-heading, t('font.heading'));
+					font-size: var(--norn-font-size-xl, t('font.size.xl'));
+					line-height: 1.15;
+					text-wrap: balance;
+				}
+
+				@media print {
+					:where(main) > section {
+						gap: var(--norn-space-s, t('space.s'));
+						padding-block: var(--norn-space-m, t('space.m'));
+					}
+				}
+
 				/* The page title and the body's line length in a page with a navigation column, for norn-docs and norn-workspace. The base styles set the title's face and wrapping. */
 				norn-sidebar-layout {
 					--norn-rich-text-measure: none;

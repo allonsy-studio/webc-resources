@@ -65,7 +65,7 @@ describe("the catalog", () => {
 		assert.deepEqual(catalog.categories.map(({ id }) => id), ["layout", "landmark", "container", "component", "template", "document"]);
 		assert.equal(where["norn-card-grid"], "container");
 		for (const name of ["norn-header", "norn-footer", "norn-side-nav"]) assert.equal(where[name], "landmark", name);
-		for (const name of ["norn-card", "norn-section"]) assert.equal(where[name], "container", name);
+		for (const name of ["norn-card"]) assert.equal(where[name], "container", name);
 		for (const name of ["norn-head", "oss-head"]) assert.equal(where[name], "document", name);
 		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces-home", "norn-workspace"]) assert.equal(where[name], "template", name);
 		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces-home"], "the layouts, and nothing else");

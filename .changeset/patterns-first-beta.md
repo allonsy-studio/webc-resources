@@ -13,7 +13,7 @@ The Norn plugin, `@allons-y/webc-patterns/plugin`, is the one setup call: `confi
 
 The shared design tokens are `--norn-*` custom properties named for their path in `tokens.json`: `--norn-ui-accent`, `--norn-ui-border-strong`, `--norn-ui-focus-width`, `--norn-ui-state-hover`, `--norn-status-info`, `--norn-surface-base`, `--norn-text-muted`, `--norn-font-body`, `--norn-font-size-m`, `--norn-code-keyword`, `--norn-space-m`, `--norn-layout-width`. Each component reads a token with its default compiled in as the fallback, so nothing has to define them, and a project sets any of them in its own `tokens.css` to restyle every component. A theme is a file of such properties. The base styles define no token.
 
-- Document and page frame: `norn-head`, `norn-skip-link`, `norn-header`, `norn-footer`, `norn-sidebar-layout`, `norn-hero`, `norn-section`, `norn-rich-text`, and `norn-pager`.
+- Document and page frame: `norn-head`, `norn-skip-link`, `norn-header`, `norn-footer`, `norn-sidebar-layout`, `norn-hero`, `norn-rich-text`, and `norn-pager`.
 - Navigation: `norn-side-nav`, `norn-breadcrumbs`, `norn-toc`, `norn-heading-anchor`, and `norn-search` (live Pagefind results, or a web search of the site without an index).
 - Content: `norn-card`, `norn-card-grid`, `norn-simple-table`, `norn-callout`, `norn-notice`, `norn-accordion`, `norn-code-tabs`, `norn-fact-list`, `norn-link-button`, and `norn-icon`.
 - Controls: `norn-segmented-control`, `norn-theme-toggle`, and `norn-copy-button`.

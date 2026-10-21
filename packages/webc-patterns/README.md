@@ -135,6 +135,8 @@ Each of the other layouts adds its own props, below. The base props a layout rea
 
 The page frame: head, skip link, header, `main` around the content, and footer. It takes the props above. Used as a page's layout, it compiles the content of a page that is not a WebC file, so a Markdown page's callouts, code fences, and tables render as components. A WebC page, and a page on a layout that extends `norn-base`, already holds compiled content, which the frame inserts as it is.
 
+A `<section>` directly in `main` is a centered column at `--norn-layout-width`, with block padding, a gap, and a second-level heading style. Its `id` is the anchor. The rule is in the `norn.layout` layer under `:where(main)`, so a project rule overrides it, and a section anywhere else is left alone.
+
 #### `norn-docs.webc`
 
 A docs page: the sidebar with site search, the title, the contents, the body in `norn-rich-text`, and the pager. Reads `title`.
@@ -361,7 +363,6 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
 | `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary` | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
-| `norn-section` | `id` on the host, default slot (the h2, then content) | Section with an anchor. Not a landmark: the heading carries the outline |
 | `norn-hero` | default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
 | `norn-card` | default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and `--norn-card-accent` draws a 2px line along the top |
 | `norn-card-grid` | default slot (`<li>` cards), `:@mono="true"` | Responsive grid of cards |

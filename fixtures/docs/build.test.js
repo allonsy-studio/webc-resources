@@ -35,7 +35,7 @@ describe("docs fixture", () => {
 	test("the pages use the shipped layouts, from the configured layouts folder, with no file of the project's and no layout listed as a page", () => {
 		assert.ok(!fs.existsSync(path.join(here, "src", "_layouts")), "the project keeps no layout");
 		assert.ok(!fs.existsSync(path.join(output, "src", "_layouts")), "no stray page for a layout outside the input folder");
-		assert.ok(pages["/"].includes("<norn-hero>") && pages["/"].includes('<norn-section id="docs">'), "norn-docs-home");
+		assert.ok(pages["/"].includes("<norn-hero>") && pages["/"].includes('<section id="docs">'), "norn-docs-home");
 		for (const url of ["/getting-started/", "/usage/", "/reference/"]) assert.ok(pages[url].includes("<norn-sidebar-layout>") && pages[url].includes("<norn-rich-text data-pagefind-body>"), `${url}: norn-docs`);
 	});
 
@@ -44,7 +44,7 @@ describe("docs fixture", () => {
 		const hero = between(html, "<norn-hero>", "</norn-hero>");
 		assert.ok(hero.includes('<a href="/getting-started/" data-variant="primary">Read the docs</a>') && hero.includes(`<a href="${REPO}" data-variant="secondary">View on GitHub</a>`));
 		assert.ok(hero.includes('<norn-code-block id="install">') && hero.includes("npm install fixture-docs"));
-		const index = between(html, '<norn-section id="docs"', "</norn-section>");
+		const index = between(html, '<section id="docs"', "</section>");
 		assert.ok(index.includes("<h2>Documentation</h2>"));
 		assert.ok(index.includes("<dl data-norn-contents>") && !index.includes("<norn-card"), "a contents list, not cards");
 		assert.deepEqual([...index.matchAll(/<dt><a href="([^"]+)">([^<]+)<\/a><\/dt>/g)].map((match) => [match[1], match[2]]), [

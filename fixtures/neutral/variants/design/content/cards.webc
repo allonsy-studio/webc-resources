@@ -2,7 +2,7 @@
 layout: norn-base.webc
 title: Cards
 ---
-<norn-section id="cards">
+<section id="cards">
 	<h2>Cards</h2>
 	<norn-card-grid>
 		<li><norn-card><h3><a href="/docs/">One</a></h3><p>The first card, with a link in its heading.</p></norn-card></li>
@@ -11,4 +11,4 @@ title: Cards
 		<li><norn-card><h3><a href="/docs/">Four</a></h3><p>The fourth card.</p></norn-card></li>
 		<li><norn-card><h3><a href="/docs/">Five</a></h3><p>The fifth card.</p></norn-card></li>
 	</norn-card-grid>
-</norn-section>
+</section>

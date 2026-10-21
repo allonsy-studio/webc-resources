@@ -38,7 +38,7 @@ layout: norn-base.webc
 		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
 	</template>
 </norn-hero>
-<norn-section webc:if="$data.norn.workspaces.length" id="packages">
+<section webc:if="$data.norn.workspaces.length" id="packages">
 	<h2 @text="nornComponentStrings?.('norn-workspaces-home', 'packages', $data.page) || 'Packages'"></h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="workspace of $data.norn.workspaces">
@@ -48,4 +48,4 @@ layout: norn-base.webc
 			</norn-card>
 		</li>
 	</norn-card-grid>
-</norn-section>
+</section>

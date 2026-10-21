@@ -42,7 +42,7 @@ facts:
 		<li webc:for="fact of facts" @text="fact"></li>
 	</norn-fact-list>
 </norn-hero>
-<norn-section id="features">
+<section id="features">
 	<h2>Features</h2>
 	<norn-card-grid>
 		<li webc:for="item of features">
@@ -55,8 +55,8 @@ facts:
 			</norn-card>
 		</li>
 	</norn-card-grid>
-</norn-section>
-<norn-section id="packages">
+</section>
+<section id="packages">
 	<h2>Packages</h2>
 	<norn-card-grid :@mono="true">
 		<li webc:for="item of packages">
@@ -66,4 +66,4 @@ facts:
 			</norn-card>
 		</li>
 	</norn-card-grid>
-</norn-section>
+</section>

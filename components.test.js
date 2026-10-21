@@ -530,8 +530,6 @@ test("the leak check flags a descendant step from the host to the component's ow
 	for (const [name, selector, step] of [
 		["norn-card-grid", "norn-card-grid ul", "ul"],
 		["norn-card-grid", "norn-card-grid ul > li > *", "ul"],
-		["norn-section", "norn-section section", "section"],
-		["norn-section", "norn-section section > h2", "section"],
 		["norn-card", "norn-card article", "article"],
 		["norn-card", "norn-card article > :is(h2, h3, h4, h5, h6) a", "article"],
 		["norn-footer", "norn-footer footer > div:first-child > * > ul", "footer"],
@@ -540,7 +538,6 @@ test("the leak check flags a descendant step from the host to the component's ow
 	}
 	for (const [name, selector] of [
 		["norn-card-grid", "norn-card-grid > ul > li > *"],
-		["norn-section", "norn-section > section > h2"],
 		["norn-card", "norn-card > article > :is(h2, h3, h4, h5, h6) a"],
 		["norn-footer", "norn-footer > footer > div:first-child > :is(div, nav) > ul"],
 		["norn-footer", "norn-footer :where(p)"],

@@ -50,7 +50,7 @@ frame:
 	<norn-toc :@items="[{ id: 'avis', text: 'Des avis et des encadrés dont les titres sont particulièrement longs', level: 2 }, { id: 'onglets', text: 'Onglets de code aux noms interminables', level: 2 }, { id: 'sous-titre', text: 'Un sous-titre tout aussi long que les autres entrées', level: 3 }, { id: 'cartes', text: 'Cartes', level: 2 }]">
 		<span slot="label">Sommaire de la page, avec un titre qui occupe plusieurs lignes</span>
 	</norn-toc>
-	<norn-section id="avis">
+	<section id="avis">
 		<h2 id="avis">Avis et encadrés</h2>
 		<norn-callout @variant="warning">
 			<span slot="heading">Un titre d’encadré volontairement très long qui doit s’étendre sur trois lignes au moins, même sur un grand écran, pour vérifier la mise en page</span>
@@ -71,8 +71,8 @@ frame:
 			<li>Compatible avec toutes les versions récentes de Node</li>
 			<li>Aucune dépendance à l’exécution, ni directe ni indirecte</li>
 		</norn-fact-list>
-	</norn-section>
-	<norn-section id="onglets">
+	</section>
+	<section id="onglets">
 		<h2 id="onglets">Onglets de code</h2>
 		<norn-code-tabs @group="long-text">
 			<span slot="label">Commandes d’installation pour chaque gestionnaire de paquets</span>
@@ -100,8 +100,8 @@ frame:
 			<span slot="copied">La commande a bien été copiée dans le presse-papiers</span>
 			<span slot="failed">La copie a échoué, copiez la commande à la main</span>
 		</norn-copy-button>
-	</norn-section>
-	<norn-section id="cartes">
+	</section>
+	<section id="cartes">
 		<h2 id="cartes">Cartes</h2>
 		<norn-card-grid>
 			<li>
@@ -136,7 +136,7 @@ frame:
 			<span slot="system">Thème du système</span>
 			<span slot="dark">Thème sombre</span>
 		</norn-theme-toggle>
-	</norn-section>
+	</section>
 	<norn-pager
 		:@prev="({ url: '/docs/one/', title: 'Une page précédente dont le titre est vraiment très long, avec des accents' })"
 		:@next="({ url: '/docs/two/', title: 'Une page suivante dont le titre est lui aussi beaucoup trop long pour une ligne' })"
