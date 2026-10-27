@@ -130,7 +130,8 @@ function tokenize(code, language) {
 	const lang = session ? "bash" : language;
 	if (!lang || !highlighter.getLoadedLanguages().includes(lang)) return undefined;
 	let ranges = [];
-	const { tokens } = highlighter.codeToTokens(code, { lang, theme: THEME.name, includeExplanation: "scopeName" });
+	// No time limit: Shiki tokenizes each line twice, and a limit that stops one pass early, as on a busy machine, breaks the explanation.
+	const { tokens } = highlighter.codeToTokens(code, { lang, theme: THEME.name, includeExplanation: "scopeName", tokenizeTimeLimit: 0 });
 	for (const lineTokens of tokens) {
 		for (const token of lineTokens) {
 			let at = token.offset;

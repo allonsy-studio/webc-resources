@@ -156,6 +156,14 @@ test("tokenRanges: a repeat sample comes from the cache, and changed code is tok
 	assert.deepEqual(JSON.parse(changed).at(-2), ["number", code.length + 12, code.length + 13]);
 });
 
+test("tokenRanges: a line that takes Shiki longer than its time limit is still tokenized to the end", () => {
+	const count = 40000;
+	const code = `const a = [${Array.from({ length: count }, (_, index) => `"s${index}"`).join(", ")}];`;
+	const ranges = JSON.parse(tokenRanges(code, "js"));
+	assert.equal(ranges.filter(([group]) => group === "string").length, count, "every string");
+	assert.deepEqual(ranges.at(-1), ["punctuation", code.length - 1, code.length]);
+});
+
 test("tokenRanges: the aliases of the loaded languages have grammars", () => {
 	const samples = { sh: "ls", shell: "ls", "shell-session": "$ ls", ts: "const a: number = 1;", html: "<a>t</a>", md: "# Title", markdown: "**b**", yml: "a: 1", js: "const a = 1;" };
 	for (const [language, code] of Object.entries(samples)) assert.equal(typeof tokenRanges(code, language), "string", `${language} has a grammar`);
