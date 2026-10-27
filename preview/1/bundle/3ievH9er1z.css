@@ -336,169 +336,66 @@
 		}
 	}
 @layer norn.components {
-		norn-toc {
+		norn-simple-table {
 			display: block;
-			font-size: var(--norn-font-size-s, 0.875rem);
+			min-inline-size: 0;
 
-			& > nav > details > summary {
-				--_state: 0%;
-				--_fold: none;
-				box-sizing: border-box;
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				gap: var(--norn-space-xs, 0.5rem);
-				margin-block-end: var(--norn-space-xs, 0.5rem);
-				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
-				font-weight: 700;
-				list-style: none;
-
-				&::-webkit-details-marker {
-					display: none;
-				}
-
-				/* A chevron drawn with two borders, shown only while the list folds. */
-				&::after {
-					box-sizing: border-box;
-					content: "";
-					display: var(--_fold);
-					flex: none;
-					inline-size: 0.5em;
-					block-size: 0.5em;
-					border-block-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-					border-inline-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-					rotate: 45deg;
-				}
+			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
+			& > div {
+				--_bg: var(--norn-simple-table-bg, var(--norn-surface-base, light-dark(#ffffff, #101216)));
+				--_shadow: color-mix(in oklab, var(--norn-text-base, light-dark(#16181d, #eceef3)) 18%, transparent);
+				overflow-x: auto;
+				background:
+					linear-gradient(to right, var(--_bg) 30%, transparent) local 0 0 / 2rem 100% no-repeat,
+					linear-gradient(to left, var(--_bg) 30%, transparent) local 100% 0 / 2rem 100% no-repeat,
+					radial-gradient(farthest-side at 0 50%, var(--_shadow), transparent) scroll 0 0 / 0.75rem 100% no-repeat,
+					radial-gradient(farthest-side at 100% 50%, var(--_shadow), transparent) scroll 100% 0 / 0.75rem 100% no-repeat;
 			}
 
-			& > nav > details[open] > summary::after {
-				rotate: 225deg;
+			& > div > table {
+				min-inline-size: 100%;
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
 			}
 
-			/* Open or not, the list shows, so the title is only a title. */
-			@supports selector(::details-content) {
-				& > nav > details::details-content {
-					content-visibility: visible;
-				}
+			& > div > table > caption {
+				padding-block-end: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				text-align: start;
 			}
 
-			& > nav > details > ol,
-			& > nav > details > ol ol {
-				display: grid;
-				gap: var(--norn-space-2xs, 0.25rem);
-				margin: 0;
-				padding: 0;
-				list-style: none;
+			& > div > table > thead {
+				background: var(--norn-simple-table-head, none);
 			}
 
-			& > nav > details > ol {
-				border-inline-start: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+			& > div > table :is(th, td) {
+				min-inline-size: 7rem;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				text-align: start;
+				vertical-align: top;
 			}
 
-			& > nav > details > ol ol {
-				padding-inline-start: var(--norn-space-s, 0.75rem);
+			/* The last column is usually the one with sentences, so it keeps room to wrap into rather than a column of words. */
+			& > div > table :is(th, td):last-child {
+				min-inline-size: 10rem;
 			}
 
-			& > nav > details > ol li > a {
-				--_state: 0%;
-				box-sizing: border-box;
-				display: flex;
-				align-items: center;
-				min-block-size: 1.5rem;
-				margin-inline-start: -1px;
-				padding: var(--norn-space-2xs, 0.25rem) var(--norn-space-s, 0.75rem);
-				border-inline-start: 2px solid transparent;
-				border-start-end-radius: var(--norn-ui-radius-s, 4px);
-				border-end-end-radius: var(--norn-ui-radius-s, 4px);
-				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
-				color: var(--norn-toc-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
-				text-decoration: none;
-
-				&:hover {
-					--_state: var(--norn-ui-state-hover, 8%);
-					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
-				}
-
-				&:active {
-					--_state: var(--norn-ui-state-press, 12%);
-				}
-
-				&[aria-current] {
-					border-inline-start-color: var(--norn-toc-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
-					color: var(--norn-toc-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
-				}
+			/* Wrap between words only: a token split across lines reads as two. */
+			& > div > table :is(th, td, code) {
+				overflow-wrap: normal;
+				word-break: normal;
 			}
 
-			/* Folded, the title is a control that opens the list. */
-			@container style(--norn-toc-fold: on) {
-				& > nav > details > summary {
-					--_fold: block;
-					padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-					border-radius: var(--norn-ui-radius-s, 4px);
-					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
-					cursor: pointer;
-
-					&:hover {
-						--_state: var(--norn-ui-state-hover, 8%);
-					}
-
-					&:active {
-						--_state: var(--norn-ui-state-press, 12%);
-					}
-
-					&:focus-visible {
-						outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
-					}
-				}
-
-				@supports selector(::details-content) {
-					& > nav > details:not([open])::details-content {
-						content-visibility: hidden;
-					}
-				}
-			}
-
-			/* Without ::details-content a closed fold can't show its list, so the title always works as a control. */
-			@supports not selector(::details-content) {
-				& > nav > details > summary {
-					--_fold: block;
-					cursor: pointer;
-				}
-			}
-
-			@media (pointer: coarse) {
-				& > nav > details > ol li > a {
-					min-block-size: 2.75rem;
-				}
-			}
-
-			@media (prefers-reduced-motion: no-preference) {
-				& > nav > details > ol li > a,
-				& > nav > details > summary {
-					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
-				}
-			}
-
-			@media (forced-colors: active) {
-				& > nav > details > summary::after {
-					border-color: CanvasText;
-				}
-
-				/* A clear border would be drawn in the text color, so only the current link has one. */
-				& > nav > details > ol li > a {
-					border-inline-start-width: 0;
-					padding-inline-start: calc(var(--norn-space-s, 0.75rem) + 2px);
-				}
-
-				& > nav > details > ol li > a[aria-current] {
-					border-inline-start-width: 2px;
-					border-inline-start-color: Highlight;
-					padding-inline-start: var(--norn-space-s, 0.75rem);
-				}
+			& > div > table code {
+				white-space: nowrap;
 			}
 
 			@media print {
-				display: none;
+				& > div {
+					overflow: visible;
+					background: none;
+				}
 			}
 		}
 	}

@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-Fq6D5"><span data-label="" id="norn-header-webc-Fq6D5"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-fSZJt"><span data-label="" id="norn-header-webc-fSZJt"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -218,7 +218,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-landing</h1>
-<p class="lead">A project's landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends <code>norn-base</code>. Samples are <code>norn-code-block</code>s when <code>@allons-y/webc-code-sample</code> is installed, and <code>&lt;pre&gt;&lt;code&gt;</code> without it. Its texts ("Get started", "View on GitHub", "Free &amp; open source", "License: {license}", "Node {node}", and the section headings) come from <code>componentStrings</code> under <code>norn-landing</code>, then English.</p>
+<p class="lead">A project's landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends <code>norn-base</code>. The page body follows the sections, in a section of its own, in <code>norn-rich-text</code>. Markdown is compiled once, as on <code>norn-docs</code>, and a page with no body renders no section. Samples are <code>norn-code-block</code>s: highlighted with <code>@allons-y/webc-code-sample</code>, and plain <code>&lt;pre&gt;&lt;code&gt;</code> without it. Its texts ("Get started", "View on GitHub", "Free &amp; open source", "License: {license}", "Node {node}", and the section headings) come from <code>componentStrings</code> under <code>norn-landing</code>, then English.</p>
 <p class="meta">
 	<code>layout: norn-landing.webc</code>
 	a <span>template</span>, from
@@ -353,7 +353,7 @@ title: Default
 order: 1
 layout: norn-landing.webc
 anchors: true
----" data-strings="norn-code-block-webc-V-kVP" data-compact=""><span data-icons=""><norn-icon>
+---" data-strings="norn-code-block-webc-QhMLo" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -376,8 +376,8 @@ order: 1
 layout: norn-landing.webc
 anchors: true
 ---</code></pre>
-	<span hidden="" id="norn-code-block-webc-V-kVP">
-		<span data-string="label" id="norn-code-block-webc-V-kVP-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-QhMLo">
+		<span data-string="label" id="norn-code-block-webc-QhMLo-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -395,7 +395,7 @@ anchors: true
 	<h2>Props</h2>
 	<p>The plugin's <code>props</code> mapping sets them on each page, and the layout reads them as <code>$data.norn</code>.</p>
 	
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-vm_vl"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-8ApTH"></span>
 <div>
 		<table>
 			<thead>
@@ -450,6 +450,25 @@ anchors: true
 </norn-simple-table>
 
 
+
+	<h2>Slots</h2>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-QMBKA"></span>
+<div>
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row"><code>default</code></th>
+					<td>The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+</norn-simple-table>
 
 
 

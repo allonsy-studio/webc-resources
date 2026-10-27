@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-XcQpl"><span data-label="" id="norn-header-webc-XcQpl"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-_TcoF"><span data-label="" id="norn-header-webc-_TcoF"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -218,7 +218,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-base</h1>
-<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own <code>layout</code> and <code>page.inputPath</code>, which a layout chain leaves alone. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. A <code>&lt;section&gt;</code> directly in <code>main</code> is a centered column at <code>--norn-layout-width</code> with block padding and a gap, and its <code>h2</code> takes the section heading size. The <code>id</code> on the section is the anchor. The rule is in the <code>norn.layout</code> layer under <code>:where(main)</code>, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
+<p class="lead">The page frame every Norn layout extends: the head, the skip link, <code>norn-header</code>, <code>main</code>, and <code>norn-footer</code>, filled from props. The Norn plugin ships it as an Eleventy layout; use it as <code>layout: norn-base.webc</code> for a WebC page, or extend it from a layout of the project's own. Markdown content is compiled once, so the components the Markdown add-ons write render, also through a Nunjucks or Liquid layout of the project's or a layout alias. Content that is already compiled is inserted as it is, because compiling it again would render its kept component tags twice: a WebC page, a <code>templateEngineOverride</code> with <code>webc</code>, a <code>{% renderTemplate "webc" %}</code> block, a page on a WebC layout of the project's own, and a page on a shipped layout, which sets <code>nornCompiled: true</code>. The <code>nornCompiles</code> helper decides, from <code>page.templateSyntax</code>. A Nunjucks, Liquid, or HTML page renders components through <code>{% renderTemplate "webc" %}</code>. A WebC layout of the project's own deeper in the chain that compiles the content sets <code>nornCompiled: true</code> in its front matter. Props are <code>$data.norn</code>: the plugin's <code>props</code> mapping, or the same-named page data. Every list defaults to <code>[]</code>. The head calls <code>norn-head</code>, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from <code>css/base.css</code> and <code>css/print.css</code>. A copy of this file pastes their text in. A <code>&lt;section&gt;</code> directly in <code>main</code> is a centered column at <code>--norn-layout-width</code> with block padding and a gap, and its <code>h2</code> takes the section heading size. The <code>id</code> on the section is the anchor. The rule is in the <code>norn.layout</code> layer under <code>:where(main)</code>, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it. Four hooks take markup from <code>fillHooks</code>: <code>head</code> at the end of the head, <code>banner</code> before the header, <code>cta</code> at the end of <code>main</code>, and <code>credit</code> as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from <code>componentStrings</code> under <code>norn-base</code>, then English.</p>
 <p class="meta">
 	<code>layout: norn-base.webc</code>
 	a <span>template</span>, from
@@ -356,7 +356,7 @@ layout: norn-base.webc
 <section>
 	<h1>A page on the base layout</h1>
 	<p>The header, the footer, and the hooks around a page body of its own.</p>
-</section>" data-strings="norn-code-block-webc-n9Fvq" data-compact=""><span data-icons=""><norn-icon>
+</section>" data-strings="norn-code-block-webc-ZWOVa" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -382,8 +382,8 @@ layout: norn-base.webc
 	&lt;h1&gt;A page on the base layout&lt;/h1&gt;
 	&lt;p&gt;The header, the footer, and the hooks around a page body of its own.&lt;/p&gt;
 &lt;/section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-n9Fvq">
-		<span data-string="label" id="norn-code-block-webc-n9Fvq-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-ZWOVa">
+		<span data-string="label" id="norn-code-block-webc-ZWOVa-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -525,7 +525,7 @@ layout: norn-base.webc
 <section id=&quot;usage&quot;>
 	<h2>Usage</h2>
 	<p>The next section has the same width and the same padding. It is not a landmark, so it takes no name.</p>
-</section>" data-strings="norn-code-block-webc-tI615" data-compact=""><span data-icons=""><norn-icon>
+</section>" data-strings="norn-code-block-webc-t5POR" data-compact=""><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -555,8 +555,8 @@ layout: norn-base.webc
 	&lt;h2&gt;Usage&lt;/h2&gt;
 	&lt;p&gt;The next section has the same width and the same padding. It is not a landmark, so it takes no name.&lt;/p&gt;
 &lt;/section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-tI615">
-		<span data-string="label" id="norn-code-block-webc-tI615-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-t5POR">
+		<span data-string="label" id="norn-code-block-webc-t5POR-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -574,7 +574,7 @@ layout: norn-base.webc
 	<h2>Props</h2>
 	<p>The plugin's <code>props</code> mapping sets them on each page, and the layout reads them as <code>$data.norn</code>.</p>
 	
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-709_A"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-qBSlg"></span>
 <div>
 		<table>
 			<thead>
