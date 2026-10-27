@@ -1,5 +1,0 @@
----
-title: No language
-order: 5
----
-<norn-code-block :@code="'Plain text, with no highlighting.\nA second line.\n'"></norn-code-block>

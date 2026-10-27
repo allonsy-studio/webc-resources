@@ -5,36 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Code sample tokenized at build time. Its script registers `norn-code-block` as a custom element that adds the highlight colors; without the script the markup is the whole sample.
- * A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction.
- * Shell samples (`sh`, `bash`, `shell`, `shell-session`) color the command, its subcommand, its flags, and its arguments apart.
- * Needs `tokenRanges` registered as the `nornTokenRanges` JavaScript function, and the patterns package's components.
- * The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button.
- * Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.
- * @prop {string} code
- * @prop {string} [language] - A language Shiki has loaded: the defaults or one added with `loadLanguages`. Unknown or empty renders plain text.
- * @prop {string} [caption] - Also names the code and its copy button.
- * @slot label - The code's name without a caption, as one element. Falls back to "{language} code", with the language filled in, or "code" with no language.
- * @slot copy-label - The copy button's name, with `{name}` for the code's name, as one element. Falls back to "Copy {name} to clipboard".
- * @slot copy - The copy button's text. Falls back to "Copy".
- * @slot copied - The copy button's text after a copy. Falls back to "Copied".
- * @slot failed - The copy button's text when the copy fails. Falls back to "Copy failed".
- * @cssprop --norn-code-block-bg - Background. Falls back to --norn-surface-code.
- * @cssprop --norn-code-block-fg - Text color. Falls back to --norn-text-base.
- * @cssprop --norn-code-block-radius - Corner radius. Falls back to --norn-ui-border-radius.
- * @cssprop --norn-code-block-padding - Inner spacing. Falls back to --norn-space-m.
- * @cssprop --norn-code-block-font - Font stack. Falls back to --norn-font-mono.
- * @cssprop --norn-chrome - Inherited. Set to `terminal` on an ancestor for the frame with a header bar for the caption.
- * @cssprop --norn-code-comment - Syntax color, with a light-dark default.
- * @cssprop --norn-code-string - Syntax color, with a light-dark default.
- * @cssprop --norn-code-keyword - Syntax color, with a light-dark default.
- * @cssprop --norn-code-function - Syntax color, with a light-dark default.
- * @cssprop --norn-code-number - Syntax color, with a light-dark default.
- * @cssprop --norn-code-flag - Syntax color for a shell command's flags, with a light-dark default.
- * @category component
- */
 --->
 <script webc:setup>
 /** The code as it should paste: a leading `$ ` prompt comes off each line, and `$HOME` is untouched. */

@@ -1,5 +1,0 @@
----
-title: Shell prompt
-order: 2
----
-<norn-code-block @language="sh" :@code="'$ npm install @example/core\n$ npx example --help\n'"></norn-code-block>

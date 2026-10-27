@@ -1,9 +1,0 @@
----
-title: Long line
-order: 4
----
-<norn-code-block
-	@language="js"
-	@caption="long.js"
-	:@code="'const message = \'This line is long enough to scroll sideways inside the sample, which is when the code becomes a keyboard stop\';\n'"
-></norn-code-block>

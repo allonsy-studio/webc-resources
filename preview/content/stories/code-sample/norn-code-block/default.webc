@@ -1,9 +1,0 @@
----
-title: JavaScript with a caption
-order: 1
----
-<norn-code-block
-	@language="js"
-	@caption="example.js"
-	:@code="'import { greet } from \'@example/core\';\n\nconsole.log(greet(\'world\')); // hello, world\n'"
-></norn-code-block>
