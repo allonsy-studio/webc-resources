@@ -64,10 +64,11 @@ const docs = new Map(
 		filesIn("src")
 			.map((entry) => ({ ...entry, layout: false }))
 			.concat(filesIn("src/layouts").map((entry) => ({ ...entry, layout: true })))
-			.map(async ({ file, text, layout }) => {
-				const name = path.basename(file, ".webc");
-				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), name, layout);
-				if (fs.existsSync(stories)) {
+			.concat(filesIn("src/fallback").map((entry) => ({ ...entry, layout: false, fallback: true })))
+			.map(async ({ file, text, layout, fallback }) => {
+				const name = `${fallback ? "fallback:" : ""}${path.basename(file, ".webc")}`;
+				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), path.basename(file, ".webc"), layout);
+				if (!fallback && fs.existsSync(stories)) {
 					const doc = csfDoc((await readCsf(stories)).meta);
 					return [name, { csf: true, category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
 				}
@@ -79,7 +80,7 @@ const docs = new Map(
 );
 
 /** A component's or layout's docs, by its file. */
-const docsOf = (file) => docs.get(path.basename(file, ".webc"));
+const docsOf = (file) => docs.get(`${/\/fallback\//.test(file) ? "fallback:" : ""}${path.basename(file, ".webc")}`);
 
 /** The server-only comment, `<!--- … --->`, which holds a file's license header and JSDoc. WebC drops it at render. */
 const SERVER_COMMENT = /<!---[\s\S]*?--->/g;
@@ -949,10 +950,11 @@ test("the plain norn-code-block keeps the code, the id, and the caption, and tak
 	assert.ok(html.includes('<figure id="a"><pre dir="ltr" data-language="html"><code>&lt;p&gt;&amp;&lt;/p&gt;</code></pre><figcaption>a.html</figcaption></figure>'), html);
 	assert.ok(html.includes('<pre dir="ltr" id="b"><code>x</code></pre>'), html);
 	assert.ok(!html.includes("Copier"), "no copy button, so no copy text");
-	const real = components.find(({ file }) => file === "webc-code-sample/components/norn-code-block.webc").text;
-	const plain = fallbacks.find(({ file }) => file === "webc-patterns/fallback/norn-code-block.webc").text;
-	const api = (text) => [...text.matchAll(/^ \* @(prop \{[^}]*\} \[?[\w-]+|slot [\w-]+)/gm)].map(([, line]) => line);
-	assert.deepEqual(api(plain), api(real), "the same props and slots");
+	const real = docsOf("webc-code-sample/components/norn-code-block.webc");
+	const plain = docsOf("webc-patterns/fallback/norn-code-block.webc");
+	const sorted = (names) => [...names].sort();
+	assert.deepEqual(sorted(plain.props), sorted(real.props), "the same props");
+	assert.deepEqual(sorted(plain.slots), sorted(real.slots), "the same slots");
 });
 
 test("a layout takes its texts from componentStrings under its own name, then English", async () => {
