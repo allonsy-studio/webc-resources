@@ -64,41 +64,58 @@ export function callouts(md) {
 	md.renderer.rules.blockquote_close = (tokens, index, ...rest) => (tokens[index].meta?.callout ? "</norn-callout>\n" : close(tokens, index, ...rest));
 }
 
-/** A URL fragment from heading text: lowercase, accents off, runs of anything else as one hyphen. */
+/**
+ * A URL fragment from heading text: the letters, marks, and digits of any script, lowercase, with accents off Latin letters, and runs of anything else as one hyphen.
+ * An ASCII heading keeps the id it always had.
+ *
+ * @param {string} text
+ * @returns {string}
+ */
 export const slugify = (text) =>
 	String(text)
 		.normalize("NFKD")
-		.replace(/[\u0300-\u036f]/g, "")
 		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, "-")
+		.replace(/(?<=\p{Script=Latin})\p{M}+/gu, "")
+		.normalize("NFC")
+		.replace(/[^\p{L}\p{M}\p{N}]+/gu, "-")
 		.replace(/^-|-$/g, "") || "section";
 
-/** Slugs taken so far, by render. */
+/** Ids taken so far, by page: Eleventy hands each Markdown render of a page, such as two Markdown blocks, the same `page` object, and a new one each build. Without a page, by render. */
 const taken = new WeakMap();
 
 /**
+ * The ids given so far on the page this render belongs to.
+ *
+ * @param {object} env - The render's environment: Eleventy's page data
+ * @returns {Set<string>}
+ */
+function idsOf(env) {
+	const key = env?.page && typeof env.page === "object" ? env.page : env && typeof env === "object" ? env : {};
+	if (!taken.has(key)) taken.set(key, new Set());
+	return taken.get(key);
+}
+
+/**
  * markdown-it amend: give each heading at the chosen levels an id, and make its text a link to itself, as `norn-heading-anchor` does.
- * A repeated heading gets `-2`, `-3`, and so on. A heading that already has an id keeps it.
+ * A repeated heading gets `-2`, `-3`, and so on, counted across the page. A heading that already has an id keeps it.
  *
  * @param {import("markdown-it").default} md
  * @param {{ levels?: number[] }} [options] - Heading levels to anchor. Defaults to 2 and 3.
  */
 export function headingAnchors(md, { levels = [2, 3] } = {}) {
 	md.core.ruler.push("heading_anchors", (state) => {
-		const env = state.env && typeof state.env === "object" ? state.env : {};
-		if (!taken.has(env)) taken.set(env, new Map());
-		const seen = taken.get(env);
+		const ids = idsOf(state.env);
 		state.tokens.forEach((token, index) => {
 			if (token.type !== "heading_open" || !levels.includes(Number(token.tag.slice(1)))) return;
 			const inline = state.tokens[index + 1];
 			let id = token.attrGet("id");
 			if (!id) {
 				const base = slugify(inline.children.filter((child) => child.type === "text" || child.type === "code_inline").map((child) => child.content).join(""));
-				const count = (seen.get(base) ?? 0) + 1;
-				seen.set(base, count);
-				id = count === 1 ? base : `${base}-${count}`;
+				id = base;
+				for (let count = 2; ids.has(id); count++) id = `${base}-${count}`;
 				token.attrSet("id", id);
 			}
+			ids.add(id);
 			const open = new state.Token("link_open", "a", 1);
 			open.attrSet("href", `#${id}`);
 			inline.children = [open, ...inline.children, new state.Token("link_close", "a", -1)];

@@ -52,6 +52,33 @@ test("slugify: lowercase, accents off, one hyphen per run, never empty", () => {
 	assert.equal(slugify("  --  "), "section");
 });
 
+test("slugify: keeps the letters and digits of any script, and leaves ASCII ids as they were", () => {
+	assert.equal(slugify("مرحبا بالعالم"), "مرحبا-بالعالم");
+	assert.equal(slugify("日本語の見出し"), "日本語の見出し");
+	assert.equal(slugify("हिन्दी शीर्षक"), "हिन्दी-शीर्षक");
+	assert.equal(slugify("Ωμέγα Δύο"), "ωμέγα-δύο");
+	assert.equal(slugify("Straße 2"), "straße-2");
+	assert.equal(slugify("Ünïcödé"), "unicode");
+	for (const [text, id] of [["Getting started", "getting-started"], ["Install with your package manager", "install-with-your-package-manager"], ["`npm` & more", "npm-more"], ["snake_case & v1.2", "snake-case-v1-2"], ["Café au lait", "cafe-au-lait"]]) assert.equal(slugify(text), id, text);
+});
+
+test("headingAnchors: ids stay unique across the renders of one page, such as two Markdown blocks", () => {
+	const md = markdownIt();
+	headingAnchors(md);
+	const page = { url: "/one/" };
+	assert.ok(md.render("## Same\n", { page }).includes('id="same"'));
+	assert.ok(md.render("## Same\n", { page }).includes('id="same-2"'), "the second block counts on");
+	assert.ok(md.render("## Same 2\n", { page }).includes('id="same-2-2"'), "a heading never takes an id already given");
+	assert.ok(md.render("## Same\n", { page: { url: "/two/" } }).includes('id="same"'), "another page starts again");
+});
+
+test("headingAnchors: a heading that reads like a numbered repeat never takes its id", () => {
+	const md = markdownIt();
+	headingAnchors(md);
+	const html = md.render("## Step\n\n## Step 2\n\n## Step\n");
+	assert.deepEqual([...html.matchAll(/ id="([^"]+)"/g)].map((match) => match[1]), ["step", "step-2", "step-3"]);
+});
+
 test("headingAnchors: h2 and h3 link to themselves, repeats get a number, and h4 is left alone", () => {
 	const md = markdownIt();
 	headingAnchors(md);

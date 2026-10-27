@@ -341,7 +341,7 @@ config.addJavaScriptFunction("nornHeadings", headings);
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
 - `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does.
 - `headings(html)` lists the anchored headings of rendered HTML for `norn-toc`. Register it as `nornHeadings`.
-- `slugify(text)` is the id function `headingAnchors` uses.
+- `slugify(text)` is the id function `headingAnchors` uses. It keeps the letters and digits of any script (`## 日本語の見出し` gets `id="日本語の見出し"`), lowercases them, takes the accents off Latin letters, and joins the rest with hyphens. A repeated heading gets `-2`, `-3`, and so on, counted across the page, so two Markdown blocks on one page never share an id.
 
 The add-on writes only what an author would write by hand, and no text of its own. A callout title, a code block's labels, and every other string come from the component's slots, which fall back to `componentStrings` and then English (see Translating).
 
@@ -469,7 +469,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 | `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
 | `headingAnchors(md, { levels })` | markdown-it amend that gives headings ids and links them to themselves; levels 2 and 3 by default |
 | `headings(html, { levels })` | The anchored headings of rendered HTML as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |
-| `slugify(text)` | The URL fragment `headingAnchors` makes from heading text |
+| `slugify(text)` | The URL fragment `headingAnchors` makes from heading text, in any script |
 
 `@allons-y/webc-patterns/project` exports the project data builders above. The stylesheets are exported as `@allons-y/webc-patterns/css/reset.css`, `/css/base.css`, and `/css/print.css`, and the schema as `@allons-y/webc-patterns/schema/project.schema.json`.
 

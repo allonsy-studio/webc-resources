@@ -159,6 +159,11 @@ describe("the component fixes, built from content with only the data a page name
 		});
 	});
 
+	test("Markdown heading ids keep their script, and stay unique across two Markdown blocks on one page", () => {
+		const ids = [...read("md-blocks", "index.html").matchAll(/<h2 id="([^"]+)"/g)].map((match) => match[1]);
+		assert.deepEqual(ids, ["مرحبا-بالعالم", "same", "日本語の見出し", "same-2"]);
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));
