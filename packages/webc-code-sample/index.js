@@ -130,7 +130,7 @@ function tokenize(code, language) {
 	const lang = session ? "bash" : language;
 	if (!lang || !highlighter.getLoadedLanguages().includes(lang)) return undefined;
 	let ranges = [];
-	const { tokens } = highlighter.codeToTokens(code, { lang, theme: THEME.name, includeExplanation: true });
+	const { tokens } = highlighter.codeToTokens(code, { lang, theme: THEME.name, includeExplanation: "scopeName" });
 	for (const lineTokens of tokens) {
 		for (const token of lineTokens) {
 			let at = token.offset;
