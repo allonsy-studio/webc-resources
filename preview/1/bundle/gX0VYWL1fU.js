@@ -36,8 +36,8 @@
 
 			disconnectedCallback() {
 				document.removeEventListener("previewpropschange", this.#onProps);
+				// The listeners stay on the elements they were added to. A move reloads the frame, and its `load` listener puts the observer back.
 				this.#observer?.disconnect();
-				this.#wired = false;
 			}
 
 			/** Follow the frame's height, and carry the controls into a fresh document. */
@@ -312,96 +312,6 @@
 		}
 
 		if (!customElements.get("norn-code-block")) customElements.define("norn-code-block", CodeBlock);
-	}
-{
-		/** A table box that is a named tab stop only while it scrolls. */
-		class SimpleTable extends HTMLElement {
-			#observer;
-
-			connectedCallback() {
-				const box = this.querySelector(":scope > div");
-				if (!box || typeof ResizeObserver === "undefined") return;
-				const label = this.querySelector(":scope > span[hidden][id]");
-				const caption = box.querySelector("caption");
-				if (caption && label) caption.id ||= `${label.id}-caption`;
-				const named = label?.textContent.trim() ? label : caption?.textContent.trim() ? caption : undefined;
-				const headings = [...this.querySelectorAll("thead th")].map((cell) => cell.textContent.trim()).filter(Boolean);
-				const fit = () => {
-					if (box.scrollWidth > box.clientWidth) {
-						box.setAttribute("tabindex", "0");
-						if (named) {
-							box.setAttribute("role", "region");
-							box.setAttribute("aria-labelledby", named.id);
-						} else if (headings.length) {
-							box.setAttribute("role", "region");
-							box.setAttribute("aria-label", headings.join(", "));
-						}
-					} else {
-						box.removeAttribute("tabindex");
-						box.removeAttribute("role");
-						box.removeAttribute("aria-labelledby");
-						box.removeAttribute("aria-label");
-					}
-				};
-				this.#observer?.disconnect();
-				// The box keeps its width when the table grows, so watch both.
-				this.#observer = new ResizeObserver(fit);
-				this.#observer.observe(box);
-				const table = box.querySelector("table");
-				if (table) this.#observer.observe(table);
-			}
-
-			disconnectedCallback() {
-				this.#observer?.disconnect();
-				this.#observer = undefined;
-			}
-		}
-
-		if (!customElements.get("norn-simple-table")) customElements.define("norn-simple-table", SimpleTable);
-	}
-{
-		/** The overrides table. Holds the values the canvases read, and tells them when one changes. */
-		class PreviewProps extends HTMLElement {
-			#wired = false;
-
-			/** Every filled field, by property name. A color field counts once it has been used. */
-			get values() {
-				const values = new Map();
-				for (const field of this.querySelectorAll("input[data-prop]")) {
-					const value = field.value.trim();
-					if (field.type === "color" ? field.dataset.touched === "true" : value !== "") values.set(field.dataset.prop, value);
-				}
-				return values;
-			}
-
-			connectedCallback() {
-				if (this.#wired) return;
-				this.#wired = true;
-				this.addEventListener("input", (event) => {
-					const field = event.target.closest("input[data-prop]");
-					if (!field) return;
-					if (field.type === "color") field.dataset.touched = "true";
-					this.#changed();
-				});
-				this.addEventListener("click", (event) => {
-					const reset = event.target.closest('[data-action="reset"]');
-					if (!reset) return;
-					const field = this.querySelector(`input[data-prop="${reset.dataset.prop}"]`);
-					field.value = field.type === "color" ? field.defaultValue : "";
-					delete field.dataset.touched;
-					this.#changed();
-					field.focus();
-				});
-			}
-
-			#changed() {
-				const values = this.values;
-				for (const reset of this.querySelectorAll('[data-action="reset"]')) reset.disabled = !values.has(reset.dataset.prop);
-				document.dispatchEvent(new CustomEvent("previewpropschange"));
-			}
-		}
-
-		if (!customElements.get("preview-props")) customElements.define("preview-props", PreviewProps);
 	}
 {
 		class PreviewOverrides extends HTMLElement {

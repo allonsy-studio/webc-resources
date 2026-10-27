@@ -1,117 +1,145 @@
 {
-		const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
-		let canvases = 0;
+		const LIMIT = 8;
+		const DELAY_MS = 200;
 
-		/** A story's frame with its controls. Safe to connect again: the listeners go on once. */
-		class PreviewCanvas extends HTMLElement {
+		/** Pagefind's excerpt as nodes: text, and `<mark>` for its highlights. Anything else stays text. */
+		const excerpt = (html) =>
+			html.split(/(<mark>.*?<\/mark>)/).map((part) => {
+				const holder = document.createElement("template");
+				holder.innerHTML = part.replace(/<\/?mark>/g, "");
+				const text = holder.content.textContent;
+				if (!part.startsWith("<mark>")) return document.createTextNode(text);
+				const mark = document.createElement("mark");
+				mark.textContent = text;
+				return mark;
+			});
+
+		/** Live results from a Pagefind index. Without one, the form searches the web. */
+		class SiteSearch extends HTMLElement {
 			#wired = false;
-			#observer;
-			#onProps = () => this.#apply(this.querySelector("iframe"));
+			#pagefind;
+			#latest = 0;
 
-			connectedCallback() {
-				document.addEventListener("previewpropschange", this.#onProps);
+			async connectedCallback() {
 				if (this.#wired) return;
 				this.#wired = true;
-				const frame = this.querySelector("iframe");
-
-				// Radios share a group by name, so each canvas names its own: two canvases on a page must not share a selection.
-				const id = ++canvases;
-				for (const group of this.querySelectorAll("[data-group]")) {
-					for (const input of group.querySelectorAll("input")) input.name = `${group.dataset.group}-${id}`;
-				}
-
-				frame.addEventListener("load", () => this.#attach(frame));
-				if (frame.contentDocument?.readyState === "complete") this.#attach(frame);
-
-				this.addEventListener("change", (event) => {
-					const group = event.target.closest("[data-group]")?.dataset.group;
-					if (group === "scheme") this.#apply(frame);
-					if (group === "width") {
-						this.querySelector("[data-stage]").style.setProperty("--canvas-width", event.target.value || "100%");
-						this.#fit(frame);
-					}
-				});
-				this.querySelector('[data-action="axe"]').addEventListener("click", () => this.#check(frame));
-			}
-
-			disconnectedCallback() {
-				document.removeEventListener("previewpropschange", this.#onProps);
-				this.#observer?.disconnect();
-				this.#wired = false;
-			}
-
-			/** Follow the frame's height, and carry the controls into a fresh document. */
-			#attach(frame) {
-				const doc = frame.contentDocument;
-				if (!doc?.body) return;
-				this.#observer?.disconnect();
-				this.#observer = new ResizeObserver(() => this.#fit(frame));
-				this.#observer.observe(doc.body);
-				this.#apply(frame);
-				this.#fit(frame);
-			}
-
-			#fit(frame) {
-				const doc = frame.contentDocument;
-				if (doc) frame.style.blockSize = `${doc.documentElement.scrollHeight}px`;
-			}
-
-			/** Write the scheme and the page's property overrides into the frame's root element. */
-			#apply(frame) {
-				const root = frame?.contentDocument?.documentElement;
-				if (!root) return;
-				root.style.colorScheme = this.querySelector('[data-group="scheme"] input:checked')?.value ?? "";
-				const overrides = document.querySelector("preview-props")?.values ?? new Map();
-				for (const name of [...root.style].filter((name) => name.startsWith("--"))) {
-					if (!overrides.has(name)) root.style.removeProperty(name);
-				}
-				for (const [name, value] of overrides) root.style.setProperty(name, value);
-				this.#fit(frame);
-			}
-
-			/** Run axe in the frame and list what it finds. The button's icon shows the state. */
-			async #check(frame) {
-				const button = this.querySelector('[data-action="axe"]');
-				const results = this.querySelector("[data-results]");
-				button.dataset.state = "running";
-				button.setAttribute("aria-busy", "true");
-				results.textContent = "Checking…";
+				// The label names the field, and the placeholder says the same in the field.
+				const input = this.querySelector('input[type="search"]');
+				input.placeholder = this.querySelector("label > span")?.textContent.trim() ?? "";
+				const search = this.querySelector("search");
 				try {
-					const doc = frame.contentDocument;
-					if (!frame.contentWindow.axe) {
-						await new Promise((resolve, reject) => {
-							const script = doc.createElement("script");
-							script.src = new URL(button.dataset.axe, location.href).href;
-							script.addEventListener("load", resolve);
-							script.addEventListener("error", reject);
-							doc.head.append(script);
-						});
-					}
-					const { violations } = await frame.contentWindow.axe.run(doc, { runOnly: { type: "tag", values: TAGS } });
-					button.dataset.state = violations.length ? "fail" : "pass";
-					if (!violations.length) {
-						results.textContent = "No accessibility violations found.";
-						return;
-					}
-					const heading = document.createElement("strong");
-					heading.textContent = `${violations.length} accessibility ${violations.length === 1 ? "violation" : "violations"}`;
-					const list = document.createElement("ul");
-					for (const violation of violations) {
-						const item = document.createElement("li");
-						item.textContent = `${violation.help} (${violation.id}, ${violation.impact}): ${violation.nodes.length} ${violation.nodes.length === 1 ? "element" : "elements"}`;
-						list.append(item);
-					}
-					results.replaceChildren(heading, list);
+					this.#pagefind = await import(new URL(search.dataset.bundle, document.baseURI).href);
+					await this.#pagefind.options?.({ excerptLength: 20 });
 				} catch {
-					button.dataset.state = "fail";
-					results.textContent = "The check could not run.";
-				} finally {
-					button.removeAttribute("aria-busy");
+					return;
 				}
+				this.dataset.live = "";
+				input.addEventListener("input", () => this.#search(input.value));
+				this.querySelector("form").addEventListener("submit", (event) => {
+					event.preventDefault();
+					this.querySelector("ol a")?.focus();
+				});
+			}
+
+			async #search(query) {
+				const run = ++this.#latest;
+				const list = this.querySelector("ol");
+				const status = this.querySelector('[role="status"]');
+				if (!query.trim()) {
+					list.hidden = true;
+					list.replaceChildren();
+					status.textContent = "";
+					return;
+				}
+				const found = await this.#pagefind.debouncedSearch(query, {}, DELAY_MS);
+				if (found === null || run !== this.#latest) return;
+				const pages = await Promise.all(found.results.slice(0, LIMIT).map((result) => result.data()));
+				if (run !== this.#latest) return;
+				list.replaceChildren(
+					...pages.map((page) => {
+						const item = document.createElement("li");
+						const link = document.createElement("a");
+						link.href = page.url;
+						link.textContent = page.meta?.title || page.url;
+						const text = document.createElement("p");
+						text.append(...excerpt(page.excerpt ?? ""));
+						item.append(link, text);
+						return item;
+					}),
+				);
+				list.hidden = !pages.length;
+				const total = found.results.length;
+				status.textContent = total ? this.#count(total) : this.#string("none");
+			}
+
+			/** One of the status texts the page holds, or "" when its slot and fallback are empty. */
+			#string(key) {
+				return this.querySelector(`search > [hidden] > [data-string="${key}"]`)?.textContent.trim() ?? "";
+			}
+
+			/** The status for a count, in the plural form and number format of the nearest `lang`. */
+			#count(total) {
+				const lang = this.closest("[lang]")?.lang || undefined;
+				let category = "other";
+				let number = String(total);
+				try {
+					category = new Intl.PluralRules(lang).select(total);
+					number = new Intl.NumberFormat(lang).format(total);
+				} catch {
+					// An invalid lang keeps the defaults.
+				}
+				return (this.#string(`results-${category}`) || this.#string("results-other")).replaceAll("{count}", number);
 			}
 		}
 
-		if (!customElements.get("preview-canvas")) customElements.define("preview-canvas", PreviewCanvas);
+		if (!customElements.get("norn-search")) customElements.define("norn-search", SiteSearch);
+	}
+{
+		/** Marks the link to the last section heading scrolled past, or the first one. */
+		class Toc extends HTMLElement {
+			#observer;
+			#onScroll;
+
+			connectedCallback() {
+				const links = [...this.querySelectorAll('a[href^="#"]')];
+				// A link's hash is percent-encoded and an id is not, but an id may hold a literal `%`: try the decoded hash, then the hash as written.
+				const heading = (link) => {
+					const hash = link.hash.slice(1);
+					try {
+						return document.getElementById(decodeURIComponent(hash)) ?? document.getElementById(hash);
+					} catch {
+						return document.getElementById(hash);
+					}
+				};
+				const sections = links.map((link) => [link, heading(link)]).filter(([, target]) => target);
+				if (!sections.length) return;
+				const mark = () => {
+					const line = innerHeight * 0.25;
+					const [current] = sections.findLast(([, target]) => target.getBoundingClientRect().top <= line) ?? sections[0];
+					for (const link of links) {
+						if (link === current) link.setAttribute("aria-current", "location");
+						else link.removeAttribute("aria-current");
+					}
+				};
+				this.#teardown();
+				this.#onScroll = () => requestAnimationFrame(mark);
+				addEventListener("scroll", this.#onScroll, { passive: true });
+				this.#observer = new ResizeObserver(this.#onScroll);
+				this.#observer.observe(document.documentElement);
+				mark();
+			}
+
+			disconnectedCallback() {
+				this.#teardown();
+			}
+
+			#teardown() {
+				if (this.#onScroll) removeEventListener("scroll", this.#onScroll);
+				this.#observer?.disconnect();
+			}
+		}
+
+		if (!customElements.get("norn-toc")) customElements.define("norn-toc", Toc);
 	}
 {
 		const CONFIRMATION_MS = 2000;
@@ -312,53 +340,4 @@
 		}
 
 		if (!customElements.get("norn-code-block")) customElements.define("norn-code-block", CodeBlock);
-	}
-{
-		class PreviewOverrides extends HTMLElement {
-			#wired = false;
-			#sync = () => this.#render();
-
-			connectedCallback() {
-				window.addEventListener("previewtokenschange", this.#sync);
-				this.#render();
-				if (this.#wired) return;
-				this.#wired = true;
-				this.addEventListener("click", (event) => {
-					if (event.target.closest('[data-action="reset"]')) window.previewTokens?.reset();
-				});
-			}
-
-			disconnectedCallback() {
-				window.removeEventListener("previewtokenschange", this.#sync);
-			}
-
-			#render() {
-				const count = Object.keys(window.previewTokens?.get() ?? {}).length;
-				this.querySelector("p").hidden = count === 0;
-				this.querySelector("[data-count]").textContent = count ? `${count} token ${count === 1 ? "override applies" : "overrides apply"} to every preview.` : "";
-			}
-		}
-
-		if (!customElements.get("preview-overrides")) customElements.define("preview-overrides", PreviewOverrides);
-	}
-{
-		/** The component list. Wide, its disclosure stays open, so the links are open in the page for every tool that reads it. Narrow, it closes. */
-		class PreviewNav extends HTMLElement {
-			#wide = window.matchMedia("(width > 48rem)");
-			#sync = () => {
-				const disclosure = this.querySelector(":scope > nav > details");
-				if (disclosure) disclosure.open = this.#wide.matches;
-			};
-
-			connectedCallback() {
-				this.#wide.addEventListener("change", this.#sync);
-				this.#sync();
-			}
-
-			disconnectedCallback() {
-				this.#wide.removeEventListener("change", this.#sync);
-			}
-		}
-
-		if (!customElements.get("preview-nav")) customElements.define("preview-nav", PreviewNav);
 	}
