@@ -203,39 +203,6 @@
 				font-size: var(--norn-font-size-m, 1rem);
 			}
 
-			/* A heading that links to itself is marked with a #, and its link takes the text color. */
-			:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-				content: "#" / "";
-				margin-inline-end: var(--norn-space-2xs, 0.25rem);
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a {
-				display: inline-block;
-				min-block-size: 1.5rem;
-				color: inherit;
-				text-decoration: none;
-				text-underline-offset: 0.1em;
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible) {
-				text-decoration: underline;
-			}
-
-			/* Where the pointer can hover and the margin has room (see norn-heading-anchor), the # hangs in it and shows with the heading's hover and focus. */
-			@media (hover: hover) and (min-width: 70rem) {
-				:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-					display: inline-block;
-					inline-size: 1ch;
-					margin-inline: -1.15ch 0.15ch;
-					opacity: 0;
-				}
-
-				:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a)::before {
-					opacity: 1;
-				}
-			}
-
 			p {
 				margin: 0;
 				text-wrap: pretty;
