@@ -1,9 +1,0 @@
----
-title: Plain
-order: 1
-hiddenH2: true
----
-<norn-card>
-	<h3>Plain card</h3>
-	<p>A card with a heading and a body, and no link.</p>
-</norn-card>
