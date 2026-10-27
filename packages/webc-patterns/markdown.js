@@ -10,6 +10,54 @@
  * None writes a string of its own: the component's slot fallbacks and `componentStrings` supply every text.
  */
 
+/** A custom element's name: a hyphen makes it a component, so ordinary HTML keeps CommonMark's rules. */
+const NAME = String.raw`[a-z][a-z0-9]*-[a-z0-9._-]*`;
+/** An attribute with any name WebC reads (`@variant`, `:@level`, `webc:if`), and an optional value. */
+const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>\x60]+))?`;
+const OPEN = new RegExp(String.raw`^<${NAME}(?:${ATTR})*\s*\/?>`, "i");
+const CLOSE = new RegExp(String.raw`^<\/${NAME}\s*>`, "i");
+const TAG_LINE = new RegExp(String.raw`^(?:<${NAME}(?:${ATTR})*\s*\/?>|<\/${NAME}\s*>)\s*$`, "i");
+
+/**
+ * markdown-it amend: a component tag stays raw HTML with WebC's attribute names, so `<norn-callout @variant="tip">` reaches WebC as written.
+ * CommonMark's attribute names have no `@`, so markdown-it escapes such a tag to text without it.
+ * A line that is only a component's open or close tag starts an HTML block that runs to the next blank line, as CommonMark's own do; a tag inside a paragraph stays inline.
+ * Fences and code spans stay literal. It does nothing when the library's `html` option is off.
+ *
+ * @param {import("markdown-it").default} md
+ */
+export function webcTags(md) {
+	if (!md.options.html) return;
+	md.block.ruler.before(
+		"html_block",
+		"webc_block",
+		(state, startLine, endLine, silent) => {
+			if (state.sCount[startLine] - state.blkIndent >= 4) return false;
+			const line = state.src.slice(state.bMarks[startLine] + state.tShift[startLine], state.eMarks[startLine]);
+			if (!TAG_LINE.test(line)) return false;
+			// Like CommonMark's HTML block of type 7, it can't interrupt a paragraph.
+			if (silent) return false;
+			let next = startLine + 1;
+			while (next < endLine && !state.isEmpty(next)) next++;
+			state.line = next;
+			const token = state.push("html_block", "", 0);
+			token.map = [startLine, next];
+			token.content = state.getLines(startLine, next, state.blkIndent, true);
+			return true;
+		},
+		{ alt: ["paragraph", "reference", "blockquote"] },
+	);
+	md.inline.ruler.before("html_inline", "webc_inline", (state, silent) => {
+		if (state.src.charCodeAt(state.pos) !== 0x3c) return false;
+		const rest = state.src.slice(state.pos);
+		const match = OPEN.exec(rest) ?? CLOSE.exec(rest);
+		if (!match) return false;
+		if (!silent) state.push("html_inline", "", 0).content = match[0];
+		state.pos += match[0].length;
+		return true;
+	});
+}
+
 /**
  * markdown-it amend: wrap each Markdown table in `<norn-simple-table>`, so a wide one scrolls in its own box.
  *

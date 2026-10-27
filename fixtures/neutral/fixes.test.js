@@ -172,6 +172,18 @@ describe("the component fixes, built from content with only the data a page name
 		assert.deepEqual(violations.filter((line) => / (link-name|nested-interactive|empty-heading):/.test(line)), []);
 	});
 
+	test("a component tag with @ props in a Markdown page or a Markdown block reaches WebC, and code stays literal", () => {
+		for (const name of ["md-props", "md-block-props"]) {
+			const html = read(name, "index.html");
+			const callout = html.slice(html.indexOf("<norn-callout>"), html.indexOf("</norn-callout>"));
+			assert.ok(callout.includes('data-variant="warning"'), `${name}: the variant prop`);
+			assert.ok(/<p>Loose body with <strong>bold<\/strong> and <norn-icon>\s*<svg\b/.test(callout), `${name}: Markdown in the body, and the icon prop`);
+			assert.ok(!html.includes("&lt;norn-callout @variant=&quot;warning"), `${name}: no tag escaped to text`);
+			assert.match(html, /<code>&lt;norn-icon @name=(?:"|&quot;)info(?:"|&quot;)&gt;<\/code>/, `${name}: a code span stays literal`);
+		}
+		assert.match(read("md-props", "index.html"), /data-language="html"><code[^>]*>&lt;norn-callout @variant=(?:"|&quot;)tip(?:"|&quot;)&gt;/, "a fence stays literal");
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));

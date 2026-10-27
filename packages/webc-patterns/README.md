@@ -53,7 +53,7 @@ The plugin registers:
 - `@11ty/eleventy-plugin-webc` once, with the patterns components, `norn-code-block` from the code sample when it is installed (else the plain one), and the `components` globs.
 - The six layouts, under the project's configured layouts folder (or its includes folder), through `addTemplate`.
 - The helpers the components and layouts call: `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`, and `nornTokenRanges` with the code sample.
-- With `markdown`, the Markdown add-ons through `amendLibrary`: `highlightFences` from the code sample, `scrollTables`, `callouts`, and `headingAnchors`.
+- With `markdown`, the Markdown add-ons through `amendLibrary`: `webcTags`, `highlightFences` from the code sample, `scrollTables`, `callouts`, and `headingAnchors`.
 - `dropEmptyBundleTags` as a transform, so a page with no CSS or JS keeps no empty `<link>` or `<script>`.
 
 ### Project icons
@@ -329,14 +329,16 @@ Copy the two stylesheets to the output with `addPassthroughCopy`, or embed their
 The components are made for hand-written HTML. The plugin's Markdown add-ons turn Markdown into the markup an author would write for the same components. Without the plugin, amend the library yourself:
 
 ```js
-import { callouts, headingAnchors, headings, scrollTables } from "@allons-y/webc-patterns/markdown";
+import { callouts, headingAnchors, headings, scrollTables, webcTags } from "@allons-y/webc-patterns/markdown";
 
+config.amendLibrary("md", webcTags);
 config.amendLibrary("md", scrollTables);
 config.amendLibrary("md", callouts);
 config.amendLibrary("md", headingAnchors);
 config.addJavaScriptFunction("nornHeadings", headings);
 ```
 
+- `webcTags` keeps a component tag with WebC attributes (`@variant`, `:@level`, `webc:if`) as HTML. Without it, markdown-it escapes the tag to text: CommonMark's attribute names have no `@`. It acts only on custom elements, names with a hyphen, and only when the library's `html` option is on, as it is in Eleventy.
 - `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
 - `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does. A heading whose text holds a link keeps that link and gets the id only, since a link can't hold another.
@@ -344,6 +346,39 @@ config.addJavaScriptFunction("nornHeadings", headings);
 - `slugify(text)` is the id function `headingAnchors` uses. It keeps the letters and digits of any script (`## 日本語の見出し` gets `id="日本語の見出し"`), lowercases them, takes the accents off Latin letters, and joins the rest with hyphens. A repeated heading gets `-2`, `-3`, and so on, counted across the page, so two Markdown blocks on one page never share an id.
 
 The add-on writes only what an author would write by hand, and no text of its own. A callout title, a code block's labels, and every other string come from the component's slots, which fall back to `componentStrings` and then English (see Translating).
+
+### Components in Markdown
+
+Write a component in Markdown as its tag, with its props, as in a WebC file. Two routes work:
+
+- A Markdown page (`.md`) on `norn-base` or `norn-docs`. The layout compiles the page's HTML as WebC.
+- A WebC page with Markdown blocks, for a page that is mostly components:
+
+  ```html
+  <template webc:type="11ty" 11ty:type="md" webc:nokeep>
+  ## Install
+
+  Run the installer once.
+  </template>
+  <norn-callout @variant="tip">
+  	<span slot="heading">Before you start</span>
+  	<template webc:type="11ty" 11ty:type="md" webc:nokeep>
+  Back up the **config** first.
+  	</template>
+  </norn-callout>
+  ```
+
+  plugin-webc renders each block with the site's Markdown library, so the add-ons apply, and the page then compiles the output. Keep the Markdown in a block flush left: an indented `## Heading` renders as a paragraph. `11ty:type="liquid,md"` runs Liquid first, for page data.
+
+In both routes:
+
+- A block component takes its open tag alone on a line, a blank line, the Markdown body, a blank line, and its close tag alone on a line. Without the blank lines, CommonMark keeps the body as raw HTML, so `**bold**` stays literal. On one line with text, the component lands inside a `<p>`.
+- An inline component, such as `norn-icon` or `norn-link-button`, may sit in a sentence.
+- A tag fits on one line. CommonMark reads no HTML tag whose attributes span lines.
+- Code spans and fences stay literal: `` `<norn-icon @name="info">` `` shows the tag.
+- The content is compiled as WebC, so it is as trusted as a `.webc` file: a dynamic attribute (`:data-x="…"`) runs at build time. Render content from outside the repository with `markdown: false` or through `@raw`.
+
+Avoid `markdownTemplateEngine: "webc"`. WebC then runs before Markdown, and Markdown parses WebC's output again: a blank line in a component's output turns into a paragraph, `> [!TIP]` loses its `>`, a tag in a fence is compiled, so a code sample shows rendered HTML, and any dynamic attribute in the page text runs at build time. Keep `markdownTemplateEngine: false`, as in Setup, and use one of the two routes above.
 
 ### Project data
 
@@ -465,6 +500,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 
 | Export | Purpose |
 | --- | --- |
+| `webcTags(md)` | markdown-it amend that keeps component tags with WebC attributes, such as `@variant`, as HTML |
 | `scrollTables(md)` | markdown-it amend that wraps each table in `norn-simple-table` |
 | `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
 | `headingAnchors(md, { levels })` | markdown-it amend that gives headings ids and links them to themselves; levels 2 and 3 by default |

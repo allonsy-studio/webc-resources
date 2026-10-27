@@ -19,7 +19,7 @@ import webc from "@11ty/eleventy-plugin-webc";
 import { codeBlock } from "../webc-code-sample/index.js";
 import { highlightFences } from "../webc-code-sample/markdown.js";
 import { patterns } from "./index.js";
-import { callouts, headingAnchors, scrollTables } from "./markdown.js";
+import { callouts, headingAnchors, scrollTables, webcTags } from "./markdown.js";
 import norn, { base, compiles, fillHooks, HOOKS, LAYOUTS, print, reset } from "./plugin.js";
 
 /** A stand-in for Eleventy's config that records what a plugin registers. */
@@ -89,12 +89,12 @@ test("the code sample is an optional peer: absent is fine, present is used, and 
 		(await install("absent", () => {})).default(absent, { layouts: false });
 		assert.equal(absent.calls.functions.nornTokenRanges, undefined, "no code sample helper");
 		assert.match(absent.calls.plugins[0].options.components[1], /\/@allons-y\/webc-patterns\/fallback\/norn-code-block\.webc$/, "the plain norn-code-block in its place");
-		assert.equal(absent.calls.amends.length, 3, "tables, callouts, and heading anchors, without the fences");
+		assert.equal(absent.calls.amends.length, 4, "component tags, tables, callouts, and heading anchors, without the fences");
 
 		const present = fakeConfig();
 		(await install("present", (scope) => fs.symlinkSync(path.join(repo, "packages", "webc-code-sample"), path.join(scope, "webc-code-sample"), "junction"))).default(present, { layouts: false });
 		assert.equal(typeof present.calls.functions.nornTokenRanges, "function");
-		assert.equal(present.calls.amends.length, 4, "with the fences");
+		assert.equal(present.calls.amends.length, 5, "with the fences");
 
 		// Installed, but one of its own dependencies is missing: Node names the importing file in the message, and that path holds the peer's name.
 		await assert.rejects(
@@ -144,7 +144,7 @@ test("the plugin registers the helpers, the Markdown add-ons, the empty bundle t
 	norn(config, { layouts: false, strings: { "norn-skip-link": { label: "Sauter" } } });
 	assert.deepEqual(Object.keys(config.calls.functions).sort(), ["nornAdjacent", "nornCompiles", "nornComponentStrings", "nornHeadings", "nornHook", "nornIcons", "nornTokenRanges"]);
 	assert.equal(config.calls.functions.nornComponentStrings("norn-skip-link", "label"), "Sauter");
-	assert.deepEqual(config.calls.amends, [["md", highlightFences], ["md", scrollTables], ["md", callouts], ["md", headingAnchors]]);
+	assert.deepEqual(config.calls.amends, [["md", webcTags], ["md", highlightFences], ["md", scrollTables], ["md", callouts], ["md", headingAnchors]]);
 	assert.ok(config.calls.transforms["norn-empty-bundle-tags"]);
 	assert.equal(typeof config.calls.globalData.eleventyComputed.norn, "function");
 	const plain = fakeConfig();

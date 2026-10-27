@@ -11,10 +11,10 @@ import { test } from "node:test";
 import markdownIt from "markdown-it";
 
 import * as main from "./index.js";
-import { callouts, headingAnchors, headings, scrollTables, slugify } from "./markdown.js";
+import { callouts, headingAnchors, headings, scrollTables, slugify, webcTags } from "./markdown.js";
 
 test("the main entry exports nothing for Markdown", () => {
-	for (const name of ["callouts", "headingAnchors", "headings", "scrollTables", "slugify"]) assert.equal(name in main, false, name);
+	for (const name of ["callouts", "headingAnchors", "headings", "scrollTables", "slugify", "webcTags"]) assert.equal(name in main, false, name);
 });
 
 test("scrollTables: wraps each Markdown table in norn-simple-table, and leaves other blocks alone", () => {
@@ -114,4 +114,28 @@ test("headings: lists the anchored headings at the chosen levels, as plain text"
 test("callouts: writes no heading slot, and ignores options, so the component's fallback supplies the title", () => {
 	const md = markdownIt().use(callouts, { headings: { note: "Remarque" } });
 	assert.equal(md.render("> [!NOTE]\n> Texte."), '<norn-callout @variant="note">\n<p>Texte.</p>\n</norn-callout>\n');
+});
+
+test("webcTags: a component tag with @ props on its own lines stays a tag, and Markdown between blank lines still renders", () => {
+	const md = markdownIt({ html: true }).use(webcTags);
+	assert.equal(
+		md.render('<norn-callout @variant="warning">\n\nLoose **bold** and <norn-icon @name="info"></norn-icon>.\n\n</norn-callout>\n'),
+		'<norn-callout @variant="warning">\n<p>Loose <strong>bold</strong> and <norn-icon @name="info"></norn-icon>.</p>\n</norn-callout>\n',
+	);
+	assert.equal(md.render('<norn-heading-anchor @slug="by-hand" :@level="3">\n'), '<norn-heading-anchor @slug="by-hand" :@level="3">\n');
+	assert.equal(md.render('<norn-code-tabs @group="pm">\n<norn-code-block data-tab="npm" @language="sh" @code="npm i &amp; go"></norn-code-block>\n</norn-code-tabs>\n'), '<norn-code-tabs @group="pm">\n<norn-code-block data-tab="npm" @language="sh" @code="npm i &amp; go"></norn-code-block>\n</norn-code-tabs>\n', "a tight block stays raw to the blank line");
+	assert.equal(md.render('Go <norn-link-button @href="/x/" webc:if="true">there</norn-link-button>.\n'), '<p>Go <norn-link-button @href="/x/" webc:if="true">there</norn-link-button>.</p>\n');
+});
+
+test("webcTags: fences, inline code, and tags that are not components stay literal, and html: false turns it off", () => {
+	const md = markdownIt({ html: true }).use(webcTags);
+	assert.equal(md.render('```html\n<norn-callout @variant="tip">\n```\n'), '<pre><code class="language-html">&lt;norn-callout @variant=&quot;tip&quot;&gt;\n</code></pre>\n');
+	assert.equal(md.render('Write `<norn-icon @name="info">`.\n'), "<p>Write <code>&lt;norn-icon @name=&quot;info&quot;&gt;</code>.</p>\n");
+	assert.equal(md.render('A <span @x="y">b</span>\n'), "<p>A &lt;span @x=&quot;y&quot;&gt;b</span></p>\n", "not a component: CommonMark's rules");
+	assert.equal(markdownIt().use(webcTags).render('<norn-icon @name="info"></norn-icon>\n'), "<p>&lt;norn-icon @name=&quot;info&quot;&gt;&lt;/norn-icon&gt;</p>\n");
+});
+
+test("webcTags: a tag line can't interrupt a paragraph, like CommonMark's own HTML blocks", () => {
+	const md = markdownIt({ html: true }).use(webcTags);
+	assert.equal(md.render('Text\n<norn-icon @name="info">\n'), '<p>Text\n<norn-icon @name="info"></p>\n');
 });

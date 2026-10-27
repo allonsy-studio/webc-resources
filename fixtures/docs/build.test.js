@@ -130,6 +130,19 @@ describe("docs fixture", () => {
 		assert.ok(!help.includes("allonsy-studio/.github"));
 	});
 
+	test("component tags with @ props in Markdown reach WebC: the props drive the output and stay off the host", () => {
+		const html = pages["/reference/"];
+		assert.ok(!html.includes("&lt;norn-"), "no tag escaped to text");
+		const tabs = [...html.matchAll(/<norn-code-tabs>([\s\S]*?)<\/norn-code-tabs>/g)].map((match) => match[1]);
+		assert.equal(tabs.length, 2);
+		for (const sample of tabs) {
+			assert.ok(sample.includes('data-group="package-manager"'), "the group prop");
+			const hosts = [...sample.matchAll(/<norn-code-block\b[^>]*>/g)].map((match) => match[0]);
+			assert.equal(hosts.length, 3);
+			for (const host of hosts) assert.ok(!/\s(language|code|@language|@code)=/.test(host), host);
+		}
+	});
+
 	test("the Markdown body renders with its prose, fences, and literal template syntax", () => {
 		assert.ok(pages["/reference/"].includes("<table>") && pages["/reference/"].includes("<blockquote>"));
 		assert.ok(pages["/reference/"].includes('<code>plain &lt;text&gt; &amp; "quotes"\n</code>'), "a fence with no language stays plain");

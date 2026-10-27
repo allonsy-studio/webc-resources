@@ -13,7 +13,7 @@ import webc from "@11ty/eleventy-plugin-webc";
 import { adjacent, componentStrings, dropEmptyBundleTags, patterns } from "./index.js";
 import { readIcons } from "./lib/icons.js";
 import { isInstalled } from "./lib/optional.js";
-import { callouts, headingAnchors, headings, scrollTables } from "./markdown.js";
+import { callouts, headingAnchors, headings, scrollTables, webcTags } from "./markdown.js";
 
 const HERE = import.meta.dirname;
 const posix = (file) => file.split(path.sep).join("/");
@@ -186,7 +186,7 @@ function readLayout(name) {
  * @param {string[]} [options.exclude] - Packaged components to leave out, so the project can supply its own
  * @param {Record<string, object>} [options.strings] - The `componentStrings` table, registered as `nornComponentStrings`
  * @param {string | string[] | Record<string, string | { src: string, mirror?: boolean }>} [options.icons] - Project icons for `norn-icon`: a glob or list of globs of `.svg` files, each named for its file without the extension, or a record of names to a path or `{ src, mirror }`. Paths resolve against the working directory. A name that matches a built-in icon replaces it
- * @param {boolean} [options.markdown] - Amend Markdown with the add-ons: fenced code as `norn-code-block` when the code sample is installed, callouts, scrolling tables, and anchored headings. On by default
+ * @param {boolean} [options.markdown] - Amend Markdown with the add-ons: component tags with WebC attributes kept as HTML, fenced code as `norn-code-block` when the code sample is installed, callouts, scrolling tables, and anchored headings. On by default
  * @param {object} [options.defaults] - Prop values a theme sets, under the mapping's
  * @throws {Error} On a bad option, a missing icon file, a second registration of the plugin or of `@11ty/eleventy-plugin-webc`, or, at build time, a project layout named like a shipped one or a page that sets the reserved `norn` key
  */
@@ -236,6 +236,7 @@ export default function norn(config, options = {}) {
 	if (codeSample) config.addJavaScriptFunction("nornTokenRanges", codeSample.tokenRanges);
 
 	if (markdown) {
+		config.amendLibrary("md", webcTags);
 		if (codeSample) config.amendLibrary("md", codeSample.highlightFences);
 		config.amendLibrary("md", scrollTables);
 		config.amendLibrary("md", callouts);
