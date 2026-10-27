@@ -142,7 +142,7 @@ function restoreIndent(source, output) {
 	return output.replace(/(<style\b[^>]*>)\s*/g, (_, open) => open + (leading[index++] ?? ""));
 }
 
-/** The source folders of a package and the folders they compile into, with the file type each holds. */
+/** The source folders of a package and the folders they compile into, with the file type each holds. A `.stories.js` beside a source is not compiled or shipped. */
 const TARGETS = [
 	{ from: "src", to: "components", extension: ".webc" },
 	{ from: "src/layouts", to: "layouts", extension: ".webc" },

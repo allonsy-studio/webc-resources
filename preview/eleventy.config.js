@@ -13,6 +13,7 @@ import norn, { base, fillHooks } from "@allons-y/webc-patterns/plugin";
 import { components as ossComponents, fonts, ossProps } from "@allons-y/webc-oss-site";
 
 import { buildComponents } from "../scripts/build-components.js";
+import { PACKAGE_IDS } from "./lib/catalog.js";
 
 const here = path.relative(process.cwd(), import.meta.dirname) || ".";
 const at = (...parts) => path.posix.join(here.split(path.sep).join("/"), ...parts);
@@ -49,14 +50,24 @@ export default async function (config) {
 
 	config.addCollection("docs", () => DOCS);
 
+	// The frames of the CSF stories and the matrices: one paginated virtual template per package, in that package's stories folder,
+	// so each frame has the layout and data a story page there has. The content is the story's WebC, compiled as a page's would be.
+	for (const packageId of PACKAGE_IDS) {
+		config.addTemplate(`stories/${packageId}/csf.webc`, '<template webc:nokeep @html="frame.source"></template>', {
+			pagination: { data: "catalog.frames", size: 1, alias: "frame", before: (frames) => frames.filter((frame) => frame.packageId === packageId) },
+			eleventyComputed: { permalink: (data) => `${data.frame.url}index.html`, title: (data) => data.frame.title, hiddenH2: (data) => data.frame.hiddenH2, ownH1: (data) => data.frame.ownH1 },
+		});
+	}
+
 	config.addPassthroughCopy({ [at("content/assets")]: "assets" });
 	config.addPassthroughCopy({ [fonts]: "assets/fonts" });
 	// The preview's own frames and shell are layouts of their own: they link the base and print styles that norn-base embeds.
 	config.addPassthroughCopy({ [path.dirname(base)]: "assets/norn" });
 	config.addPassthroughCopy({ [axe]: "assets/axe.min.js" });
 
-	// Rebuild when a component source or the tokens change, so `yarn docs:start` follows the packages.
-	config.addWatchTarget("../packages/*/src/");
+	// Rebuild when a component source, a CSF file, or the tokens change, so `yarn docs:start` follows the packages.
+	// The catalog imports each CSF file with its modification time in the URL, so an edit is read again.
+	config.addWatchTarget("../packages/*/src/**");
 	config.addWatchTarget("../tokens.json");
 
 	return {

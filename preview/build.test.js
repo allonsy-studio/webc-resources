@@ -18,7 +18,7 @@ import { buildCatalog } from "./lib/catalog.js";
 
 const here = import.meta.dirname;
 const eleventy = path.resolve(path.dirname(createRequire(import.meta.url).resolve("@11ty/eleventy")), "..", "cmd.cjs");
-const catalog = buildCatalog({ packagesDir: path.join(here, "..", "packages"), storiesDir: path.join(here, "content", "stories") });
+const catalog = await buildCatalog({ packagesDir: path.join(here, "..", "packages"), storiesDir: path.join(here, "content", "stories") });
 
 const read = (output, ...parts) => fs.readFileSync(path.join(output, ...parts), "utf8");
 const pageFor = (output, url) => read(output, ...url.split("/").filter(Boolean), "index.html");
