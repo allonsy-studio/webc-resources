@@ -29,12 +29,20 @@ const highlighter = createHighlighterCoreSync({
 });
 
 /**
+ * Ranges by language and code, for the life of the process. The code is the key, so a watch-mode rebuild with changed code tokenizes again.
+ * Holds at most `CACHE_LIMIT` samples and drops the oldest first.
+ */
+const cache = new Map();
+const CACHE_LIMIT = 1000;
+
+/**
  * Add languages beyond the defaults.
  *
  * @param {...import("shiki/core").LanguageRegistration[]} languages - Shiki language registrations, such as the default export of `@shikijs/langs/rust`
  */
 export function loadLanguages(...languages) {
 	highlighter.loadLanguageSync(languages.flat());
+	cache.clear();
 }
 
 /** Absolute glob-safe path to `components/norn-code-block.webc`, for the project's WebC `components` list. */
@@ -102,6 +110,22 @@ const continues = (line) => line.trimEnd().split(/\s+/).at(-1) === "\\";
  * @returns {string | undefined} JSON `[group, start, end][]` of character offsets; undefined when the language isn't loaded or nothing matched
  */
 export function tokenRanges(code, language = "") {
+	const key = `${language}\0${code}`;
+	if (cache.has(key)) return cache.get(key);
+	const ranges = tokenize(code, language);
+	if (cache.size >= CACHE_LIMIT) cache.delete(cache.keys().next().value);
+	cache.set(key, ranges);
+	return ranges;
+}
+
+/**
+ * The uncached work of `tokenRanges`.
+ *
+ * @param {string} code
+ * @param {string} language
+ * @returns {string | undefined}
+ */
+function tokenize(code, language) {
 	const session = SESSION.has(language);
 	const lang = session ? "bash" : language;
 	if (!lang || !highlighter.getLoadedLanguages().includes(lang)) return undefined;

@@ -142,6 +142,20 @@ test("tokenRanges: a shell session colors every line of a command that goes on a
 	assert.deepEqual(roles("$ echo hi\nC:\\dir\\\nnot a command\n$ ls"), ["punctuation:$", "function:echo", "keyword:hi", "punctuation:$", "function:ls"], "output that ends in a backslash does not continue anything");
 });
 
+test("tokenRanges: a repeat sample comes from the cache, and changed code is tokenized again", () => {
+	const code = Array.from({ length: 40 }, (_, line) => `const value${line} = compute("${line}", ${line}); // line ${line}`).join("\n");
+	let start = performance.now();
+	const first = tokenRanges(code, "js");
+	const cold = performance.now() - start;
+	start = performance.now();
+	for (let i = 0; i < 10; i++) assert.equal(tokenRanges(code, "js"), first);
+	const repeat = (performance.now() - start) / 10;
+	assert.ok(repeat < cold / 10, `a repeat call (${repeat.toFixed(2)} ms) is much faster than the first (${cold.toFixed(2)} ms)`);
+	const changed = tokenRanges(`${code}\nlet more = 1;`, "js");
+	assert.notEqual(changed, first);
+	assert.deepEqual(JSON.parse(changed).at(-2), ["number", code.length + 12, code.length + 13]);
+});
+
 test("tokenRanges: the aliases of the loaded languages have grammars", () => {
 	const samples = { sh: "ls", shell: "ls", "shell-session": "$ ls", ts: "const a: number = 1;", html: "<a>t</a>", md: "# Title", markdown: "**b**", yml: "a: 1", js: "const a = 1;" };
 	for (const [language, code] of Object.entries(samples)) assert.equal(typeof tokenRanges(code, language), "string", `${language} has a grammar`);
