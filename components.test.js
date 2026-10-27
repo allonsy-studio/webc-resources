@@ -16,7 +16,8 @@ import test from "node:test";
 import { WebC } from "@11ty/webc";
 
 import { tokenRanges } from "./packages/webc-code-sample/index.js";
-import { componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
+import { headings } from "./packages/webc-patterns/markdown.js";
+import { adjacent, componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
 import { compiles, HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
 import { csfDoc, csfFile, readCsf } from "./preview/lib/catalog.js";
 import { readTokens, TOKENS_FILE } from "./scripts/build-components.js";
@@ -1080,6 +1081,20 @@ test("the hero layouts leave out an empty h1 and an empty action navigation when
 	}
 	const install = await render(layoutText("norn-landing"), { data: { norn: { ...BARE, install: "npm install widget" } } });
 	assert.ok(install.includes('<nav aria-labelledby="norn-landing-actions">'), "norn-landing: an install command is an action");
+});
+
+test("norn-docs calls norn-toc only with two or more headings, and looks up the pager's neighbors once", async () => {
+	const docs = [{ url: "/a/", title: "A" }, { url: "/b/", title: "B" }, { url: "/c/", title: "C" }];
+	let lookups = 0;
+	const helpers = { nornHeadings: headings, nornAdjacent: (...args) => (lookups++, adjacent(...args)), url: (value) => value };
+	const page = (content) => render(layoutText("norn-docs"), { helpers, data: { content, page: { url: "/b/" }, norn: { ...LANDING, title: "B", docs } } });
+	const heading = (id) => `<h2 id="${id}"><a href="#${id}">${id}</a></h2>`;
+	const one = await page(heading("one"));
+	assert.ok(!one.includes("<norn-toc"), "one heading: no contents component, so none of its CSS or JS");
+	assert.equal(lookups, 1, "one lookup for both pager links");
+	assert.ok(one.includes('rel="prev" href="/a/"') && one.includes('rel="next" href="/c/"'), "both neighbors");
+	const two = await page(heading("one") + heading("two"));
+	assert.ok(two.includes("<norn-toc>") && two.includes('href="#two"'), "two headings: the contents");
 });
 
 test("norn-heading-anchor without a slug fails the build and names the component and the prop, even when a slug helper is registered", async () => {

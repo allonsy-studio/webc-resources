@@ -11,7 +11,7 @@ import path from "node:path";
 import { after, before, describe, test } from "node:test";
 
 import { audit, launch, listsNeedingRole, pagesOf, serve } from "../lib/browser.js";
-import { between, buildFixture, labelledBy, namedBetween, pagesIn } from "../lib/build.js";
+import { allCss, between, buildFixture, labelledBy, namedBetween, pagesIn } from "../lib/build.js";
 import { sharedChecks } from "../lib/checks.js";
 
 const here = import.meta.dirname;
@@ -97,6 +97,7 @@ describe("docs fixture", () => {
 		assert.ok(toc.includes('<a href="#options">Options</a>') && toc.includes('<a href="#install-with-your-package-manager">Install with your package manager</a>'));
 		assert.ok(pages["/reference/"].includes('<h2 id="options"><a href="#options">Options</a></h2>'));
 		assert.ok(!pages["/usage/"].includes("On this page"), "no contents for a page with fewer than two sections");
+		assert.ok(!pages["/usage/"].includes("<norn-toc") && !/^\s*norn-toc \{/m.test(allCss(output, pages["/usage/"])), "and no empty norn-toc, nor its CSS");
 	});
 
 	test("the props mapping sets a relative share image, which resolves against the canonical URL", () => {

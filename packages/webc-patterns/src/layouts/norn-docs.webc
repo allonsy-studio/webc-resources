@@ -14,7 +14,7 @@ nornCompiled: true
  * A docs page: the sticky docs sidebar with site search above its list, the page title, its contents when it has two or more sections, the body in `norn-rich-text`, and the pager. Extends `norn-base`.
  * When the page is 60rem wide or more, the contents are a sticky column at the end of the body. Narrower, they fold under their title, and the sidebar folds into a closed `<details>` under the sidebar's name.
  * The search is live from a Pagefind index at `pagefind/`, or a web search of the site's host without one. Only the page body is indexed.
- * The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings.
+ * The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings. With fewer than two, the layout leaves `norn-toc` out, so the page ships none of its CSS or JS.
  * The sidebar's name ("Documentation") and the search label ("Search the docs") come from `componentStrings` under `norn-docs`, then English.
  * @prop {{ url: string, title: string, icon?: string }[]} [docs] - The docs pages, in order. `icon` names a sidebar `norn-icon`.
  * @prop {{ url: string, title: string }} [prev] - Falls back to the page before this one in `docs`, by `nornAdjacent`.
@@ -36,15 +36,14 @@ nornCompiled: true
 		></norn-search>
 	</norn-side-nav>
 	<h1 @text="$data.norn.title || ''"></h1>
-	<norn-toc :@items="nornHeadings($data.content)"></norn-toc>
+	<template webc:nokeep webc:for="toc of [nornHeadings($data.content)]"><norn-toc webc:if="toc.length > 1" :@items="toc"></norn-toc></template>
 	<norn-rich-text data-pagefind-body
 		><template webc:if="nornCompiles($data, 'norn-docs')" webc:nokeep @html="$data.content"></template
 		><template webc:else webc:nokeep @raw="$data.content"></template
 	></norn-rich-text>
-	<norn-pager
-		:@prev="$data.norn.prev !== undefined ? $data.norn.prev : nornAdjacent($data.norn.docs, $data.page).prev"
-		:@next="$data.norn.next !== undefined ? $data.norn.next : nornAdjacent($data.norn.docs, $data.page).next"
-	></norn-pager>
+	<template webc:nokeep webc:for="pair of [nornAdjacent($data.norn.docs, $data.page)]"
+		><norn-pager :@prev="$data.norn.prev !== undefined ? $data.norn.prev : pair.prev" :@next="$data.norn.next !== undefined ? $data.norn.next : pair.next"></norn-pager
+	></template>
 </norn-sidebar-layout>
 <style>
 	@layer norn.layout {
