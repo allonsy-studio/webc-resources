@@ -143,6 +143,15 @@ describe("docs fixture", () => {
 		}
 	});
 
+	test("a Markdown h1 never makes a second h1: one that repeats the title goes, and any other becomes an anchored h2", () => {
+		const start = pages["/getting-started/"];
+		assert.equal((start.match(/<h1\b/g) ?? []).length, 1);
+		assert.ok(!/<h[1-6][^>]*>Getting started<\/h[1-6]>/.test(between(start, "<norn-rich-text data-pagefind-body>", "</norn-rich-text>")), "the repeated title is gone from the body");
+		const usage = pages["/usage/"];
+		assert.equal((usage.match(/<h1\b/g) ?? []).length, 1);
+		assert.ok(usage.includes('<h2 id="from-a-template"><a href="#from-a-template">From a template</a></h2>'), "demoted, with its anchor");
+	});
+
 	test("the Markdown body renders with its prose, fences, and literal template syntax", () => {
 		assert.ok(pages["/reference/"].includes("<table>") && pages["/reference/"].includes("<blockquote>"));
 		assert.ok(pages["/reference/"].includes('<code>plain &lt;text&gt; &amp; "quotes"\n</code>'), "a fence with no language stays plain");

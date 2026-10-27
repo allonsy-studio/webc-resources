@@ -11,10 +11,10 @@ import { test } from "node:test";
 import markdownIt from "markdown-it";
 
 import * as main from "./index.js";
-import { callouts, headingAnchors, headings, scrollTables, slugify, webcTags } from "./markdown.js";
+import { callouts, headingAnchors, headings, scrollTables, singleTitle, slugify, webcTags } from "./markdown.js";
 
 test("the main entry exports nothing for Markdown", () => {
-	for (const name of ["callouts", "headingAnchors", "headings", "scrollTables", "slugify", "webcTags"]) assert.equal(name in main, false, name);
+	for (const name of ["callouts", "headingAnchors", "headings", "scrollTables", "singleTitle", "slugify", "webcTags"]) assert.equal(name in main, false, name);
 });
 
 test("scrollTables: wraps each Markdown table in norn-simple-table, and leaves other blocks alone", () => {
@@ -158,4 +158,15 @@ test("webcTags: fences, inline code, and tags that are not components stay liter
 test("webcTags: a tag line can't interrupt a paragraph, like CommonMark's own HTML blocks", () => {
 	const md = markdownIt({ html: true }).use(webcTags);
 	assert.equal(md.render('Text\n<norn-icon @name="info">\n'), '<p>Text\n<norn-icon @name="info"></p>\n');
+});
+
+test("singleTitle: on a layout that shows the title, a leading h1 that repeats it goes, and any other h1 becomes an h2", () => {
+	const md = markdownIt().use(singleTitle).use(headingAnchors);
+	const env = { layout: "norn-docs.webc", norn: { title: "Getting  started" } };
+	assert.equal(md.render("# Getting started\n\nText.\n", env), "<p>Text.</p>\n");
+	assert.equal(md.render("Intro.\n\n# Getting started\n", { ...env }), '<p>Intro.</p>\n<norn-heading-anchor @slug="getting-started">Getting started</norn-heading-anchor>\n', "not leading: kept, as an h2 with an anchor");
+	assert.equal(md.render("# Another title\n", { ...env }), '<norn-heading-anchor @slug="another-title">Another title</norn-heading-anchor>\n');
+	assert.equal(md.render("# Getting started\n", { layout: "norn-base.webc", norn: { title: "Getting started" } }), "<h1>Getting started</h1>\n", "a layout that shows no title keeps it");
+	assert.equal(md.render("# Pkg\n", { layout: "custom.webc", norn: { title: "Pkg" } }), "<h1>Pkg</h1>\n");
+	assert.equal(markdownIt().use(singleTitle, { layouts: ["custom"] }).render("# Pkg\n", { layout: "custom.webc", norn: { title: "Pkg" } }), "", "a project's own layout, by name");
 });

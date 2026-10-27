@@ -11,6 +11,8 @@ import { greet } from "@allons-y/fixture-docs";
 greet("world"); // hello, world
 ```
 
+# From a template
+
 Template syntax stays literal: `{{ not liquid }}`.
 
 ```html

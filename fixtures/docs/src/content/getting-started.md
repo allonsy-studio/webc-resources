@@ -3,6 +3,8 @@ title: Getting started
 description: Install the project and run it once.
 order: 1
 ---
+# Getting started
+
 Install the package:
 
 ```sh

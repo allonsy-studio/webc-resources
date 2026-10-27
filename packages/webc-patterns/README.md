@@ -53,7 +53,7 @@ The plugin registers:
 - `@11ty/eleventy-plugin-webc` once, with the patterns components, `norn-code-block` from the code sample when it is installed (else the plain one), and the `components` globs.
 - The six layouts, under the project's configured layouts folder (or its includes folder), through `addTemplate`.
 - The helpers the components and layouts call: `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`, and `nornTokenRanges` with the code sample.
-- With `markdown`, the Markdown add-ons through `amendLibrary`: `webcTags`, `highlightFences` from the code sample, `scrollTables`, `callouts`, and `headingAnchors`.
+- With `markdown`, the Markdown add-ons through `amendLibrary`: `webcTags`, `highlightFences` from the code sample, `scrollTables`, `callouts`, `singleTitle`, and `headingAnchors`.
 - `dropEmptyBundleTags` as a transform, so a page with no CSS or JS keeps no empty `<link>` or `<script>`.
 
 ### Project icons
@@ -148,7 +148,7 @@ A docs page: the sidebar with site search, the title, the contents, the body in 
 | `prev`, `next` | `{ url, title }` | the neighbors in `docs` | The `norn-pager` |
 | `search` | `{ bundle?, site? }` or `false` | the Pagefind script at `/pagefind/pagefind.js`, and the host of `url` | `norn-search` above the sidebar list. `false` leaves it out |
 
-The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors and any `norn-heading-anchor` written by hand. A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
+The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors and any `norn-heading-anchor` written by hand. The layout shows the title as the page's h1, so a Markdown body keeps no h1 of its own: a leading `# Title` that repeats the title is dropped, and any other `#` heading renders as an h2 (`singleTitle`). A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
 
 #### `norn-docs-home.webc`
 
@@ -329,11 +329,12 @@ Copy the two stylesheets to the output with `addPassthroughCopy`, or embed their
 The components are made for hand-written HTML. The plugin's Markdown add-ons turn Markdown into the markup an author would write for the same components. Without the plugin, amend the library yourself:
 
 ```js
-import { callouts, headingAnchors, headings, scrollTables, webcTags } from "@allons-y/webc-patterns/markdown";
+import { callouts, headingAnchors, headings, scrollTables, singleTitle, webcTags } from "@allons-y/webc-patterns/markdown";
 
 config.amendLibrary("md", webcTags);
 config.amendLibrary("md", scrollTables);
 config.amendLibrary("md", callouts);
+config.amendLibrary("md", singleTitle);
 config.amendLibrary("md", headingAnchors);
 config.addJavaScriptFunction("nornHeadings", headings);
 ```
@@ -341,6 +342,7 @@ config.addJavaScriptFunction("nornHeadings", headings);
 - `webcTags` keeps a component tag with WebC attributes (`@variant`, `:@level`, `webc:if`) as HTML. Without it, markdown-it escapes the tag to text: CommonMark's attribute names have no `@`. It acts only on custom elements, names with a hyphen, and only when the library's `html` option is on, as it is in Eleventy.
 - `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
+- `singleTitle` keeps a page on `norn-docs` or `norn-workspace`, which show the title as their h1, to one h1: a leading `# Title` that repeats the title goes, and any other h1 becomes an h2. `{ layouts }` names a project layout that shows the title too.
 - `headingAnchors` renders each h2 and h3 as `norn-heading-anchor`, with an id from `slugify`, as an author writes it: `## Install` becomes `<norn-heading-anchor @slug="install">Install</norn-heading-anchor>`. A heading whose text holds a link keeps that link and gets the id only, since a link can't hold another. Like the callouts, the tag needs WebC to compile it: on a layout that doesn't, such as a Nunjucks one of the project's own, or in a feed built from `templateContent`, it stays an uncompiled tag.
 - `headings(html)` lists the anchored headings for `norn-toc`, from compiled HTML or from Markdown output that WebC has not compiled yet, `norn-heading-anchor` tags included. Register it as `nornHeadings`.
 - `slugify(text)` is the id function `headingAnchors` uses. It keeps the letters and digits of any script (`## 日本語の見出し` gets `id="日本語の見出し"`), lowercases them, takes the accents off Latin letters, and joins the rest with hyphens. A repeated heading gets `-2`, `-3`, and so on, counted across the page, so two Markdown blocks on one page never share an id.
@@ -503,6 +505,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 | `webcTags(md)` | markdown-it amend that keeps component tags with WebC attributes, such as `@variant`, as HTML |
 | `scrollTables(md)` | markdown-it amend that wraps each table in `norn-simple-table` |
 | `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
+| `singleTitle(md, { layouts })` | markdown-it amend that drops a leading h1 that repeats the title, and turns any other h1 into an h2, on `norn-docs` and `norn-workspace` by default |
 | `headingAnchors(md, { levels })` | markdown-it amend that renders headings as `norn-heading-anchor` with an id; levels 2 and 3 by default |
 | `headings(html, { levels })` | The anchored headings of rendered HTML or Markdown output as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |
 | `slugify(text)` | The URL fragment `headingAnchors` makes from heading text, in any script |

@@ -112,6 +112,38 @@ export function callouts(md) {
 	md.renderer.rules.blockquote_close = (tokens, index, ...rest) => (tokens[index].meta?.callout ? "</norn-callout>\n" : close(tokens, index, ...rest));
 }
 
+/** Text for comparing titles: spaces collapsed, case folded. */
+const titleText = (text) => String(text).replace(/\s+/g, " ").trim().toLowerCase();
+
+/**
+ * markdown-it amend: on a layout that shows the page title as its h1, keep the page to one h1.
+ * A leading `# Title` that repeats the title goes, and any other h1 becomes an h2, which `headingAnchors` then anchors.
+ * The layout is the page's own `layout`, by name; the title is the layout's, `norn.title`, or else the page's `title`.
+ *
+ * @param {import("markdown-it").default} md
+ * @param {{ layouts?: string[] }} [options] - Layouts that show the title as an h1. Defaults to `norn-docs` and `norn-workspace`.
+ */
+export function singleTitle(md, { layouts = ["norn-docs", "norn-workspace"] } = {}) {
+	const rule = (state) => {
+		const env = state.env && typeof state.env === "object" ? state.env : {};
+		const layout = String(env.layout ?? "").split("/").pop().replace(/\.webc$/, "");
+		if (!layouts.includes(layout)) return;
+		const title = env.norn?.workspace?.name ?? env.norn?.title ?? env.title;
+		const { tokens } = state;
+		const text = (inline) => inline.children.filter((child) => child.type === "text" || child.type === "code_inline").map((child) => child.content).join("");
+		if (tokens[0]?.type === "heading_open" && tokens[0].tag === "h1" && typeof title === "string" && titleText(text(tokens[1])) === titleText(title)) tokens.splice(0, 3);
+		for (const token of tokens) {
+			if ((token.type === "heading_open" || token.type === "heading_close") && token.tag === "h1") {
+				token.tag = "h2";
+				token.markup = "##";
+			}
+		}
+	};
+	// It runs before the anchors, so a demoted heading gets one.
+	if (md.core.ruler.__find__("heading_anchors") === -1) md.core.ruler.push("single_title", rule);
+	else md.core.ruler.before("heading_anchors", "single_title", rule);
+}
+
 /**
  * A URL fragment from heading text: the letters, marks, and digits of any script, lowercase, with accents off Latin letters, and runs of anything else as one hyphen.
  * An ASCII heading keeps the id it always had.
