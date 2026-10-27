@@ -14,7 +14,7 @@
  * The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button.
  * Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.
  * @prop {string} code
- * @prop {string} [language] - A Prism language. Unknown or empty renders plain text.
+ * @prop {string} [language] - A language Shiki has loaded: the defaults or one added with `loadLanguages`. Unknown or empty renders plain text.
  * @prop {string} [caption] - Also names the code and its copy button.
  * @slot label - The code's name without a caption, as one element. Falls back to "{language} code", with the language filled in, or "code" with no language.
  * @slot copy-label - The copy button's name, with `{name}` for the code's name, as one element. Falls back to "Copy {name} to clipboard".
