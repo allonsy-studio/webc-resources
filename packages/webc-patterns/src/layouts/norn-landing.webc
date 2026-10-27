@@ -8,21 +8,6 @@ layout: norn-base.webc
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A project's landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`.
- * Samples are `norn-code-block`s when `@allons-y/webc-code-sample` is installed, and `<pre><code>` without it.
- * Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.
- * @prop {string} [lede] - The hero paragraph. Falls back to the description.
- * @prop {string} [repo] - The repository's URL.
- * @prop {string} [license] - The license name, for the hero's facts.
- * @prop {string} [node] - The lowest Node version, such as `24+`.
- * @prop {string} [install] - The install command.
- * @prop {{ language: string, code: string, caption?: string }} [usage] - One sample for the hero. With it, the install command gets its own section.
- * @prop {{ title: string, body: string, href?: string }[]} [features] - Feature cards.
- * @prop {{ name: string, description: string, href?: string }[]} [packages] - Package cards, titles in the mono face.
- * @category template
- */
 --->
 <norn-hero>
 	<h1 webc:if="$data.norn.name">
