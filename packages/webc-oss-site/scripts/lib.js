@@ -8,8 +8,11 @@
 import fs from "node:fs";
 import path from "node:path";
 
+/** The commit of the org's `.github` repository the assets come from. A commit never changes, so a release can't pick up edits made there later. Move it in a reviewed change. */
+export const ASSETS_COMMIT = "b1f1615c5f5711f4739020599a36b006a06688cf";
+
 /** Where the org's assets live when no local checkout is given. */
-const RAW = "https://raw.githubusercontent.com/allonsy-studio/.github/main/assets";
+const RAW = `https://raw.githubusercontent.com/allonsy-studio/.github/${ASSETS_COMMIT}/assets`;
 
 /**
  * Read an asset from a local checkout of the org's `.github` repository (`OSS_ASSETS`, its `assets` folder), else from GitHub.

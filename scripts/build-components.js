@@ -108,68 +108,6 @@ function writeResolved(tokens, file) {
 	fs.writeFileSync(file, JSON.stringify(tree, null, "\t"));
 }
 
-/**
- * Split a selector from the pseudo-elements that end it: `:is(h1):has(> a)::before` is `:is(h1):has(> a)` and `::before`.
- *
- * @param {string} selector
- * @returns {[string, string]} The selector without them, and the pseudo-elements
- */
-const splitPseudoElement = (selector) => {
-	const [, base, pseudo] = selector.match(/^([\s\S]*?)((?:::[\w-]+(?:\([^)]*\))?)*)$/);
-	return [base, pseudo];
-};
-
-/**
- * Write the older-browser copy of every `@scope (root) to (limit)` block, which `@scope` makes unnecessary where it exists.
- * Each rule inside moves under `@supports not at-rule(@scope)` as `root { & :where(selector) { … } }`: the same rules reach every descendant of the root at zero specificity, so a slotted component's own styles win where they set the property. A pseudo-element stays outside the `:where()`, which can't hold one.
- * The rules in a `@scope` block are flat (no nesting), and an at-rule inside it, such as `@media`, is copied with its rules moved the same way.
- *
- * @returns {import("postcss").Plugin}
- */
-const scopeFallback = () => ({
-	postcssPlugin: "norn-scope-fallback",
-	Once(root, { atRule, rule }) {
-		/** @param {import("postcss").Container} parent */
-		const moved = (parent) =>
-			parent.nodes.flatMap((node) => {
-				if (node.type === "rule") {
-					const copy = node.clone();
-					copy.selector = node.selectors
-						.map((selector) => {
-							const [base, pseudo] = splitPseudoElement(selector.trim());
-							return `& :where(${base})${pseudo}`;
-						})
-						.join(", ");
-					return [copy];
-				}
-				if (node.type === "atrule" && node.nodes) {
-					const copy = node.clone({ nodes: [] });
-					copy.append(moved(node));
-					return [copy];
-				}
-				return node.type === "comment" ? [] : [node.clone()];
-			});
-		root.walkAtRules("scope", (scope) => {
-			const host = scope.params.match(/^\(([^)]+)\)/)?.[1];
-			if (!host) throw new Error(`@scope ${scope.params}: the build needs its root in parentheses.`);
-			const fallback = atRule({ name: "supports", params: "not at-rule(@scope)" });
-			const hostRule = rule({ selector: host.trim() });
-			hostRule.append(moved(scope));
-			// The copies sit one level deeper than the rules they come from.
-			hostRule.walk((node) => {
-				if (typeof node.raws.before === "string") node.raws.before += "\t";
-				if (typeof node.raws.after === "string") node.raws.after += "\t";
-			});
-			hostRule.raws.before = "\n\t\t\t";
-			hostRule.raws.after = "\n\t\t";
-			fallback.raws.before = "\n\n\t\t";
-			fallback.raws.after = "\n\t\t";
-			fallback.append(hostRule);
-			scope.after(fallback);
-		});
-	},
-});
-
 /** A server-only comment: `<!--- … --->`. WebC drops it from the output, and it holds the file's license header and JSDoc. */
 const SERVER_COMMENT = /<!---[\s\S]*?--->/g;
 
@@ -290,7 +228,7 @@ export async function buildComponents({ packages } = {}) {
 	try {
 		const resolvedFile = path.join(temp, "tokens.json");
 		writeResolved(tokens, resolvedFile);
-		const processor = postcss([designTokens({ valueFunctionName: "t", importAtRuleName: "tokens" }), scopeFallback()]);
+		const processor = postcss([designTokens({ valueFunctionName: "t", importAtRuleName: "tokens" })]);
 		const built = {};
 		for (const folder of folders) built[folder] = await buildPackage(path.join(PACKAGES, folder), resolvedFile, processor);
 		return built;

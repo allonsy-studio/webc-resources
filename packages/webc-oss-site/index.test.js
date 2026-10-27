@@ -13,7 +13,7 @@ import { test } from "node:test";
 
 import norn from "@allons-y/webc-patterns/plugin";
 
-import { prepare } from "./scripts/lib.js";
+import { ASSETS_COMMIT, prepare, readAsset } from "./scripts/lib.js";
 import oss, { components as glob, fonts, host, policies, ossEnabled, ossProps, tokens } from "./index.js";
 
 const COMPONENTS = path.join(import.meta.dirname, "components");
@@ -170,4 +170,19 @@ test("prepare: refuses WebC directives, which run when the component is built, a
 	}
 	const fine = '<svg viewBox="0 0 1 1" aria-label="Follow @allons-y on x:y"><text>Follow @allons-y :)</text><use xlink:href="#a" xml:space="preserve"/></svg>';
 	assert.equal(prepare(fine, 'role="img"'), fine.replace("<svg", '<svg role="img"'));
+});
+
+test("readAsset: fetches from the pinned commit, never a branch", async () => {
+	assert.match(ASSETS_COMMIT, /^[0-9a-f]{40}$/);
+	const saved = [process.env.OSS_ASSETS, globalThis.fetch];
+	delete process.env.OSS_ASSETS;
+	const urls = [];
+	globalThis.fetch = async (url) => (urls.push(url), new Response("<svg></svg>"));
+	try {
+		await readAsset("svg", "mark.svg");
+	} finally {
+		[process.env.OSS_ASSETS, globalThis.fetch] = saved;
+		if (saved[0] === undefined) delete process.env.OSS_ASSETS;
+	}
+	assert.deepEqual(urls, [`https://raw.githubusercontent.com/allonsy-studio/.github/${ASSETS_COMMIT}/assets/svg/mark.svg`]);
 });

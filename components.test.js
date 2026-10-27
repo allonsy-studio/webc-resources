@@ -396,17 +396,15 @@ test("the build script runs when it is started through a symlinked path", () => 
 	}
 });
 
-test("the build writes the @supports not at-rule(@scope) copy of norn-rich-text from its @scope rules, pseudo-elements outside the :where()", () => {
+test("norn-rich-text holds only its @scope rules, with no @supports copy", () => {
 	const source = sources.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text;
 	assert.ok(!/@supports/.test(styles(source).replace(/\/\*[\s\S]*?\*\//g, "")), "the source holds only the @scope");
-	const compiled = squash(styles(components.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text));
-	const fallback = compiled.slice(compiled.lastIndexOf("@supports not at-rule(@scope)"));
-	assert.ok(fallback.startsWith("@supports not at-rule(@scope) { norn-rich-text { & :where(h2), & :where(h3)"), "the copy follows the scope");
-	assert.ok(fallback.includes("& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {"), "a pseudo-element stays outside");
-	assert.ok(/@media \(hover: hover\) and \(min-width: 70rem\) \{ & :where\(:is\(h1, h2, h3, h4, h5, h6\):has\(> a\)\)::before/.test(fallback), "an at-rule inside is copied with its rules moved");
-	const scoped = compiled.slice(0, compiled.lastIndexOf("@supports not at-rule(@scope)"));
-	const rules = (css) => [...css.matchAll(/\{ ([^{}]*?) \}/g)].length;
-	assert.equal(rules(fallback.slice(fallback.indexOf("norn-rich-text {"))), rules(scoped.slice(scoped.indexOf("@scope"))) , "a rule for each rule");
+	assert.ok(!/@supports/.test(styles(components.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text)), "the build adds no copy");
+});
+
+test("::highlight() rules sit on the element that holds the text, which Firefox needs", () => {
+	const bare = sources.flatMap(({ file, text }) => styles(text).replace(/\/\*[\s\S]*?\*\//g, "").match(/[^{}]*::highlight\([^)]*\)\s*\{/g)?.map((rule) => [file, rule.trim()]) ?? []).filter(([, rule]) => !/(^|\s)code::highlight\(/.test(rule));
+	assert.deepEqual(bare, [], "write `& code::highlight(name)`: an ancestor's ::highlight() is ignored by Firefox");
 });
 
 test("the docs layouts share one title rule in norn-base, and norn-docs-home lists its contents with no rules between them", () => {

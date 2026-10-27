@@ -58,9 +58,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    and the bundle order picks the winner. Reach the component's own markup the same way, from the host by a child path (`norn-card-grid > ul`, not `norn-card-grid ul`), so a `<ul>` in a slotted card is left alone. Reach slotted content through a child path from the slot's position
    (`norn-footer > footer > div:first-child > :is(div, nav) > ul`). Where prose styles must reach a slot's markup, scope them with `@scope`
    and stop the scope at the components that style all their own markup (`norn-rich-text` uses
-   `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list)`), with a `:where()` copy in
-   `@supports not at-rule(@scope)` for older browsers. The build writes that copy from the `@scope` rules, so a source holds only the `@scope`, in flat rules with no nesting. `:where()` only yields to a property the slotted component sets, so it is
-   the fallback, not the first choice. `components.test.js` checks it.
+   `@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list)`). A browser without `@scope` shows the prose unstyled but readable, and the sources carry no copy for it. `components.test.js` checks it.
 3. Wrap styles in a cascade layer inside `norn`: `norn.components` for generic components, `norn.layout` for the layouts,
    `norn.oss` for the OSS components and tokens. `norn-head` declares the order once, in an inline style ahead of the
    bundle links: `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. One outer layer lets a project
