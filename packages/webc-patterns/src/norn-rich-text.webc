@@ -7,7 +7,7 @@
  */
 
 /**
- * Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself shows its `#` while it is hovered or has focus, where the pointer can hover and the page is at least 70rem wide. Elsewhere the `#` stays in line.
+ * Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#`.
  * Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`.
  * @slot - The prose, as rendered HTML.
  * @cssprop --norn-rich-text-measure - Line length. Falls back to --norn-text-measure.
@@ -57,39 +57,6 @@
 			h5,
 			h6 {
 				font-size: var(--norn-font-size-m, t('font.size.m'));
-			}
-
-			/* A heading that links to itself is marked with a #, and its link takes the text color. */
-			:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-				content: "#" / "";
-				margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
-				color: var(--norn-text-muted, t('text.muted'));
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a {
-				display: inline-block;
-				min-block-size: 1.5rem;
-				color: inherit;
-				text-decoration: none;
-				text-underline-offset: 0.1em;
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible) {
-				text-decoration: underline;
-			}
-
-			/* Where the pointer can hover and the margin has room (see norn-heading-anchor), the # hangs in it and shows with the heading's hover and focus. */
-			@media (hover: hover) and (min-width: 70rem) {
-				:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-					display: inline-block;
-					inline-size: 1ch;
-					margin-inline: -1.15ch 0.15ch;
-					opacity: 0;
-				}
-
-				:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a)::before {
-					opacity: 1;
-				}
 			}
 
 			p {

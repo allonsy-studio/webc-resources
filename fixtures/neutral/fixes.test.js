@@ -199,6 +199,16 @@ describe("the component fixes, built from content with only the data a page name
 		});
 	});
 
+	test("--norn-heading-anchor-mark colors the # inside norn-rich-text too", async () => {
+		await onPage("/toc-by-hand/", async (page) => {
+			const mark = () => page.$eval("norn-rich-text norn-heading-anchor h2", (heading) => getComputedStyle(heading, "::before").color);
+			const muted = await mark();
+			await page.evaluate(() => document.documentElement.style.setProperty("--norn-heading-anchor-mark", "rgb(255, 0, 0)"));
+			assert.equal(await mark(), "rgb(255, 0, 0)");
+			assert.notEqual(muted, "rgb(255, 0, 0)");
+		});
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));

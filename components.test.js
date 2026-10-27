@@ -442,6 +442,13 @@ test("norn-rich-text holds only its @scope rules, with no @supports copy", () =>
 	assert.ok(!/@supports/.test(styles(components.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text)), "the build adds no copy");
 });
 
+test("one heading anchor recipe: norn-heading-anchor draws the # and styles its link, and norn-rich-text keeps no copy", () => {
+	const rich = styles(sources.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text).replace(/\/\*[\s\S]*?\*\//g, "");
+	assert.ok(!/::before|>\s*a\b/.test(rich), "norn-rich-text has no rule for the mark or the heading link");
+	const anchor = styles(sources.find(({ file }) => file.endsWith("/norn-heading-anchor.webc")).text);
+	assert.ok(anchor.includes("var(--norn-heading-anchor-mark,"), "the component reads its custom property");
+});
+
 test("::highlight() rules sit on the element that holds the text, which Firefox needs", () => {
 	const bare = sources.flatMap(({ file, text }) => styles(text).replace(/\/\*[\s\S]*?\*\//g, "").match(/[^{}]*::highlight\([^)]*\)\s*\{/g)?.map((rule) => [file, rule.trim()]) ?? []).filter(([, rule]) => !/(^|\s)code::highlight\(/.test(rule));
 	assert.deepEqual(bare, [], "write `& code::highlight(name)`: an ancestor's ::highlight() is ignored by Firefox");
