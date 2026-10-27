@@ -339,7 +339,7 @@ config.amendLibrary("md", headingAnchors);
 config.addJavaScriptFunction("nornHeadings", headings);
 ```
 
-- `webcTags` keeps a component tag with WebC attributes (`@variant`, `:@level`, `webc:if`) as HTML. Without it, markdown-it escapes the tag to text: CommonMark's attribute names have no `@`. It acts only on custom elements, names with a hyphen, and only when the library's `html` option is on, as it is in Eleventy.
+- `webcTags` keeps a component tag with WebC attributes (`@variant`, `:@level`, `webc:if`) as HTML. Without it, markdown-it escapes the tag to text: CommonMark's attribute names have no `@`. It acts only on custom elements, names with a hyphen, and only when the library's `html` option is on, as it is in Eleventy. It also gives a `<script>` or a `<link>` in Markdown `webc:keep`, so an embed (`<script async src="https://…">`, `<script src="/local.js">`) reaches the browser as written: without it, WebC fails the build on a full URL or a site path, and moves an inline script into the page bundle. Where a layout inserts the HTML without compiling it, the attribute stays in the output, where browsers ignore it.
 - `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
 - `singleTitle` keeps a page on `norn-docs` or `norn-workspace`, which show the title as their h1, to one h1: a leading `# Title` that repeats the title goes, and any other h1 becomes an h2. `{ layouts }` names a project layout that shows the title too.
@@ -378,6 +378,7 @@ In both routes:
 - An inline component, such as `norn-icon` or `norn-link-button`, may sit in a sentence.
 - A tag fits on one line. CommonMark reads no HTML tag whose attributes span lines.
 - Code spans and fences stay literal: `` `<norn-icon @name="info">` `` shows the tag.
+- A `<script>` or `<link>` stays where it is written, for the browser, and WebC's bundler leaves it alone.
 - The content is compiled as WebC, so it is as trusted as a `.webc` file: a dynamic attribute (`:data-x="…"`) runs at build time. Render content from outside the repository with `markdown: false` or through `@raw`.
 
 Avoid `markdownTemplateEngine: "webc"`. WebC then runs before Markdown, and Markdown parses WebC's output again: a blank line in a component's output turns into a paragraph, `> [!TIP]` loses its `>`, a tag in a fence is compiled, so a code sample shows rendered HTML, and any dynamic attribute in the page text runs at build time. Keep `markdownTemplateEngine: false`, as in Setup, and use one of the two routes above.

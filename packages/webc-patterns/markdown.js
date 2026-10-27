@@ -17,12 +17,15 @@ const ATTR = String.raw`\s+[^\s"'>/=]+(?:\s*=\s*(?:"[^"]*"|'[^']*'|[^\s"'=<>\x60
 const OPEN = new RegExp(String.raw`^<${NAME}(?:${ATTR})*\s*\/?>`, "i");
 const CLOSE = new RegExp(String.raw`^<\/${NAME}\s*>`, "i");
 const TAG_LINE = new RegExp(String.raw`^(?:<${NAME}(?:${ATTR})*\s*\/?>|<\/${NAME}\s*>)\s*$`, "i");
+/** A `<script>` or `<link>` open tag without `webc:keep`. */
+const EMBED = /<(script|link)(?=[\s/>])(?![^>]*\swebc:keep\b)/gi;
 
 /**
  * markdown-it amend: a component tag stays raw HTML with WebC's attribute names, so `<norn-callout @variant="tip">` reaches WebC as written.
  * CommonMark's attribute names have no `@`, so markdown-it escapes such a tag to text without it.
  * A line that is only a component's open or close tag starts an HTML block that runs to the next blank line, as CommonMark's own do; a tag inside a paragraph stays inline.
  * Fences and code spans stay literal. It does nothing when the library's `html` option is off.
+ * A `<script>` or `<link>` in Markdown is written for the browser, so it gets `webc:keep`: WebC then leaves it in place instead of bundling it, or failing on a full URL or a site path.
  *
  * @param {import("markdown-it").default} md
  */
@@ -47,6 +50,10 @@ export function webcTags(md) {
 		},
 		{ alt: ["paragraph", "reference", "blockquote"] },
 	);
+	for (const type of ["html_block", "html_inline"]) {
+		const render = md.renderer.rules[type];
+		md.renderer.rules[type] = (tokens, index, ...rest) => render(tokens, index, ...rest).replace(EMBED, "<$1 webc:keep");
+	}
 	md.inline.ruler.before("html_inline", "webc_inline", (state, silent) => {
 		if (state.src.charCodeAt(state.pos) !== 0x3c) return false;
 		const rest = state.src.slice(state.pos);

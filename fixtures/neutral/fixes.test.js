@@ -209,6 +209,16 @@ describe("the component fixes, built from content with only the data a page name
 		});
 	});
 
+	test("a Markdown page on norn-base keeps its embed scripts and links as written, for the browser", () => {
+		const html = read("embed", "index.html");
+		assert.ok(html.includes('<script async src="https://example.com/widget.js"></script>'), "a full URL");
+		assert.ok(html.includes('<script src="/local.js"></script>'), "a local path, not read from disk");
+		assert.ok(html.includes('<link rel="stylesheet" href="https://example.com/widget.css">'));
+		assert.ok(html.includes("<script>window.inlineRan = true;</script>"), "an inline script stays in place, out of the bundle");
+		assert.ok(!html.includes("webc:keep"));
+		assert.ok(html.includes('data-variant="note"'), "the page still compiles");
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));

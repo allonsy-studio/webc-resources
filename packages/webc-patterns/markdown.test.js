@@ -170,3 +170,13 @@ test("singleTitle: on a layout that shows the title, a leading h1 that repeats i
 	assert.equal(md.render("# Pkg\n", { layout: "custom.webc", norn: { title: "Pkg" } }), "<h1>Pkg</h1>\n");
 	assert.equal(markdownIt().use(singleTitle, { layouts: ["custom"] }).render("# Pkg\n", { layout: "custom.webc", norn: { title: "Pkg" } }), "", "a project's own layout, by name");
 });
+
+test("webcTags: a script, or a linked stylesheet, in Markdown is kept for the browser, not taken by WebC's bundler", () => {
+	const md = markdownIt({ html: true }).use(webcTags);
+	assert.equal(md.render('<script async src="https://example.com/w.js"></script>\n'), '<script webc:keep async src="https://example.com/w.js"></script>\n');
+	assert.equal(md.render("<script>go();</script>\n"), "<script webc:keep>go();</script>\n");
+	assert.equal(md.render('Text <link rel="stylesheet" href="x.css"> here.\n'), '<p>Text <link webc:keep rel="stylesheet" href="x.css"> here.</p>\n');
+	assert.equal(md.render('<script webc:keep src="a.js"></script>\n'), '<script webc:keep src="a.js"></script>\n', "kept once");
+	assert.equal(md.render('<link-card @href="/x/">\n'), '<link-card @href="/x/">\n', "a component named link-");
+	assert.equal(md.render("<scripted-thing></scripted-thing>\n\n`<script>`\n"), "<p><scripted-thing></scripted-thing></p>\n<p><code>&lt;script&gt;</code></p>\n", "other tags and code alone");
+});
