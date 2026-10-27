@@ -1,5 +1,0 @@
----
-title: With an icon
-order: 2
----
-<norn-link-button @href="#next">Next step <norn-icon @name="arrow-end"></norn-icon></norn-link-button>

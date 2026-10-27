@@ -5,21 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A link styled as a button, for a call to action. It navigates, so it stays a link: use a `<button>` for an action on the page.
- * The default slot is the link text, and may hold a `norn-icon`. A hover and a press take a layer of the text color over the background, and the text is never underlined.
- * @prop {string} href
- * @prop {string} [variant] - `primary`, a filled accent; `secondary`, a 1px outline; or `quiet`, text with no border. Falls back to `primary`.
- * @slot - The link text, which may hold a `norn-icon`.
- * @cssprop --norn-link-button-accent - Primary background. Falls back to --norn-ui-accent.
- * @cssprop --norn-link-button-on-accent - Primary text. Falls back to --norn-text-on-accent, then Canvas.
- * @cssprop --norn-link-button-link - Secondary and quiet text. Falls back to --norn-text-accent.
- * @cssprop --norn-link-button-border - Secondary border color. Falls back to --norn-text-accent.
- * @cssprop --norn-link-button-border-width - Border width. Falls back to 1px.
- * @cssprop --norn-link-button-radius - Corner radius. Falls back to --norn-ui-border-radius.
- * @category component
- */
 --->
 <a :href="href" :data-variant="variant === 'secondary' || variant === 'quiet' ? variant : 'primary'"><slot></slot></a>
 <style>

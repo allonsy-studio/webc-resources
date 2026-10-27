@@ -1,0 +1,7 @@
+---
+title: Primary, secondary, and quiet
+order: 1
+---
+<p>
+	<norn-link-button webc:for="(variant, index) of $data.csf.argTypes.props.variant.options" :@href="['#start', '#source', '#changes'][index] || '#'" :@variant="variant"><span webc:nokeep @text="['Get started', 'View the source', 'Read the changes'][index] || variant"></span></norn-link-button>
+</p>
