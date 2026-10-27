@@ -14,7 +14,8 @@ import { after, before, describe, test } from "node:test";
 
 import { audit, launch, listsNeedingRole, pagesOf, serve } from "../fixtures/lib/browser.js";
 import { readTokens } from "../scripts/build-components.js";
-import { buildCatalog } from "./lib/catalog.js";
+import { buildCatalog, csfFile, readCsf } from "./lib/catalog.js";
+import { matrixCells } from "./lib/render-story.js";
 
 const here = import.meta.dirname;
 const eleventy = path.resolve(path.dirname(createRequire(import.meta.url).resolve("@11ty/eleventy")), "..", "cmd.cjs");
@@ -43,12 +44,14 @@ describe("the catalog", () => {
 		assert.equal(catalog.components.filter(({ layout }) => layout).length, 6, "the six layouts");
 	});
 
-	test("parses props, slots, and custom properties out of the JSDoc", () => {
+	test("reads props, slots, and custom properties from a CSF file, or from the JSDoc of a component that has none", () => {
+		for (const component of catalog.components) assert.equal(Boolean(component.csf), fs.existsSync(csfFile(path.join(here, "..", "packages", `webc-${component.packageId}`), component.name, component.layout)), `${component.slug}: docs from ${component.csf ? "CSF" : "JSDoc"}`);
 		const button = catalog.components.find(({ name }) => name === "norn-link-button");
 		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border. Falls back to <code>primary</code>." });
 		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
 		assert.ok(button.cssprops.some(({ name }) => name === "--norn-link-button-accent"));
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
+		assert.equal(footer.csf, undefined, "norn-footer still has its JSDoc");
 		assert.deepEqual(footer.slots.map(({ name }) => name), ["default", "colophon"], "an unnamed slot is the default one");
 	});
 
@@ -158,6 +161,35 @@ describe("the preview build", () => {
 		}
 		const story = catalog.components.find(({ name }) => name === "norn-landing").stories[0];
 		assert.ok(story.source.startsWith("---\ntitle: Default") && story.source.includes("layout: norn-landing.webc"), "a layout story's source shows its front matter");
+	});
+
+	test("a component with enumerable props has a matrix frame after its other stories: one labeled cell per option, one prop at a time", async () => {
+		for (const component of catalog.components.filter(({ csf, layout, head }) => csf && !layout && !head)) {
+			const { meta, stories } = await readCsf(component.csf);
+			const cells = matrixCells(meta, stories.find(({ exportName }) => exportName === "Default"));
+			const matrix = component.stories.find(({ slug }) => slug === "matrix");
+			if (!cells.length) {
+				assert.equal(matrix, undefined, `${component.slug}: nothing enumerable, no matrix`);
+				continue;
+			}
+			assert.equal(component.stories.at(-1), matrix, `${component.slug}: the matrix is the last story`);
+			const html = pageFor(output, matrix.frameUrl);
+			assert.deepEqual([...html.matchAll(/<p><code>([^<]+)<\/code><\/p>/g)].map(([, label]) => label), cells.map(({ label }) => label), `${component.slug}: the cells`);
+			assert.equal(html.split(`<${component.name}`).length - 1, cells.length, `${component.slug}: one instance per cell`);
+			assert.ok(pageFor(output, component.url).includes(`src="${matrix.frameUrl}"`), `${component.slug}: the page shows the matrix`);
+		}
+	});
+
+	test("a story page that loops over a prop's options in $data.csf renders one instance per option, in order", () => {
+		for (const component of catalog.components.filter(({ csfData }) => csfData)) {
+			for (const story of component.stories.filter(({ frame }) => !frame)) {
+				for (const [, prop] of story.source.matchAll(/\$data\.csf\.argTypes\.props\.([\w-]+)\.options/g)) {
+					const main = pageFor(output, story.frameUrl).match(/<main[\s\S]*<\/main>/)[0];
+					const options = component.csfData.argTypes.props[prop].options;
+					assert.deepEqual([...main.matchAll(new RegExp(`data-${prop}="([^"]+)"`, "g"))].map(([, value]) => value), options, `${story.frameUrl}: one per ${prop} option`);
+				}
+			}
+		}
 	});
 
 	test("the foundations page lists every token in tokens.json, with its group, default, and comment", () => {
@@ -274,6 +306,11 @@ describe("the preview in a browser", () => {
 			assert.deepEqual(await listsNeedingRole(page), [], url);
 		}
 		await page.close();
+	});
+
+	test("every matrix frame passes axe in light, dark, and forced colors", async () => {
+		const frames = catalog.frames.filter(({ url }) => url.endsWith("/matrix/")).map(({ url }) => url);
+		assert.deepEqual(await audit(browser, server.url, frames), []);
 	});
 
 	test("each sample of the code tabs story is highlighted in at least three groups, with the tokens registered for its own text", async () => {

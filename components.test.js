@@ -18,6 +18,7 @@ import { WebC } from "@11ty/webc";
 import { tokenRanges } from "./packages/webc-code-sample/index.js";
 import { componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
 import { HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
+import { csfDoc, csfFile, readCsf } from "./preview/lib/catalog.js";
 import { readTokens, TOKENS_FILE } from "./scripts/build-components.js";
 
 const PACKAGES = path.join(import.meta.dirname, "packages");
@@ -49,6 +50,32 @@ const sources = [...filesIn("src"), ...filesIn("src/layouts"), ...filesIn("src/c
 const compiledFrom = (file) => file.replace(/\/src\/layouts\//, "/layouts/").replace(/\/src\/css\//, "/css/").replace(/\/src\//, "/components/");
 
 const squash = (value) => value.replace(/\s+/g, " ").trim();
+
+/**
+ * Each component's and layout's docs, by name: from its CSF file where it has one, else from its JSDoc.
+ * While the move to CSF is under way, a check reads whichever the component has.
+ */
+const docs = new Map(
+	await Promise.all(
+		filesIn("src")
+			.map((entry) => ({ ...entry, layout: false }))
+			.concat(filesIn("src/layouts").map((entry) => ({ ...entry, layout: true })))
+			.map(async ({ file, text, layout }) => {
+				const name = path.basename(file, ".webc");
+				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), name, layout);
+				if (fs.existsSync(stories)) {
+					const doc = csfDoc((await readCsf(stories)).meta);
+					return [name, { csf: true, category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
+				}
+				const props = new Set([...text.matchAll(/^ \* @prop \{[^\n]*?\} \[?([\w-]+)/gm)].map(([, prop]) => prop));
+				const slots = new Set([...text.matchAll(/^ \* @slot ([a-z-]+) - /gm)].map(([, slot]) => slot));
+				return [name, { csf: false, category: text.match(/^ \* @category (\w+)$/m)?.[1], slots, props, text }];
+			}),
+	),
+);
+
+/** A component's or layout's docs, by its file. */
+const docsOf = (file) => docs.get(path.basename(file, ".webc"));
 
 /** The server-only comment, `<!--- … --->`, which holds a file's license header and JSDoc. WebC drops it at render. */
 const SERVER_COMMENT = /<!---[\s\S]*?--->/g;
@@ -444,26 +471,30 @@ test("norn-toc folds under its title through a details, and the title names the 
 	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);
 });
 
-test("the JSDoc never names a token with a stray number after it", () => {
-	for (const { file, text } of components) assert.ok(!/--norn-[a-z0-9-]+\.\d/.test(text), `${file}: a token name runs into a decimal`);
+test("the docs never name a token with a stray number after it", () => {
+	for (const { file } of components) assert.ok(!/--norn-[a-z0-9-]+\.\d/.test(docsOf(file).text), `${file}: a token name runs into a decimal`);
 });
 
 const CATEGORIES = ["layout", "landmark", "container", "component", "template", "document"];
 
-test("every component and layout names its category in its JSDoc", () => {
-	for (const { file, text } of [...components, ...layouts]) {
-		const category = text.match(/^ \* @category (\w+)$/m)?.[1];
-		assert.ok(CATEGORIES.includes(category), `${file}: @category is one of ${CATEGORIES.join(", ")}`);
+test("every component and layout names its category: the first part of its CSF title, or its JSDoc's @category", () => {
+	for (const { file } of [...components, ...layouts]) {
+		const { category } = docsOf(file);
+		assert.ok(CATEGORIES.includes(category), `${file}: the category is one of ${CATEGORIES.join(", ")}`);
 	}
 });
 
-test("every component and layout keeps its license header and JSDoc in one server-only comment, and its setup block holds only code", () => {
+/** The license header alone, as a component with a CSF file keeps it. */
+const LICENSE_COMMENT = "<!---\n/*\n * SPDX-License-Identifier: MPL-2.0\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at https://mozilla.org/MPL/2.0/.\n */\n--->";
+
+test("every component and layout keeps its license header in one server-only comment, with its JSDoc until it has a CSF file, and its setup block holds only code", () => {
 	for (const { file, text } of sources.filter(({ file }) => file.endsWith(".webc"))) {
 		const comments = text.match(SERVER_COMMENT) ?? [];
 		assert.equal(comments.length, 1, `${file}: one <!--- … ---> comment`);
 		const [comment] = comments;
 		assert.ok(comment.startsWith("<!---\n/*\n * SPDX-License-Identifier: MPL-2.0\n"), `${file}: the comment opens with the license header`);
-		assert.ok(/\n \* @category \w+\n \*\/\n--->$/.test(comment), `${file}: the JSDoc ends the comment`);
+		if (docsOf(file).csf) assert.equal(comment, LICENSE_COMMENT, `${file}: with a CSF file, the comment is the license header alone`);
+		else assert.ok(/\n \* @category \w+\n \*\/\n--->$/.test(comment), `${file}: the JSDoc ends the comment`);
 		// A closer inside the comment ends it early, and WebC then prints the rest.
 		assert.ok(!/--!?>/.test(comment.slice(0, -"--->".length)), `${file}: the comment holds no --> or --!>`);
 		for (const [, code] of text.matchAll(/<script webc:setup>([\s\S]*?)<\/script>/g)) {
@@ -477,7 +508,7 @@ test("every component and layout keeps its license header and JSDoc in one serve
 
 test("a landmark component renders a landmark element, or one that does", () => {
 	for (const { file, text } of components) {
-		if (text.match(/^ \* @category (\w+)$/m)?.[1] !== "landmark") continue;
+		if (docsOf(file).category !== "landmark") continue;
 		assert.match(withoutDocs(text), /<(header|nav|footer|norn-header|norn-footer)\b/, `${file} has no landmark in its markup`);
 	}
 });
@@ -590,7 +621,7 @@ function leak(selector, root, tag) {
 test("a slot-taking layout, landmark, or container never styles slotted components by element", () => {
 	const leaks = [];
 	for (const { file, text } of components) {
-		if (!["layout", "landmark", "container"].includes(text.match(/^ \* @category (\w+)$/m)?.[1])) continue;
+		if (!["layout", "landmark", "container"].includes(docsOf(file).category)) continue;
 		const root = tree(text);
 		if (!holdsSlot(root)) continue;
 		const tag = path.basename(file, ".webc");
@@ -674,8 +705,8 @@ test("norn-code-tabs holds its tab list name and fallback tab name as hidden tex
 	assert.ok(!/data-(label|sample)=/.test(html + own));
 });
 
-/** Each component's documented `@slot` names. */
-const slotsOf = (text) => new Set([...text.matchAll(/^ \* @slot ([a-z-]+) - /gm)].map(([, name]) => name));
+/** Each component's documented slot names: its CSF slot argTypes, or its JSDoc `@slot` lines. */
+const slotsOf = (file) => docsOf(file).slots;
 
 test("defaultStrings lists every string a component or layout looks up, with the default it falls back to", () => {
 	const looked = new Set();
@@ -710,19 +741,19 @@ test("defaultStrings lists every string a component or layout looks up, with the
 test("every component string is a named slot with the registry as its fallback, and none is a prop", () => {
 	const SLOT_OF = { "norn-callout": "heading", "norn-notice": "prefix" };
 	for (const [component, keys] of Object.entries(defaultStrings).filter(([name]) => !LAYOUTS.includes(name))) {
-		const text = components.find(({ file }) => path.basename(file, ".webc") === component).text;
-		const slots = slotsOf(text);
+		const { file, text } = components.find(({ file }) => path.basename(file, ".webc") === component);
+		const slots = slotsOf(file);
 		for (const key of Object.keys(keys)) {
 			const slot = SLOT_OF[component] ?? key;
-			assert.ok(slots.has(slot), `${component}: no @slot ${slot}`);
-			assert.ok(!new RegExp(`^ \\* @prop \\{[^}]*\\} \\[?${slot}\\b`, "m").test(text), `${component}: ${slot} is still a prop`);
+			assert.ok(slots.has(slot), `${component}: the ${slot} slot is not documented`);
+			assert.ok(!docsOf(file).props.has(slot), `${component}: ${slot} is still a prop`);
 			const pattern = new RegExp(`<slot name="${slot}">(?:(?!</slot>)[\\s\\S])*nornComponentStrings\\?\\.\\('${component}', ${SLOT_OF[component] ? "" : `'${key}'`}`);
 			assert.match(text, pattern, `${component}: the ${slot} slot falls back to the registry`);
 		}
 	}
 	for (const { file, text } of components) {
-		const documented = slotsOf(text);
-		for (const [, name] of withoutDocs(text).matchAll(/<slot name="([a-z-]+)"/g)) assert.ok(documented.has(name), `${file}: <slot name="${name}"> has no @slot line`);
+		const documented = slotsOf(file);
+		for (const [, name] of withoutDocs(text).matchAll(/<slot name="([a-z-]+)"/g)) assert.ok(documented.has(name), `${file}: <slot name="${name}"> is not documented`);
 	}
 });
 
@@ -978,12 +1009,13 @@ test("norn-base passes ogImage {src, alt} to the head, and a page without one ge
 	assert.ok(!without.includes("og:image") && without.includes('<meta name="twitter:card" content="summary">'));
 });
 
-test("the server-only comment never reaches the output: a component, a component with a setup block, and a layout", async () => {
+test("the server-only comment never reaches the output: a component, a component with a setup block, a component with a CSF file, and a layout", async () => {
+	// The JSDoc pieces stay in the pattern while a component may still carry JSDoc.
 	const LEAK = /SPDX|@prop\b|@slot\b|@cssprop\b|@category\b|<!--|-->/;
 	const base = { name: "widget", title: "Usage", url: "https://example.com/widget/usage/", lang: "en", nav: [], footer: { badges: [], groups: [] } };
 	const page = await render(layoutText("norn-base"), { helpers: { ...HEAD_HELPERS, nornHook: () => "" }, data: { content: "", norn: base } });
 	assert.ok(page.startsWith("<!doctype html>"), "the doctype stays first");
-	for (const [label, html] of [["norn-skip-link", await render("<norn-skip-link></norn-skip-link>")], ["norn-icon", await render('<norn-icon @name="book"></norn-icon>')], ["norn-base", page]]) {
+	for (const [label, html] of [["norn-skip-link", await render("<norn-skip-link></norn-skip-link>")], ["norn-icon", await render('<norn-icon @name="book"></norn-icon>')], ["norn-callout", await render("<norn-callout><p>x</p></norn-callout>")], ["norn-base", page]]) {
 		assert.ok(html.length > 0 && !LEAK.test(html), `${label}: no trace of the comment`);
 	}
 });
