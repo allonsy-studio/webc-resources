@@ -156,7 +156,7 @@ test("buildWorkspaces: SKILL.md wins over README.md, and front matter and the fi
 		...workspace("skilled", "A skill.", { "README.md": "# readme\n\nThe readme.\n", "SKILL.md": "---\nname: skilled\n---\n# Skilled\n\nThe skill.\n\n## Later heading\n" }),
 	});
 	const [entry] = buildWorkspaces({ root });
-	assert.ok(entry.html.includes("<p>The skill.</p>") && entry.html.includes("<h2>Later heading</h2>"));
+	assert.ok(entry.html.includes("<p>The skill.</p>") && entry.html.includes('<norn-heading-anchor @slug="later-heading">Later heading</norn-heading-anchor>'));
 	assert.ok(!entry.html.includes("The readme.") && !entry.html.includes("<h1>") && !entry.html.includes("name: skilled"));
 });
 
@@ -229,4 +229,41 @@ test("accentHex: the first accent declared in a stylesheet, lowercased, or null"
 	assert.equal(accentHex(css), null);
 	assert.equal(accentHex(path.join(dir, "missing.css")), null);
 	fs.rmSync(dir, { recursive: true, force: true });
+});
+
+test("buildWorkspaces: a README renders with the site's add-ons and ids, and its HTML as HTML, as on GitHub", () => {
+	const readme = [
+		"# kit",
+		"",
+		'<p align="center"><img src="logo.svg" alt="Kit logo"></p>',
+		"",
+		"## Install",
+		"",
+		"| a | b |",
+		"| - | - |",
+		"| 1 | 2 |",
+		"",
+		"<details>",
+		"<summary>More</summary>",
+		"",
+		"Hidden **text**.",
+		"",
+		"</details>",
+		"",
+		'<norn-callout @variant="tip">',
+		"",
+		"A tip.",
+		"",
+		"</norn-callout>",
+		"",
+		"## Install",
+		"",
+	].join("\n");
+	const root = project({ "package.json": { workspaces: ["packages/*"] }, ...workspace("kit", "Kit.", { "README.md": readme }) });
+	const [entry] = buildWorkspaces({ root });
+	assert.ok(entry.html.includes('<p align="center"><img src="logo.svg" alt="Kit logo"></p>'), entry.html);
+	assert.ok(entry.html.includes("<details>\n<summary>More</summary>\n<p>Hidden <strong>text</strong>.</p>\n</details>"), entry.html);
+	assert.ok(entry.html.includes('<norn-callout @variant="tip">\n<p>A tip.</p>\n</norn-callout>'), entry.html);
+	assert.ok(entry.html.includes("<norn-simple-table><table>"), entry.html);
+	assert.deepEqual([...entry.html.matchAll(/<norn-heading-anchor @slug="([^"]+)">/g)].map((match) => match[1]), ["install", "install-2"]);
 });

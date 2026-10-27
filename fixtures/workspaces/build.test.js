@@ -51,6 +51,13 @@ describe("workspaces fixture", () => {
 		assert.equal((html.match(/<norn-code-block>/g) ?? []).length, 1);
 	});
 
+	test("a workspace README keeps its HTML, and its headings link to themselves as on a docs page", () => {
+		const html = pages["/plugin-a/"];
+		assert.match(html, /<norn-heading-anchor>\s*<h2 id="options"><a href="#options">Options<\/a><\/h2>\s*<\/norn-heading-anchor>/);
+		assert.ok(html.includes("<details>\n<summary>Every option</summary>\n<p>The <strong>defaults</strong> suit most projects.</p>\n</details>"), "HTML, not text");
+		assert.ok(!html.includes("&lt;details&gt;"));
+	});
+
 	test("a workspace page prefers SKILL.md to README.md", () => {
 		const html = pages["/plugin-b/"];
 		assert.ok(html.includes("The second plugin's skill page, preferred over the readme."));

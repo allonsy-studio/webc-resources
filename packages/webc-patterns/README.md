@@ -389,7 +389,7 @@ Avoid `markdownTemplateEngine: "webc"`. WebC then runs before Markdown, and Mark
 | Export | Purpose |
 | --- | --- |
 | `buildSite({ packagePath, projectPath, host })` | Site facts from `package.json` and `project.json`: name, tagline, description, license, repository links, the Node version, and the URL (the project's, or `host` plus the repository name) |
-| `buildWorkspaces({ root })` | One entry per workspace: its `package.json` and its SKILL.md or README.md, rendered with the Markdown add-ons |
+| `buildWorkspaces({ root })` | One entry per workspace: its `package.json` and its SKILL.md or README.md, rendered with the site's Markdown add-ons, so headings get the same ids and anchors as a docs page. The README's raw HTML renders as HTML, as on GitHub. Nothing is sanitized: the README is the project's own, and `norn-workspace` compiles it as WebC, as trusted as any page |
 | `npmRelease(packageName)` | Whether the package has a `latest` release on npm, for badges. Cached an hour; offline is no release |
 | `accentHex(cssPath)` | The `--norn-ui-accent` hex digits a stylesheet sets, for a badge color |
 

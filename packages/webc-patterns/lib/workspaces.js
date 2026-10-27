@@ -10,7 +10,7 @@ import path from "node:path";
 
 import markdownIt from "markdown-it";
 
-import { callouts, scrollTables } from "../markdown.js";
+import { callouts, headingAnchors, scrollTables, webcTags } from "../markdown.js";
 import { isInstalled } from "./optional.js";
 
 /** The code sample's Markdown add-on, when `@allons-y/webc-code-sample` is installed: fences render as `norn-code-block`. Without it they stay `<pre><code>`. */
@@ -31,16 +31,20 @@ const body = (text) => text.replace(/\r\n?/g, "\n").replace(/^---\n[\s\S]*?\n---
 
 /**
  * One entry per workspace of the repository: its package.json and its page,
- * the workspace's SKILL.md or else its README.md, rendered with the Markdown add-ons.
+ * the workspace's SKILL.md or else its README.md, rendered with the site's Markdown add-ons: anchored headings, callouts, tables, fences, and component tags.
+ * Its raw HTML renders as HTML, as on GitHub. Nothing is sanitized: the README is the project's own, and `norn-workspace` compiles it as WebC.
  *
  * @param {{ root: string }} options - The project root, where the `workspaces` field lives
  * @returns {{ name: string, title: string, description?: string, slug: string, url: string, html: string }[]}
  */
 export function buildWorkspaces({ root }) {
-	const md = markdownIt();
+	// HTML on, as on GitHub and in Eleventy: the README is the project's own, as trusted as its pages. `norn-workspace` compiles it as WebC, and nothing is sanitized.
+	const md = markdownIt({ html: true });
+	webcTags(md);
 	highlightFences?.(md);
 	scrollTables(md);
 	callouts(md);
+	headingAnchors(md);
 	const { workspaces = [] } = read(path.join(root, "package.json"));
 	const patterns = Array.isArray(workspaces) ? workspaces : (workspaces.packages ?? []);
 	const excluded = new Set(manifests(root, patterns.filter((pattern) => pattern.startsWith("!")).map((pattern) => pattern.slice(1))));
