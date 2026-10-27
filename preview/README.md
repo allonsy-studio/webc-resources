@@ -5,7 +5,7 @@ A Storybook-style preview of every Norn component and layout in the three packag
 ## Run it
 
 ```sh
-yarn docs:start        # compile the components, then serve at http://localhost:8080, rebuilt as `src/` or `tokens.json` change
+yarn docs:start        # compile the components, then serve at http://localhost:8080, rebuilt as `src/` (the CSF files included) or `tokens.json` change
 yarn docs:build        # build into preview/_site
 ```
 
@@ -15,14 +15,14 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 
 | Part | Comes from |
 | --- | --- |
-| Description, props, slots, custom properties | The JSDoc in the `<!--- … --->` comment at the top of the component file, read at build time |
-| Examples | The stories in `content/stories/<package>/<component>/`, each rendered in its own frame |
-| Source | The story file, shown with `norn-code-block` |
+| Description, props, slots, custom properties | The component's CSF file, `src/<name>.stories.js` in its package, read at build time. A component that has not moved to CSF yet is read from the JSDoc in the `<!--- … --->` comment at the top of its file |
+| Examples | The CSF stories, in export order, then the story pages in `content/stories/<package>/<component>/`, then the matrix, each rendered in its own frame |
+| Source | The markup the default renderer writes from a CSF story's args, or the story page's file, shown with `norn-code-block` |
 | Canvas controls | The `preview-canvas` component, below |
 
 Head components (`norn-head`, `oss-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
 
-The navigation and the index group the components by the `@category` each declares in its JSDoc: layout, landmark, container, component, template, or document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
+The navigation and the index group the components by category: the first part of the CSF title (`Container/norn-card`), or the `@category` in the JSDoc of a component without a CSF file. The categories are layout, landmark, container, component, template, and document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
 
 On a phone (48rem and narrower) the navigation is one closed disclosure, "Components" with the count, above the page. On a wide screen the groups are the sidebar, and the disclosure's bar is hidden where the browser supports `::details-content`. A touch screen gets 44px targets for the navigation and the canvas controls.
 
@@ -52,7 +52,15 @@ The component frames define no token, so they show the defaults compiled into ea
 
 ## Add a story
 
-Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding, `ownH1: true` when the component renders the page's h1, or `hiddenH2: true` for a component that starts at a third-level heading, which adds a hidden h2 after the frame's hidden h1. The file's body is the story: write the component the way a page would.
+A single instance of a component, with props and slots, is a CSF story: a named export in the component's `.stories.js` with its `args`.
+
+```js
+export const Linked = { name: "Linked heading", args: { default: '<h3><a href="https://example.com/">Linked card</a></h3>' } };
+```
+
+`lib/render-story.js` writes it as WebC: a string prop as `@name="…"`, `true` as a bare `@name`, any other value as a `:@name` expression, each named slot as a `<template slot="name" webc:nokeep>`, the `default` slot as the children, and custom properties as a `style`. One virtual template per package builds the frames at `/frames/<package>/<component>/<kebab export name>/`, with the layout and data a story page there has. `parameters.webc.hiddenH2` and `parameters.webc.ownH1` set the frame data a page sets in its front matter. A component with `options` or boolean props also gets `/frames/<package>/<component>/matrix/`: each value of one prop at a time, over the meta's and the `Default` story's args, each cell labeled `prop = value`.
+
+Anything more, such as a composition, Markdown, or a whole page on a layout, is a story page. Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding, `ownH1: true` when the component renders the page's h1, or `hiddenH2: true` for a component that starts at a third-level heading, which adds a hidden h2 after the frame's hidden h1. The file's body is the story: write the component the way a page would. The page reads its component's CSF file as `$data.csf`: `title`, `component`, the baseline `args`, the `argTypes` by category (`props`, `slots`, `cssprops`), and the `stories` with their resolved args. Loop over a prop's options from there instead of listing them, as the `norn-callout` Variants page does.
 
 ```webc
 ---
@@ -72,8 +80,9 @@ A new component or layout with no story fails `yarn test`. For a layout, the sto
 
 | Path | Holds |
 | --- | --- |
-| `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, and the watch targets |
-| `lib/catalog.js` | The JSDoc parser and the component and story catalog |
+| `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, the virtual templates for the CSF frames, and the watch targets |
+| `lib/catalog.js` | The CSF reader, the JSDoc parser for components that have no CSF file yet, and the component and story catalog |
+| `lib/render-story.js` | The default renderer, which writes a CSF story's args as WebC, and the matrix |
 | `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
 | `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
 | `_layouts/` | The page shell, and the plain and OSS story frames: layouts of the preview's own, which call `norn-head` and link the reset, base, and print styles |
