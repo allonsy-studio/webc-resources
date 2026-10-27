@@ -730,4 +730,17 @@ describe("page content compiles once, whatever the route to the layout", () => {
 		}
 		assert.ok(main("chain").includes("<div data-frame>") && main("own").includes("<div data-own>"), "the project layouts");
 	});
+
+	test("the home layouts render the page body after their own sections, in norn-rich-text, compiled once", () => {
+		for (const url of ["landing", "docs-home", "workspaces-home"]) {
+			const html = read(output, url, "index.html").match(/<main[^>]*>([\s\S]*?)<\/main>/)[1];
+			const body = html.match(/<section>\s*<norn-rich-text>([\s\S]*?)<\/norn-rich-text>\s*<\/section>\s*$/)?.[1];
+			assert.ok(body, `${url}: the body closes main, in a section`);
+			assert.ok(body.includes('<h2 id="prose">') && (body.match(/<norn-callout>\s*<div role="note" data-variant="tip">/g) ?? []).length === 1, `${url}: compiled once`);
+			assert.ok(html.indexOf("</norn-hero>") < html.indexOf(body), `${url}: after the hero`);
+		}
+		const html = once("landing-webc");
+		assert.equal((html.match(/<norn-icon>\s*<svg/g) ?? []).length, 1, "a WebC page on norn-landing: its icon, once");
+		assert.ok(!/<section>\s*<norn-rich-text>/.test(read(output, "landing-empty", "index.html")), "no empty section without a body");
+	});
 });

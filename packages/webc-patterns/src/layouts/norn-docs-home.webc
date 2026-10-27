@@ -12,6 +12,7 @@ nornCompiled: true
 
 /**
  * A docs site's home page: the hero with the install sample, then the docs pages as a contents list, each title and then its description. Extends `norn-base`.
+ * The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section.
  * The install sample is a `norn-code-block` when `@allons-y/webc-code-sample` is installed, and a `<pre><code>` without it.
  * Its texts ("Get started", "Read the docs", "View on GitHub", "Documentation") come from `componentStrings` under `norn-docs-home`, then English.
  * @prop {string} [lede] - The hero paragraph. Falls back to the description.
@@ -47,6 +48,12 @@ nornCompiled: true
 			<dd webc:if="page.description" @text="page.description"></dd>
 		</div>
 	</dl>
+</section>
+<section webc:if="String($data.content ?? '').trim()">
+	<norn-rich-text
+		><template webc:if="nornCompiles($data, 'norn-docs-home')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
 </section>
 <style>
 	@layer norn.layout {

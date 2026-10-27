@@ -74,3 +74,9 @@ nornCompiled: true
 		</li>
 	</norn-card-grid>
 </section>
+<section webc:if="String($data.content ?? '').trim()">
+	<norn-rich-text
+		><template webc:if="nornCompiles($data, 'norn-landing')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
+</section>

@@ -1,0 +1,7 @@
+---
+layout: norn-landing.webc
+title: WebC on landing
+name: Widget
+---
+<norn-icon @name="check"></norn-icon>
+<norn-link-button @href="/go/">Go</norn-link-button>

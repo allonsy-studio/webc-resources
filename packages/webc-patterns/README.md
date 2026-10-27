@@ -152,7 +152,7 @@ The contents come from `nornHeadings` over the body, so they list the headings t
 
 #### `norn-docs-home.webc`
 
-The hero with the install sample, then the docs pages as a contents list. Reads `name`, `tagline`, and `description`.
+The hero with the install sample, then the docs pages as a contents list, then the page body. Reads `name`, `tagline`, and `description`.
 
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
@@ -163,7 +163,7 @@ The hero with the install sample, then the docs pages as a contents list. Reads 
 
 #### `norn-landing.webc`
 
-The hero with a sample, then install, features, and packages sections. Reads `name`, `tagline`, and `description`.
+The hero with a sample, then install, features, and packages sections, then the page body. Reads `name`, `tagline`, and `description`.
 
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
@@ -177,7 +177,7 @@ The hero with a sample, then install, features, and packages sections. Reads `na
 
 #### `norn-workspaces-home.webc`
 
-A monorepo's home page: the hero with the install sample, then an index of the workspaces. Reads `name`, `tagline`, and `description`.
+A monorepo's home page: the hero with the install sample, then an index of the workspaces, then the page body. Reads `name`, `tagline`, and `description`.
 
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
@@ -194,6 +194,8 @@ One workspace's page in the docs frame. Reads `title`.
 | --- | --- | --- | --- |
 | `workspaces` | `{ url, title, icon? }[]` | `[]` | The sidebar. `name` stands in for a missing `title` |
 | `workspace` | `{ name, description?, html? }` | none | The `<h1>`, the description, and `html`, compiled as WebC. The page's own content follows |
+
+On the three home layouts, the page body follows the shipped sections in a `<section>` of its own, in `norn-rich-text`, and a page with no body renders none. Markdown there is compiled once, as on `norn-docs`.
 
 The layouts' texts ("Get started", "Read the docs", "Packages") come from `componentStrings` under the layout's name, then English (see Translating).
 
