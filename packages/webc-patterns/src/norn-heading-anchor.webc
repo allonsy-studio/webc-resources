@@ -8,7 +8,7 @@
 
 /**
  * A heading that links to itself, so a reader can copy a link to the section. The heading text is the link, with a `#` before it. Where the pointer can hover and the page is at least 70rem wide, the `#` hangs in the margin and shows while the heading is hovered or has focus. Elsewhere it stays in line: there is no hover to reveal it, or no room in the margin for it.
- * The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown headings.
+ * The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes this component for Markdown headings.
  * @prop {string} slug - The heading's id, and the link's fragment. Required: the build fails without it.
  * @prop {number} [level] - 2 to 6. Falls back to 2.
  * @slot - The heading text.

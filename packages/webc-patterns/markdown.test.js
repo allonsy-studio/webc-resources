@@ -66,27 +66,33 @@ test("headingAnchors: ids stay unique across the renders of one page, such as tw
 	const md = markdownIt();
 	headingAnchors(md);
 	const page = { url: "/one/" };
-	assert.ok(md.render("## Same\n", { page }).includes('id="same"'));
-	assert.ok(md.render("## Same\n", { page }).includes('id="same-2"'), "the second block counts on");
-	assert.ok(md.render("## Same 2\n", { page }).includes('id="same-2-2"'), "a heading never takes an id already given");
-	assert.ok(md.render("## Same\n", { page: { url: "/two/" } }).includes('id="same"'), "another page starts again");
+	assert.ok(md.render("## Same\n", { page }).includes('@slug="same"'));
+	assert.ok(md.render("## Same\n", { page }).includes('@slug="same-2"'), "the second block counts on");
+	assert.ok(md.render("## Same 2\n", { page }).includes('@slug="same-2-2"'), "a heading never takes an id already given");
+	assert.ok(md.render("## Same\n", { page: { url: "/two/" } }).includes('@slug="same"'), "another page starts again");
 });
 
 test("headingAnchors: a heading that reads like a numbered repeat never takes its id", () => {
 	const md = markdownIt();
 	headingAnchors(md);
 	const html = md.render("## Step\n\n## Step 2\n\n## Step\n");
-	assert.deepEqual([...html.matchAll(/ id="([^"]+)"/g)].map((match) => match[1]), ["step", "step-2", "step-3"]);
+	assert.deepEqual([...html.matchAll(/ @slug="([^"]+)"/g)].map((match) => match[1]), ["step", "step-2", "step-3"]);
 });
 
-test("headingAnchors: h2 and h3 link to themselves, repeats get a number, and h4 is left alone", () => {
+test("headingAnchors: h2 and h3 render as norn-heading-anchor, as an author writes it, repeats get a number, and h4 is left alone", () => {
 	const md = markdownIt();
 	headingAnchors(md);
 	const html = md.render("## Install it\n\n### `npm` & more\n\n## Install it\n\n#### Deep\n");
-	assert.ok(html.includes('<h2 id="install-it"><a href="#install-it">Install it</a></h2>'), html);
-	assert.ok(html.includes('<h3 id="npm-more"><a href="#npm-more"><code>npm</code> &amp; more</a></h3>'), html);
-	assert.ok(html.includes('<h2 id="install-it-2"><a href="#install-it-2">Install it</a></h2>'), html);
-	assert.ok(html.includes("<h4>Deep</h4>"), html);
+	assert.equal(
+		html,
+		'<norn-heading-anchor @slug="install-it">Install it</norn-heading-anchor>\n<norn-heading-anchor @slug="npm-more" :@level="3"><code>npm</code> &amp; more</norn-heading-anchor>\n<norn-heading-anchor @slug="install-it-2">Install it</norn-heading-anchor>\n<h4>Deep</h4>\n',
+	);
+});
+
+test("headingAnchors: a level the component has no tag for gets the id only", () => {
+	const md = markdownIt();
+	headingAnchors(md, { levels: [1, 4] });
+	assert.equal(md.render("# Top\n\n#### Deep\n"), '<h1 id="top">Top</h1>\n<norn-heading-anchor @slug="deep" :@level="4">Deep</norn-heading-anchor>\n');
 });
 
 test("headingAnchors: a heading that holds a link gets an id and keeps the author's link, with no link around it", () => {
@@ -99,7 +105,7 @@ test("headingAnchors: each render starts its count again", () => {
 	const md = markdownIt();
 	headingAnchors(md, { levels: [2] });
 	md.render("## Same\n", {});
-	assert.ok(md.render("## Same\n", {}).includes('id="same"'));
+	assert.ok(md.render("## Same\n", {}).includes('@slug="same"'));
 });
 
 test("headings: lists the anchored headings at the chosen levels, as plain text", () => {
@@ -109,6 +115,20 @@ test("headings: lists the anchored headings at the chosen levels, as plain text"
 		{ id: "c", level: 3, text: "C" },
 	]);
 	assert.deepEqual(headings(undefined), []);
+});
+
+test("headings: reads norn-heading-anchor as Markdown writes it, as an author writes it, and compiled, in page order", () => {
+	const md = markdownIt({ html: true }).use(webcTags).use(headingAnchors);
+	const markdown = md.render('## A & `b`\n\n<norn-heading-anchor @slug="by-hand" :@level="3">\nBy <em>hand</em>\n</norn-heading-anchor>\n\n<norn-heading-anchor slug="plain" level="3">\nPlain\n</norn-heading-anchor>\n\n<norn-heading-anchor :@slug="\'quoted\'" @level="4">\nToo deep\n</norn-heading-anchor>\n\n## [Linked](/x/) one\n');
+	const compiled = '<norn-heading-anchor><h3 id="compiled"><a href="#compiled">Compiled</a></h3></norn-heading-anchor>';
+	assert.deepEqual(headings(markdown + compiled), [
+		{ id: "a-b", level: 2, text: "A & b" },
+		{ id: "by-hand", level: 3, text: "By hand" },
+		{ id: "plain", level: 3, text: "Plain" },
+		{ id: "linked-one", level: 2, text: "Linked one" },
+		{ id: "compiled", level: 3, text: "Compiled" },
+	]);
+	assert.deepEqual(headings(markdown, { levels: [4] }), [{ id: "quoted", level: 4, text: "Too deep" }]);
 });
 
 test("callouts: writes no heading slot, and ignores options, so the component's fallback supplies the title", () => {

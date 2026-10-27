@@ -144,9 +144,9 @@ function idsOf(env) {
 }
 
 /**
- * markdown-it amend: give each heading at the chosen levels an id, and make its text a link to itself, as `norn-heading-anchor` does.
+ * markdown-it amend: give each heading at the chosen levels an id, and render it as `norn-heading-anchor`, as an author writes it, so its text links to itself.
  * A repeated heading gets `-2`, `-3`, and so on, counted across the page. A heading that already has an id keeps it.
- * A heading whose text holds a link gets the id only, so no link nests in another.
+ * A heading whose text holds a link gets the id only, so no link nests in another. So does an h1, which the component has no tag for.
  *
  * @param {import("markdown-it").default} md
  * @param {{ levels?: number[] }} [options] - Heading levels to anchor. Defaults to 2 and 3.
@@ -155,7 +155,8 @@ export function headingAnchors(md, { levels = [2, 3] } = {}) {
 	md.core.ruler.push("heading_anchors", (state) => {
 		const ids = idsOf(state.env);
 		state.tokens.forEach((token, index) => {
-			if (token.type !== "heading_open" || !levels.includes(Number(token.tag.slice(1)))) return;
+			const level = Number(token.tag.slice(1));
+			if (token.type !== "heading_open" || !levels.includes(level)) return;
 			const inline = state.tokens[index + 1];
 			let id = token.attrGet("id");
 			if (!id) {
@@ -166,18 +167,58 @@ export function headingAnchors(md, { levels = [2, 3] } = {}) {
 			}
 			ids.add(id);
 			// A link can't hold a link: a heading whose text links elsewhere keeps the author's link and takes only the id.
-			if (inline.children.some((child) => child.type === "link_open")) return;
-			const open = new state.Token("link_open", "a", 1);
-			open.attrSet("href", `#${id}`);
-			inline.children = [open, ...inline.children, new state.Token("link_close", "a", -1)];
+			if (level < 2 || inline.children.some((child) => child.type === "link_open")) return;
+			const anchor = { slug: id, level };
+			token.meta = { ...token.meta, anchor };
+			const close = state.tokens.slice(index).find((next) => next.type === "heading_close");
+			close.meta = { ...close.meta, anchor };
 		});
 	});
+	const render = (tokens, index, options, env, self) => self.renderToken(tokens, index, options);
+	const open = md.renderer.rules.heading_open ?? render;
+	const close = md.renderer.rules.heading_close ?? render;
+	md.renderer.rules.heading_open = (tokens, index, ...rest) => {
+		const anchor = tokens[index].meta?.anchor;
+		if (!anchor) return open(tokens, index, ...rest);
+		return `<norn-heading-anchor @slug="${md.utils.escapeHtml(anchor.slug)}"${anchor.level === 2 ? "" : ` :@level="${anchor.level}"`}>`;
+	};
+	md.renderer.rules.heading_close = (tokens, index, ...rest) => (tokens[index].meta?.anchor ? "</norn-heading-anchor>\n" : close(tokens, index, ...rest));
 }
 
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", apos: "'" };
 
+/** Markup as plain text: tags off, the common entities decoded, spaces collapsed. */
+const plain = (markup) =>
+	markup
+		.replace(/<[^>]+>/g, "")
+		.replace(/&(amp|lt|gt|quot|#39|apos);/g, (_, name) => ENTITIES[name])
+		.replace(/\s+/g, " ")
+		.trim();
+
+/** A heading with an id, as compiled or written as HTML. */
+const HEADING = /<h([1-6])\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g;
+/** `norn-heading-anchor` before WebC compiles it: as `headingAnchors` writes it, or as an author does in Markdown. */
+const ANCHOR = new RegExp(String.raw`<norn-heading-anchor\b((?:${ATTR})*)\s*>([\s\S]*?)<\/norn-heading-anchor>`, "g");
+
 /**
- * The headings in rendered HTML that carry an id, for `norn-toc`.
+ * A prop of an uncompiled tag: `@name="x"`, `name="x"`, or `:@name` with a string or number literal.
+ *
+ * @param {string} attributes
+ * @param {string} name
+ * @returns {string | undefined}
+ */
+function prop(attributes, name) {
+	const match = new RegExp(String.raw`(?:^|\s)(:?@?)${name}\s*=\s*(?:"([^"]*)"|'([^']*)')`).exec(attributes);
+	if (!match) return undefined;
+	const value = (match[2] ?? match[3]).replace(/&(amp|lt|gt|quot|#39|apos);/g, (_, entity) => ENTITIES[entity]);
+	if (match[1] !== ":@") return value;
+	const literal = /^\s*(?:'([^']*)'|"([^"]*)"|(\d+))\s*$/.exec(value);
+	return literal ? (literal[1] ?? literal[2] ?? literal[3]) : undefined;
+}
+
+/**
+ * The headings in rendered HTML that carry an id, for `norn-toc`, in page order.
+ * It reads a heading with an id, and a `norn-heading-anchor` that WebC has not compiled yet, as `headingAnchors` writes it in Markdown.
  *
  * @param {string} html
  * @param {{ levels?: number[] }} [options] - Heading levels to list. Defaults to 2 and 3.
@@ -185,15 +226,14 @@ const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', "#39": "'", apos: "'" 
  */
 export function headings(html, { levels = [2, 3] } = {}) {
 	if (typeof html !== "string") return [];
-	return [...html.matchAll(/<h([1-6])\b[^>]*\bid="([^"]+)"[^>]*>([\s\S]*?)<\/h\1>/g)]
-		.filter(([, level]) => levels.includes(Number(level)))
-		.map(([, level, id, inner]) => ({
-			id,
-			level: Number(level),
-			text: inner
-				.replace(/<[^>]+>/g, "")
-				.replace(/&(amp|lt|gt|quot|#39|apos);/g, (_, name) => ENTITIES[name])
-				.replace(/\s+/g, " ")
-				.trim(),
-		}));
+	const found = [...html.matchAll(HEADING)].map((match) => ({ at: match.index, id: match[2], level: Number(match[1]), text: plain(match[3]) }));
+	for (const match of html.matchAll(ANCHOR)) {
+		const id = prop(match[1], "slug");
+		// A compiled anchor has no slug on its tag: the heading inside it is listed above.
+		if (id) found.push({ at: match.index, id, level: Number(prop(match[1], "level") ?? 2) || 2, text: plain(match[2]) });
+	}
+	return found
+		.filter((heading) => levels.includes(heading.level))
+		.sort((a, b) => a.at - b.at)
+		.map(({ id, level, text }) => ({ id, level, text }));
 }

@@ -184,6 +184,21 @@ describe("the component fixes, built from content with only the data a page name
 		assert.match(read("md-props", "index.html"), /data-language="html"><code[^>]*>&lt;norn-callout @variant=(?:"|&quot;)tip(?:"|&quot;)&gt;/, "a fence stays literal");
 	});
 
+	test("Markdown headings render as norn-heading-anchor, and the contents list them with hand-written ones", () => {
+		const html = read("toc-by-hand", "index.html");
+		assert.match(html, /<norn-heading-anchor>\s*<h2 id="from-markdown"><a href="#from-markdown">From Markdown<\/a><\/h2>\s*<\/norn-heading-anchor>/, "the component, as an author writes it");
+		const toc = html.slice(html.indexOf("<norn-toc>"), html.indexOf("</norn-toc>"));
+		assert.ok(toc.includes('<li><a href="#from-markdown">From Markdown</a><ol><li><a href="#by-hand">By hand</a></li></ol></li>'), toc);
+	});
+
+	test("a Markdown heading on norn-base looks like norn-heading-anchor: the link takes the heading's color and no underline at rest", async () => {
+		await onPage("/heading-base/", async (page) => {
+			const style = await page.$eval("main h2 a", (element) => ({ color: getComputedStyle(element).color, heading: getComputedStyle(element.parentElement).color, line: getComputedStyle(element).textDecorationLine }));
+			assert.equal(style.line, "none");
+			assert.equal(style.color, style.heading);
+		});
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));

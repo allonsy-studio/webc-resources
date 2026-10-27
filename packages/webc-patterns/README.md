@@ -148,7 +148,7 @@ A docs page: the sidebar with site search, the title, the contents, the body in 
 | `prev`, `next` | `{ url, title }` | the neighbors in `docs` | The `norn-pager` |
 | `search` | `{ bundle?, site? }` or `false` | the Pagefind script at `/pagefind/pagefind.js`, and the host of `url` | `norn-search` above the sidebar list. `false` leaves it out |
 
-The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors. A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
+The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors and any `norn-heading-anchor` written by hand. A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
 
 #### `norn-docs-home.webc`
 
@@ -341,8 +341,8 @@ config.addJavaScriptFunction("nornHeadings", headings);
 - `webcTags` keeps a component tag with WebC attributes (`@variant`, `:@level`, `webc:if`) as HTML. Without it, markdown-it escapes the tag to text: CommonMark's attribute names have no `@`. It acts only on custom elements, names with a hyphen, and only when the library's `html` option is on, as it is in Eleventy.
 - `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
-- `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does. A heading whose text holds a link keeps that link and gets the id only, since a link can't hold another.
-- `headings(html)` lists the anchored headings of rendered HTML for `norn-toc`. Register it as `nornHeadings`.
+- `headingAnchors` renders each h2 and h3 as `norn-heading-anchor`, with an id from `slugify`, as an author writes it: `## Install` becomes `<norn-heading-anchor @slug="install">Install</norn-heading-anchor>`. A heading whose text holds a link keeps that link and gets the id only, since a link can't hold another. Like the callouts, the tag needs WebC to compile it: on a layout that doesn't, such as a Nunjucks one of the project's own, or in a feed built from `templateContent`, it stays an uncompiled tag.
+- `headings(html)` lists the anchored headings for `norn-toc`, from compiled HTML or from Markdown output that WebC has not compiled yet, `norn-heading-anchor` tags included. Register it as `nornHeadings`.
 - `slugify(text)` is the id function `headingAnchors` uses. It keeps the letters and digits of any script (`## 日本語の見出し` gets `id="日本語の見出し"`), lowercases them, takes the accents off Latin letters, and joins the rest with hyphens. A repeated heading gets `-2`, `-3`, and so on, counted across the page, so two Markdown blocks on one page never share an id.
 
 The add-on writes only what an author would write by hand, and no text of its own. A callout title, a code block's labels, and every other string come from the component's slots, which fall back to `componentStrings` and then English (see Translating).
@@ -503,8 +503,8 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 | `webcTags(md)` | markdown-it amend that keeps component tags with WebC attributes, such as `@variant`, as HTML |
 | `scrollTables(md)` | markdown-it amend that wraps each table in `norn-simple-table` |
 | `callouts(md)` | markdown-it amend that renders `> [!NOTE]` blockquotes as `norn-callout` |
-| `headingAnchors(md, { levels })` | markdown-it amend that gives headings ids and links them to themselves; levels 2 and 3 by default |
-| `headings(html, { levels })` | The anchored headings of rendered HTML as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |
+| `headingAnchors(md, { levels })` | markdown-it amend that renders headings as `norn-heading-anchor` with an id; levels 2 and 3 by default |
+| `headings(html, { levels })` | The anchored headings of rendered HTML or Markdown output as `{ id, text, level }[]`, for `norn-toc`; register it as `nornHeadings` |
 | `slugify(text)` | The URL fragment `headingAnchors` makes from heading text, in any script |
 
 `@allons-y/webc-patterns/project` exports the project data builders above. The stylesheets are exported as `@allons-y/webc-patterns/css/reset.css`, `/css/base.css`, and `/css/print.css`, and the schema as `@allons-y/webc-patterns/schema/project.schema.json`.
