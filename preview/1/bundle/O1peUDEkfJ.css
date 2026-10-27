@@ -7,7 +7,7 @@
 			max-inline-size: var(--norn-rich-text-measure, var(--norn-text-measure, 40em));
 		}
 
-		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. The rules are flat: the build writes the @supports not at-rule(@scope) copy for older browsers from them. */
+		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
 		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
 			h2,
 			h3,
@@ -119,107 +119,6 @@
 				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 				font-size: 0.875em;
 			}
-		}
-
-		@supports not at-rule(@scope) {
-			norn-rich-text {
-				& :where(h2), & :where(h3), & :where(h4), & :where(h5), & :where(h6) {
-					margin: var(--norn-space-s, 0.75rem) 0 0;
-					font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
-					line-height: 1.15;
-					text-wrap: balance;
-				}
-				& :where(norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6))) {
-					margin-block-start: var(--norn-space-s, 0.75rem);
-				}
-
-				& :where(h2) {
-					font-size: var(--norn-font-size-xl, 1.5rem);
-				}
-
-				& :where(h3) {
-					font-size: var(--norn-font-size-l, 1.25rem);
-				}
-
-				& :where(h4), & :where(h5), & :where(h6) {
-					font-size: var(--norn-font-size-m, 1rem);
-				}
-				& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
-					content: "#" / "";
-					margin-inline-end: var(--norn-space-2xs, 0.25rem);
-					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-				}
-
-				& :where(:is(h1, h2, h3, h4, h5, h6) > a) {
-					display: inline-block;
-					min-block-size: 1.5rem;
-					color: inherit;
-					text-decoration: none;
-					text-underline-offset: 0.1em;
-				}
-
-				& :where(:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible)) {
-					text-decoration: underline;
-				}
-				@media (hover: hover) and (min-width: 70rem) {
-					& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
-						display: inline-block;
-						inline-size: 1ch;
-						margin-inline: -1.15ch 0.15ch;
-						opacity: 0;
-					}
-
-					& :where(:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a))::before {
-						opacity: 1;
-					}
-				}
-
-				& :where(p) {
-					margin: 0;
-					text-wrap: pretty;
-				}
-
-				& :where(ul), & :where(ol) {
-					display: grid;
-					gap: var(--norn-space-xs, 0.5rem);
-					margin: 0;
-					padding-inline-start: var(--norn-space-m, 1.25rem);
-					list-style: revert;
-				}
-
-				& :where(blockquote) {
-					margin: 0;
-					padding-inline-start: var(--norn-space-m, 1.25rem);
-					border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-				}
-
-				& :where(table) {
-					border-collapse: collapse;
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				}
-
-				& :where(th), & :where(td) {
-					padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-					text-align: start;
-				}
-
-				& :where(hr) {
-					box-sizing: border-box;
-					width: 100%;
-					border: 0;
-					border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				}
-
-				& :where(:not(pre) > code) {
-					padding: 0.1em 0.35em;
-					border-radius: var(--norn-ui-radius-s, 4px);
-					background: var(--norn-rich-text-code-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
-					font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-					font-size: 0.875em;
-				}
-		}
 		}
 	}
 @layer norn.components {

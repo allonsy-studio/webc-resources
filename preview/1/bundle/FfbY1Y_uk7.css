@@ -1,71 +1,26 @@
 @layer norn.components {
-		norn-side-nav {
-			display: flex;
-			flex-direction: column;
-			min-block-size: 0;
-			font-size: var(--norn-font-size-s, 0.875rem);
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
 
-			& nav {
-				display: flex;
-				flex-direction: column;
-				gap: var(--norn-space-s, 0.75rem);
-				min-block-size: 0;
-			}
-
-			& nav > [data-label] {
-				position: absolute;
-				inline-size: 1px;
-				block-size: 1px;
-				overflow: hidden;
-				clip-path: inset(50%);
-				white-space: nowrap;
-			}
-
-			& nav > ul,
-			& nav > ul ul {
-				display: flex;
-				flex-direction: column;
-				gap: var(--norn-space-2xs, 0.25rem);
-				margin: 0;
-				padding: 0;
-				list-style: none;
-			}
-
-			/* Padding with an equal negative margin keeps focus rings inside the scroll box, which would clip them. */
-			& nav > ul {
-				box-sizing: border-box;
-				min-block-size: 0;
-				margin: -6px;
-				padding: 6px;
-				overflow-y: auto;
-				overscroll-behavior: contain;
-			}
-
-			/* An item with a nested list stacks them with the list's gap, and keeps a little room below. */
-			& nav > ul li:has(> ul) {
-				display: flex;
-				flex-direction: column;
-				gap: var(--norn-space-2xs, 0.25rem);
-				padding-block-end: var(--norn-space-xs, 0.5rem);
-			}
-
-			& nav > ul ul {
-				margin-inline: var(--norn-space-s, 0.75rem) 0;
-			}
-
-			& nav > ul a {
+			& a[data-variant] {
 				--_state: 0%;
-				--_tint: transparent;
+				--_bg: transparent;
+				--_border: transparent;
 				box-sizing: border-box;
-				display: flex;
+				display: inline-flex;
 				align-items: center;
 				gap: var(--norn-space-xs, 0.5rem);
-				padding: var(--norn-space-2xs, 0.25rem) var(--norn-space-xs, 0.5rem);
-				border-radius: var(--norn-ui-radius-s, 4px);
-				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
-				color: var(--norn-side-nav-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
-				text-decoration: none;
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding: var(--norn-space-2xs, 0.25rem) var(--norn-space-m, 1.25rem);
+				border: var(--norn-link-button-border-width, 1px) solid var(--_border);
+				border-radius: var(--norn-link-button-radius, var(--norn-ui-border-radius, 6px));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg));
+				color: var(--norn-link-button-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				font-weight: 600;
+				line-height: 1.3;
 				overflow-wrap: anywhere;
+				text-decoration: none;
 
 				&:hover {
 					--_state: var(--norn-ui-state-hover, 8%);
@@ -74,456 +29,52 @@
 				&:active {
 					--_state: var(--norn-ui-state-press, 12%);
 				}
-
-				&[aria-current="page"] {
-					--_tint: color-mix(in oklab, var(--norn-side-nav-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)))) var(--norn-ui-state-press, 12%), transparent);
-					color: var(--norn-side-nav-current, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
-				}
 			}
 
-			& nav > ul norn-icon {
-				flex: none;
-				color: var(--norn-side-nav-icon, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+			& a[data-variant="primary"] {
+				--_bg: var(--norn-link-button-accent, var(--norn-ui-accent, #2346d4));
+				color: var(--norn-link-button-on-accent, var(--norn-text-on-accent, color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1)))));
+			}
+
+			& a[data-variant="secondary"] {
+				--_border: var(--norn-link-button-border, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
 			}
 
 			@media (pointer: coarse) {
-				& nav > ul a {
+				& a[data-variant] {
 					min-block-size: 2.75rem;
 				}
 			}
 
 			@media (prefers-reduced-motion: no-preference) {
-				& nav > ul a {
+				& a[data-variant] {
 					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
 				}
 			}
 
-			/* The current page fills itself, since the browser replaces the tint. */
+			/* The primary button stays filled, since the browser would turn its fill into the page color. */
 			@media (forced-colors: active) {
-				& nav > ul a[aria-current="page"] {
-					background-color: Highlight;
-					color: HighlightText;
+				& a[data-variant="primary"] {
+					border-color: LinkText;
+					background-color: LinkText;
+					color: Canvas;
 					forced-color-adjust: none;
 
-					& norn-icon {
-						color: HighlightText;
-					}
-				}
-
-				& nav > ul a:focus-visible {
-					outline-color: CanvasText;
-				}
-			}
-
-			@media print {
-				display: none;
-			}
-		}
-	}
-@layer norn.components {
-		norn-rich-text {
-			display: grid;
-			grid-template-columns: minmax(0, 1fr);
-			align-content: start;
-			gap: var(--norn-space-m, 1.25rem);
-			max-inline-size: var(--norn-rich-text-measure, var(--norn-text-measure, 40em));
-		}
-
-		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. The rules are flat: the build writes the @supports not at-rule(@scope) copy for older browsers from them. */
-		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
-			h2,
-			h3,
-			h4,
-			h5,
-			h6 {
-				margin: var(--norn-space-s, 0.75rem) 0 0;
-				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
-				line-height: 1.15;
-				text-wrap: balance;
-			}
-
-			/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
-			norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6)) {
-				margin-block-start: var(--norn-space-s, 0.75rem);
-			}
-
-			h2 {
-				font-size: var(--norn-font-size-xl, 1.5rem);
-			}
-
-			h3 {
-				font-size: var(--norn-font-size-l, 1.25rem);
-			}
-
-			h4,
-			h5,
-			h6 {
-				font-size: var(--norn-font-size-m, 1rem);
-			}
-
-			/* A heading that links to itself is marked with a #, and its link takes the text color. */
-			:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-				content: "#" / "";
-				margin-inline-end: var(--norn-space-2xs, 0.25rem);
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a {
-				display: inline-block;
-				min-block-size: 1.5rem;
-				color: inherit;
-				text-decoration: none;
-				text-underline-offset: 0.1em;
-			}
-
-			:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible) {
-				text-decoration: underline;
-			}
-
-			/* Where the pointer can hover and the margin has room (see norn-heading-anchor), the # hangs in it and shows with the heading's hover and focus. */
-			@media (hover: hover) and (min-width: 70rem) {
-				:is(h1, h2, h3, h4, h5, h6):has(> a)::before {
-					display: inline-block;
-					inline-size: 1ch;
-					margin-inline: -1.15ch 0.15ch;
-					opacity: 0;
-				}
-
-				:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a)::before {
-					opacity: 1;
-				}
-			}
-
-			p {
-				margin: 0;
-				text-wrap: pretty;
-			}
-
-			ul,
-			ol {
-				display: grid;
-				gap: var(--norn-space-xs, 0.5rem);
-				margin: 0;
-				padding-inline-start: var(--norn-space-m, 1.25rem);
-				list-style: revert;
-			}
-
-			blockquote {
-				margin: 0;
-				padding-inline-start: var(--norn-space-m, 1.25rem);
-				border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-			}
-
-			table {
-				border-collapse: collapse;
-				border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-			}
-
-			th,
-			td {
-				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-				border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				text-align: start;
-			}
-
-			hr {
-				box-sizing: border-box;
-				width: 100%;
-				border: 0;
-				border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-			}
-
-			:not(pre) > code {
-				padding: 0.1em 0.35em;
-				border-radius: var(--norn-ui-radius-s, 4px);
-				background: var(--norn-rich-text-code-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
-				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-				font-size: 0.875em;
-			}
-		}
-
-		@supports not at-rule(@scope) {
-			norn-rich-text {
-				& :where(h2), & :where(h3), & :where(h4), & :where(h5), & :where(h6) {
-					margin: var(--norn-space-s, 0.75rem) 0 0;
-					font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
-					line-height: 1.15;
-					text-wrap: balance;
-				}
-				& :where(norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6))) {
-					margin-block-start: var(--norn-space-s, 0.75rem);
-				}
-
-				& :where(h2) {
-					font-size: var(--norn-font-size-xl, 1.5rem);
-				}
-
-				& :where(h3) {
-					font-size: var(--norn-font-size-l, 1.25rem);
-				}
-
-				& :where(h4), & :where(h5), & :where(h6) {
-					font-size: var(--norn-font-size-m, 1rem);
-				}
-				& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
-					content: "#" / "";
-					margin-inline-end: var(--norn-space-2xs, 0.25rem);
-					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-				}
-
-				& :where(:is(h1, h2, h3, h4, h5, h6) > a) {
-					display: inline-block;
-					min-block-size: 1.5rem;
-					color: inherit;
-					text-decoration: none;
-					text-underline-offset: 0.1em;
-				}
-
-				& :where(:is(h1, h2, h3, h4, h5, h6) > a:is(:hover, :focus-visible)) {
-					text-decoration: underline;
-				}
-				@media (hover: hover) and (min-width: 70rem) {
-					& :where(:is(h1, h2, h3, h4, h5, h6):has(> a))::before {
-						display: inline-block;
-						inline-size: 1ch;
-						margin-inline: -1.15ch 0.15ch;
-						opacity: 0;
-					}
-
-					& :where(:is(h1, h2, h3, h4, h5, h6):is(:hover, :focus-within):has(> a))::before {
-						opacity: 1;
-					}
-				}
-
-				& :where(p) {
-					margin: 0;
-					text-wrap: pretty;
-				}
-
-				& :where(ul), & :where(ol) {
-					display: grid;
-					gap: var(--norn-space-xs, 0.5rem);
-					margin: 0;
-					padding-inline-start: var(--norn-space-m, 1.25rem);
-					list-style: revert;
-				}
-
-				& :where(blockquote) {
-					margin: 0;
-					padding-inline-start: var(--norn-space-m, 1.25rem);
-					border-inline-start: 3px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-				}
-
-				& :where(table) {
-					border-collapse: collapse;
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				}
-
-				& :where(th), & :where(td) {
-					padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-					border-block-end: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-					text-align: start;
-				}
-
-				& :where(hr) {
-					box-sizing: border-box;
-					width: 100%;
-					border: 0;
-					border-block-start: 1px solid var(--norn-rich-text-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
-				}
-
-				& :where(:not(pre) > code) {
-					padding: 0.1em 0.35em;
-					border-radius: var(--norn-ui-radius-s, 4px);
-					background: var(--norn-rich-text-code-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
-					font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
-					font-size: 0.875em;
-				}
-		}
-		}
-	}
-@layer norn.components {
-		norn-sidebar-layout {
-			display: block;
-			container-type: inline-size;
-			inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), var(--norn-sidebar-layout-width, var(--norn-layout-width, 64rem)));
-			margin-inline: auto;
-			padding-block: var(--norn-space-l, 2rem);
-
-			& > div {
-				display: grid;
-				grid-template-columns: var(--norn-sidebar-layout-nav, 14rem) minmax(0, 1fr);
-				align-items: start;
-				gap: var(--norn-sidebar-layout-gap, var(--norn-space-l, 2rem));
-			}
-
-			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. The details is only a column here: its summary is hidden, and its content always shows. */
-			& > div > details {
-				position: sticky;
-				inset-block-start: var(--norn-space-m, 1.25rem);
-				display: flex;
-				flex-direction: column;
-				max-block-size: calc(100dvh - 2 * var(--norn-space-m, 1.25rem));
-
-				&::details-content {
-					content-visibility: visible;
-					display: contents;
-				}
-			}
-
-			& > div > details > summary {
-				display: none;
-			}
-
-			& > div > article {
-				display: grid;
-				grid-template-columns: var(--norn-sidebar-layout-columns, minmax(0, 1fr));
-				align-content: start;
-				gap: var(--norn-space-m, 1.25rem);
-				min-inline-size: 0;
-			}
-
-			& > div > article > :is(article, section) {
-				display: grid;
-				grid-template-columns: minmax(0, 1fr);
-				align-content: start;
-				gap: var(--norn-space-s, 0.75rem);
-				min-inline-size: 0;
-			}
-
-			/* Narrow, the columns stack and the navigation is a control that opens it. */
-			@container (max-width: 37.5rem) {
-				& > div {
-					grid-template-columns: minmax(0, 1fr);
-				}
-
-				& > div > details {
-					position: static;
-					display: block;
-					max-block-size: none;
-
-					&:not([open])::details-content {
-						content-visibility: hidden;
-					}
-
-					&::details-content {
-						display: block;
-					}
-				}
-
-				& > div > details > summary {
-					--_state: 0%;
-					box-sizing: border-box;
-					display: flex;
-					align-items: center;
-					justify-content: space-between;
-					gap: var(--norn-space-s, 0.75rem);
-					min-block-size: var(--norn-ui-control-height, 2.25rem);
-					margin-block-end: var(--norn-space-xs, 0.5rem);
-					padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-					border-radius: var(--norn-ui-radius-s, 4px);
-					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
-					font-weight: 600;
-					list-style: none;
-					cursor: pointer;
-
-					&::-webkit-details-marker {
-						display: none;
-					}
-
-					&:hover {
-						--_state: var(--norn-ui-state-hover, 8%);
-					}
-
-					&:active {
-						--_state: var(--norn-ui-state-press, 12%);
-					}
-
 					&:focus-visible {
-						outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
-					}
-
-					/* A chevron drawn with two borders, pointing down when closed and up when open. */
-					&::after {
-						box-sizing: border-box;
-						content: "";
-						flex: none;
-						inline-size: 0.5em;
-						block-size: 0.5em;
-						border-block-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-						border-inline-end: 2px solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-						rotate: 45deg;
+						outline-color: CanvasText;
 					}
 				}
 
-				& > div > details[open] > summary::after {
-					rotate: 225deg;
-				}
-			}
-
-			@media (prefers-reduced-motion: no-preference) {
-				& > div > details > summary {
-					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
-				}
-			}
-
-			@media (forced-colors: active) {
-				& > div > details > summary::after {
-					border-color: CanvasText;
-				}
-			}
-
-			@media print {
-				& > div {
-					grid-template-columns: minmax(0, 1fr);
+				& a[data-variant="secondary"] {
+					border-color: LinkText;
+					color: LinkText;
 				}
 
-				& > div > details > summary {
-					display: none;
+				/* A clear border would be drawn in the text color, so the quiet button's takes the page's. */
+				& a[data-variant="quiet"] {
+					border-color: Canvas;
+					color: LinkText;
 				}
-			}
-		}
-
-		/* Without ::details-content a closed details can't show its content, so the control is always there. */
-		@supports not selector(::details-content) {
-			norn-sidebar-layout > div > details > summary {
-				display: flex;
-				min-block-size: var(--norn-ui-control-height, 2.25rem);
-				align-items: center;
-				font-weight: 600;
-				cursor: pointer;
-			}
-		}
-	}
-@layer norn.components {
-		norn-skip-link {
-			display: block;
-
-			& a {
-				position: absolute;
-				inset-block-start: -5rem;
-				inset-inline-start: var(--norn-space-m, 1.25rem);
-				z-index: 10;
-				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
-				border-radius: var(--norn-skip-link-radius, var(--norn-ui-border-radius, 6px));
-				background: var(--norn-skip-link-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
-				color: var(--norn-skip-link-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
-
-				&:focus {
-					inset-block-start: var(--norn-space-xs, 0.5rem);
-				}
-			}
-
-			@media (forced-colors: active) {
-				& a {
-					border: 1px solid CanvasText;
-				}
-			}
-
-			@media print {
-				display: none;
 			}
 		}
 	}
@@ -566,6 +117,395 @@
 
 			&:dir(rtl) [data-mirror] {
 				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-copy-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& button {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				max-inline-size: 100%;
+				padding: 0 var(--norn-space-xs, 0.5rem);
+				border: 0;
+				border-radius: var(--norn-copy-button-radius, var(--norn-ui-border-radius, 6px));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-copy-button-bg, transparent));
+				color: var(--norn-copy-button-fg, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
+				font: inherit;
+				font-size: var(--norn-font-size-s, 0.875rem);
+				overflow-wrap: anywhere;
+				text-align: start;
+				cursor: pointer;
+
+				&[hidden] {
+					display: none;
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				&[data-state="copied"] {
+					color: var(--norn-status-success, light-dark(#0b6b3a, #7ed6a1));
+				}
+
+				&[data-state="failed"] {
+					color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+				}
+			}
+
+			/* The copy icon and the check share a cell, and so do the three texts, so the button is as wide for one as for another. */
+			& [data-icons],
+			& [data-label] {
+				display: inline-grid;
+			}
+
+			& [data-icons] > norn-icon,
+			& [data-label] > span {
+				grid-area: 1 / 1;
+			}
+
+			& [data-label] {
+				margin-inline-start: var(--norn-space-2xs, 0.25rem);
+			}
+
+			& button:not([data-state="copied"]) [data-icons] > norn-icon:last-child,
+			& button[data-state="copied"] [data-icons] > norn-icon:first-child,
+			& [data-label] > span:not([data-active]) {
+				visibility: hidden;
+			}
+
+			/* A compact button is only its icon until the pointer or focus is on it, or it has a result to show. */
+			& button[data-compact]:not(:hover, :focus-visible, [data-state]) [data-label] {
+				inline-size: 0;
+				margin: 0;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			& [role="status"] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (pointer: coarse) {
+				& button {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+@layer norn.components {
+		norn-code-block {
+			display: block;
+
+			/* The caption sits above the code. The copy button shares the code's cell, over its top end corner. */
+			& figure {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				margin: 0;
+			}
+
+			& figure:has(> figcaption) {
+				row-gap: var(--norn-space-xs, 0.5rem);
+			}
+
+			& figcaption {
+				grid-area: 1 / 1;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-family: var(--norn-code-block-font, var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace));
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& norn-copy-button {
+				--norn-copy-button-bg: var(--norn-code-block-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
+				grid-area: 2 / 1;
+				z-index: 1;
+				justify-self: end;
+				align-self: start;
+				margin: var(--norn-space-2xs, 0.25rem);
+			}
+
+			& pre {
+				box-sizing: border-box;
+				grid-area: 2 / 1;
+				margin: 0;
+				overflow-x: auto;
+				padding: var(--norn-code-block-padding, var(--norn-space-m, 1.25rem));
+				border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-code-block-bg, var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b)));
+				color: var(--norn-code-block-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+				font-family: var(--norn-code-block-font, var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace));
+				font-size: var(--norn-font-size-s, 0.875rem);
+				line-height: 1.5;
+			}
+
+			/* With the copy button showing, the code's scrolling area stops short of it. A transparent border is outside the scrolling area and under the background, so no code runs beneath the button. The button sits at the figure's end, and the code is always left to right, so a right-to-left page takes the border on the other side. */
+			& figure:has(> norn-copy-button > button:not([hidden])) {
+				--_chip: calc(2 * var(--norn-space-xs, 0.5rem) + var(--norn-ui-icon-s, 1em) + var(--norn-space-2xs, 0.25rem) + var(--norn-space-xs, 0.5rem));
+			}
+
+			& figure:has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: var(--_chip) solid transparent;
+			}
+
+			& figure:dir(rtl):has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: 0;
+				border-inline-start: var(--_chip) solid transparent;
+			}
+
+			& code {
+				padding: 0;
+				background: none;
+				font: inherit;
+			}
+
+			/* A frame with a header bar for the caption, set with `--norn-chrome: terminal` on an ancestor. */
+			@container style(--norn-chrome: terminal) {
+				& figure,
+				& figure:has(> figcaption) {
+					overflow: hidden;
+					row-gap: 0;
+					border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, 6px));
+				}
+
+				& figcaption {
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					block-size: 2rem;
+					padding-inline: var(--norn-space-s, 0.75rem);
+					background: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+				}
+
+				& pre {
+					border-radius: 0;
+				}
+			}
+
+			/* Colors for the ranges the script registers, set on `code` as Firefox ignores them on an ancestor. Plain text without Custom Highlight API support. */
+			& code::highlight(tok-comment) {
+				color: var(--norn-code-comment, light-dark(#566070, #9aa3b5));
+			}
+
+			& code::highlight(tok-string) {
+				color: var(--norn-code-string, light-dark(#0b6b3a, #7ed6a1));
+			}
+
+			& code::highlight(tok-keyword) {
+				color: var(--norn-code-keyword, light-dark(#6b2fc2, #c4a3ff));
+			}
+
+			& code::highlight(tok-function) {
+				color: var(--norn-code-function, light-dark(#1b4fc4, #8fb0ff));
+			}
+
+			& code::highlight(tok-number) {
+				color: var(--norn-code-number, light-dark(#9a4a00, #ffb36b));
+			}
+
+			& code::highlight(tok-flag) {
+				color: var(--norn-code-flag, light-dark(#00687a, #5ccfe0));
+			}
+
+			& code::highlight(tok-punctuation) {
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+
+			@media print {
+				break-inside: avoid;
+
+				& pre {
+					white-space: pre-wrap;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-hero {
+			display: block;
+
+			& > header {
+				display: grid;
+				grid-auto-flow: row;
+				align-content: start;
+				gap: var(--norn-space-m, 1.25rem);
+				inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), var(--norn-hero-width, var(--norn-layout-width, 64rem)));
+				margin-inline: auto;
+				padding-block: var(--norn-space-xl, 4rem) var(--norn-space-l, 2rem);
+			}
+
+			& > header > h1 {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: clamp(2rem, 5vw, 3.25rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			& > header > h1 > :first-child {
+				font-size: 1.15em;
+			}
+
+			& > header > h1 > :last-child:not(:first-child) {
+				color: var(--norn-hero-link, var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))));
+				font-size: 0.55em;
+				font-weight: 400;
+			}
+
+			& > header > p {
+				max-inline-size: var(--norn-text-measure, 40em);
+				margin: 0;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-size: var(--norn-font-size-l, 1.25rem);
+				text-wrap: pretty;
+			}
+
+			& > header > norn-fact-list {
+				--norn-fact-list-gap: var(--norn-space-l, 2rem) var(--norn-space-m, 1.25rem);
+			}
+
+			& > header > nav ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, 0.75rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+
+				& > header {
+					gap: var(--norn-space-s, 0.75rem);
+					padding-block: var(--norn-space-m, 1.25rem);
+				}
+			}
+		}
+	}
+@layer norn.layout {
+		/* Contents: a title and its description, in two columns when wide. Each row is one link, with no rules between them. */
+		[data-norn-contents] {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+			gap: var(--norn-space-s, 0.75rem);
+			/* The rows are padded, so the text lines up with the heading above. */
+			margin: 0 calc(-1 * var(--norn-space-m, 1.25rem));
+
+			& > div {
+				--_state: 0%;
+				position: relative;
+				display: grid;
+				align-content: start;
+				gap: var(--norn-space-2xs, 0.25rem);
+				padding: var(--norn-space-s, 0.75rem) var(--norn-space-m, 1.25rem);
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				/* The ring goes around the row, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, 2px) solid var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
+				}
+			}
+
+			& dt {
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				font-size: var(--norn-font-size-m, 1rem);
+				font-weight: 700;
+			}
+
+			/* The link reaches over the whole row. */
+			& dt a {
+				text-decoration: none;
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
+				}
+			}
+
+			& dd {
+				margin: 0;
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+		}
+	}
+@layer norn.components {
+		norn-skip-link {
+			display: block;
+
+			& a {
+				position: absolute;
+				inset-block-start: -5rem;
+				inset-inline-start: var(--norn-space-m, 1.25rem);
+				z-index: 10;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-radius: var(--norn-skip-link-radius, var(--norn-ui-border-radius, 6px));
+				background: var(--norn-skip-link-bg, var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932)));
+				color: var(--norn-skip-link-fg, var(--norn-text-base, light-dark(#16181d, #eceef3)));
+
+				&:focus {
+					inset-block-start: var(--norn-space-xs, 0.5rem);
+				}
+			}
+
+			@media (forced-colors: active) {
+				& a {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				display: none;
 			}
 		}
 	}

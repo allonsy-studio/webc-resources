@@ -474,32 +474,32 @@
 				}
 			}
 
-			/* Colors for the ranges the script registers. Plain text without Custom Highlight API support. */
-			&::highlight(tok-comment) {
+			/* Colors for the ranges the script registers, set on `code` as Firefox ignores them on an ancestor. Plain text without Custom Highlight API support. */
+			& code::highlight(tok-comment) {
 				color: var(--norn-code-comment, light-dark(#566070, #9aa3b5));
 			}
 
-			&::highlight(tok-string) {
+			& code::highlight(tok-string) {
 				color: var(--norn-code-string, light-dark(#0b6b3a, #7ed6a1));
 			}
 
-			&::highlight(tok-keyword) {
+			& code::highlight(tok-keyword) {
 				color: var(--norn-code-keyword, light-dark(#6b2fc2, #c4a3ff));
 			}
 
-			&::highlight(tok-function) {
+			& code::highlight(tok-function) {
 				color: var(--norn-code-function, light-dark(#1b4fc4, #8fb0ff));
 			}
 
-			&::highlight(tok-number) {
+			& code::highlight(tok-number) {
 				color: var(--norn-code-number, light-dark(#9a4a00, #ffb36b));
 			}
 
-			&::highlight(tok-flag) {
+			& code::highlight(tok-flag) {
 				color: var(--norn-code-flag, light-dark(#00687a, #5ccfe0));
 			}
 
-			&::highlight(tok-punctuation) {
+			& code::highlight(tok-punctuation) {
 				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
 			}
 
@@ -513,81 +513,66 @@
 		}
 	}
 @layer norn.components {
-		preview-props {
+		norn-simple-table {
 			display: block;
-			overflow-x: auto;
-		}
+			min-inline-size: 0;
 
-		preview-props:not(:defined) :is(thead th:last-child, td:has([data-field])) {
-			display: none;
-		}
-
-		preview-props [data-col="type"] code {
-			overflow-wrap: normal;
-			white-space: nowrap;
-		}
-
-		preview-props th[scope="row"] {
-			font-weight: 400;
-		}
-
-		preview-props th[scope="row"] code {
-			font-weight: 700;
-			white-space: nowrap;
-		}
-
-		preview-props :is(th, td) small {
-			display: block;
-			color: var(--norn-text-muted);
-		}
-
-		preview-props [data-field] {
-			display: flex;
-			align-items: center;
-			gap: var(--norn-space-xs);
-		}
-
-		preview-props input[type="text"] {
-			inline-size: 100%;
-			min-inline-size: 8rem;
-			padding: 0.25rem 0.5rem;
-			border: 1px solid var(--norn-ui-border-color);
-			border-radius: var(--norn-ui-border-radius);
-			background: var(--norn-surface-base);
-			color: var(--norn-text-base);
-			font-family: var(--norn-font-mono);
-			font-size: 0.85rem;
-		}
-
-		preview-props input[type="color"] {
-			inline-size: 2.5rem;
-			block-size: 1.75rem;
-			padding: 0;
-		}
-
-		preview-props button {
-			padding: 0.25rem 0.6rem;
-			border: 1px solid var(--norn-ui-border-color);
-			border-radius: var(--norn-ui-border-radius);
-			background: var(--norn-surface-base);
-			color: var(--norn-text-base);
-			font: inherit;
-			font-size: 0.85rem;
-			cursor: pointer;
-		}
-
-		preview-props button:disabled {
-			color: var(--norn-text-muted);
-			cursor: default;
-		}
-
-		@media (pointer: coarse) {
-			preview-props :is(button, input[type="text"]) {
-				min-block-size: 2.75rem;
+			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
+			& > div {
+				--_bg: var(--norn-simple-table-bg, var(--norn-surface-base, light-dark(#ffffff, #101216)));
+				--_shadow: color-mix(in oklab, var(--norn-text-base, light-dark(#16181d, #eceef3)) 18%, transparent);
+				overflow-x: auto;
+				background:
+					linear-gradient(to right, var(--_bg) 30%, transparent) local 0 0 / 2rem 100% no-repeat,
+					linear-gradient(to left, var(--_bg) 30%, transparent) local 100% 0 / 2rem 100% no-repeat,
+					radial-gradient(farthest-side at 0 50%, var(--_shadow), transparent) scroll 0 0 / 0.75rem 100% no-repeat,
+					radial-gradient(farthest-side at 100% 50%, var(--_shadow), transparent) scroll 100% 0 / 0.75rem 100% no-repeat;
 			}
 
-			preview-props input[type="color"] {
-				block-size: 2.75rem;
+			& > div > table {
+				min-inline-size: 100%;
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+			}
+
+			& > div > table > caption {
+				padding-block-end: var(--norn-space-xs, 0.5rem);
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				text-align: start;
+			}
+
+			& > div > table > thead {
+				background: var(--norn-simple-table-head, none);
+			}
+
+			& > div > table :is(th, td) {
+				min-inline-size: 7rem;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e)));
+				text-align: start;
+				vertical-align: top;
+			}
+
+			/* The last column is usually the one with sentences, so it keeps room to wrap into rather than a column of words. */
+			& > div > table :is(th, td):last-child {
+				min-inline-size: 10rem;
+			}
+
+			/* Wrap between words only: a token split across lines reads as two. */
+			& > div > table :is(th, td, code) {
+				overflow-wrap: normal;
+				word-break: normal;
+			}
+
+			& > div > table code {
+				white-space: nowrap;
+			}
+
+			@media print {
+				& > div {
+					overflow: visible;
+					background: none;
+				}
 			}
 		}
 	}
