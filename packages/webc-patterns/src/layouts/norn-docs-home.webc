@@ -13,7 +13,7 @@ nornCompiled: true
 /**
  * A docs site's home page: the hero with the install sample, then the docs pages as a contents list, each title and then its description. Extends `norn-base`.
  * The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section.
- * The install sample is a `norn-code-block` when `@allons-y/webc-code-sample` is installed, and a `<pre><code>` without it.
+ * The install sample is a `norn-code-block`: highlighted with `@allons-y/webc-code-sample`, and a plain `<pre><code>` without it.
  * Its texts ("Get started", "Read the docs", "View on GitHub", "Documentation") come from `componentStrings` under `norn-docs-home`, then English.
  * @prop {string} [lede] - The hero paragraph. Falls back to the description.
  * @prop {string} [install] - The install command.
@@ -35,10 +35,7 @@ nornCompiled: true
 			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.docs.length ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
-	<template webc:nokeep>
-		<norn-code-block webc:if="$data.norn.install && typeof nornTokenRanges === 'function'" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
-		<pre webc:elseif="$data.norn.install" id="install"><code @text="$data.norn.install"></code></pre>
-	</template>
+	<norn-code-block webc:if="$data.norn.install" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
 </norn-hero>
 <section webc:if="$data.norn.docs.length" id="docs">
 	<h2 @text="nornComponentStrings?.('norn-docs-home', 'contents', $data.page) || 'Documentation'"></h2>

@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// Compile each package's sources into the folders it ships: `src/*.webc` into `components/`, `src/layouts/*.webc` into `layouts/`,
+// Compile each package's sources into the folders it ships: `src/*.webc` into `components/`, `src/layouts/*.webc` into `layouts/`, `src/fallback/*.webc` into `fallback/`,
 // and `src/css/*.css` into `css/`.
 // A source writes a shared token as `var(--norn-space-m, t('space.m'))`. The build fills each `t()` from the root `tokens.json`,
 // so a component renders with no stylesheet beside it, and a project's own `tokens.css` still wins through the custom property.
@@ -146,6 +146,7 @@ function restoreIndent(source, output) {
 const TARGETS = [
 	{ from: "src", to: "components", extension: ".webc" },
 	{ from: "src/layouts", to: "layouts", extension: ".webc" },
+	{ from: "src/fallback", to: "fallback", extension: ".webc" },
 	{ from: "src/css", to: "css", extension: ".css" },
 ];
 
@@ -215,7 +216,7 @@ async function buildPackage(packageDir, resolvedFile, processor) {
 }
 
 /**
- * Compile each package's `src/` into `components/`, `layouts/`, and `css/`.
+ * Compile each package's `src/` into `components/`, `layouts/`, `fallback/`, and `css/`.
  *
  * @param {object} [options]
  * @param {string[]} [options.packages] - Package folder names; every package with a `src` by default

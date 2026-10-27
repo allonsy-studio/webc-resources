@@ -74,8 +74,11 @@ const LISTS = ["nav", "features", "packages", "docs", "workspaces"];
 /** Icon types by file extension, for the icon link. */
 const ICON_TYPES = { ".svg": "image/svg+xml", ".png": "image/png", ".ico": "image/x-icon", ".webp": "image/webp" };
 
+/** The plain `norn-code-block`, `<pre><code>`, registered in place of the code sample when it is not installed. */
+const plainCodeBlock = posix(path.join(HERE, "fallback", "norn-code-block.webc"));
+
 /**
- * `@allons-y/webc-code-sample`, when it is installed: an optional peer. Without it the layouts render code as `<pre><code>`.
+ * `@allons-y/webc-code-sample`, when it is installed: an optional peer. Without it the plugin registers `plainCodeBlock` under the same tag.
  * Any other failure to load it is a real error and is thrown.
  */
 const codeSample = isInstalled("@allons-y/webc-code-sample")
@@ -206,7 +209,7 @@ export default function norn(config, options = {}) {
 		throw new Error("norn: @11ty/eleventy-plugin-webc is registered twice. The Norn plugin registers it: remove the project's own `addPlugin`, and pass its component globs as `components`.");
 	}
 	try {
-		config.addPlugin(webc, { components: [patterns({ exclude }), ...(codeSample ? [codeSample.codeBlock] : []), ...components] });
+		config.addPlugin(webc, { components: [patterns({ exclude }), codeSample ? codeSample.codeBlock : plainCodeBlock, ...components] });
 	} catch (error) {
 		if (/"webc" template syntax twice/.test(error.message)) {
 			throw new Error("norn: @11ty/eleventy-plugin-webc is registered twice. The Norn plugin registers it: remove the other `addPlugin`, and pass its component globs as `components`.", { cause: error });

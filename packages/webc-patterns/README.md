@@ -15,7 +15,7 @@ npm install --save-dev @11ty/eleventy @11ty/eleventy-plugin-webc @allons-y/webc-
 npm install --save-dev @allons-y/webc-code-sample   # optional: highlighted code samples
 ```
 
-`@11ty/eleventy` and `@11ty/eleventy-plugin-webc` are peer dependencies. `@allons-y/webc-code-sample` is an optional one: with it installed, the plugin registers `norn-code-block` and highlights Markdown fences, and the layouts show code with it; without it, they show `<pre><code>`. The project is an ES module (`"type": "module"`). Node 22 or later.
+`@11ty/eleventy` and `@11ty/eleventy-plugin-webc` are peer dependencies. `@allons-y/webc-code-sample` is an optional one: with it installed, the plugin registers `norn-code-block` and highlights Markdown fences, and the layouts show code with it; without it, the plugin registers a plain `norn-code-block` under the same tag, so a hand-written sample and the layouts' samples show as `<pre><code>`, with their `id` and caption. The project is an ES module (`"type": "module"`). Node 22 or later.
 
 Evergreen browsers from about 2024. Features newer than that, such as `@scope`, degrade gracefully.
 
@@ -50,7 +50,7 @@ Then pick a layout per page in its front matter: `layout: norn-docs.webc`. The p
 
 The plugin registers:
 
-- `@11ty/eleventy-plugin-webc` once, with the patterns components, `norn-code-block` when the code sample is installed, and the `components` globs.
+- `@11ty/eleventy-plugin-webc` once, with the patterns components, `norn-code-block` from the code sample when it is installed (else the plain one), and the `components` globs.
 - The six layouts, under the project's configured layouts folder (or its includes folder), through `addTemplate`.
 - The helpers the components and layouts call: `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`, and `nornTokenRanges` with the code sample.
 - With `markdown`, the Markdown add-ons through `amendLibrary`: `highlightFences` from the code sample, `scrollTables`, `callouts`, and `headingAnchors`.

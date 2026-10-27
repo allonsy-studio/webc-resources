@@ -21,7 +21,7 @@ export default {
 	parameters: {
 		docs: {
 			description: {
-				component: 'A project\'s landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. Samples are `norn-code-block`s when `@allons-y/webc-code-sample` is installed, and `<pre><code>` without it. Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.',
+				component: 'A project\'s landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. Samples are `norn-code-block`s: highlighted with `@allons-y/webc-code-sample`, and plain `<pre><code>` without it. Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.',
 			},
 		},
 	},

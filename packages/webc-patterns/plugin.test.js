@@ -6,7 +6,9 @@
  */
 
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
@@ -86,6 +88,7 @@ test("the code sample is an optional peer: absent is fine, present is used, and 
 		const absent = fakeConfig();
 		(await install("absent", () => {})).default(absent, { layouts: false });
 		assert.equal(absent.calls.functions.nornTokenRanges, undefined, "no code sample helper");
+		assert.match(absent.calls.plugins[0].options.components[1], /\/@allons-y\/webc-patterns\/fallback\/norn-code-block\.webc$/, "the plain norn-code-block in its place");
 		assert.equal(absent.calls.amends.length, 3, "tables, callouts, and heading anchors, without the fences");
 
 		const present = fakeConfig();
@@ -104,6 +107,33 @@ test("the code sample is an optional peer: absent is fine, present is used, and 
 			}),
 			(error) => error.code === "ERR_MODULE_NOT_FOUND" && error.message.includes("a-dependency-that-is-not-installed"),
 		);
+	} finally {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
+});
+
+test("without the code sample, a site still renders every code sample as <pre><code>, with its id and caption", () => {
+	const repo = path.resolve(import.meta.dirname, "..", "..");
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-no-peer-"));
+	try {
+		// This package as a project installs it, with no @allons-y/webc-code-sample beside it.
+		const dir = path.join(root, "node_modules", "@allons-y", "webc-patterns");
+		fs.mkdirSync(dir, { recursive: true });
+		for (const entry of ["package.json", "plugin.js", "index.js", "markdown.js", "lib", "components", "layouts", "css", "fallback"].filter((entry) => fs.existsSync(path.join(import.meta.dirname, entry)))) fs.cpSync(path.join(import.meta.dirname, entry), path.join(dir, entry), { recursive: true });
+		fs.symlinkSync(path.join(repo, "node_modules", "@11ty"), path.join(root, "node_modules", "@11ty"), "junction");
+		const site = path.join(root, "src");
+		fs.mkdirSync(site);
+		fs.writeFileSync(path.join(root, "eleventy.config.js"), 'import norn from "@allons-y/webc-patterns/plugin";\nexport default (config) => { config.addPlugin(norn); };\nexport const config = { dir: { input: "src" }, templateFormats: ["md", "webc"], markdownTemplateEngine: false };\n');
+		fs.writeFileSync(path.join(site, "page.webc"), '---\nlayout: norn-base.webc\n---\n<norn-code-block id="sample" @language="js" @code="a < b && c" @caption="a.js"></norn-code-block>\n<norn-code-block @code="plain"></norn-code-block>\n');
+		fs.writeFileSync(path.join(site, "index.md"), "---\nlayout: norn-landing.webc\nname: Widget\ninstall: npm install widget\n---\n");
+		const eleventy = path.resolve(path.dirname(createRequire(import.meta.url).resolve("@11ty/eleventy")), "..", "cmd.cjs");
+		execFileSync(process.execPath, [eleventy, "--quiet"], { cwd: root, stdio: "pipe" });
+		const page = fs.readFileSync(path.join(root, "_site", "page", "index.html"), "utf8");
+		assert.ok(page.includes('<figure id="sample"><pre dir="ltr" data-language="js"><code>a &lt; b &amp;&amp; c</code></pre><figcaption>a.js</figcaption></figure>'), "the code, its id, and its caption");
+		assert.ok(page.includes('<pre dir="ltr"><code>plain</code></pre>'), "without a caption or a language");
+		assert.ok(!page.includes("<norn-code-block"), "no empty host");
+		const home = fs.readFileSync(path.join(root, "_site", "index.html"), "utf8");
+		assert.ok(home.includes('<pre dir="ltr" data-language="sh" id="install"><code>npm install widget</code></pre>'), "the layout's install sample");
 	} finally {
 		fs.rmSync(root, { recursive: true, force: true });
 	}

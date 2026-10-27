@@ -32,6 +32,7 @@
 	"files": [
 		"components/",
 		"layouts/",
+		"fallback/",
 		"css/",
 		"lib/",
 		"schema/",

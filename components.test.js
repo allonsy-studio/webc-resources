@@ -41,13 +41,16 @@ const components = filesIn("components");
 
 /** The compiled layouts and stylesheets, shipped beside the components. */
 const layouts = filesIn("layouts");
+
+/** The compiled fallbacks: the plain `norn-code-block` the plugin registers without the code sample. */
+const fallbacks = filesIn("fallback");
 const stylesheets = filesIn("css", ".css");
 
 /** The sources everything compiled comes from: components, layouts, and stylesheets. */
-const sources = [...filesIn("src"), ...filesIn("src/layouts"), ...filesIn("src/css", ".css")];
+const sources = [...filesIn("src"), ...filesIn("src/layouts"), ...filesIn("src/fallback"), ...filesIn("src/css", ".css")];
 
 /** Every compiled file, by the source it comes from. */
-const compiledFrom = (file) => file.replace(/\/src\/layouts\//, "/layouts/").replace(/\/src\/css\//, "/css/").replace(/\/src\//, "/components/");
+const compiledFrom = (file) => file.replace(/\/src\/layouts\//, "/layouts/").replace(/\/src\/fallback\//, "/fallback/").replace(/\/src\/css\//, "/css/").replace(/\/src\//, "/components/");
 
 const squash = (value) => value.replace(/\s+/g, " ").trim();
 
@@ -146,7 +149,7 @@ test("every token in tokens.json is read by a component, a layout, or the base s
 });
 
 test("the compiled components, layouts, and stylesheets keep no t() and no @tokens rule", () => {
-	const compiled = [...components, ...layouts, ...stylesheets];
+	const compiled = [...components, ...layouts, ...fallbacks, ...stylesheets];
 	assert.deepEqual(compiled.map(({ file }) => file).sort(), sources.map(({ file }) => compiledFrom(file)).sort(), "one compiled file per source");
 	for (const { file, text } of compiled) {
 		assert.ok(!/(^|[^\w-])t\(/.test(styles(text, file)), `${file}: a t() is left`);
@@ -478,7 +481,7 @@ test("the docs never name a token with a stray number after it", () => {
 const CATEGORIES = ["layout", "landmark", "container", "component", "template", "document"];
 
 test("every component and layout names its category: the first part of its CSF title, or its JSDoc's @category", () => {
-	for (const { file } of [...components, ...layouts]) {
+	for (const { file } of [...components, ...layouts, ...fallbacks]) {
 		const { category } = docsOf(file);
 		assert.ok(CATEGORIES.includes(category), `${file}: the category is one of ${CATEGORIES.join(", ")}`);
 	}
@@ -501,7 +504,7 @@ test("every component and layout keeps its license header in one server-only com
 			assert.ok(code.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "").trim() !== "", `${file}: a webc:setup block holds code, not only comments`);
 			assert.ok(!code.includes("SPDX-License-Identifier") && !code.includes("@category"), `${file}: the license header and JSDoc sit in the top comment`);
 		}
-		const shipped = [...components, ...layouts].find((entry) => entry.file === compiledFrom(file));
+		const shipped = [...components, ...layouts, ...fallbacks].find((entry) => entry.file === compiledFrom(file));
 		assert.deepEqual(shipped.text.match(SERVER_COMMENT), comments, `${file}: the build keeps the comment as written`);
 	}
 });
@@ -656,7 +659,7 @@ test("the leak check flags a descendant step from the host to the component's ow
 
 /**
  * Compile markup with every package component defined, and optionally a `componentStrings` table, a page `lang`, more page data,
- * and, with `codeSample: false`, without the code sample's helper, as when it is not installed.
+ * and, with `codeSample: false`, with the plain `norn-code-block` and without the code sample's helper, as when it is not installed.
  */
 async function render(content, { strings, lang, data = {}, codeSample = true, helpers = {} } = {}) {
 	const page = new WebC();
@@ -665,7 +668,7 @@ async function render(content, { strings, lang, data = {}, codeSample = true, he
 	for (const [name, helper] of Object.entries(helpers)) page.setHelper(name, helper);
 	if (codeSample) page.setHelper("nornTokenRanges", tokenRanges);
 	if (strings) page.setHelper("nornComponentStrings", componentStrings(strings));
-	page.defineComponents(Object.fromEntries(components.map(({ file }) => [path.basename(file, ".webc"), path.join(PACKAGES, file)])));
+	page.defineComponents(Object.fromEntries([...components, ...(codeSample ? [] : fallbacks)].map(({ file }) => [path.basename(file, ".webc"), path.join(PACKAGES, file)])));
 	page.setContent(content);
 	return (await page.compile({ data: { page: { lang }, ...data } })).html;
 }
@@ -935,8 +938,20 @@ test("a layout renders norn-code-block with the code sample, and <pre><code> wit
 	assert.ok(withSample.includes('<norn-code-block id="usage">') && !withSample.includes("<pre><code>"));
 	const without = await render(layoutText("norn-landing"), { data: { norn: LANDING }, codeSample: false });
 	assert.ok(!without.includes("<norn-code-block"));
-	assert.ok(without.includes('<figure id="usage"><pre><code>let a = 1;</code></pre><figcaption>a.js</figcaption></figure>'), "the usage sample");
-	assert.ok(without.includes("<pre><code>npm install widget</code></pre>"), "the install section");
+	assert.ok(without.includes('<figure id="usage"><pre dir="ltr" data-language="js"><code>let a = 1;</code></pre><figcaption>a.js</figcaption></figure>'), "the usage sample");
+	assert.ok(without.includes('<pre dir="ltr" data-language="sh"><code>npm install widget</code></pre>'), "the install section");
+	for (const { text } of layouts) assert.ok(!/nornTokenRanges|<pre\b/.test(withoutDocs(text)), "a layout always calls norn-code-block, and never tests for the code sample");
+});
+
+test("the plain norn-code-block keeps the code, the id, and the caption, and takes the real one's props and slots", async () => {
+	const html = await render('<norn-code-block id="a" @language="html" @code="<p>&amp;</p>" @caption="a.html"><span slot="copy">Copier</span></norn-code-block><norn-code-block id="b" @code="x"></norn-code-block>', { codeSample: false });
+	assert.ok(html.includes('<figure id="a"><pre dir="ltr" data-language="html"><code>&lt;p&gt;&amp;&lt;/p&gt;</code></pre><figcaption>a.html</figcaption></figure>'), html);
+	assert.ok(html.includes('<pre dir="ltr" id="b"><code>x</code></pre>'), html);
+	assert.ok(!html.includes("Copier"), "no copy button, so no copy text");
+	const real = components.find(({ file }) => file === "webc-code-sample/components/norn-code-block.webc").text;
+	const plain = fallbacks.find(({ file }) => file === "webc-patterns/fallback/norn-code-block.webc").text;
+	const api = (text) => [...text.matchAll(/^ \* @(prop \{[^}]*\} \[?[\w-]+|slot [\w-]+)/gm)].map(([, line]) => line);
+	assert.deepEqual(api(plain), api(real), "the same props and slots");
 });
 
 test("a layout takes its texts from componentStrings under its own name, then English", async () => {

@@ -24,7 +24,7 @@ neither of them knows the OSS site theme exists.
 ## Layout
 
 ```text
-packages/<name>/   src/*.webc, src/layouts/*.webc, src/css/*.css (the sources); src/**/*.stories.js (each component's CSF file, not shipped); components/, layouts/, css/ (compiled from src, not committed); index.js, README.md
+packages/<name>/   src/*.webc, src/layouts/*.webc, src/fallback/*.webc, src/css/*.css (the sources); src/**/*.stories.js (each component's CSF file, not shipped); components/, layouts/, fallback/, css/ (compiled from src, not committed); index.js, README.md
 tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
 scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json
 fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
@@ -209,8 +209,10 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
   `components` option. The OSS site plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
   sets `themeColor` and `locale` as `defaults`, and copies the fonts.
 - **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
-- **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. With it, layouts render `norn-code-block`;
-  without it, `<pre><code>`. A layout tests `typeof nornTokenRanges === 'function'`.
+- **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. Every call site, a layout's included, calls
+  `norn-code-block`. Without the peer the plugin registers the plain one from `src/fallback/`, compiled to `fallback/`: a
+  `<pre><code>` that keeps the code, the `id`, and the caption, with the real component's props and slots. It has no story,
+  since the preview installs the peer; `plugin.test.js` builds a site without the peer.
 
 ## Decisions
 
@@ -226,7 +228,7 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
 10. The Norn plugin owns the one plugin-webc registration; a theme or project adds globs through its `components` option, and nothing touches plugin-webc's internals.
 11. `norn-base` exposes four hooks (`head`, `banner`, `cta`, `credit`) through the `nornHook` helper. Fills append; an unknown name throws.
 12. A theme is a CSS file of custom properties. There is no theme API for styling.
-13. `@allons-y/webc-code-sample` is an optional peer of patterns: present, the plugin registers it and layouts use it; absent, layouts render `<pre><code>`.
+13. `@allons-y/webc-code-sample` is an optional peer of patterns: present, the plugin registers it; absent, it registers a plain `norn-code-block` that renders `<pre><code>`.
 14. The reset is optional: Norn looks the same without it.
 15. Browser support is evergreen browsers from about 2024 (`@layer`, `light-dark()`, `:has()`, container queries). A feature newer than that (`@scope`, `::details-content`, `interpolate-size`, the CSS Custom Highlight API) degrades gracefully: the content stays readable and usable without it, with no polyfill. The root README and each package README say so in one line.
 
