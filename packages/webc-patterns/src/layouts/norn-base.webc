@@ -15,7 +15,7 @@
 /**
  * The page frame every Norn layout extends: the head, the skip link, `norn-header`, `main`, and `norn-footer`, filled from props.
  * The Norn plugin ships it as an Eleventy layout; use it as `layout: norn-base.webc` for a WebC page, or extend it from a layout of the project's own.
- * A page that uses it directly and is not a WebC file, such as Markdown, has its content compiled, so the components the Markdown add-ons write render. Content that is already compiled (a WebC page, or a page on a layout that extends it) is inserted as it is, because compiling it again would render its kept component tags twice. It tells them apart by the page's own `layout` and `page.inputPath`, which a layout chain leaves alone.
+ * Markdown content is compiled once, so the components the Markdown add-ons write render, also through a Nunjucks or Liquid layout of the project's or a layout alias. Content that is already compiled is inserted as it is, because compiling it again would render its kept component tags twice: a WebC page, a `templateEngineOverride` with `webc`, a `{% renderTemplate "webc" %}` block, a page on a WebC layout of the project's own, and a page on a shipped layout, which sets `nornCompiled: true`. The `nornCompiles` helper decides, from `page.templateSyntax`. A Nunjucks, Liquid, or HTML page renders components through `{% renderTemplate "webc" %}`. A WebC layout of the project's own deeper in the chain that compiles the content sets `nornCompiled: true` in its front matter.
  * Props are `$data.norn`: the plugin's `props` mapping, or the same-named page data. Every list defaults to `[]`.
  * The head calls `norn-head`, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from `css/base.css` and `css/print.css`. A copy of this file pastes their text in.
  * A `<section>` directly in `main` is a centered column at `--norn-layout-width` with block padding and a gap, and its `h2` takes the section heading size. The `id` on the section is the anchor. The rule is in the `norn.layout` layer under `:where(main)`, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it.
@@ -136,7 +136,7 @@
 			</a>
 			<a webc:for="link of $data.norn.nav" :href="link.url" :aria-current="link.url === $data.page.url ? 'page' : undefined"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
 		</norn-header>
-		<main id="main" tabindex="-1"><template webc:if="/^norn-base(\.webc)?$/.test(String($data.layout)) && !String($data.page?.inputPath).endsWith('.webc')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
+		<main id="main" tabindex="-1"><template webc:if="nornCompiles($data, 'norn-base')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
 		<norn-footer>
 			<div>
 				<p webc:if="$data.norn.footer.name || $data.norn.name"><strong @text="$data.norn.footer.name || $data.norn.name"></strong></p>

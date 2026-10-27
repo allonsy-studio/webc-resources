@@ -52,7 +52,7 @@ The plugin registers:
 
 - `@11ty/eleventy-plugin-webc` once, with the patterns components, `norn-code-block` when the code sample is installed, and the `components` globs.
 - The six layouts, under the project's configured layouts folder (or its includes folder), through `addTemplate`.
-- The helpers the components and layouts call: `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, and `nornTokenRanges` with the code sample.
+- The helpers the components and layouts call: `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`, and `nornTokenRanges` with the code sample.
 - With `markdown`, the Markdown add-ons through `amendLibrary`: `highlightFences` from the code sample, `scrollTables`, `callouts`, and `headingAnchors`.
 - `dropEmptyBundleTags` as a transform, so a page with no CSS or JS keeps no empty `<link>` or `<script>`.
 
@@ -134,7 +134,7 @@ Each of the other layouts adds its own props, below. The base props a layout rea
 
 #### `norn-base.webc`
 
-The page frame: head, skip link, header, `main` around the content, and footer. It takes the props above. Used as a page's layout, it compiles the content of a page that is not a WebC file, so a Markdown page's callouts, code fences, and tables render as components. A WebC page, and a page on a layout that extends `norn-base`, already holds compiled content, which the frame inserts as it is.
+The page frame: head, skip link, header, `main` around the content, and footer. It takes the props above. It compiles Markdown content once, so a Markdown page's callouts, code fences, and tables render as components, also through a Nunjucks or Liquid layout of the project's or a layout alias. Content that WebC already compiled goes in as it is: a WebC page, a `templateEngineOverride` with `webc`, a `{% renderTemplate "webc" %}` block, and a page on any shipped layout or on a WebC layout of the project's own. A Nunjucks, Liquid, or HTML page renders its components through `{% renderTemplate "webc" %}`. The `nornCompiles` helper decides, from `page.templateSyntax`. Every other shipped layout sets `nornCompiled: true` in its front matter, so the frame leaves the content it compiled; a WebC layout of the project's own that compiles the content and sits deeper in the chain than the page's own layout sets it too.
 
 A `<section>` directly in `main` is a centered column at `--norn-layout-width`, with block padding, a gap, and a second-level heading style. Its `id` is the anchor. The rule is in the `norn.layout` layer under `:where(main)`, so a project rule overrides it, and a section anywhere else is left alone.
 
@@ -457,6 +457,7 @@ A layout has no caller to fill a slot, so its texts are keys of their own under 
 | `fillHooks(config, { head, banner, cta, credit })` | Adds markup to `norn-base`'s hooks |
 | `reset`, `base`, `print` | Absolute paths to `css/reset.css`, `css/base.css`, and `css/print.css` |
 | `HOOKS`, `LAYOUTS` | The hook names and the layout names |
+| `compiles(data, layout, aliases)` | Whether a shipped layout compiles the page content: the rule behind `nornCompiles` |
 
 `@allons-y/webc-patterns/markdown` exports the Markdown add-on:
 

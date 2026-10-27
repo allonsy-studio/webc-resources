@@ -1,0 +1,6 @@
+---
+layout: norn-workspace.webc
+title: WebC on workspace
+---
+<norn-icon @name="check"></norn-icon>
+<norn-link-button @href="/go/">Go</norn-link-button>

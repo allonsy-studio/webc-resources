@@ -146,6 +146,26 @@ function layoutProps(data, map, defaults) {
 	return props;
 }
 
+/**
+ * Whether a shipped layout compiles the page content as WebC, so the components the Markdown add-ons write render: the `nornCompiles` helper.
+ * Content compiles exactly once, and only when it is Markdown output that no WebC has compiled, by `page.templateSyntax`.
+ * WebC output, a `templateEngineOverride` with `webc`, and a Nunjucks or Liquid page that renders through `{% renderTemplate "webc" %}` are already compiled.
+ * A project's own WebC layout as the page's layout compiles the content itself. A Nunjucks or Liquid layout in the chain, or a layout alias, does not.
+ * Every child layout sets `nornCompiled: true` in its front matter, which reaches `norn-base` in the data, so the frame leaves what the child compiled.
+ *
+ * @param {object} data - The page data, `$data`
+ * @param {string} layout - The shipped layout that asks, such as `norn-docs`
+ * @param {Record<string, string>} [aliases] - The project's layout aliases
+ * @returns {boolean}
+ */
+export function compiles(data, layout, aliases = {}) {
+	const engines = String(data?.page?.templateSyntax ?? "").split(",");
+	if (!engines.includes("md") || engines.includes("webc")) return false;
+	const own = String(aliases[data.layout] ?? data.layout ?? "");
+	if (own.endsWith(".webc") && !LAYOUTS.includes(path.posix.basename(own, ".webc"))) return false;
+	return layout !== "norn-base" || !data.nornCompiled;
+}
+
 /** Read a compiled layout, with `norn-base`'s style placeholders filled from the package's css folder. */
 function readLayout(name) {
 	const text = fs.readFileSync(path.join(HERE, "layouts", `${name}.webc`), "utf8");
@@ -202,6 +222,7 @@ export default function norn(config, options = {}) {
 		return own.hooks[name].join("\n");
 	});
 	config.addJavaScriptFunction("nornIcons", () => projectIcons);
+	config.addJavaScriptFunction("nornCompiles", (data, layout) => compiles(data, layout, config.layoutAliases ?? {}));
 	if (icons !== undefined) {
 		config.on("eleventy.before", () => {
 			projectIcons = readIcons(icons);

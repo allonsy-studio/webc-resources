@@ -688,3 +688,46 @@ describe("the layouts without a props mapping", () => {
 		assert.ok(!fs.existsSync(path.join(output, "_includes")), "no stray page");
 	});
 });
+
+describe("page content compiles once, whatever the route to the layout", () => {
+	let output;
+
+	before(() => {
+		output = build({ config: "variants/compile/eleventy.config.js", output: "_site-compile" });
+	});
+
+	after(() => fs.rmSync(output, { recursive: true, force: true }));
+
+	/** The page body: its `norn-rich-text` on a docs layout, else its `main`. */
+	const main = (url) => {
+		const html = read(output, url, "index.html").match(/<main[^>]*>([\s\S]*?)<\/main>/)[1];
+		return html.match(/<norn-rich-text[^>]*>([\s\S]*)<\/norn-rich-text>/)?.[1] ?? html;
+	};
+
+	/** A link button and an icon, each rendered once. */
+	function once(url) {
+		const html = main(url);
+		assert.equal((html.match(/<a href="\/go\/" data-variant="primary">Go<\/a>/g) ?? []).length, 1, `${url}: the link button`);
+		assert.ok(!/<a\b(?![^>]*href)[^>]*>/.test(html), `${url}: no link without an href around it`);
+		return html;
+	}
+
+	test("a WebC page on norn-docs or norn-workspace, and a Markdown page set to WebC, keep their icon and link button", () => {
+		for (const url of ["docs-webc", "workspace-webc", "override-base", "override-docs"]) {
+			const html = once(url);
+			assert.equal((html.match(/<norn-icon>\s*<svg/g) ?? []).length, 1, `${url}: one icon`);
+		}
+		assert.ok(once("webc-md").includes("<norn-link-button>"), "WebC, then Markdown");
+		assert.ok(once("render").includes("<norn-icon>"), "a Nunjucks page through the Render plugin");
+	});
+
+	test("Markdown compiles once on norn-docs, on a project layout of any language, and through a layout alias", () => {
+		for (const url of ["docs-md", "chain", "own", "alias"]) {
+			const html = main(url);
+			assert.equal((html.match(/<norn-callout>/g) ?? []).length, 1, `${url}: one callout`);
+			assert.match(html, /<norn-callout>\s*<div role="note" data-variant="tip">/, `${url}: compiled`);
+			assert.ok(!html.includes("@variant"), `${url}: no raw prop`);
+		}
+		assert.ok(main("chain").includes("<div data-frame>") && main("own").includes("<div data-own>"), "the project layouts");
+	});
+});

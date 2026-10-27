@@ -99,7 +99,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    script. Setup is idempotent (`connectedCallback` runs again on a move), waits for `DOMContentLoaded` while the
    document is still parsing, and is undone in `disconnectedCallback`.
 9. Generic components take props and slots only, never `$data`. `$data.page` is allowed. A layout reads its props as
-   `$data.norn`, plus `$data.page` and `$data.content`, and never `$data.site` or `$data.project`. `norn-base` also reads `$data.layout`, the page's own layout, to tell a Markdown page on the frame from content that is already compiled.
+   `$data.norn`, plus `$data.page` and `$data.content`, and never `$data.site` or `$data.project`. Each layout that inserts the page content compiles it only when `nornCompiles($data, '<layout>')` says so: Markdown output that no WebC has compiled, once, at the first shipped layout. The child layouts set `nornCompiled: true` in their front matter, so `norn-base` leaves what they compiled.
    A dynamic `style` or `class` attribute must evaluate to a string, never `undefined`: WebC throws.
    Return `''` to omit it.
    A prop that isn't passed resolves to a same-named Eleventy helper or page data, not to
@@ -235,7 +235,7 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
 Changing any of these is a major version on the package that owns it: component tag names,
 props and slot names, layout names and their props (the `norn` data key), hook names, the plugin's options,
 custom properties and their fallbacks, cascade layer names and order,
-helper names components and layouts call (`nornTokenRanges`, `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`), the `norn` layer and `--norn-*` token names (and the paths in `tokens.json` that name them), the `data-tokens` format, exported
+helper names components and layouts call (`nornTokenRanges`, `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`), the `nornCompiled` layout flag, the `norn` layer and `--norn-*` token names (and the paths in `tokens.json` that name them), the `data-tokens` format, exported
 functions and their options, the string keys in `defaultStrings`, the `project.json` schema (patterns), and the `oss-docs`
 schema (OSS site).
 

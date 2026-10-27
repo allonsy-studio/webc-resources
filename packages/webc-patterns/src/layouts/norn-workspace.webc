@@ -1,5 +1,6 @@
 ---
 layout: norn-base.webc
+nornCompiled: true
 ---
 <!---
 /*
@@ -27,6 +28,7 @@ layout: norn-base.webc
 	<norn-rich-text>
 		<p webc:if="$data.norn.workspace && $data.norn.workspace.description" @text="$data.norn.workspace.description"></p>
 		<template webc:nokeep @html="($data.norn.workspace && $data.norn.workspace.html) || ''"></template>
-		<template webc:nokeep @html="$data.content || ''"></template>
+		<template webc:if="nornCompiles($data, 'norn-workspace')" webc:nokeep @html="$data.content || ''"></template>
+		<template webc:else webc:nokeep @raw="$data.content || ''"></template>
 	</norn-rich-text>
 </norn-sidebar-layout>

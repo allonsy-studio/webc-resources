@@ -1,0 +1,8 @@
+---
+layout: norn-docs.webc
+title: WebC on docs
+---
+<h2 id="one">One</h2>
+<norn-icon @name="check"></norn-icon>
+<norn-link-button @href="/go/">Go</norn-link-button>
+<h2 id="two">Two</h2>

@@ -1,5 +1,6 @@
 ---
 layout: norn-base.webc
+nornCompiled: true
 ---
 <!---
 /*
@@ -36,7 +37,10 @@ layout: norn-base.webc
 	</norn-side-nav>
 	<h1 @text="$data.norn.title || ''"></h1>
 	<norn-toc :@items="nornHeadings($data.content)"></norn-toc>
-	<norn-rich-text data-pagefind-body><template webc:nokeep @html="$data.content"></template></norn-rich-text>
+	<norn-rich-text data-pagefind-body
+		><template webc:if="nornCompiles($data, 'norn-docs')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
 	<norn-pager
 		:@prev="$data.norn.prev !== undefined ? $data.norn.prev : nornAdjacent($data.norn.docs, $data.page).prev"
 		:@next="$data.norn.next !== undefined ? $data.norn.next : nornAdjacent($data.norn.docs, $data.page).next"

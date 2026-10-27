@@ -17,7 +17,7 @@ import { WebC } from "@11ty/webc";
 
 import { tokenRanges } from "./packages/webc-code-sample/index.js";
 import { componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
-import { HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
+import { compiles, HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
 import { csfDoc, csfFile, readCsf } from "./preview/lib/catalog.js";
 import { readTokens, TOKENS_FILE } from "./scripts/build-components.js";
 
@@ -661,6 +661,7 @@ test("the leak check flags a descendant step from the host to the component's ow
 async function render(content, { strings, lang, data = {}, codeSample = true, helpers = {} } = {}) {
 	const page = new WebC();
 	page.setBundlerMode(true);
+	page.setHelper("nornCompiles", compiles);
 	for (const [name, helper] of Object.entries(helpers)) page.setHelper(name, helper);
 	if (codeSample) page.setHelper("nornTokenRanges", tokenRanges);
 	if (strings) page.setHelper("nornComponentStrings", componentStrings(strings));
@@ -898,7 +899,7 @@ test("the six layouts ship compiled: norn-base is a whole page, and every other 
 	for (const { file, text } of layouts) {
 		const name = path.basename(file, ".webc");
 		if (name === "norn-base") assert.ok(text.startsWith("<!doctype html>\n<html") && text.trimEnd().endsWith("</html>"), file);
-		else assert.ok(text.startsWith("---\nlayout: norn-base.webc\n---\n<!---\n/*\n * SPDX-License-Identifier: MPL-2.0"), file);
+		else assert.ok(text.startsWith("---\nlayout: norn-base.webc\nnornCompiled: true\n---\n<!---\n/*\n * SPDX-License-Identifier: MPL-2.0"), file);
 		assert.ok(text.includes("<!---\n/*\n * SPDX-License-Identifier: MPL-2.0"), `${file} carries the license header`);
 		assert.ok(!withoutDocs(text).includes("<!--"), `${file} has no HTML comment`);
 	}
@@ -922,8 +923,7 @@ test("norn-base embeds the base and print styles, and no layout reads site or pr
 	assert.ok(base.includes('<meta\n\t\t\twebc:is="norn-head"'), "the head, with the layer order first");
 	for (const { file, text } of layouts) {
 		const reads = new Set([...text.matchAll(/\$data\.(\w+)/g)].map(([, key]) => key));
-		const allowed = file.endsWith("norn-base.webc") ? ["norn", "page", "content", "layout"] : ["norn", "page", "content"];
-		assert.deepEqual([...reads].filter((key) => !allowed.includes(key)), [], `${file} reads only $data.norn, $data.page, and $data.content (and norn-base, $data.layout)`);
+		assert.deepEqual([...reads].filter((key) => !["norn", "page", "content"].includes(key)), [], `${file} reads only $data.norn, $data.page, and $data.content`);
 	}
 });
 

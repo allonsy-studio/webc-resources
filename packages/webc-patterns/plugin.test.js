@@ -18,7 +18,7 @@ import { codeBlock } from "../webc-code-sample/index.js";
 import { highlightFences } from "../webc-code-sample/markdown.js";
 import { patterns } from "./index.js";
 import { callouts, headingAnchors, scrollTables } from "./markdown.js";
-import norn, { base, fillHooks, HOOKS, LAYOUTS, print, reset } from "./plugin.js";
+import norn, { base, compiles, fillHooks, HOOKS, LAYOUTS, print, reset } from "./plugin.js";
 
 /** A stand-in for Eleventy's config that records what a plugin registers. */
 function fakeConfig({ input = "./src/content/", includes = "./src/_includes/", layouts = "./src/_layouts/", plugins = [] } = {}) {
@@ -112,7 +112,7 @@ test("the code sample is an optional peer: absent is fine, present is used, and 
 test("the plugin registers the helpers, the Markdown add-ons, the empty bundle tag transform, and the computed props", () => {
 	const config = fakeConfig();
 	norn(config, { layouts: false, strings: { "norn-skip-link": { label: "Sauter" } } });
-	assert.deepEqual(Object.keys(config.calls.functions).sort(), ["nornAdjacent", "nornComponentStrings", "nornHeadings", "nornHook", "nornIcons", "nornTokenRanges"]);
+	assert.deepEqual(Object.keys(config.calls.functions).sort(), ["nornAdjacent", "nornCompiles", "nornComponentStrings", "nornHeadings", "nornHook", "nornIcons", "nornTokenRanges"]);
 	assert.equal(config.calls.functions.nornComponentStrings("norn-skip-link", "label"), "Sauter");
 	assert.deepEqual(config.calls.amends, [["md", highlightFences], ["md", scrollTables], ["md", callouts], ["md", headingAnchors]]);
 	assert.ok(config.calls.transforms["norn-empty-bundle-tags"]);
@@ -126,7 +126,7 @@ test("the six layouts register under the configured layouts folder, and one outs
 	const config = fakeConfig();
 	norn(config);
 	assert.deepEqual(Object.keys(config.calls.templates).sort(), LAYOUTS.map((name) => `src/_layouts/${name}.webc`).sort());
-	assert.ok(config.calls.templates["src/_layouts/norn-docs.webc"].content.startsWith("---\nlayout: norn-base.webc\n---"));
+	assert.ok(config.calls.templates["src/_layouts/norn-docs.webc"].content.startsWith("---\nlayout: norn-base.webc\nnornCompiled: true\n---"));
 	const baseLayout = config.calls.templates["src/_layouts/norn-base.webc"].content;
 	assert.ok(baseLayout.includes("@layer norn.base {") && baseLayout.includes("@layer norn.print {") && !baseLayout.includes("/* norn: css/"), "the base and print styles are embedded");
 	const { extensions, fn } = config.calls.preprocessors["norn-layouts"];
@@ -136,6 +136,23 @@ test("the six layouts register under the configured layouts folder, and one outs
 	const inside = fakeConfig({ input: "./src/", includes: "./src/_includes/", layouts: null });
 	norn(inside);
 	assert.ok(inside.calls.templates["_includes/norn-landing.webc"], "the includes folder, relative to the input, without a layouts folder");
+});
+
+test("nornCompiles compiles Markdown once, at the first shipped layout, and never content WebC already compiled", () => {
+	const page = (templateSyntax, layout, more = {}) => ({ page: { templateSyntax }, layout, ...more });
+	for (const syntax of ["md", "liquid,md", "njk,md"]) assert.equal(compiles(page(syntax, "norn-base.webc"), "norn-base"), true, `${syntax} on norn-base`);
+	for (const syntax of ["webc", "webc,md", "njk", "liquid", "11ty.js", undefined]) assert.equal(compiles(page(syntax, "norn-base.webc"), "norn-base"), false, `${syntax}: already compiled, or not Markdown`);
+	assert.equal(compiles(page("md", "norn-docs.webc", { nornCompiled: true }), "norn-docs"), true, "the child layout compiles");
+	assert.equal(compiles(page("md", "norn-docs.webc", { nornCompiled: true }), "norn-base"), false, "and the frame leaves it");
+	assert.equal(compiles(page("md", "post.njk"), "norn-base"), true, "a Nunjucks layout in the chain");
+	assert.equal(compiles(page("md", "page"), "norn-base"), true, "an alias");
+	assert.equal(compiles(page("md", "docs", { nornCompiled: true }), "norn-docs", { docs: "norn-docs.webc" }), true, "an alias of a child layout");
+	assert.equal(compiles(page("md", "own.webc"), "norn-base"), false, "a WebC layout of the project's own compiles it");
+	assert.equal(compiles(page("md", "mine"), "norn-base", { mine: "layouts/own.webc" }), false, "also through an alias");
+	const config = fakeConfig();
+	config.layoutAliases = { mine: "own.webc" };
+	norn(config, { layouts: false });
+	assert.equal(config.calls.functions.nornCompiles(page("md", "mine"), "norn-base"), false, "the helper reads the project's aliases");
 });
 
 test("layouts: false registers none, a list leaves those out, and an unknown name throws", () => {
