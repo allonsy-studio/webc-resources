@@ -19,10 +19,28 @@ nornCompiled: true
  * @prop {{ url: string, title: string, icon?: string }[]} [docs] - The docs pages, in order. `icon` names a sidebar `norn-icon`.
  * @prop {{ url: string, title: string }} [prev] - Falls back to the page before this one in `docs`, by `nornAdjacent`.
  * @prop {{ url: string, title: string }} [next] - Falls back to the page after this one in `docs`.
- * @prop {{ bundle?: string, site?: string } | false} [search] - Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`). `false` leaves the search out.
+ * @prop {{ bundle?: string, site?: string } | false} [search] - Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`; a `url` with a scheme that does not parse fails the build). `false` leaves the search out.
  * @category template
  */
 --->
+<script webc:setup>
+/**
+ * The host the plain search form keeps results on: `search.site`, else the host of an absolute `url`, else none.
+ *
+ * @param {object} norn - The layout props, `$data.norn`
+ * @returns {string}
+ * @throws {Error} When `url` starts with a scheme but does not parse, naming the layout and the prop
+ */
+const searchSite = (norn) => {
+	if (norn.search && norn.search.site) return norn.search.site;
+	if (!/^https?:\/\//.test(typeof norn.url === "string" ? norn.url : "")) return "";
+	try {
+		return new URL(norn.url).host;
+	} catch (cause) {
+		throw new Error(`norn-docs: \`url\` "${norn.url}" is not a valid URL, so the search has no host to keep results on. Fix \`url\`, or set \`search.site\`.`, { cause });
+	}
+};
+</script>
 <norn-sidebar-layout>
 	<span slot="summary" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
 	<norn-side-nav slot="nav" :@items="$data.norn.docs">
@@ -31,7 +49,7 @@ nornCompiled: true
 			webc:if="$data.norn.search !== false"
 			slot="search"
 			:@bundle="($data.norn.search && $data.norn.search.bundle) || url('/pagefind/pagefind.js')"
-			:@site="($data.norn.search && $data.norn.search.site) || (/^https?:\/\//.test($data.norn.url || '') ? new URL($data.norn.url).host : '')"
+			:@site="searchSite($data.norn)"
 			><span slot="label" @text="nornComponentStrings?.('norn-docs', 'search', $data.page) || 'Search the docs'"></span
 		></norn-search>
 	</norn-side-nav>

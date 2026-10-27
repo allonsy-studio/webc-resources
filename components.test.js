@@ -1097,6 +1097,15 @@ test("norn-docs calls norn-toc only with two or more headings, and looks up the 
 	assert.ok(two.includes("<norn-toc>") && two.includes('href="#two"'), "two headings: the contents");
 });
 
+test("norn-docs searches the host of url, and a url it cannot parse fails the build naming the layout and the prop", async () => {
+	const helpers = { nornHeadings: headings, nornAdjacent: adjacent, url: (value) => value };
+	const page = (norn) => render(layoutText("norn-docs"), { helpers, data: { content: "", page: { url: "/" }, norn: { ...LANDING, docs: [], ...norn } } });
+	assert.ok((await page({ url: "https://example.com/docs/" })).includes('value="example.com"'), "the host of url");
+	assert.ok((await page({ url: "https://", search: { site: "example.org" } })).includes('value="example.org"'), "search.site wins, and url is not read");
+	assert.ok(!(await page({ url: "/relative/" })).includes('name="sites"'), "no host from a relative url");
+	await assert.rejects(page({ url: "https://" }), /norn-docs: `url` "https:\/\/" is not a valid URL/);
+});
+
 test("norn-heading-anchor without a slug fails the build and names the component and the prop, even when a slug helper is registered", async () => {
 	for (const helpers of [{}, { slug: (text) => String(text).toLowerCase() }]) {
 		const label = Object.keys(helpers).length ? "with a slug helper" : "without one";
