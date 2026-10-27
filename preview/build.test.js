@@ -296,6 +296,49 @@ describe("the preview in a browser", () => {
 		await context.close();
 	});
 
+	test("sixty samples on one page are all highlighted, and each group is registered once, not once per sample", async () => {
+		const frame = "/frames/code-sample/norn-code-block/default/";
+		const html = read(output, ...frame.split("/").filter(Boolean), "index.html");
+		const block = html.slice(html.indexOf("<norn-code-block>"), html.lastIndexOf("</norn-code-block>") + "</norn-code-block>".length);
+		const page = await browser.newPage();
+		await page.route(`${server.url}/many/`, (route) => route.fulfill({ contentType: "text/html", body: html.replace(block, block.repeat(60)) }));
+		await page.addInitScript(() => {
+			window.highlightSets = 0;
+			const set = window.HighlightRegistry.prototype.set;
+			window.HighlightRegistry.prototype.set = function (...args) {
+				window.highlightSets += 1;
+				return set.apply(this, args);
+			};
+		});
+		await page.goto(`${server.url}/many/`);
+		await page.waitForFunction(() => CSS.highlights.size > 0);
+		/** Each sample's registered ranges as `group:start:end`, against its own `data-tokens`. */
+		const registered = () =>
+			page.evaluate(() => {
+				const codes = [...document.querySelectorAll("norn-code-block code")];
+				const found = codes.map(() => []);
+				for (const [name, highlight] of CSS.highlights) {
+					for (const range of highlight) found[codes.findIndex((code) => code.contains(range.startContainer))]?.push(`${name.replace("tok-", "")}:${range.startOffset}:${range.endOffset}`);
+				}
+				return codes.map((code, index) => [found[index].sort(), JSON.parse(code.dataset.tokens).map((entry) => entry.join(":")).sort()]);
+			});
+		const samples = await registered();
+		assert.equal(samples.length, 60, "sixty samples");
+		for (const [index, [found, expected]] of samples.entries()) assert.deepEqual(found, expected, `sample ${index}`);
+		const groups = await page.evaluate(() => CSS.highlights.size);
+		assert.equal(await page.evaluate(() => window.highlightSets), groups, "each group is set once");
+		await page.evaluate(async () => {
+			const blocks = document.querySelectorAll("norn-code-block");
+			blocks[0].remove();
+			blocks[1].after(blocks[2]);
+			await new Promise(window.requestAnimationFrame);
+		});
+		const after = await registered();
+		assert.equal(after.length, 59);
+		for (const [index, [found, expected]] of after.entries()) assert.deepEqual(found, expected, `after a removal and a move, sample ${index}`);
+		await page.close();
+	});
+
 	test("no preview page scrolls sideways on a phone: the foundations table scrolls in its own box", async () => {
 		for (const width of [390, 320]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
