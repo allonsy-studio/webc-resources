@@ -17,6 +17,7 @@ export default {
 		usage: { description: "One sample for the hero. With it, the install command gets its own section.", control: "object", table: { category: "props", type: { summary: "{ language: string, code: string, caption?: string }" } } },
 		features: { description: "Feature cards.", control: "object", table: { category: "props", type: { summary: "{ title: string, body: string, href?: string }[]" } } },
 		packages: { description: "Package cards, titles in the mono face.", control: "object", table: { category: "props", type: { summary: "{ name: string, description: string, href?: string }[]" } } },
+		default: { description: "The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section.", control: "text", table: { category: "slots" } },
 	},
 	parameters: {
 		docs: {
