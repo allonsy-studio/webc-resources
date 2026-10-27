@@ -5,17 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * An aside in long-form text, set apart like a pull quote: a short label with an icon over the body, on a quiet raised panel. Use it for a fun fact, a tip, or a point worth a pause. It is not a status message: use `norn-notice` for one.
- * The kinds match GitHub's alerts and differ only in the label's color, its default text, and its icon. `callouts` in `@allons-y/webc-patterns/markdown` writes the same markup for a Markdown `> [!NOTE]` blockquote. Its role is `note`: it is not a landmark.
- * @prop {string} [variant] - `note`, `tip`, `important`, `warning`, or `caution`. Falls back to `note`.
- * @slot heading - The label over the body, as one element, such as `<span slot="heading">Did you know?</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
- * @slot - The body.
- * @cssprop --norn-callout-color - The label, icon, and rule color. Falls back to --norn-text-accent for `note` and `important`, and to a status color for the others.
- * @cssprop --norn-callout-bg - Background. Falls back to --norn-surface-raised.
- * @category container
- */
 --->
 <script webc:setup>
 const VARIANTS = { note: ["Note", "info"], tip: ["Tip", "tip"], important: ["Important", "important"], warning: ["Warning", "warning"], caution: ["Caution", "caution"] };

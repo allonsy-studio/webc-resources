@@ -181,15 +181,18 @@ describe("the preview build", () => {
 	});
 
 	test("a story page that loops over a prop's options in $data.csf renders one instance per option, in order", () => {
+		let checked = 0;
 		for (const component of catalog.components.filter(({ csfData }) => csfData)) {
 			for (const story of component.stories.filter(({ frame }) => !frame)) {
 				for (const [, prop] of story.source.matchAll(/\$data\.csf\.argTypes\.props\.([\w-]+)\.options/g)) {
 					const main = pageFor(output, story.frameUrl).match(/<main[\s\S]*<\/main>/)[0];
 					const options = component.csfData.argTypes.props[prop].options;
 					assert.deepEqual([...main.matchAll(new RegExp(`data-${prop}="([^"]+)"`, "g"))].map(([, value]) => value), options, `${story.frameUrl}: one per ${prop} option`);
+					checked++;
 				}
 			}
 		}
+		assert.ok(checked > 0, "the norn-callout Variants page reads its options from $data.csf");
 	});
 
 	test("the foundations page lists every token in tokens.json, with its group, default, and comment", () => {
