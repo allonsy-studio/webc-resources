@@ -26,6 +26,9 @@ export async function readAsset(kind, name) {
 	return Buffer.from(await response.arrayBuffer());
 }
 
+/** An attribute WebC runs at build time: a dynamic `:attr`, an `@prop` or `@html`, or a `webc:` directive. Tested with the quoted values blanked, since a value may hold any of these as text. */
+const WEBC_DIRECTIVE = /<[^<>]*\s(?::|@|webc:)[^\s=/>]+/i;
+
 /**
  * Prepare an org SVG for inlining: drop the XML prolog, check it is plain markup, and add attributes.
  *
@@ -37,8 +40,8 @@ export async function readAsset(kind, name) {
  */
 export function prepare(source, attributes, viewBox) {
 	const svg = source.replace(/<\?xml[^>]*\?>\s*/, "").trim();
-	if (!svg.startsWith("<svg") || !svg.endsWith("</svg>") || /<(script|style|foreignObject)\b|\son\w+=/i.test(svg)) {
-		throw new Error("An inline SVG must be plain markup: no script, style, foreignObject, or event handlers.");
+	if (!svg.startsWith("<svg") || !svg.endsWith("</svg>") || /<(script|style|foreignObject)\b|\son\w+=/i.test(svg) || WEBC_DIRECTIVE.test(svg.replace(/"[^"]*"|'[^']*'/g, '""'))) {
+		throw new Error("An inline SVG must be plain markup: no script, style, foreignObject, event handlers, or WebC directives.");
 	}
 	if (viewBox && !/^<svg\b[^>]*\sviewBox="/.test(svg)) throw new Error("The SVG has no viewBox to crop.");
 	const cropped = viewBox ? svg.replace(/^<svg\b[^>]*>/, (tag) => tag.replace(/\sviewBox="[^"]*"/, ` viewBox="${viewBox}"`)) : svg;

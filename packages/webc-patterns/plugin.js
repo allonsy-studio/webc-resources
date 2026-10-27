@@ -12,6 +12,7 @@ import webc from "@11ty/eleventy-plugin-webc";
 
 import { adjacent, componentStrings, dropEmptyBundleTags, patterns } from "./index.js";
 import { readIcons } from "./lib/icons.js";
+import { isInstalled } from "./lib/optional.js";
 import { callouts, headingAnchors, headings, scrollTables } from "./markdown.js";
 
 const HERE = import.meta.dirname;
@@ -77,13 +78,13 @@ const ICON_TYPES = { ".svg": "image/svg+xml", ".png": "image/png", ".ico": "imag
  * `@allons-y/webc-code-sample`, when it is installed: an optional peer. Without it the layouts render code as `<pre><code>`.
  * Any other failure to load it is a real error and is thrown.
  */
-const codeSample = await Promise.all([import("@allons-y/webc-code-sample"), import("@allons-y/webc-code-sample/markdown")]).then(
-	([main, markdown]) => ({ codeBlock: main.codeBlock, tokenRanges: main.tokenRanges, highlightFences: markdown.highlightFences }),
-	(error) => {
-		if (error?.code === "ERR_MODULE_NOT_FOUND" && String(error.message).includes("@allons-y/webc-code-sample")) return null;
-		throw error;
-	},
-);
+const codeSample = isInstalled("@allons-y/webc-code-sample")
+	? await Promise.all([import("@allons-y/webc-code-sample"), import("@allons-y/webc-code-sample/markdown")]).then(([main, markdown]) => ({
+		codeBlock: main.codeBlock,
+		tokenRanges: main.tokenRanges,
+		highlightFences: markdown.highlightFences,
+	}))
+	: null;
 
 /** Per-configuration state: the hook fills, and whether the plugin ran. */
 const states = new WeakMap();

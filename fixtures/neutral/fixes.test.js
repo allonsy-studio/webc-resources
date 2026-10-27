@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-/* global document, getComputedStyle */
+/* global document, getComputedStyle, requestAnimationFrame, scrollY, window */
 
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -75,6 +75,19 @@ describe("the component fixes, built from content with only the data a page name
 				["its list", "#plain-tags > ul", "#footer-tags > ul"],
 			]) {
 				assert.deepEqual(await computed(page, nested, BOX), await computed(page, plain, BOX), label);
+			}
+		});
+	});
+
+	test("norn-toc marks the section in view, for an id with a non-ASCII letter or a literal percent sign too", async () => {
+		await onPage("/toc-ids/", async (page) => {
+			await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
+			const frames = () => page.evaluate(() => new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => requestAnimationFrame(done)))));
+			const current = () => page.$$eval('norn-toc a[aria-current="location"]', (links) => links.map((link) => link.textContent));
+			for (const [id, text] of [["first", "First"], ["über-uns", "Über uns"], ["100%-sure", "A literal percent sign"], ["last", "Last"]]) {
+				await page.evaluate((target) => window.scrollTo(0, document.getElementById(target).getBoundingClientRect().top + scrollY), id);
+				await frames();
+				assert.deepEqual(await current(), [text], `with "${id}" at the top`);
 			}
 		});
 	});

@@ -11,15 +11,10 @@ import path from "node:path";
 import markdownIt from "markdown-it";
 
 import { callouts, scrollTables } from "../markdown.js";
+import { isInstalled } from "./optional.js";
 
 /** The code sample's Markdown add-on, when `@allons-y/webc-code-sample` is installed: fences render as `norn-code-block`. Without it they stay `<pre><code>`. */
-const highlightFences = await import("@allons-y/webc-code-sample/markdown").then(
-	(markdown) => markdown.highlightFences,
-	(error) => {
-		if (error?.code === "ERR_MODULE_NOT_FOUND" && String(error.message).includes("@allons-y/webc-code-sample")) return null;
-		throw error;
-	},
-);
+const highlightFences = isInstalled("@allons-y/webc-code-sample") ? (await import("@allons-y/webc-code-sample/markdown")).highlightFences : null;
 
 /** @param {string} file */
 const read = (file) => JSON.parse(fs.readFileSync(file, "utf8"));
@@ -31,8 +26,8 @@ const manifests = (root, patterns) =>
 		{ cwd: root, exclude: (name) => name === "node_modules" },
 	);
 
-/** Front matter and the first heading come off: the page has its own title. */
-const body = (text) => text.replace(/^---\n[\s\S]*?\n---\n/, "").replace(/^\s*# .*\n/, "");
+/** Front matter and the first heading come off: the page has its own title. Windows line endings count as the same. */
+const body = (text) => text.replace(/\r\n?/g, "\n").replace(/^---\n[\s\S]*?\n---\n/, "").replace(/^\s*# .*\n/, "");
 
 /**
  * One entry per workspace of the repository: its package.json and its page,

@@ -13,11 +13,14 @@ import norn, { fillHooks } from "@allons-y/webc-patterns/plugin";
 const HERE = import.meta.dirname;
 const posix = (file) => file.split(path.sep).join("/");
 
+/** A folder path to put at the start of a glob: a backslash before each character a glob reads as syntax, so `Dropbox (Personal)` matches itself. */
+const globPath = (folder) => posix(folder).replace(/[\\()*?[\]{|}]|[!+@](?=\()/g, "\\$&");
+
 /** Absolute path to the self-hosted font files. The OSS site plugin copies them to `assets/fonts`. */
 export const fonts = posix(path.join(HERE, "fonts"));
 
 /** Absolute glob for the OSS components: `oss-head` and the locked `oss-bar`, `oss-cta`, and `oss-credit`. The OSS site plugin adds it. */
-export const components = `${posix(path.join(HERE, "components"))}/*.webc`;
+export const components = `${globPath(path.join(HERE, "components"))}/*.webc`;
 
 /** Absolute path to the brand tokens, `css/tokens.css`, in the `norn.oss` layer. The OSS site plugin embeds it in every page's bundle. */
 export const tokens = posix(path.join(HERE, "css", "tokens.css"));
@@ -89,7 +92,7 @@ export function ossProps(site, project, { docs = [], anchors = false, oss = true
 		],
 		footer: {
 			name: pkg,
-			text: facts.tagline ? `${facts.tagline}.` : undefined,
+			text: facts.tagline ? `${facts.tagline.replace(/\.$/, "")}.` : undefined,
 			badges: facts.npmRelease && pkg
 				? [
 					{ href: facts.npm, src: `https://img.shields.io/npm/v/${pkg}?logo=npm&labelColor=black&color=%23${color}`, alt: `npm version of ${pkg}`, width: 105, height: 20 },

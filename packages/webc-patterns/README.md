@@ -72,6 +72,7 @@ Then `<norn-icon @name="logo"></norn-icon>`. Paths resolve against the working d
 - A project icon with a built-in's name replaces the built-in.
 - The icon keeps its `viewBox`, or takes one from a numeric `width` and `height`, or gets `0 0 24 24`, and its own paint. Draw it with `currentColor` so it follows the text color; a file with no paint is filled with `currentColor`. The built-in stroke styling applies to the built-in icons only, so a filled SVG renders filled.
 - The size, `<title>`, `<desc>`, scripts, and event handler attributes are dropped, and the drawing is always hidden from assistive tech. Name an icon that carries meaning in the `label` slot, as for any icon.
+- Ids in the drawing, and the references to them (`url(#id)`, `href`, and a `<style>`'s `#id` selectors), are prefixed with `norn-icon-` and the icon's name. Inlined icons share the page's one id space, so two icons that each define `id="a"` would otherwise clip and fill each other.
 - `mirror: true` flips the icon in right-to-left text, as the built-in arrows do.
 
 Without the plugin, `norn-icon` draws the built-in set only.

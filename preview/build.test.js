@@ -454,6 +454,35 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
+	test("a canvas that is moved keeps one set of listeners, and its frame still follows its content", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+		await page.goto(server.url + "/components/patterns/norn-card/");
+		const canvas = page.locator("preview-canvas").first();
+		const runs = () =>
+			canvas.evaluate(async (element) => {
+				let calls = 0;
+				element.querySelector("iframe").contentWindow.axe = { run: async () => (calls++, { violations: [] }) };
+				element.querySelector('[data-action="axe"]').click();
+				await new Promise((done) => setTimeout(done, 100));
+				return calls;
+			});
+		assert.equal(await runs(), 1, "as loaded");
+		for (const moves of [1, 2]) {
+			await canvas.evaluate((element) => element.parentElement.append(element));
+			await page.waitForFunction(() => document.querySelector("preview-canvas iframe").contentDocument?.readyState === "complete" && document.querySelector("preview-canvas iframe").contentDocument.body?.children.length > 0);
+			assert.equal(await runs(), 1, `one click, one run, after ${moves} move(s)`);
+		}
+		const height = () => canvas.evaluate((element) => [element.querySelector("iframe").getBoundingClientRect().height, element.querySelector("iframe").contentDocument.documentElement.scrollHeight]);
+		await canvas.evaluate((element) => element.querySelector("iframe").contentDocument.body.insertAdjacentHTML("beforeend", '<div style="block-size: 600px"></div>'));
+		await page.waitForFunction(() => {
+			const frame = document.querySelector("preview-canvas iframe");
+			return Math.round(frame.getBoundingClientRect().height) === frame.contentDocument.documentElement.scrollHeight;
+		});
+		const [frame, content] = await height();
+		assert.equal(Math.round(frame), content, "the frame grew with its content after the moves");
+		await page.close();
+	});
+
 	test("a width chosen on a wide screen leaves the frame no wider than its box once the screen is narrow", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(server.url + "/components/patterns/norn-card/");

@@ -63,6 +63,28 @@ test("an icon keeps its viewBox and drawing, and loses its size, title, scripts,
 	});
 });
 
+test("ids in a drawing, and the references to them, are scoped to the icon, so two icons cannot clip or fill each other", () => {
+	const drawing = "<svg viewBox=\"0 0 8 8\" fill=\"url(#g)\"><defs><linearGradient id=\"g\"><stop offset=\"0\"/></linearGradient><clipPath id='a'><rect width=\"4\" height=\"4\"/></clipPath></defs><style>#a{opacity:.5}.k{fill:#abc}</style><rect clip-path=\"url('#a')\" style=\"stroke:url( #g )\"/><use href=\"#a\"/><use xlink:href=\"#g\"/><path mask=\"url(#missing)\"/></svg>";
+	withFiles({ "one.svg": drawing, "two.svg": drawing }, (root) => {
+		const { one, two } = readIcons("*.svg", root);
+		const idsOf = (icon) => [...icon.body.matchAll(/\sid=["']([^"']+)["']/g)].map(([, id]) => id);
+		assert.deepEqual(idsOf(one), ["norn-icon-one-g", "norn-icon-one-a"]);
+		assert.deepEqual(idsOf(two), ["norn-icon-two-g", "norn-icon-two-a"]);
+		assert.ok(one.body.startsWith('<g fill="url(#norn-icon-one-g)">'), "the paint that moved to a group");
+		for (const expected of ["clip-path=\"url('#norn-icon-one-a')\"", "stroke:url( #norn-icon-one-g )", 'href="#norn-icon-one-a"', 'xlink:href="#norn-icon-one-g"', "#norn-icon-one-a{opacity:.5}", ".k{fill:#abc}", "url(#missing)"]) {
+			assert.ok(one.body.includes(expected), expected);
+		}
+		assert.ok(!one.body.includes("two") && !two.body.includes("norn-icon-one"), "nothing is shared");
+	});
+});
+
+test("an id that starts another is scoped whole, and an id with a regular expression character is read as text", () => {
+	withFiles({ "ids.svg": '<svg viewBox="0 0 8 8"><defs><clipPath id="a"/><clipPath id="a.b+c"/><clipPath id="ab"/></defs><rect clip-path="url(#a.b+c)"/><rect clip-path="url(#ab)"/><rect clip-path="url(#a)"/><rect clip-path="url(#aXb+c)"/></svg>' }, (root) => {
+		const { ids } = readIcons("*.svg", root);
+		for (const expected of ['id="norn-icon-ids-a.b+c"', "url(#norn-icon-ids-a.b+c)", "url(#norn-icon-ids-ab)", "url(#norn-icon-ids-a)", "url(#aXb+c)"]) assert.ok(ids.body.includes(expected), expected);
+	});
+});
+
 test("a file with no viewBox takes one from a numeric width and height", () => {
 	withFiles({ "sized.svg": '<svg width="16px" height="16"><path d="M1 1h14"/></svg>', "relative.svg": '<svg width="100%" height="1em"><path d="M1 1h14"/></svg>' }, (root) => {
 		const { sized, relative } = readIcons("*.svg", root);

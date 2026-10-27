@@ -26,7 +26,8 @@ export async function npmRelease(packageName, { fetch = globalThis.fetch, now = 
 	if (hit && now() - hit.at < CACHE_MS) return hit.released;
 	let released;
 	try {
-		const response = await fetch(`https://registry.npmjs.org/${packageName.replace("/", "%2F")}`, { signal: AbortSignal.timeout(5000) });
+		// The abbreviated document still has `dist-tags`, without the metadata of every version.
+		const response = await fetch(`https://registry.npmjs.org/${packageName.replace("/", "%2F")}`, { signal: AbortSignal.timeout(5000), headers: { accept: "application/vnd.npm.install-v1+json" } });
 		released = response.ok && typeof (await response.json())?.["dist-tags"]?.latest === "string";
 	} catch {
 		released = false;

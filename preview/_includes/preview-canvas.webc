@@ -213,8 +213,8 @@
 
 			disconnectedCallback() {
 				document.removeEventListener("previewpropschange", this.#onProps);
+				// The listeners stay on the elements they were added to. A move reloads the frame, and its `load` listener puts the observer back.
 				this.#observer?.disconnect();
-				this.#wired = false;
 			}
 
 			/** Follow the frame's height, and carry the controls into a fresh document. */

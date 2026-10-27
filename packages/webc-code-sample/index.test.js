@@ -132,6 +132,13 @@ test("tokenRanges: a shell session colors only the lines that start with a promp
 	assert.deepEqual(slices("$ npm i\nadded 1 package\n$ ls -la", "shell-session").map(([group, text]) => `${group}:${text}`), ["punctuation:$", "function:npm", "keyword:i", "punctuation:$", "function:ls", "flag:-la"]);
 });
 
+test("tokenRanges: a shell session colors every line of a command that goes on after a backslash, and none of the output", () => {
+	const roles = (code) => slices(code, "shell-session").map(([group, text]) => `${group}:${text}`);
+	assert.deepEqual(roles("$ docker run \\\n    --rm \\\n    alpine\nbooted ok\n$ ls"), ["punctuation:$", "function:docker", "keyword:run", "punctuation:\\", "flag:--rm", "punctuation:\\", "string:alpine", "punctuation:$", "function:ls"], "the last line of the command is a command line too");
+	assert.deepEqual(roles('$ git commit \\\n  -m "a b"'), ["punctuation:$", "function:git", "keyword:commit", "punctuation:\\", "flag:-m", 'string:"a b"'], "a quoted argument on a continuation line is one string");
+	assert.deepEqual(roles("$ echo hi\nC:\\dir\\\nnot a command\n$ ls"), ["punctuation:$", "function:echo", "keyword:hi", "punctuation:$", "function:ls"], "output that ends in a backslash does not continue anything");
+});
+
 test("tokenRanges: the aliases of the loaded languages have grammars", () => {
 	const samples = { sh: "ls", shell: "ls", "shell-session": "$ ls", ts: "const a: number = 1;", html: "<a>t</a>", md: "# Title", markdown: "**b**", yml: "a: 1", js: "const a = 1;" };
 	for (const [language, code] of Object.entries(samples)) assert.equal(typeof tokenRanges(code, language), "string", `${language} has a grammar`);

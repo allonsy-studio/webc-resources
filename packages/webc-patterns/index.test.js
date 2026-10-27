@@ -7,8 +7,12 @@
 
 import assert from "node:assert/strict";
 import fs from "node:fs";
+import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
+
+import { WebC } from "@11ty/webc";
 
 import { adjacent, componentStrings, defaultStrings, dropEmptyBundleTags, patterns } from "./index.js";
 
@@ -21,7 +25,24 @@ test("patterns: a forward-slash glob over every component", () => {
 	const glob = patterns();
 	assert.ok(glob.endsWith("/components/*.webc"));
 	assert.ok(path.isAbsolute(glob.split("/").join(path.sep)) || glob.startsWith("/") || /^[A-Za-z]:/.test(glob));
-	assert.ok(!glob.includes("\\"));
+	assert.ok(!glob.replace(/\\(?=[\\()*?[\]{|}!+@])/g, "").includes("\\"), "no backslash path separators; one before a glob character is an escape");
+});
+
+test("patterns: the glob finds the components in a folder whose name holds glob syntax", async () => {
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-glob-"));
+	try {
+		for (const folder of ["plain", "Dropbox (Personal)", "site [copy]", "a{b,c}", "(copy) of site", "hello!"]) {
+			const dir = path.join(root, folder, "node_modules", "@allons-y", "webc-patterns");
+			fs.mkdirSync(path.join(dir, "components"), { recursive: true });
+			fs.copyFileSync(path.join(import.meta.dirname, "index.js"), path.join(dir, "index.js"));
+			for (const name of ["norn-card", "norn-hero"]) fs.writeFileSync(path.join(dir, "components", `${name}.webc`), "<p></p>");
+			const copy = await import(pathToFileURL(path.join(dir, "index.js")).href);
+			assert.deepEqual(Object.keys(WebC.getComponentsMap([copy.patterns()])).sort(), ["norn-card", "norn-hero"], folder);
+			assert.deepEqual(Object.keys(WebC.getComponentsMap([copy.patterns({ exclude: ["norn-card"] })])), ["norn-hero"], `${folder}, with an exclusion`);
+		}
+	} finally {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
 });
 
 test("patterns: excluded names drop out of the glob", () => {

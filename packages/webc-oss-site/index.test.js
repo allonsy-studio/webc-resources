@@ -70,6 +70,11 @@ test("ossProps: the head, header, and footer props from the site facts and proje
 	]);
 });
 
+test("ossProps: a tagline that already ends in a period is not given a second one", () => {
+	assert.equal(ossProps({ ...SITE, tagline: "Fast. Small." }, {}).footer.text, "Fast. Small.");
+	assert.equal(ossProps(SITE, {}).footer.text, "Builds widgets.");
+});
+
 test("ossProps: conduct and security come from the project first, and Allons-y Studio's policies only with the OSS site theme on", () => {
 	const help = (options) => ossProps(SITE, {}, options).footer.groups[1].links;
 	assert.deepEqual(help().slice(2).map(({ url }) => url), [SITE.conductUrl, policies.security]);
@@ -102,7 +107,7 @@ test("the OSS site plugin adds Norn with the OSS components, the theme color, an
 	assert.deepEqual(options.components, [glob, "_includes/*.webc"]);
 	assert.deepEqual(options.defaults, { themeColor: "#33394e", locale: "fr_FR" });
 	assert.deepEqual(config.calls.passthrough, [{ [fonts]: "assets/fonts" }]);
-	assert.ok(glob.endsWith("/components/*.webc") && !glob.includes("\\"));
+	assert.ok(glob.endsWith("/components/*.webc") && !glob.replace(/\\(?=[\\()*?[\]{|}!+@])/g, "").includes("\\"), "no backslash path separators; one before a glob character is an escape");
 });
 
 test("the brand tokens set only custom properties, in the norn.oss layer", () => {
@@ -157,4 +162,12 @@ test("prepare: refuses script, style, foreignObject, event handlers, and anythin
 	for (const bad of ["<svg><script>1</script></svg>", "<svg><style>a{}</style></svg>", "<svg><foreignObject/></svg>", '<svg onload="x()"></svg>', "<div></div>"]) {
 		assert.throws(() => prepare(bad, 'role="img"'), /plain markup/, bad);
 	}
+});
+
+test("prepare: refuses WebC directives, which run when the component is built, and keeps an @ or : that is only text or a value", () => {
+	for (const bad of ['<svg><rect :data-x="process.env.NPM_TOKEN"/></svg>', '<svg><g @html="1"></g></svg>', "<svg><g @raw='1'></g></svg>", '<svg><g webc:type="js"></g></svg>', "<svg webc:nokeep><path/></svg>", '<svg><path\n\t:d="1"/></svg>']) {
+		assert.throws(() => prepare(bad, 'role="img"'), /WebC directives/, bad);
+	}
+	const fine = '<svg viewBox="0 0 1 1" aria-label="Follow @allons-y on x:y"><text>Follow @allons-y :)</text><use xlink:href="#a" xml:space="preserve"/></svg>';
+	assert.equal(prepare(fine, 'role="img"'), fine.replace("<svg", '<svg role="img"'));
 });

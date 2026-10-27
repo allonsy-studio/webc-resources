@@ -676,6 +676,11 @@ describe("the layouts without a props mapping", () => {
 		assert.ok(!/<norn-header>[\s\S]*<a href="[^"]*">an object where a list goes/.test(docs), "a nav that is not a list is empty");
 	});
 
+	test("a tagline with no name is the whole title, not \"undefined: \" before it", () => {
+		const html = read(output, "tagline-only", "index.html");
+		assert.ok(html.includes("<title>Only a tagline</title>"), html.match(/<title>[^<]*<\/title>/)?.[0]);
+	});
+
 	test("register no reset and no stylesheet of the project's, and leave no stray page for a layout", () => {
 		const html = read(output, "index.html");
 		assert.ok(!bundles(output, html).join("\n").includes("@layer norn.reset {"), "no reset");

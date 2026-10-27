@@ -6,8 +6,10 @@
  */
 
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import { createRequire } from "node:module";
+import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 
@@ -381,6 +383,17 @@ test("norn-card has a fill and no band, border, or underline at rest, and its he
 	assert.match(css, /a \{ color: var\(--norn-card-link, [^;]+; text-decoration: none;/, "no underline at rest");
 	const grid = cssOf("norn-card-grid");
 	assert.ok(!/ActiveText|VisitedText|GrayText|accent|feature/.test(grid + sources.find(({ file }) => file.endsWith("/norn-card-grid.webc")).text), "no accent cycle and no system color");
+});
+
+test("the build script runs when it is started through a symlinked path", () => {
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-link-"));
+	try {
+		fs.symlinkSync(path.join(import.meta.dirname, "scripts"), path.join(root, "scripts"), "junction");
+		const output = execFileSync(process.execPath, [path.join(root, "scripts", "build-components.js"), "webc-code-sample"], { encoding: "utf8" });
+		assert.match(output, /^webc-code-sample: 1 components$/m, "the package is built and reported");
+	} finally {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
 });
 
 test("the build writes the @supports not at-rule(@scope) copy of norn-rich-text from its @scope rules, pseudo-elements outside the :where()", () => {

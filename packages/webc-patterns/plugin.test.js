@@ -10,6 +10,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { test } from "node:test";
+import { pathToFileURL } from "node:url";
 
 import webc from "@11ty/eleventy-plugin-webc";
 
@@ -64,6 +65,48 @@ test("the plugin registers the WebC plugin once: the patterns, then the code sam
 	const registrations = config.calls.plugins.filter(({ plugin }) => plugin === webc);
 	assert.equal(registrations.length, 1);
 	assert.deepEqual(registrations[0].options.components, [patterns({ exclude: ["norn-card"] }), codeBlock, "theme/*.webc", "_includes/*.webc"]);
+});
+
+test("the code sample is an optional peer: absent is fine, present is used, and installed but broken is an error", async () => {
+	const repo = path.resolve(import.meta.dirname, "..", "..");
+	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-peer-"));
+	/** This package copied into a project's node_modules, which `modules` then fills. Returns the copy's plugin module. */
+	const install = async (name, modules) => {
+		const project = path.join(root, name, "node_modules");
+		const dir = path.join(project, "@allons-y", "webc-patterns");
+		fs.mkdirSync(path.join(dir, "lib"), { recursive: true });
+		fs.mkdirSync(path.join(dir, "components"));
+		fs.writeFileSync(path.join(dir, "components", "norn-card.webc"), "<p></p>");
+		for (const file of ["plugin.js", "index.js", "markdown.js", "lib/icons.js", "lib/optional.js"]) fs.copyFileSync(path.join(import.meta.dirname, file), path.join(dir, file));
+		fs.symlinkSync(path.join(repo, "node_modules", "@11ty"), path.join(project, "@11ty"), "junction");
+		modules(path.join(project, "@allons-y"));
+		return import(pathToFileURL(path.join(dir, "plugin.js")).href);
+	};
+	try {
+		const absent = fakeConfig();
+		(await install("absent", () => {})).default(absent, { layouts: false });
+		assert.equal(absent.calls.functions.nornTokenRanges, undefined, "no code sample helper");
+		assert.equal(absent.calls.amends.length, 3, "tables, callouts, and heading anchors, without the fences");
+
+		const present = fakeConfig();
+		(await install("present", (scope) => fs.symlinkSync(path.join(repo, "packages", "webc-code-sample"), path.join(scope, "webc-code-sample"), "junction"))).default(present, { layouts: false });
+		assert.equal(typeof present.calls.functions.nornTokenRanges, "function");
+		assert.equal(present.calls.amends.length, 4, "with the fences");
+
+		// Installed, but one of its own dependencies is missing: Node names the importing file in the message, and that path holds the peer's name.
+		await assert.rejects(
+			install("broken", (scope) => {
+				const stub = path.join(scope, "webc-code-sample");
+				fs.mkdirSync(stub);
+				fs.writeFileSync(path.join(stub, "package.json"), JSON.stringify({ name: "@allons-y/webc-code-sample", type: "module", exports: { ".": "./index.js", "./markdown": "./markdown.js" } }));
+				fs.writeFileSync(path.join(stub, "index.js"), 'import "a-dependency-that-is-not-installed";\n');
+				fs.writeFileSync(path.join(stub, "markdown.js"), "export const highlightFences = () => {};\n");
+			}),
+			(error) => error.code === "ERR_MODULE_NOT_FOUND" && error.message.includes("a-dependency-that-is-not-installed"),
+		);
+	} finally {
+		fs.rmSync(root, { recursive: true, force: true });
+	}
 });
 
 test("the plugin registers the helpers, the Markdown add-ons, the empty bundle tag transform, and the computed props", () => {

@@ -39,6 +39,9 @@ const OPERATOR = /^[<>|&;()0-9]*[<>|&;()]+$/;
 const ASSIGNMENT = /^[A-Za-z_]\w*=/;
 const SEPARATOR = /^(\|\|?|&&|&|;|\(|\|&)$/;
 
+/** Whether a line ends with a lone backslash, so its command goes on in the next line. */
+const continues = (line) => line.trimEnd().split(/\s+/).at(-1) === "\\";
+
 const GROUP_OF = new Map(Object.entries(GROUPS).flatMap(([group, types]) => types.map((type) => [type, group])));
 
 /**
@@ -83,11 +86,14 @@ export function tokenRanges(code, language = "") {
 function shellWords(code, ranges, session) {
 	const roles = [];
 	if (session) {
-		// Output lines are plain: keep Prism's ranges only on the lines that start with a prompt.
+		// Output lines are plain: keep Prism's ranges only on the lines of a command, which start with a prompt and go on while a line ends with a backslash.
 		let at = 0;
+		let running = false;
 		const kept = new Set();
 		for (const line of code.split("\n")) {
-			if (/^\s*\$\s/.test(line)) kept.add(at);
+			const command = running || /^\s*\$\s/.test(line);
+			if (command) kept.add(at);
+			running = command && continues(line);
 			at += line.length + 1;
 		}
 		const lineStart = (offset) => code.lastIndexOf("\n", offset - 1) + 1;
@@ -102,12 +108,13 @@ function shellWords(code, ranges, session) {
 	for (const line of code.split("\n")) {
 		const words = [...line.matchAll(/\S+/g)];
 		const prompted = /^\s*\$\s/.test(line);
-		if (!continued) {
+		const continuing = continued;
+		if (!continuing) {
 			command = !session || prompted;
 			sub = false;
 			dashes = false;
 		}
-		continued = words.at(-1)?.[0] === "\\";
+		continued = (!session || prompted || continuing) && continues(line);
 		for (const [index, match] of words.entries()) {
 			const [word] = match;
 			const start = offset + match.index;
@@ -120,7 +127,7 @@ function shellWords(code, ranges, session) {
 				roles.push(["punctuation", start, end]);
 				continue;
 			}
-			if (!command && session && !prompted && !continued) continue;
+			if (!command && session && !prompted && !continuing) continue;
 			if (SEPARATOR.test(word)) {
 				command = true;
 				continue;

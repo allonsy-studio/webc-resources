@@ -28,16 +28,16 @@ function minimumVersion(range) {
 const firstSentence = (text) => text.split(/(?<=\.)\s/)[0].replace(/\.$/, "");
 
 /**
- * The blob URL of a policy file the project keeps, or null.
+ * The URL of a policy file the project keeps, or null.
  *
  * @param {string} root - The project root
- * @param {string} repo - The repository's browse URL
+ * @param {(file: string) => string} link - The URL of a file in the repository
  * @param {string} name - A file name, such as `SECURITY.md`
  * @returns {string | null}
  */
-function policyUrl(root, repo, name) {
+function policyUrl(root, link, name) {
 	const found = POLICY_DIRS.map((dir) => path.posix.join(dir, name)).find((file) => fs.existsSync(path.join(root, ...file.split("/"))));
-	return found ? `${repo}/blob/main/${found}` : null;
+	return found ? link(found) : null;
 }
 
 /**
@@ -63,6 +63,8 @@ export function buildSite({ packagePath, projectPath, host }) {
 	const repo = info.browse();
 	const repoName = repo.split("/").pop();
 	const root = path.dirname(packagePath);
+	/** A file on the default branch, in the URL form its host uses: GitHub's `blob/main/…` is Bitbucket's `src/main/…`. */
+	const link = (file) => info.browseFile(file, { committish: "main" });
 
 	return {
 		name: pkg.name.split("/").pop(),
@@ -70,16 +72,16 @@ export function buildSite({ packagePath, projectPath, host }) {
 		tagline: project.tagline ?? firstSentence(pkg.description),
 		description: pkg.description,
 		license: pkg.license,
-		licenseUrl: `${repo}/blob/main/LICENSE`,
+		licenseUrl: link("LICENSE"),
 		repo,
 		repoName,
 		npm: pkg.private ? null : `https://www.npmjs.com/package/${pkg.name}`,
 		node: minimumVersion(pkg.engines?.node),
 		url: project.url ? project.url.replace(/\/?$/, "/") : host ? `${host.replace(/\/$/, "")}/${repoName}/` : null,
 		issuesUrl: pkg.bugs?.url ?? `${repo}/issues`,
-		contributingUrl: `${repo}/blob/main/.github/CONTRIBUTING.md`,
-		changelogUrl: `${repo}/blob/main/CHANGELOG.md`,
-		conductUrl: policyUrl(root, repo, "CODE_OF_CONDUCT.md"),
-		securityUrl: policyUrl(root, repo, "SECURITY.md"),
+		contributingUrl: link(".github/CONTRIBUTING.md"),
+		changelogUrl: link("CHANGELOG.md"),
+		conductUrl: policyUrl(root, link, "CODE_OF_CONDUCT.md"),
+		securityUrl: policyUrl(root, link, "SECURITY.md"),
 	};
 }

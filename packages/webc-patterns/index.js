@@ -10,6 +10,15 @@ import path from "node:path";
 
 const COMPONENTS = path.join(import.meta.dirname, "components");
 
+/**
+ * A folder path to put at the start of a glob: forward slashes, and a backslash before each character a glob reads as syntax,
+ * so a folder such as `Dropbox (Personal)` matches itself and not `Dropbox Personal`.
+ *
+ * @param {string} folder
+ * @returns {string}
+ */
+const globPath = (folder) => folder.split(path.sep).join("/").replace(/[\\()*?[\]{|}]|[!+@](?=\()/g, "\\$&");
+
 /** Component names in the package, from the files in `components/`. */
 const names = () =>
 	fs
@@ -31,7 +40,7 @@ export function patterns({ exclude = [] } = {}) {
 	if (unknown.length) {
 		throw new Error(`patterns: no component named ${unknown.map((name) => `"${name}"`).join(", ")}. Available: ${available.join(", ")}`);
 	}
-	const dir = COMPONENTS.split(path.sep).join("/");
+	const dir = globPath(COMPONENTS);
 	return exclude.length ? `${dir}/!(${exclude.join("|")}).webc` : `${dir}/*.webc`;
 }
 

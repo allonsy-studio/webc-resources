@@ -77,6 +77,33 @@ function parse(text, file) {
 	return { viewBox, body: paint.length ? `<g${paint.join("")}>${inner}</g>` : inner };
 }
 
+/**
+ * Give every id in an icon's drawing, and each reference to it, a prefix made from the icon's name.
+ * Inlined icons share the page's one id space, so two icons that each define `id="a"`, as SVGO's `cleanupIds` leaves them, would clip, mask, and fill each other:
+ * a reference resolves to the first element with the id, whichever icon it is in. The prefix is the same every time, so an icon used twice repeats its ids only with itself.
+ * References are `url(#id)`, `href` and `xlink:href`, and the `#id` selectors of a `<style>` in the drawing.
+ *
+ * @param {string} markup - The drawing
+ * @param {string} name - The icon's name, a lowercase kebab name
+ * @returns {string}
+ */
+function scopeIds(markup, name) {
+	const ids = [...new Set([...markup.matchAll(/\sid\s*=\s*(?:"([^"]*)"|'([^']*)')/gi)].map(([, double, single]) => double ?? single))].filter(Boolean);
+	if (!ids.length) return markup;
+	const prefix = `norn-icon-${name}-`;
+	// The longest first, so an id that starts another is not matched as the shorter one.
+	const any = ids
+		.sort((a, b) => b.length - a.length)
+		.map((id) => id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+		.join("|");
+	const scoped = (_, before, id) => `${before}${prefix}${id}`;
+	return markup
+		.replace(new RegExp(`(\\sid\\s*=\\s*["'])(${any})(?=["'])`, "gi"), scoped)
+		.replace(new RegExp(`(url\\(\\s*["']?#)(${any})(?=["']?\\s*\\))`, "gi"), scoped)
+		.replace(new RegExp(`((?:xlink:)?href\\s*=\\s*["']#)(${any})(?=["'])`, "gi"), scoped)
+		.replace(/<style\b[\s\S]*?<\/style\s*>/gi, (style) => style.replace(new RegExp(`(#)(${any})(?![\\w-])`, "g"), scoped));
+}
+
 /** The `{ src, mirror }` of one record entry, or an error naming the icon. */
 function entry(name, value) {
 	if (!NAME.test(name)) throw new Error(`norn: icons: ${quoted(name)} is not a lowercase kebab name, such as "chevron-up".`);
@@ -131,6 +158,9 @@ export function readIcons(option, root = process.cwd()) {
 	}
 
 	return Object.fromEntries(
-		[...found].map(([name, { src, file, mirror }]) => [name, { ...parse(fs.readFileSync(file, "utf8"), src), mirror }]),
+		[...found].map(([name, { src, file, mirror }]) => {
+			const { viewBox, body } = parse(fs.readFileSync(file, "utf8"), src);
+			return [name, { viewBox, body: scopeIds(body, name), mirror }];
+		}),
 	);
 }

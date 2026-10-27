@@ -299,7 +299,19 @@ export async function buildComponents({ packages } = {}) {
 	}
 }
 
-if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+/**
+ * Whether node was started on this file. `import.meta.url` is the real path, so the script's path is resolved the same way:
+ * a path through a symlink, such as a symlinked workspace, would otherwise match nothing and the build would silently do nothing.
+ */
+function isMain() {
+	try {
+		return fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url);
+	} catch {
+		return false;
+	}
+}
+
+if (isMain()) {
 	try {
 		const built = await buildComponents({ packages: process.argv.length > 2 ? process.argv.slice(2) : undefined });
 		for (const [folder, files] of Object.entries(built)) console.log(`${folder}: ${files.length} components`);

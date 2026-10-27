@@ -44,7 +44,7 @@
 		<meta
 			webc:is="norn-head"
 			webc:nokeep
-			:@title="$data.norn.title ? ($data.norn.name && $data.norn.title !== $data.norn.name ? $data.norn.title + ': ' + $data.norn.name : $data.norn.title) : $data.norn.tagline ? $data.norn.name + ': ' + $data.norn.tagline : $data.norn.name || ''"
+			:@title="$data.norn.title ? ($data.norn.name && $data.norn.title !== $data.norn.name ? $data.norn.title + ': ' + $data.norn.name : $data.norn.title) : $data.norn.tagline ? ($data.norn.name ? $data.norn.name + ': ' + $data.norn.tagline : $data.norn.tagline) : $data.norn.name || ''"
 			:@description="$data.norn.description || ''"
 			:@url="typeof $data.norn.url === 'string' ? $data.norn.url : false"
 			:@theme-color="$data.norn.themeColor || ''"

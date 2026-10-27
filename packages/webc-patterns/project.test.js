@@ -110,6 +110,15 @@ test("buildSite: conduct and security links point at policy files the project ke
 	assert.equal(site({}, { "docs/SECURITY.md": "x" }).securityUrl, "https://github.com/acme/widget/blob/main/docs/SECURITY.md");
 });
 
+test("buildSite: file links take the form the repository's host uses, with GitHub's unchanged", () => {
+	const found = site({ repository: "git+https://bitbucket.org/acme/widget.git" }, { "SECURITY.md": "x" });
+	assert.equal(found.licenseUrl, "https://bitbucket.org/acme/widget/src/main/LICENSE");
+	assert.equal(found.contributingUrl, "https://bitbucket.org/acme/widget/src/main/.github/CONTRIBUTING.md");
+	assert.equal(found.changelogUrl, "https://bitbucket.org/acme/widget/src/main/CHANGELOG.md");
+	assert.equal(found.securityUrl, "https://bitbucket.org/acme/widget/src/main/SECURITY.md");
+	assert.equal(site({}).licenseUrl, "https://github.com/acme/widget/blob/main/LICENSE");
+});
+
 test("buildSite: a missing project.json is fine", () => {
 	assert.equal(buildSite({ packagePath: path.join(project({ "package.json": PKG }), "package.json"), projectPath: "/nowhere/project.json" }).name, "widget");
 });
@@ -151,6 +160,16 @@ test("buildWorkspaces: SKILL.md wins over README.md, and front matter and the fi
 	assert.ok(!entry.html.includes("The readme.") && !entry.html.includes("<h1>") && !entry.html.includes("name: skilled"));
 });
 
+test("buildWorkspaces: Windows line endings lose the front matter and the first heading too", () => {
+	const root = project({
+		"package.json": { workspaces: ["packages/*"] },
+		...workspace("crlf", "A skill.", { "SKILL.md": "---\r\nname: crlf\r\n---\r\n# Title\r\n\r\nThe skill.\r\n" }),
+	});
+	const [entry] = buildWorkspaces({ root });
+	assert.ok(entry.html.includes("<p>The skill.</p>"));
+	assert.ok(!entry.html.includes("name: crlf") && !entry.html.includes("<h1>") && !entry.html.includes("<hr>"), entry.html);
+});
+
 test("buildWorkspaces: code fences render as code samples, and a workspace without a page has empty html", () => {
 	const root = project({
 		"package.json": { workspaces: ["packages/*"] },
@@ -164,11 +183,13 @@ test("buildWorkspaces: code fences render as code samples, and a workspace witho
 
 /** A fetch that answers with the given body and status, and counts its calls. */
 const registry = (body, status = 200) => {
-	const fake = async () => {
+	const fake = async (url, init) => {
 		fake.calls++;
+		fake.requests.push({ url, init });
 		return { ok: status === 200, json: async () => body };
 	};
 	fake.calls = 0;
+	fake.requests = [];
 	return fake;
 };
 
@@ -178,6 +199,8 @@ test("npmRelease: a latest dist-tag is a release, and the answer is reused withi
 	assert.equal(await npmRelease("@example/released", { fetch, now: () => clock }), true);
 	assert.equal(await npmRelease("@example/released", { fetch, now: () => clock }), true);
 	assert.equal(fetch.calls, 1, "cached");
+	assert.equal(fetch.requests[0].url, "https://registry.npmjs.org/@example%2Freleased");
+	assert.equal(fetch.requests[0].init.headers.accept, "application/vnd.npm.install-v1+json", "the abbreviated document, which still holds dist-tags");
 	clock = 60 * 60 * 1000;
 	await npmRelease("@example/released", { fetch, now: () => clock });
 	assert.equal(fetch.calls, 2, "asked again after an hour");
