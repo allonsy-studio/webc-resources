@@ -26,6 +26,9 @@
  */
 --->
 <script webc:setup>
+/** The default theme colors: `surface.base` from tokens.json, written out because a `<meta>` can't read a custom property. */
+const SURFACE = { light: "#ffffff", dark: "#101216" };
+
 /** Whether the page sets a share image. Checked with `typeof`: a missing `og-image` prop can resolve to page data. */
 function hasImage(src) {
 	return typeof src === "string" && src !== "";
@@ -60,8 +63,8 @@ function absoluteImage(src, base) {
 	} catch {}
 </script>
 <meta webc:if="themeColor" name="theme-color" :content="themeColor" />
-<meta webc:if="!themeColor" name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-<meta webc:if="!themeColor" name="theme-color" content="#101216" media="(prefers-color-scheme: dark)" />
+<meta webc:if="!themeColor" name="theme-color" :content="SURFACE.light" media="(prefers-color-scheme: light)" />
+<meta webc:if="!themeColor" name="theme-color" :content="SURFACE.dark" media="(prefers-color-scheme: dark)" />
 <meta property="og:type" content="website" />
 <meta property="og:title" :content="ogTitle || title" />
 <meta webc:if="description" property="og:description" :content="description" />

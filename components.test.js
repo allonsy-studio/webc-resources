@@ -157,6 +157,14 @@ test("the base styles define no token: base.css sets color-scheme, norn-head dec
 	}
 });
 
+test("norn-head's default theme colors are the page surface from tokens.json, one per scheme", async () => {
+	const surface = readTokens().find((token) => token.path === "surface.base").resolved;
+	const [, light, dark] = surface.match(/^light-dark\((\S+), (\S+)\)$/);
+	const html = await render('<html><head><meta webc:is="norn-head" webc:nokeep @title="T" /></head><body></body></html>', { helpers: { getBundleFileUrl: () => "/bundle" } });
+	assert.ok(html.includes(`<meta name="theme-color" content="${light}" media="(prefers-color-scheme: light)">`), `light: ${light}`);
+	assert.ok(html.includes(`<meta name="theme-color" content="${dark}" media="(prefers-color-scheme: dark)">`), `dark: ${dark}`);
+});
+
 test("the shipped stylesheets each sit in one layer: reset in norn.reset, base in norn.base, print in norn.print", () => {
 	for (const [name, layer] of [["reset", "norn.reset"], ["base", "norn.base"], ["print", "norn.print"]]) {
 		const text = stylesheets.find(({ file }) => file === `webc-patterns/css/${name}.css`).text.replace(/\/\*[\s\S]*?\*\//g, "").trim();
