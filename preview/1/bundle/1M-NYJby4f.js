@@ -197,22 +197,29 @@
 {
 		/** The ranges of every connected sample, by sample. The Custom Highlight API registry is shared by the page. */
 		const rangesBySample = new Map();
-		const painted = new Set();
+		const supported = typeof CSS !== "undefined" && "highlights" in CSS;
 
-		/** Color every connected sample from the ranges the build wrote. */
-		const paint = () => {
-			if (typeof CSS === "undefined" || !("highlights" in CSS)) return;
-			const groups = new Map();
-			for (const found of rangesBySample.values()) {
-				for (const [group, range] of found) groups.set(group, [...(groups.get(group) ?? []), range]);
+		/** Add a sample's ranges to the page's highlights, one group at a time, so each connect costs only its own ranges. */
+		const paint = (sample, found) => {
+			rangesBySample.set(sample, found);
+			if (!supported) return;
+			for (const [group, range] of found) {
+				const name = `tok-${group}`;
+				if (!CSS.highlights.has(name)) CSS.highlights.set(name, new Highlight());
+				CSS.highlights.get(name).add(range);
 			}
-			for (const group of painted) {
-				if (!groups.has(group)) CSS.highlights.delete(`tok-${group}`);
-			}
-			painted.clear();
-			for (const [group, ranges] of groups) {
-				CSS.highlights.set(`tok-${group}`, new Highlight(...ranges));
-				painted.add(group);
+		};
+
+		/** Take a sample's ranges back out, and drop a group left empty. */
+		const unpaint = (sample) => {
+			const found = rangesBySample.get(sample);
+			rangesBySample.delete(sample);
+			if (!found || !supported) return;
+			for (const [group, range] of found) {
+				const name = `tok-${group}`;
+				const highlight = CSS.highlights.get(name);
+				highlight?.delete(range);
+				if (highlight?.size === 0) CSS.highlights.delete(name);
 			}
 		};
 
@@ -232,8 +239,7 @@
 			}
 
 			disconnectedCallback() {
-				rangesBySample.delete(this);
-				paint();
+				unpaint(this);
 				this.#observer?.disconnect();
 				this.#observer = undefined;
 			}
@@ -267,11 +273,11 @@
 
 			/** A sample whose token data is unusable stays plain. */
 			#highlight(code) {
-				rangesBySample.delete(this);
+				unpaint(this);
 				try {
 					const text = code?.firstChild;
 					if (text) {
-						rangesBySample.set(
+						paint(
 							this,
 							JSON.parse(code.dataset.tokens).map(([group, start, end]) => {
 								const range = new Range();
@@ -282,9 +288,8 @@
 						);
 					}
 				} catch {
-					rangesBySample.delete(this);
+					unpaint(this);
 				}
-				paint();
 			}
 
 
@@ -312,6 +317,52 @@
 		}
 
 		if (!customElements.get("norn-code-block")) customElements.define("norn-code-block", CodeBlock);
+	}
+{
+		/** A table box that is a named tab stop only while it scrolls. */
+		class SimpleTable extends HTMLElement {
+			#observer;
+
+			connectedCallback() {
+				const box = this.querySelector(":scope > div");
+				if (!box || typeof ResizeObserver === "undefined") return;
+				const label = this.querySelector(":scope > span[hidden][id]");
+				const caption = box.querySelector("caption");
+				if (caption && label) caption.id ||= `${label.id}-caption`;
+				const named = label?.textContent.trim() ? label : caption?.textContent.trim() ? caption : undefined;
+				const headings = [...this.querySelectorAll("thead th")].map((cell) => cell.textContent.trim()).filter(Boolean);
+				const fit = () => {
+					if (box.scrollWidth > box.clientWidth) {
+						box.setAttribute("tabindex", "0");
+						if (named) {
+							box.setAttribute("role", "region");
+							box.setAttribute("aria-labelledby", named.id);
+						} else if (headings.length) {
+							box.setAttribute("role", "region");
+							box.setAttribute("aria-label", headings.join(", "));
+						}
+					} else {
+						box.removeAttribute("tabindex");
+						box.removeAttribute("role");
+						box.removeAttribute("aria-labelledby");
+						box.removeAttribute("aria-label");
+					}
+				};
+				this.#observer?.disconnect();
+				// The box keeps its width when the table grows, so watch both.
+				this.#observer = new ResizeObserver(fit);
+				this.#observer.observe(box);
+				const table = box.querySelector("table");
+				if (table) this.#observer.observe(table);
+			}
+
+			disconnectedCallback() {
+				this.#observer?.disconnect();
+				this.#observer = undefined;
+			}
+		}
+
+		if (!customElements.get("norn-simple-table")) customElements.define("norn-simple-table", SimpleTable);
 	}
 {
 		class PreviewOverrides extends HTMLElement {
