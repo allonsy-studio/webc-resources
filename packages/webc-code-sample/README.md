@@ -1,6 +1,6 @@
 # @allons-y/webc-code-sample
 
-Part of [Norn](https://github.com/allonsy-studio/webc-resources#readme). `norn-code-block` WebC component with build-time syntax highlighting. Prism runs at build; the browser receives token ranges for the CSS Custom Highlight API and a copy button, with no highlighter shipped.
+Part of [Norn](https://github.com/allonsy-studio/webc-resources#readme). `norn-code-block` WebC component with build-time syntax highlighting. Shiki runs at build; the browser receives token ranges for the CSS Custom Highlight API and a copy button, with no highlighter shipped.
 
 See it in the [component preview](https://allonsy-studio.github.io/webc-resources/).
 
@@ -101,8 +101,8 @@ Custom properties, each falling back to a shared token, which falls back to its 
 | Export | Purpose |
 | --- | --- |
 | `codeBlock` | Absolute path to `components/norn-code-block.webc` |
-| `tokenRanges(code, language)` | Prism tokens as `[group, start, end][]` character offsets, in the groups `comment`, `string`, `keyword`, `function`, `number`, `flag`, and `punctuation`. For `sh`, `bash`, `shell`, and `shell-session`, the command is a `function`, its subcommand a `keyword`, a flag a `flag`, and an argument a `string`. The plugin registers it as `nornTokenRanges` |
-| `loadLanguages(names)` | Prism's loader, for languages beyond the defaults |
+| `tokenRanges(code, language)` | Shiki tokens as `[group, start, end][]` character offsets, in the groups `comment`, `string`, `keyword`, `function`, `number`, `flag`, and `punctuation`. For `sh`, `bash`, `shell`, and `shell-session`, the command is a `function`, its subcommand a `keyword`, a flag a `flag`, and an argument a `string`. The plugin registers it as `nornTokenRanges` |
+| `loadLanguages(...languages)` | Adds Shiki language registrations beyond the defaults (`bash`, `css`, `diff`, `html`, `javascript`, `json`, `markdown`, `typescript`, `yaml`), such as `import rust from "@shikijs/langs/rust"`. Call it once, before the build highlights code |
 
 `@allons-y/webc-code-sample/markdown` exports `highlightFences(md)`, a markdown-it amend that renders fenced code as `<norn-code-block>`.
 

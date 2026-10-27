@@ -8,7 +8,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { codeBlock, tokenRanges } from "./index.js";
+import rust from "@shikijs/langs/rust";
+
+import { codeBlock, loadLanguages, tokenRanges } from "./index.js";
 
 /** Pair each range with the text it covers. */
 const slices = (code, language) => JSON.parse(tokenRanges(code, language)).map(([group, start, end]) => [group, code.slice(start, end)]);
@@ -47,12 +49,13 @@ test("tokenRanges: loads the default extra languages", () => {
 	}
 });
 
-test("tokenRanges: plain text inside a token inherits the token's group", () => {
-	const keywords = slices('<a href="x">t</a>', "html").filter(([group]) => group === "keyword");
+test("tokenRanges: the tag names of markup are keywords, and the text between them is plain", () => {
+	const found = slices('<a href="x">t</a>', "html");
 	assert.deepEqual(
-		keywords.map(([, text]) => text),
-		["a", " ", "a"],
+		found.filter(([group]) => group === "keyword").map(([, text]) => text),
+		["a", "a"],
 	);
+	assert.ok(!found.some(([, text]) => text === "t"));
 });
 
 
@@ -142,4 +145,10 @@ test("tokenRanges: a shell session colors every line of a command that goes on a
 test("tokenRanges: the aliases of the loaded languages have grammars", () => {
 	const samples = { sh: "ls", shell: "ls", "shell-session": "$ ls", ts: "const a: number = 1;", html: "<a>t</a>", md: "# Title", markdown: "**b**", yml: "a: 1", js: "const a = 1;" };
 	for (const [language, code] of Object.entries(samples)) assert.equal(typeof tokenRanges(code, language), "string", `${language} has a grammar`);
+});
+
+test("loadLanguages: adds a Shiki language, which tokenRanges then highlights", () => {
+	assert.equal(tokenRanges('fn main() { println!("hi"); }', "rust"), undefined);
+	loadLanguages(rust);
+	assert.deepEqual(slices('fn main() { println!("hi"); }', "rust").filter(([group]) => group === "string"), [["string", '"hi"']]);
 });

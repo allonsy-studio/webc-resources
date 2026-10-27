@@ -15,7 +15,7 @@ its page data to the layout props.
 | Package | Holds | Runtime dependencies |
 | --- | --- | --- |
 | `@allons-y/webc-patterns` | Generic components, the six `norn-*` layouts, the base and print styles and the optional reset (`css/`), the Norn plugin (`/plugin`), the helpers components call, the Markdown add-on (`/markdown`), and the optional project data builders (`/project`) | `hosted-git-info`, `semver`, `markdown-it` (for `/project`); `@allons-y/webc-code-sample` as an optional peer |
-| `@allons-y/webc-code-sample` | `norn-code-block`, `tokenRanges`, and the Markdown add-on `highlightFences` (`/markdown`) | `prismjs` |
+| `@allons-y/webc-code-sample` | `norn-code-block`, `tokenRanges`, and the Markdown add-on `highlightFences` (`/markdown`) | `shiki`, `@shikijs/langs` |
 | `@allons-y/webc-oss-site` | The OSS site theme: brand tokens (`css/tokens.css`), fonts, the locked `oss-bar`, `oss-cta`, and `oss-credit`, `oss-head`, `ossProps`, and the OSS site plugin | None; the patterns package as a peer |
 
 Dependencies point one way: `webc-oss-site` peers on patterns, patterns optionally on the code sample, and
