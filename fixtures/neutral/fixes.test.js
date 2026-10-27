@@ -164,6 +164,14 @@ describe("the component fixes, built from content with only the data a page name
 		assert.deepEqual(ids, ["مرحبا-بالعالم", "same", "日本語の見出し", "same-2"]);
 	});
 
+	test("a Markdown heading that holds a link keeps it, gets an id, nests no link, and joins the contents", async () => {
+		const html = read("linked-heading", "index.html");
+		assert.ok(html.includes('<h2 id="linked-heading"><a href="/somewhere/">Linked</a> heading</h2>'), "the author's link, with no self-link around it");
+		assert.ok(html.includes('<a href="#linked-heading">Linked heading</a>'), "the contents list it");
+		const violations = await audit(browser, server.url, ["/linked-heading/"]);
+		assert.deepEqual(violations.filter((line) => / (link-name|nested-interactive|empty-heading):/.test(line)), []);
+	});
+
 	test("the theme toggle script comes with true and 'true', and not with 'false'", () => {
 		const SCRIPT = 'localStorage.getItem("color-scheme")';
 		assert.ok(read("toggle-true", "index.html").includes(SCRIPT));

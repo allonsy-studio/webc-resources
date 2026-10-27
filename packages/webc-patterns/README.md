@@ -339,7 +339,7 @@ config.addJavaScriptFunction("nornHeadings", headings);
 
 - `scrollTables` wraps each table in `norn-simple-table`.
 - `callouts` turns a `> [!NOTE]` blockquote into a `norn-callout` of that kind.
-- `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does.
+- `headingAnchors` gives each h2 and h3 an id and links its text to itself, as `norn-heading-anchor` does. A heading whose text holds a link keeps that link and gets the id only, since a link can't hold another.
 - `headings(html)` lists the anchored headings of rendered HTML for `norn-toc`. Register it as `nornHeadings`.
 - `slugify(text)` is the id function `headingAnchors` uses. It keeps the letters and digits of any script (`## 日本語の見出し` gets `id="日本語の見出し"`), lowercases them, takes the accents off Latin letters, and joins the rest with hyphens. A repeated heading gets `-2`, `-3`, and so on, counted across the page, so two Markdown blocks on one page never share an id.
 

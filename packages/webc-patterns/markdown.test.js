@@ -89,6 +89,12 @@ test("headingAnchors: h2 and h3 link to themselves, repeats get a number, and h4
 	assert.ok(html.includes("<h4>Deep</h4>"), html);
 });
 
+test("headingAnchors: a heading that holds a link gets an id and keeps the author's link, with no link around it", () => {
+	const md = markdownIt();
+	headingAnchors(md);
+	assert.equal(md.render("## [Linked](/somewhere/) heading\n"), '<h2 id="linked-heading"><a href="/somewhere/">Linked</a> heading</h2>\n');
+});
+
 test("headingAnchors: each render starts its count again", () => {
 	const md = markdownIt();
 	headingAnchors(md, { levels: [2] });

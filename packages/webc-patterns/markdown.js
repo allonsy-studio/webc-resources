@@ -98,6 +98,7 @@ function idsOf(env) {
 /**
  * markdown-it amend: give each heading at the chosen levels an id, and make its text a link to itself, as `norn-heading-anchor` does.
  * A repeated heading gets `-2`, `-3`, and so on, counted across the page. A heading that already has an id keeps it.
+ * A heading whose text holds a link gets the id only, so no link nests in another.
  *
  * @param {import("markdown-it").default} md
  * @param {{ levels?: number[] }} [options] - Heading levels to anchor. Defaults to 2 and 3.
@@ -116,6 +117,8 @@ export function headingAnchors(md, { levels = [2, 3] } = {}) {
 				token.attrSet("id", id);
 			}
 			ids.add(id);
+			// A link can't hold a link: a heading whose text links elsewhere keeps the author's link and takes only the id.
+			if (inline.children.some((child) => child.type === "link_open")) return;
 			const open = new state.Token("link_open", "a", 1);
 			open.attrSet("href", `#${id}`);
 			inline.children = [open, ...inline.children, new state.Token("link_close", "a", -1)];
