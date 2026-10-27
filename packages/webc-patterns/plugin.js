@@ -188,7 +188,7 @@ function readLayout(name) {
  * @param {string | string[] | Record<string, string | { src: string, mirror?: boolean }>} [options.icons] - Project icons for `norn-icon`: a glob or list of globs of `.svg` files, each named for its file without the extension, or a record of names to a path or `{ src, mirror }`. Paths resolve against the working directory. A name that matches a built-in icon replaces it
  * @param {boolean} [options.markdown] - Amend Markdown with the add-ons: fenced code as `norn-code-block` when the code sample is installed, callouts, scrolling tables, and anchored headings. On by default
  * @param {object} [options.defaults] - Prop values a theme sets, under the mapping's
- * @throws {Error} On a bad option, a missing icon file, a second registration of the plugin or of `@11ty/eleventy-plugin-webc`, or, at build time, a project layout named like a shipped one
+ * @throws {Error} On a bad option, a missing icon file, a second registration of the plugin or of `@11ty/eleventy-plugin-webc`, or, at build time, a project layout named like a shipped one or a page that sets the reserved `norn` key
  */
 export default function norn(config, options = {}) {
 	const { props, layouts = true, components = [], exclude = [], strings = {}, markdown = true, defaults = {}, icons } = options ?? {};
@@ -246,6 +246,10 @@ export default function norn(config, options = {}) {
 
 	const map = props ?? sameNamed;
 	config.addGlobalData("eleventyComputed", { norn: (data) => layoutProps(data, map, defaults) });
+	// A preprocessor sees the data before computed data runs, so a page's own `norn` is still there to report.
+	config.addPreprocessor("norn-reserved", "*", (data) => {
+		if (data?.norn !== undefined) throw new Error(`norn: ${data.page?.inputPath} sets \`norn\`, a reserved key: the plugin computes it from \`props\`, which would replace it. Map the value in \`props\`, or rename the key.`);
+	});
 
 	if (layouts === false) return;
 	const shipped = LAYOUTS.filter((name) => !skipped.includes(name));

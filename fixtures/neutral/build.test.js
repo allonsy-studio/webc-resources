@@ -689,6 +689,19 @@ describe("the layouts without a props mapping", () => {
 	});
 });
 
+describe("the reserved norn key", () => {
+	test("a page that sets norn in its front matter fails the build, naming the page and the key", () => {
+		const content = path.join(here, "variants", "compile", "content", "reserved.md");
+		fs.writeFileSync(content, "---\nlayout: norn-base.webc\nnorn:\n  title: Lost\n---\nBody\n");
+		try {
+			assert.throws(() => build({ config: "variants/compile/eleventy.config.js", output: "_site-compile" }), /norn: \.\/variants\/compile\/content\/reserved\.md sets `norn`, a reserved key/);
+		} finally {
+			fs.rmSync(content);
+			fs.rmSync(path.join(here, "_site-compile"), { recursive: true, force: true });
+		}
+	});
+});
+
 describe("page content compiles once, whatever the route to the layout", () => {
 	let output;
 

@@ -185,6 +185,15 @@ test("nornCompiles compiles Markdown once, at the first shipped layout, and neve
 	assert.equal(config.calls.functions.nornCompiles(page("md", "mine"), "norn-base"), false, "the helper reads the project's aliases");
 });
 
+test("a page that sets the reserved norn key throws, naming the page", () => {
+	const config = fakeConfig();
+	norn(config, { layouts: false });
+	const { extensions, fn } = config.calls.preprocessors["norn-reserved"];
+	assert.equal(extensions, "*");
+	assert.throws(() => fn({ norn: { title: "Lost" }, page: { inputPath: "./src/a.md" } }), /norn: \.\/src\/a\.md sets `norn`, a reserved key/);
+	assert.equal(fn({ title: "Kept", page: { inputPath: "./src/b.md" } }), undefined, "a page without it is left alone");
+});
+
 test("layouts: false registers none, a list leaves those out, and an unknown name throws", () => {
 	const none = fakeConfig();
 	norn(none, { layouts: false });

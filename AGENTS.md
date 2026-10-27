@@ -199,7 +199,7 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
   preprocessor skips those paths.
 - **Props.** `props` maps page data to the layout props; without it, the same-named page data. It also runs against
   Eleventy's placeholder data, so it never throws on missing data, and every list prop defaults to `[]`. `norn` is a reserved
-  data key.
+  data key, and a preprocessor fails the build for a page that sets it.
 - **Layouts.** `norn-base` (the frame), `norn-docs`, `norn-docs-home`, `norn-landing`, `norn-workspaces-home`, `norn-workspace`,
   each extending `norn-base`. Sources in `packages/webc-patterns/src/layouts/`, compiled to `layouts/` and shipped. A layout's
   own CSS sits in `norn.layout` and starts at a `data-norn-*` attribute or a component tag of its own markup.

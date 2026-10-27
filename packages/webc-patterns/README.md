@@ -81,7 +81,7 @@ Without the plugin, register the components as `patterns()` (or `npm:@allons-y/w
 
 ### Layout props
 
-The layouts read their props as `$data.norn`. Without `props`, each prop is read off the page data of the same name. Every list defaults to `[]`, and a value that is not a list counts as empty. Eleventy also runs the mapping against placeholder data to learn what it reads, so it must not throw on missing data: write `data.collections?.docs ?? []`, not `data.collections.docs`. `norn` is a reserved data key.
+The layouts read their props as `$data.norn`. Without `props`, each prop is read off the page data of the same name. Every list defaults to `[]`, and a value that is not a list counts as empty. Eleventy also runs the mapping against placeholder data to learn what it reads, so it must not throw on missing data: write `data.collections?.docs ?? []`, not `data.collections.docs`. `norn` is a reserved data key: a page, or a data file, that sets it fails the build with the page's path.
 
 One mapping serves every layout, because each layout reads only its own props and ignores the rest:
 
