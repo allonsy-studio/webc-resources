@@ -24,9 +24,6 @@
  * @slot results-two - The status for the `two` category.
  * @slot results-few - The status for the `few` category.
  * @slot results-many - The status for the `many` category.
- * @cssprop --norn-search-bg - Field background. Falls back to --norn-surface-base.
- * @cssprop --norn-search-border - Field border. Falls back to --norn-ui-border-strong.
- * @cssprop --norn-search-results - Results background. Falls back to --norn-surface-raised.
  * @category component
  */
 --->
@@ -109,8 +106,8 @@
 			& input {
 				inline-size: 100%;
 				padding: 0 var(--norn-space-s, t('space.s')) 0 calc(var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-xs, t('space.xs')));
-				border: 1px solid var(--norn-search-border, var(--norn-ui-border-strong, t('ui.border.strong')));
-				background: var(--norn-search-bg, var(--norn-surface-base, t('surface.base')));
+				border: 1px solid var(--norn-ui-border-strong, t('ui.border.strong'));
+				background: var(--norn-surface-base, t('surface.base'));
 			}
 
 			& input:dir(rtl) {
@@ -180,7 +177,7 @@
 				padding: var(--norn-space-s, t('space.s'));
 				overflow-y: auto;
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-search-results, var(--norn-surface-raised, t('surface.raised')));
+				background: var(--norn-surface-raised, t('surface.raised'));
 				box-shadow: var(--norn-ui-shadow, t('ui.shadow'));
 				list-style: none;
 

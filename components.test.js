@@ -345,7 +345,7 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager", "norn-skip-link"]) {
+	for (const name of ["norn-pager", "norn-skip-link", "norn-search"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);
@@ -353,6 +353,7 @@ test("a component that exposes no custom property of its own reads only global t
 	assert.ok(cssOf("norn-pager").includes("color: var(--norn-text-accent, t('text.accent'))"), "norn-pager: links in the accent text color");
 	const skip = cssOf("norn-skip-link");
 	assert.ok(skip.includes("border-radius: var(--norn-ui-border-radius, t('ui.border.radius'))") && skip.includes("background: var(--norn-surface-raised, t('surface.raised'))") && skip.includes("color: var(--norn-text-base, t('text.base'))"), "norn-skip-link: the radius, the raised fill, and the base text");
+	assert.ok(cssOf("norn-search").includes("background: var(--norn-surface-base, t('surface.base'))"), "norn-search: the field on the page surface");
 });
 
 test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
@@ -428,11 +429,11 @@ test("norn-code-block reads the shared tokens, and its terminal frame is a prop,
 
 test("norn-search has a field edge from the strong border, a leading magnifier, and floating results on the raised surface with the shadow and no border", async () => {
 	const css = cssOf("norn-search");
-	assert.ok(css.includes("var(--norn-search-border, var(--norn-ui-border-strong,"), "the field's edge is 3:1");
+	assert.ok(css.includes("border: 1px solid var(--norn-ui-border-strong, t('ui.border.strong'))"), "the field's edge is 3:1");
 	const results = css.match(/& ol \{[^}]*\}/)[0];
 	assert.ok(results.includes("box-shadow: var(--norn-ui-shadow,"), "the results float on a shadow");
 	assert.ok(!/border:/.test(results), "and have no border");
-	assert.ok(results.includes("background: var(--norn-search-results, var(--norn-surface-raised,"), "on the raised surface");
+	assert.ok(results.includes("background: var(--norn-surface-raised, t('surface.raised'))"), "on the raised surface");
 	const html = unid(await render("<norn-search></norn-search>"));
 	assert.match(html, /<label>\s*<span>[^]*?<\/span>\s*<norn-icon>[^]*?<\/norn-icon>\s*<input type="search"/, "the magnifier is in the label, before the field");
 });
