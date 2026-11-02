@@ -134,8 +134,8 @@ preview/           the component preview: an Eleventy site with a page and stori
     conditional), its options (comparisons, `.includes()`, a setup table's keys, attribute selectors the prop sets), whether it
     is a boolean (the boolean rule) or required (a setup function throws without it), and each slot (`<slot>`, a layout's
     `$data.content`). The CSF file gives each derived prop and slot a `description`, and nothing the code already says. Where
-    the code cannot say a fact, such as a required prop or an object's shape, the entry overrides it, with a reason in
-    `OVERRIDES` in `stories.test.js`. There is no custom property argType: the preview lists the global tokens the CSS reads.
+    the code cannot say a fact, such as a required prop or an object's shape, the entry overrides it, with a reason in the
+    file's own `parameters.webc.overrides` (`"<arg> <field>": "why"`), which `stories.test.js` requires and checks is used. There is no custom property argType: the preview lists the global tokens the CSS reads.
     The component description is `parameters.docs.description.component`. A fact lives in one place. Phase A moved
     `norn-callout`, `norn-card`, `norn-link-button`, `norn-code-block`, `oss-bar`, and `norn-landing`; the rest still use JSDoc
     until they move. `stories.test.js` checks the shape, an undocumented derived arg, a stale argType, a restated fact, an

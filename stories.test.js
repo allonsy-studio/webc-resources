@@ -32,20 +32,6 @@ const KINDS = CATEGORIES.map(({ id }) => id);
 /** The title group of the OSS site package, which holds components of any kind. */
 const OSS_GROUP = "OSS site";
 
-/**
- * Each fact a CSF file adds over what the analyzer derives, as `component arg field`, with the reason the code cannot say it.
- * Keep it short: a fact the code says is derived, never written.
- */
-const OVERRIDES = {
-	"norn-code-block code type": "Required: without it the sample is empty, and no setup function throws.",
-	"norn-link-button href type": "Required: a link needs a URL, and no setup function throws without one.",
-	"norn-landing repo table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
-	"norn-landing install table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
-	"norn-landing usage table.type": "The object's shape: the code reads its fields, not their types.",
-	"norn-landing features table.type": "The items' shape: the code reads their fields, not their types.",
-	"norn-landing packages table.type": "The items' shape: the code reads their fields, not their types.",
-};
-
 const analyzer = { tokens: readTokens(), helpers: helperNames() };
 
 /** Every component and layout source, with its CSF file if it has one. */
@@ -77,7 +63,7 @@ const withCsf = await Promise.all(
 /** Each leaf of a value, by its dotted path: an array is one leaf. */
 const leaves = (value, trail = "") => (value && typeof value === "object" && !Array.isArray(value) ? Object.entries(value).flatMap(([key, child]) => leaves(child, trail ? `${trail}.${key}` : key)) : [[trail, value]]);
 
-/** The field an override sets, as `OVERRIDES` names it: `type`, `options`, `table.type`, `table.defaultValue`. */
+/** The field an override sets, as a CSF file's `parameters.webc.overrides` names it (`<arg> <field>`): `type`, `options`, `table.type`, `table.defaultValue`. */
 const fieldOf = (leaf) => (leaf.startsWith("table.") ? leaf.split(".").slice(0, 2).join(".") : leaf.split(".")[0]);
 
 /** Every path in a value that holds a function. */
@@ -92,13 +78,15 @@ const functionsIn = (value, trail = "") => {
  * analyzer derives from the source, and its stories.
  *
  * @param {{ name: string, folder: string, layout: boolean, head: boolean, csf: Awaited<ReturnType<typeof readCsf>>, derived: Record<string, object> }} entry
- * @param {Record<string, string>} [overrides] - The allowed overrides, `OVERRIDES` by default
+ * @param {Record<string, string>} [overrides] - Extra allowed overrides, as `component arg field`; each file also carries its own in `parameters.webc.overrides`
  * @returns {string[]}
  */
-function problems({ name, folder, layout, head, csf, derived }, overrides = OVERRIDES) {
+function problems({ name, folder, layout, head, csf, derived }, overrides = {}) {
 	const found = [];
 	const { meta, stories, order, exports } = csf;
 	if (!meta || typeof meta !== "object") return [`${name}: no default export`];
+	const own = Object.fromEntries(Object.entries(meta.parameters?.webc?.overrides ?? {}).map(([key, reason]) => [`${name} ${key}`, reason]));
+	const allowed = { ...overrides, ...own };
 	for (const key of Object.keys(meta)) if (!META_KEYS.includes(key)) found.push(`${name}: meta key "${key}" is not allowed`);
 	for (const where of functionsIn(meta)) found.push(`${name}: meta${where} is a function`);
 	if (meta.component !== name) found.push(`${name}: component is "${meta.component}", not the file's name`);
@@ -126,7 +114,7 @@ function problems({ name, folder, layout, head, csf, derived }, overrides = OVER
 		for (const [leaf, value] of leaves(argType).filter(([leaf]) => leaf !== "description")) {
 			const key = `${name} ${arg} ${fieldOf(leaf)}`;
 			if (facts.has(leaf) && JSON.stringify(facts.get(leaf)) === JSON.stringify(value)) found.push(`${name}: the argType "${arg}" restates ${leaf}, which the analyzer derives from the source`);
-			else if (!overrides[key]) found.push(`${name}: the argType "${arg}" sets ${leaf}, an override with no reason in OVERRIDES ("${key}")`);
+			else if (!allowed[key]) found.push(`${name}: the argType "${arg}" sets ${leaf}, an override with no reason in parameters.webc.overrides ("${key.slice(name.length + 1)}")`);
 		}
 	}
 	const argTypes = effectiveArgTypes(derived, written);
@@ -162,9 +150,12 @@ test("every CSF file has the strict CSF 3 shape and agrees with its component", 
 	assert.deepEqual(withCsf.flatMap((entry) => problems(entry)), []);
 });
 
-test("every override in OVERRIDES is one a CSF file sets", () => {
-	const set = new Set(withCsf.flatMap(({ name, csf }) => Object.entries(csf.meta.argTypes ?? {}).flatMap(([arg, argType]) => leaves(argType).filter(([leaf]) => leaf !== "description").map(([leaf]) => `${name} ${arg} ${fieldOf(leaf)}`))));
-	assert.deepEqual(Object.keys(OVERRIDES).filter((key) => !set.has(key)), []);
+test("every override a CSF file gives a reason for is one it sets", () => {
+	const unused = withCsf.flatMap(({ name, csf }) => {
+		const set = new Set(Object.entries(csf.meta.argTypes ?? {}).flatMap(([arg, argType]) => leaves(argType).filter(([leaf]) => leaf !== "description").map(([leaf]) => `${arg} ${fieldOf(leaf)}`)));
+		return Object.entries(csf.meta.parameters?.webc?.overrides ?? {}).flatMap(([key, reason]) => [...(set.has(key) ? [] : [`${name}: the override "${key}" is not set by any argType`]), ...(typeof reason === "string" && reason.trim() ? [] : [`${name}: the override "${key}" has no reason`])]);
+	});
+	assert.deepEqual(unused, []);
 });
 
 test("CSF titles are unique", () => {
@@ -198,7 +189,7 @@ test("the CSF check catches each kind of mistake", () => {
 		[entry(argTypes({ footer: { description: "Footer." } })), /"footer" is stale/],
 		[entry(argTypes({ tone: { description: "Tone.", options: ["a", "b"] } })), /"tone" restates options/],
 		[entry(argTypes({ heading: { description: "Heading.", table: { category: SLOTS } } })), /"heading" restates table.category/],
-		[entry(argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } })), /"tone" sets table.defaultValue.summary, an override with no reason in OVERRIDES \("x-a tone table.defaultValue"\)/],
+		[entry(argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } })), /"tone" sets table.defaultValue.summary, an override with no reason in parameters.webc.overrides \("tone table.defaultValue"\)/],
 		[entry(argTypes({ "--x-a-color": { description: "Color." } })), /"--x-a-color" is a custom property, and a component surfaces none of its own/],
 		[entry(argTypes({ size: { description: "Size.", control: "select" } })), /"size" is a select with no options/],
 		[entry(argTypes({ size: { description: "Size.", table: { category: "attributes" } } })), /table.category "attributes"/],
@@ -208,7 +199,7 @@ test("the CSF check catches each kind of mistake", () => {
 		[{ ...entry(), csf: { ...entry().csf, exports: ["Default", "Other"] } }, /Other is not a plain `export const`/],
 	];
 	for (const [broken, message] of cases) assert.match(problems(broken).join("\n"), message);
-	assert.deepEqual(problems(entry(argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } })), { "x-a tone table.defaultValue": "A reason." }), [], "an override with a reason passes");
+	assert.deepEqual(problems(entry({ ...argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } }), parameters: { webc: { overrides: { "tone table.defaultValue": "A reason." } } } })), [], "an override with a reason in the file passes");
 	const oss = { ...entry({ title: "OSS site/x-a" }), folder: "webc-oss-site" };
 	assert.match(problems(oss).join("\n"), /parameters.webc.category/, "an OSS site component names its category");
 });

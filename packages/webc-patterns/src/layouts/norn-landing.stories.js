@@ -20,6 +20,15 @@ export default {
 		default: { description: "The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section." },
 	},
 	parameters: {
+		webc: {
+			overrides: {
+				"repo table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
+				"install table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
+				"usage table.type": "The object's shape: the code reads its fields, not their types.",
+				"features table.type": "The items' shape: the code reads their fields, not their types.",
+				"packages table.type": "The items' shape: the code reads their fields, not their types.",
+			},
+		},
 		docs: {
 			description: {
 				component: 'A project\'s landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. Samples are `norn-code-block`s: highlighted with `@allons-y/webc-code-sample`, and plain `<pre><code>` without it. Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.',

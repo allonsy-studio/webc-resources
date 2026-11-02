@@ -20,6 +20,11 @@ export default {
 		failed: { description: 'The copy button\'s text when the copy fails. Falls back to "Copy failed".' },
 	},
 	parameters: {
+		webc: {
+			overrides: {
+				"code type": "Required: without it the sample is empty, and no setup function throws.",
+			},
+		},
 		docs: {
 			description: {
 				component:

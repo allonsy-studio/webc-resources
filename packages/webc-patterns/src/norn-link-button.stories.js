@@ -15,6 +15,11 @@ export default {
 		default: { description: "The link text, which may hold a `norn-icon`." },
 	},
 	parameters: {
+		webc: {
+			overrides: {
+				"href type": "Required: a link needs a URL, and no setup function throws without one.",
+			},
+		},
 		docs: {
 			description: {
 				component: "A link styled as a button, for a call to action. It navigates, so it stays a link: use a `<button>` for an action on the page. The default slot is the link text, and may hold a `norn-icon`. A hover and a press take a layer of the text color over the background, and the text is never underlined.",
