@@ -16,7 +16,7 @@ import { matrixCells, PROPS, renderMatrix, renderStory, SLOTS } from "./render-s
 /** Components that live in the document head: they have no canvas, since every frame renders them. */
 export const HEAD_COMPONENTS = new Set(["norn-head", "oss-head"]);
 
-/** The kinds of component, in the order the preview shows them. A component's category is the first part of its CSF title, or the `@category` of its JSDoc until it has a CSF file. */
+/** The kinds of component, in the order the preview shows them. A component's category is the first part of its CSF title. */
 export const CATEGORIES = [
 	{ id: "layout", title: "Layout", description: "Arranges other things: page frames." },
 	{ id: "landmark", title: "Landmark", description: "A page region with a role and a name: header, navigation, footer." },
@@ -63,67 +63,6 @@ const paragraphsOf = (text) =>
 		.map((paragraph) => paragraph.replace(/\s*\n\s*/g, " ").trim())
 		.filter(Boolean);
 
-/**
- * Take a `{type}` off the front of a string, balancing the braces.
- *
- * @param {string} text
- * @returns {[string, string]} The type, and the rest
- */
-function takeType(text) {
-	if (!text.startsWith("{")) return ["", text];
-	let depth = 0;
-	for (let index = 0; index < text.length; index++) {
-		if (text[index] === "{") depth++;
-		if (text[index] === "}" && --depth === 0) return [text.slice(1, index), text.slice(index + 1).trim()];
-	}
-	return ["", text];
-}
-
-/**
- * Read a component's JSDoc, the block inside the `<!--- … --->` server-only comment at the top of its file.
- *
- * @param {string} source - The `.webc` file
- * @returns {{ description: string[], text: string[], category: string, props: object[], slots: object[], cssprops: { name: string, raw: string }[] }} The `cssprops` are read for the calibration only: the preview lists the tokens a component reads instead
- */
-export function parseDoc(source) {
-	const comment = source.match(/<!---([\s\S]*?)--->/)?.[1] ?? "";
-	const block = comment.match(/\/\*\*([\s\S]*?)\*\//)?.[1] ?? "";
-	const lines = block.split("\n").map((line) => line.replace(/^\s*\* ?/, "").trimEnd());
-
-	const description = [];
-	const tags = [];
-	for (const line of lines) {
-		if (line.startsWith("@")) tags.push(line);
-		else if (tags.length) tags[tags.length - 1] += ` ${line.trim()}`;
-		else description.push(line);
-	}
-
-	const paragraphs = paragraphsOf(description.join("\n"));
-
-	const props = [];
-	const slots = [];
-	const cssprops = [];
-	let category = "";
-	for (const tag of tags) {
-		const [, kind, rest] = tag.match(/^@(\w+)\s+([\s\S]*)$/) ?? [];
-		if (kind === "prop") {
-			const [type, after] = takeType(rest);
-			const match = after.match(/^(\[?)([\w-]+)\]?(?:\s+-\s+([\s\S]*))?$/);
-			if (match) props.push({ name: match[2], type, optional: match[1] === "[", description: inline((match[3] ?? "").trim()) });
-		} else if (kind === "category") {
-			category = rest.trim();
-		} else if (kind === "slot") {
-			// An unnamed slot is the default one: `@slot - The body.`
-			const [, name = "default", text = ""] = rest.match(/^([\w-]+)?(?:\s*-\s+([\s\S]*))?$/) ?? [];
-			slots.push({ name, description: inline(text.trim()) });
-		} else if (kind === "cssprop") {
-			const [, name, text = ""] = rest.match(/^(--[\w-]+)(?:\s+-\s+([\s\S]*))?$/) ?? [];
-			if (name) cssprops.push({ name, raw: text.trim() });
-		}
-	}
-	return { description: paragraphs.map(inline), text: paragraphs, category, props, slots, cssprops };
-}
-
 /** Start case, as Storybook names a story from its export: `LongText` is "Long Text". */
 export const startCase = (name) => name.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/^./, (first) => first.toUpperCase());
 
@@ -164,7 +103,7 @@ function propText({ description = "", options, table }) {
 }
 
 /**
- * A component's docs from its CSF meta and its effective argTypes, in the shape `parseDoc` gives the JSDoc.
+ * A component's docs from its CSF meta and its effective argTypes: its description, category, props, and slots.
  * The category is the title's first part, lowercased, except where `parameters.webc.category` names it (the OSS site group).
  *
  * @param {{ title: string, argTypes?: object, parameters?: { docs?: { description?: { component?: string } }, webc?: { category?: string } } }} meta
@@ -250,7 +189,7 @@ function csfStories({ meta, stories }, effective, { packageId, name, layout, hea
 }
 
 /** The `key: value` lines of a story's front matter, and the markup after it. */
-export function splitStory(text) {
+function splitStory(text) {
 	const match = text.match(/^---\n([\s\S]*?)\n---\n?/);
 	const data = {};
 	for (const line of (match?.[1] ?? "").split("\n")) {
@@ -325,10 +264,10 @@ const tokensTable = (analysis, tokens) => analysis.tokens.map(({ name, type, val
 /**
  * Every package, with its components and layouts documented from their CSF files and joined to their stories.
  * The props, slots, and tokens are derived from each source by the analyzer, and the CSF file adds the rest.
- * A component with no CSF file yet is documented from its JSDoc, with its tokens derived.
  * `frames` lists every frame a CSF file renders, which the preview builds as virtual templates.
  *
  * @param {{ packagesDir: string, storiesDir: string }} options
+ * @throws {Error} When a component or layout has no CSF file
  */
 export async function buildCatalog({ packagesDir, storiesDir }) {
 	const tokens = readTokens();
@@ -348,11 +287,12 @@ export async function buildCatalog({ packagesDir, storiesDir }) {
 		const components = await Promise.all(found.map(async ({ file, name, layout }) => {
 			const head = HEAD_COMPONENTS.has(name);
 			const stories = csfFile(path.join(packagesDir, folder), name, layout);
-			const csf = fs.existsSync(stories) ? await readCsf(stories) : undefined;
+			if (!fs.existsSync(stories)) throw new Error(`${id}/${name}: no CSF file. Document its API in ${path.relative(packagesDir, stories)}.`);
+			const csf = await readCsf(stories);
 			const analysis = analyzeFile(sourceFile(path.join(packagesDir, folder), name, layout), analyzer);
-			const argTypes = csf ? effectiveArgTypes(derivedArgTypes(analysis), csf.meta.argTypes) : undefined;
-			const doc = csf ? csfDoc(csf.meta, argTypes) : parseDoc(fs.readFileSync(file, "utf8"));
-			const own = csf ? csfStories(csf, argTypes, { packageId: id, name, layout, head }) : { stories: [], matrix: undefined };
+			const argTypes = effectiveArgTypes(derivedArgTypes(analysis), csf.meta.argTypes);
+			const doc = csfDoc(csf.meta, argTypes);
+			const own = csfStories(csf, argTypes, { packageId: id, name, layout, head });
 			const pages = readStories(storiesDir, id, name);
 			const all = [...own.stories, ...pages, ...(own.matrix ? [own.matrix] : [])];
 			const clash = all.find((story, index) => all.findIndex(({ slug }) => slug === story.slug) !== index);
@@ -368,9 +308,9 @@ export async function buildCatalog({ packagesDir, storiesDir }) {
 				packageName: pkg.name,
 				category: doc.category,
 				head,
-				csf: csf ? stories : undefined,
+				csf: stories,
 				argTypes,
-				csfData: csf ? csfData(csf, argTypes) : undefined,
+				csfData: csfData(csf, argTypes),
 				summary: doc.description[0]?.split(/(?<=\.)\s/)[0] ?? "",
 				summaryText: (doc.text[0]?.split(/(?<=\.)\s/)[0] ?? "").replaceAll("`", ""),
 				description: doc.description,

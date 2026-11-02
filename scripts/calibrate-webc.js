@@ -5,18 +5,16 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// Compare what the analyzer derives from each source with what its docs say: the CSF file where there is one,
-// else the JSDoc. Prints a Markdown table of every difference. Run `node scripts/calibrate-webc.js`.
+// Compare what the analyzer derives from each source with what its CSF file says. Prints a Markdown table of every difference. Run `node scripts/calibrate-webc.js`.
 // A custom property a component owns is a failure in components.test.js, so only a documented one the code does not read is listed here.
 
-import fs from "node:fs";
 import path from "node:path";
 
-import { csfFile, effectiveArgTypes, parseDoc, readCsf } from "../preview/lib/catalog.js";
+import { csfFile, effectiveArgTypes, readCsf } from "../preview/lib/catalog.js";
 import { analyzeFile, derivedArgTypes, helperNames, sourceFiles } from "./analyze-webc.js";
 import { PACKAGES, readTokens } from "./build-components.js";
 
-/** The coarse type a JSDoc or CSF type names. */
+/** The coarse type a CSF type names. */
 const coarse = (type = "") => {
 	const text = type.trim();
 	if (!text) return "";
@@ -37,23 +35,13 @@ async function documented(file, analysis) {
 	const layout = path.basename(path.dirname(file)) === "layouts";
 	const name = path.basename(file, ".webc");
 	const packageDir = path.join(PACKAGES, path.relative(PACKAGES, file).split(path.sep)[0]);
-	const stories = csfFile(packageDir, name, layout);
-	if (fs.existsSync(stories)) {
-		const argTypes = effectiveArgTypes(derivedArgTypes(analysis), (await readCsf(stories)).meta.argTypes);
-		const of = (category) => Object.entries(argTypes).filter(([, argType]) => argType.table?.category === category);
-		return {
-			source: "CSF",
-			props: of("props").map(([prop, argType]) => ({ name: prop, type: coarse(argType.table?.type?.summary ?? argType.type?.name), default: argType.table?.defaultValue?.summary, required: argType.type?.required === true, options: argType.options })),
-			slots: of("slots").map(([slot, argType]) => argType.name ?? slot),
-			cssprops: of("css custom properties").map(([prop]) => prop),
-		};
-	}
-	const doc = parseDoc(fs.readFileSync(file, "utf8"));
+	const argTypes = effectiveArgTypes(derivedArgTypes(analysis), (await readCsf(csfFile(packageDir, name, layout))).meta.argTypes);
+	const of = (category) => Object.entries(argTypes).filter(([, argType]) => argType.table?.category === category);
 	return {
-		source: "JSDoc",
-		props: doc.props.map(({ name: prop, type, optional, description }) => ({ name: prop, type: coarse(type), default: description.match(/Falls back to <code>([^<]+)<\/code>/)?.[1] ?? description.match(/(\d) to \d\. (?:Anything else falls|Falls) back to (\d)/)?.[2], required: !optional })),
-		slots: doc.slots.map(({ name: slot }) => slot),
-		cssprops: doc.cssprops.map(({ name: prop }) => prop),
+		source: "CSF",
+		props: of("props").map(([prop, argType]) => ({ name: prop, type: coarse(argType.table?.type?.summary ?? argType.type?.name), default: argType.table?.defaultValue?.summary, required: argType.type?.required === true, options: argType.options })),
+		slots: of("slots").map(([slot, argType]) => argType.name ?? slot),
+		cssprops: of("css custom properties").map(([prop]) => prop),
 	};
 }
 
