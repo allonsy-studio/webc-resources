@@ -562,6 +562,16 @@ test("norn-header folds its links into a closed details with a summary from the 
 	assert.equal(defaultStrings["norn-header"].summary, "Menu");
 });
 
+test("norn-header reads the shared tokens and no custom property of its own, and sizes a logo by its logo-height prop", async () => {
+	const css = styles(sources.find(({ file }) => file === "webc-patterns/src/norn-header.webc").text);
+	assert.ok(!/--norn-header-/.test(css), "no --norn-header-* property");
+	assert.ok(!/&::after \{\s*content: "";\s*position: absolute;/.test(css), "no strip: the OSS site theme draws its own");
+	assert.ok(css.includes("background: var(--norn-surface-raised, t('surface.raised'));") && css.includes("block-size: var(--_logo, 2rem);"));
+	assert.match(await render('<norn-header @logo-height="3rem"><a slot="brand" rel="home" href="/"><img src="l.svg" alt="L"></a></norn-header>'), /<header style="--_logo: 3rem">/, "the prop sets the logo height");
+	assert.match(await render('<norn-header><a slot="brand" rel="home" href="/">Home</a></norn-header>'), /<header>/, "without it, no style");
+	assert.match(await render('<norn-header style="--norn-header-logo: 9rem"><a slot="brand" rel="home" href="/">Home</a></norn-header>'), /<header>/, "the old property sets nothing");
+});
+
 test("norn-sidebar-layout folds its navigation into a closed details with a summary from the slot, the registry, then English", async () => {
 	const html = unid(await render("<norn-sidebar-layout><norn-side-nav slot=\"nav\" :@items=\"[]\"></norn-side-nav><h1>T</h1></norn-sidebar-layout>"));
 	assert.match(html, /<details>\s*<summary>Menu<\/summary>\s*<norn-side-nav/, "closed, and named in English");

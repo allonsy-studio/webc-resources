@@ -21,6 +21,7 @@
 	"exports": {
 		".": "./index.js",
 		"./css/tokens.css": "./css/tokens.css",
+		"./css/brand.css": "./css/brand.css",
 		"./schema/oss-docs.schema.json": "./schema/oss-docs.schema.json",
 		"./package.json": "./package.json"
 	},

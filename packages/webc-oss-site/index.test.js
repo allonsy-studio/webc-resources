@@ -13,8 +13,10 @@ import { test } from "node:test";
 
 import norn from "@allons-y/webc-patterns/plugin";
 
+import { readTokens } from "../../scripts/build-components.js";
+
 import { ASSETS_COMMIT, prepare, readAsset } from "./scripts/lib.js";
-import oss, { components as glob, fonts, host, policies, ossEnabled, ossProps, tokens } from "./index.js";
+import oss, { brand, components as glob, fonts, host, policies, ossEnabled, ossProps, tokens } from "./index.js";
 
 const COMPONENTS = path.join(import.meta.dirname, "components");
 const components = fs.readdirSync(COMPONENTS).filter((file) => file.endsWith(".webc")).map((file) => file.slice(0, -5));
@@ -110,12 +112,24 @@ test("the OSS site plugin adds Norn with the OSS components, the theme color, an
 	assert.ok(glob.endsWith("/components/*.webc") && !glob.replace(/\\(?=[\\()*?[\]{|}!+@])/g, "").includes("\\"), "no backslash path separators; one before a glob character is an escape");
 });
 
-test("the brand tokens set only custom properties, in the norn.oss layer", () => {
+test("the brand tokens set only shared tokens from tokens.json, in the norn.oss layer", () => {
 	const css = fs.readFileSync(tokens, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
 	assert.ok(css.trim().startsWith("@layer norn.oss {\n\t:root {"));
+	const shared = new Set(readTokens().map(({ name }) => name));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
-	assert.ok(declarations.length > 4 && declarations.every((name) => name.startsWith("--norn-")), declarations.join(", "));
-	for (const name of ["--norn-font-mono", "--norn-header-stripe", "--norn-footer-name"]) assert.ok(declarations.includes(name), name);
+	assert.ok(declarations.length > 0 && declarations.every((name) => shared.has(name) || name.startsWith("--norn-footer-")), declarations.join(", "));
+	assert.ok(declarations.includes("--norn-font-mono"));
+});
+
+test("the brand rules style the Norn components by their tags in the norn.oss layer, and set no custom property", () => {
+	const css = fs.readFileSync(brand, "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+	assert.ok(css.trim().startsWith("@layer norn.oss {"));
+	const shared = new Set(readTokens().map(({ name }) => name));
+	assert.ok(!/^\s*--[\w-]+\s*:/m.test(css), "sets no custom property");
+	for (const [, name] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(shared.has(name), `${name} is a shared token`);
+	const rules = [...css.matchAll(/^\t(\S[^{\n]*?)\s*\{/gm)].map(([, selector]) => selector);
+	assert.ok(rules.length > 0 && rules.every((selector) => /^norn-[a-z-]+ > /.test(selector)), rules.join(", "));
+	assert.match(css, /norn-header > header \{[\s\S]*?&::after \{[\s\S]*?block-size: 3px;[\s\S]*?background: linear-gradient\(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%\);/, "the header strip");
 });
 
 test("fonts: a forward-slash folder holding the four woff2 files", () => {

@@ -259,13 +259,20 @@ The accent drives the link color (`--norn-text-accent`) and the text on an accen
 | `layout` | `--norn-layout-width` |
 | `status` | `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger` |
 
-A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. There is no theme API for styling: the tokens are the API. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, the header stripe, and the footer name in the `norn.oss` layer, and its plugin fills all four hooks:
+A theme is a file like that, plus the components and hook fills it adds through the plugin's `components` option and `fillHooks`. A theme styles a component with CSS against its tag, in its own layer; no component exposes a custom property of its own. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, its `css/brand.css` draws the header strip and styles the footer name by the component tags, both in the `norn.oss` layer, and its plugin fills all four hooks:
 
 ```css
 @layer norn.oss {
 	:root {
 		--norn-font-mono: "PT Mono", ui-monospace, monospace;
-		--norn-header-stripe: linear-gradient(90deg, #d22d6f, #ff944d);
+	}
+
+	norn-header > header::after {
+		content: "";
+		position: absolute;
+		inset: auto 0 0;
+		block-size: 3px;
+		background: linear-gradient(90deg, #d22d6f, #ff944d);
 	}
 }
 ```
@@ -402,7 +409,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | --- | --- | --- |
 | `norn-head` | `@title`, `@description`, `@url`, `@theme-color`, `@og-title`, `@og-image`, `@og-image-alt`, `:@theme-toggle` | Head metadata, Open Graph and Twitter card tags, the layer order, and the bundle links. `norn-base` calls it |
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
-| `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary` | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
+| `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary`, `@logo-height` (a CSS length, 2rem by default) | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
 | `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list` with `@gap="l"`, extras) | Page intro |
 | `norn-card` | `@accent` (`accent`, `info`, `success`, `warning`, `danger`, or `none`), `@title-face` (`mono`), default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and an accent draws a 2px line along the top |

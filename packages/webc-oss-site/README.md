@@ -80,13 +80,16 @@ The Allons-y Studio SVGs are inlined into the three locked components when the p
 
 ## The brand
 
-`css/tokens.css` is the theme: custom properties in the `norn.oss` layer, which the plugin embeds in every page's bundle. A project's unlayered `tokens.css` still wins over each of them.
+The theme is two files in the `norn.oss` layer, which the plugin embeds in every page's bundle: `css/tokens.css` sets shared tokens, and `css/brand.css` styles the Norn components by their tags. A project's unlayered CSS still wins over each of them.
 
 | Token | Allons-y Studio value |
 | --- | --- |
 | `--norn-font-mono` | PT Mono, Allons-y Studio's locked monospace |
-| `--norn-header-stripe` | The four-color strip along the header bar |
 | `--norn-footer-name`, `--norn-footer-name-face`, `--norn-footer-name-size` | The footer's project name in the accent color and the mono face |
+
+| Rule in `css/brand.css` | Allons-y Studio look |
+| --- | --- |
+| `norn-header > header::after` | The four-color strip along the header bar |
 
 The plugin also sets the theme color, `#33394e`, and `og:locale`, `en_US`, as prop defaults under the project's mapping.
 
@@ -101,9 +104,10 @@ The plugin also sets the theme color, `#33394e`, and `og:locale`, `en_US`, as pr
 | `policies` | Allons-y Studio's conduct and security policy URLs |
 | `components` | Absolute glob for the OSS components, which the plugin adds |
 | `tokens` | Absolute path to `css/tokens.css` |
+| `brand` | Absolute path to `css/brand.css` |
 | `fonts` | Absolute path to the self-hosted font files, which the plugin copies to `assets/fonts` |
 
-The schema for the `oss-docs` settings is exported as `@allons-y/webc-oss-site/schema/oss-docs.schema.json`, and the brand tokens as `@allons-y/webc-oss-site/css/tokens.css`.
+The schema for the `oss-docs` settings is exported as `@allons-y/webc-oss-site/schema/oss-docs.schema.json`, the brand tokens as `@allons-y/webc-oss-site/css/tokens.css`, and the brand rules as `@allons-y/webc-oss-site/css/brand.css`.
 
 ## The OSS lock
 

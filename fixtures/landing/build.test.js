@@ -93,10 +93,10 @@ describe("landing fixture with the OSS site layer", () => {
 		}
 	});
 
-	test("the stripe is a brand token in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
+	test("the stripe is a brand rule in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
 		const css = allCss(output, pages["/"]);
-		assert.match(css, /@layer norn\.oss \{\s*:root \{[^}]*--norn-header-stripe: linear-gradient\(/);
-		assert.ok(/norn-header \{[\s\S]*?& > header \{[\s\S]*?&::after/.test(css) && !pages["/"].includes("--norn-header-stripe"), "set in the theme, not on the tag");
+		assert.match(css, /@layer norn\.oss \{\s*(\/\*[^*]*\*\/\s*)?norn-header > header \{[^}]*&::after \{[^}]*background: linear-gradient\(90deg, #d22d6f/);
+		assert.ok(!css.includes("--norn-header-stripe") && !pages["/"].includes("--norn-header-stripe"), "no component custom property, in the theme or on the tag");
 		assert.ok(css.includes('src: url("../assets/fonts/pt-mono.woff2")'));
 		assert.deepEqual(fs.readdirSync(path.join(output, "assets", "fonts")).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
 	});

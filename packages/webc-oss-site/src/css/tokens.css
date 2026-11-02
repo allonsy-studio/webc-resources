@@ -1,14 +1,11 @@
 /*
  * The Allons-y Studio brand as Norn tokens, in the norn.oss layer: the OSS site plugin adds it to every page's bundle.
- * A theme is a file like this one, of custom properties. A project's own unlayered tokens.css still wins over it.
+ * It sets only shared tokens from tokens.json; css/brand.css styles the components. A project's own unlayered tokens.css still wins over it.
  */
 @layer norn.oss {
 	:root {
 		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
 		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-		/* The four-color strip along the header bar. */
-		--norn-header-stripe: linear-gradient(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%);
 
 		/* The project name leads the footer, in the accent color and the mono face. */
 		--norn-footer-name: var(--norn-text-accent, t('text.accent'));

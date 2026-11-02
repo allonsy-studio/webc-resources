@@ -25,6 +25,9 @@ export const components = `${globPath(path.join(HERE, "components"))}/*.webc`;
 /** Absolute path to the brand tokens, `css/tokens.css`, in the `norn.oss` layer. The OSS site plugin embeds it in every page's bundle. */
 export const tokens = posix(path.join(HERE, "css", "tokens.css"));
 
+/** Absolute path to the brand rules, `css/brand.css`, in the `norn.oss` layer: CSS against the Norn component tags, such as the header's strip. The OSS site plugin embeds it after the tokens. */
+export const brand = posix(path.join(HERE, "css", "brand.css"));
+
 /** The host that serves every Allons-y Studio project site, one path per repository: pass it to `buildSite` as `host`. */
 export const host = "https://projects.allons-y.studio";
 
@@ -133,7 +136,7 @@ export function ossProps(site, project, { docs = [], anchors = false, oss = true
 
 /**
  * The OSS site theme, as an Eleventy plugin: it adds the Norn plugin with the OSS components, fills the hooks with the OSS head, banner,
- * call to action, and credit, embeds the brand tokens, sets the theme color, and copies the fonts. Add it in place of the Norn plugin, with the same options.
+ * call to action, and credit, embeds the brand tokens and rules, sets the theme color, and copies the fonts. Add it in place of the Norn plugin, with the same options.
  *
  * @param {import("@11ty/eleventy").UserConfig} config
  * @param {object} [options] - The Norn plugin's options: `props`, `layouts`, `components`, `exclude`, `strings`, `markdown`, `defaults`, `icons`
@@ -145,7 +148,7 @@ export default function oss(config, options = {}) {
 		defaults: { themeColor: THEME_COLOR, locale: "en_US", ...options.defaults },
 	});
 	fillHooks(config, {
-		head: `<meta webc:is="oss-head" webc:nokeep />\n<style>${fs.readFileSync(tokens, "utf8").trim()}</style>`,
+		head: `<meta webc:is="oss-head" webc:nokeep />\n<style>${[tokens, brand].map((file) => fs.readFileSync(file, "utf8").trim()).join("\n")}</style>`,
 		banner: "<oss-bar></oss-bar>",
 		cta: "<oss-cta></oss-cta>",
 		credit: "<oss-credit></oss-credit>",
