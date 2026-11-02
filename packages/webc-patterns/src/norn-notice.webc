@@ -14,7 +14,7 @@
  * @prop {boolean} [live] - Announce the notice when it appears. On for `@live`, `@live="true"`, or `:@live="true"`.
  * @slot prefix - The severity word read before the message, with its punctuation, as one element, such as `<span slot="prefix">Remarque : </span>`. Falls back to the site's `componentStrings` for the severity, then "Note: ", "Success: ", "Warning: ", or "Error: ".
  * @slot - The message.
- * @slot action - One action, such as a `norn-link-button` with `variant="quiet"`. It reads in the text color.
+ * @slot action - One action, such as a `norn-link-button` with `@variant="quiet"` and `@tone="current"`, so it reads in the text color and doesn't compete with the severity.
  * @cssprop --norn-notice-color - The bar and icon color. Falls back to a status color per severity.
  * @cssprop --norn-notice-bg - Background. Falls back to a tint of the color.
  * @category container
@@ -83,11 +83,6 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 
 			& > div > div:first-of-type > :is(p, ul, ol) {
 				margin: 0;
-			}
-
-			/* The action reads in the text color, so it doesn't compete with the severity. */
-			& > div > div:last-child {
-				--norn-link-button-link: currentcolor;
 			}
 
 			& > div > div:last-child:not(:has(*)) {

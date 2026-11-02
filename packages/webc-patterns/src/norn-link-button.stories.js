@@ -11,6 +11,7 @@ export default {
 	argTypes: {
 		href: { description: "The link's URL.", type: { name: "string", required: true } },
 		variant: { description: "`primary`, a filled accent; `secondary`, a 1px outline; or `quiet`, text with no border." },
+		tone: { description: "`accent`, the accent text color; or `current`, the surrounding text color, for a secondary or quiet button inside a colored container such as `norn-notice`. A primary button keeps its fill and text." },
 		default: { description: "The link text, which may hold a `norn-icon`." },
 	},
 	parameters: {

@@ -34,7 +34,7 @@ description: The small components, one of each.
 <h2>Notices</h2>
 <norn-notice @severity="success">
 	<p>Saved. The changes apply on the next build.</p>
-	<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Open the docs</norn-link-button>
+	<norn-link-button slot="action" @href="/docs/one/" @variant="quiet" @tone="current">Open the docs</norn-link-button>
 </norn-notice>
 <norn-notice @severity="error" :@live="true">
 	<p>The build failed.</p>

@@ -59,7 +59,7 @@ frame:
 		<norn-notice @severity="warning">
 			<span slot="prefix">Attention, avis important pour toutes les équipes : </span>
 			<p>Le message de l’avis est lui aussi bien plus long que d’habitude, et contient un mot interminable comme anticonstitutionnellement ou électroencéphalographiquement.</p>
-			<norn-link-button slot="action" @href="/docs/one/" @variant="quiet">Ouvrir la documentation complète et détaillée</norn-link-button>
+			<norn-link-button slot="action" @href="/docs/one/" @variant="quiet" @tone="current">Ouvrir la documentation complète et détaillée</norn-link-button>
 		</norn-notice>
 		<norn-accordion>
 			<details name="faq">

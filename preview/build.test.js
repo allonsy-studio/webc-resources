@@ -51,6 +51,7 @@ describe("the catalog", () => {
 		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
 		assert.ok(button.tokens.some(({ name }) => name === "--norn-ui-accent"), "a global token it reads");
 		assert.ok(button.tokens.every(({ name }) => !name.startsWith("--norn-link-button-")), "never a custom property of its own");
+		assert.ok(button.props.some(({ name }) => name === "tone"), "the tone prop");
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
 		assert.ok(footer.tokens.some(({ name }) => name === "--norn-text-muted"), "a component without a CSF file lists its tokens too");
 		assert.equal(footer.csf, undefined, "norn-footer still has its JSDoc");
@@ -127,7 +128,7 @@ describe("the preview build", () => {
 	test("a component page shows its docs, its tokens, and its stories", () => {
 		const html = pageFor(output, "/components/patterns/norn-link-button/");
 		assert.ok(html.includes("<code>@variant</code>") && html.includes("a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border."));
-		assert.ok(html.includes("<code>--norn-text-on-accent</code>") && !html.includes("<code>--norn-link-button-accent</code>"), "the tokens it reads, and no custom property of its own");
+		assert.ok(html.includes("<code>--norn-text-on-accent</code>") && html.includes("<code>@tone</code>") && !html.includes("<code>--norn-link-button-accent</code>"), "the tokens it reads, and no custom property of its own");
 		assert.ok(pageFor(output, "/components/patterns/norn-footer/").includes("<code>colophon</code>"));
 		assert.ok(html.includes("<norn-code-block"), "the source is shown with norn-code-block");
 		assert.equal((html.match(/<preview-canvas>/g) ?? []).length, catalog.components.find(({ name }) => name === "norn-link-button").stories.length);

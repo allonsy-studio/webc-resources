@@ -450,6 +450,8 @@ describe("neutral fixture in a browser", () => {
 		assert.equal(await failed.locator("[data-severity]").getAttribute("role"), "alert");
 		assert.equal((await failed.locator("[data-prefix]").textContent()).trim(), "Error:");
 		assert.equal(await saved.locator("[data-severity] > div").last().isVisible(), true, "the action shows");
+		const textColor = await saved.locator("[data-severity]").evaluate((element) => getComputedStyle(element).color);
+		assert.equal(await saved.locator("norn-link-button a").evaluate((element) => getComputedStyle(element).color), textColor, "the quiet action with @tone=\"current\" reads in the text color");
 		assert.equal(await failed.locator("[data-severity] > div").last().isVisible(), false, "an empty action slot takes no room");
 		await page.close();
 	});

@@ -418,7 +418,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-sidebar-layout` | slots `nav` and `summary`, default slot (the body, from its h1), `@nav-width` (a CSS length), `@gap` (`s`, `m`, `l`, `xl`), `@columns` (the body's grid columns) | Navigation column beside a page body. The navigation stays in view; below 37.5rem the columns stack and the navigation folds into a closed `<details>` |
 | `norn-rich-text` | `@measure` (`text` or `none`), default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
-| `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), default slot | A link styled as a button, for a call to action |
+| `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), `@tone` (`accent` or `current`), default slot | A link styled as a button, for a call to action |
 | `norn-fact-list` | `@gap` (`xs`, `s`, `m`, or `l`, the space between rows), default slot (`<li>` facts) | A row of short facts, each with an optional icon |
 | `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The checked option is tinted in the accent |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |

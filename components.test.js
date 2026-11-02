@@ -346,7 +346,7 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control", "norn-callout"]) {
+	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control", "norn-callout", "norn-link-button"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);
@@ -376,9 +376,18 @@ test("norn-link-button has primary, secondary, and quiet, and any other value is
 	}
 	const css = cssOf("norn-link-button");
 	assert.ok(!/text-decoration: underline/.test(css), "no underline on hover or focus");
+	assert.ok(css.includes("border: 1px solid var(--_border)") && css.includes("border-radius: var(--norn-ui-border-radius, t('ui.border.radius'))"), "a 1px edge and the component radius");
+	assert.ok(css.includes("--_bg: var(--norn-ui-accent, t('ui.accent')); color: var(--norn-text-on-accent, t('text.on-accent'));"), "primary reads the accent tokens");
 	assert.ok(!/outline-width/.test(css), "the ring is the base ring");
 	assert.match(css, /a\[data-variant="primary"\] \{ border-color: LinkText; background-color: LinkText; color: Canvas; forced-color-adjust: none;/, "primary stays filled in forced colors");
 	assert.ok(css.includes("&:active"), "a pressed state");
+});
+
+test("norn-link-button takes @tone=\"current\" for the surrounding text color, and any other value keeps the accent", async () => {
+	assert.ok((await render('<norn-link-button @href="/" @variant="quiet" @tone="current">Go</norn-link-button>')).includes('<a href="/" data-variant="quiet" data-tone="current">Go</a>'));
+	for (const tone of ["accent", "inherit", ""]) assert.ok((await render(`<norn-link-button @href="/" @tone="${tone}">Go</norn-link-button>`)).includes('<a href="/" data-variant="primary">Go</a>'), tone);
+	const css = cssOf("norn-link-button");
+	assert.ok(css.indexOf('& a[data-tone="current"] { color: inherit; }') > css.indexOf("& a[data-variant] {") && css.indexOf('& a[data-tone="current"]') < css.indexOf('& a[data-variant="primary"]'), "after the base rule, and before primary, which keeps its text");
 });
 
 test("norn-copy-button has no border, stacks its icons and texts in one cell, and swaps to a check tinted with the success color", async () => {
