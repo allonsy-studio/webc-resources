@@ -5,25 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Head metadata, the cascade layer order, and the page's bundle links. `norn-base` calls it; a layout of the project's own can too.
- * Call it in the head as `<meta webc:is="norn-head" webc:nokeep … />`: a custom tag in the head would close it early.
- * Emits Open Graph tags and `twitter:card`: `summary_large_image` when an image is set, else `summary`. Write extra head tags right after the call: they land after the bundle links.
- * Declares the layer order in an inline style before the bundle links, so it comes first whatever order the page's styles bundle in:
- * `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. A project's unlayered CSS beats every layer without `!important`.
- * The base and print styles are files, `css/base.css` and `css/print.css`: `norn-base` embeds them, and a layout of the project's own adds them itself.
- * Register `dropEmptyBundleTags` as a transform so a page without CSS or JS keeps no empty `<link>` or `<script>`; the Norn plugin does.
- * @prop {string} title
- * @prop {string} [description]
- * @prop {string} [url] - The canonical URL. Checked with `typeof`: a missing `url` prop resolves to Eleventy's `url` filter.
- * @prop {string} [theme-color] - One color for both schemes. Without it, the page surface in each scheme.
- * @prop {string} [og-title] - Falls back to the title.
- * @prop {string} [og-image] - The share image, for `og:image`. Open Graph needs an absolute URL, so a relative one resolves against the canonical `url`. When `url` is not absolute, the build logs a warning, and `og:image` and `og:image:alt` are left out, with a `summary` card. Without an image, no image tag renders.
- * @prop {string} [og-image-alt] - The image's description, for `og:image:alt`. Ignored without `og-image`.
- * @prop {boolean} [theme-toggle] - Adds a small inline script that applies the scheme a `norn-theme-toggle` saved, before the first paint. On for `@theme-toggle`, `@theme-toggle="true"`, or `:@theme-toggle="true"`.
- * @category document
- */
 --->
 <script webc:setup>
 /** The default theme colors: `surface.base` from tokens.json, written out because a `<meta>` can't read a custom property. */
