@@ -1,6 +1,4 @@
-<p><img src="preview/content/assets/norn.svg" alt="" width="64" height="64"></p>
-
-# Norn
+# <img src="preview/content/assets/norn.svg" alt="" width="40" height="40" align="middle"> Norn
 
 Un-opinionated WebC components, layouts, & helpers for Eleventy sites, named for the Norse weavers of fate: small threads a project weaves into its own pages. Each component carries its own CSS & JS, so a page ships only what it uses. A project adds one Eleventy plugin, with a mapping from its own data to the layout props:
 
