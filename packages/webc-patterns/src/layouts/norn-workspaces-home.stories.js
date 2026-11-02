@@ -12,7 +12,7 @@ export default {
 		lede: { description: "The hero paragraph. Falls back to the description." },
 		install: { description: "The install command.", table: { type: { summary: "string" } } },
 		repo: { description: "The repository's URL.", table: { type: { summary: "string" } } },
-		workspaces: { description: "The workspaces, each with its page.", table: { type: { summary: "{ name: string, description?: string, url: string }[]" } } },
+		workspaces: { description: "The workspaces, each with its page.", table: { type: { summary: "{ href: string, title: string, description?: string }[]" } } },
 		default: { description: "The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section." },
 	},
 	parameters: {

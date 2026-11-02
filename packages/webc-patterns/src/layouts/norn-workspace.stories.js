@@ -9,7 +9,7 @@ export default {
 	title: "Template/norn-workspace",
 	component: "norn-workspace",
 	argTypes: {
-		workspaces: { description: "The workspaces, for the sidebar. `name` stands in for a missing `title`.", table: { type: { summary: "{ url: string, title: string }[]" } } },
+		workspaces: { description: "The workspaces, for the sidebar.", table: { type: { summary: "{ href: string, title: string, icon?: string }[]" } } },
 		workspace: { description: "The workspace on this page. Its `html` is compiled as WebC, so it may hold components.", table: { type: { summary: "{ name: string, description?: string, html?: string }" } } },
 		default: { description: "The page's own content, in `norn-rich-text` after the workspace's page." },
 	},

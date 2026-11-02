@@ -30,7 +30,7 @@ nornCompiled: true
 	<norn-card-grid>
 		<li webc:for="workspace of $data.norn.workspaces">
 			<norn-card @title-face="mono">
-				<h3><a :href="workspace.url" @text="workspace.name || workspace.title"></a></h3>
+				<h3><a :href="workspace.href" @text="workspace.title"></a></h3>
 				<p webc:if="workspace.description" @text="workspace.description"></p>
 			</norn-card>
 		</li>

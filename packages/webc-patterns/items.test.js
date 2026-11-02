@@ -118,3 +118,17 @@ test("norn-docs-home links its docs by href, and a page with only url gets no li
 	assert.ok(html.includes('<a href="/start/">Start</a>') && html.includes("<dd>Begin.</dd>"), "the contents list");
 	assert.ok(!html.includes('href="/old/"'), "no link from url");
 });
+
+test("norn-workspaces-home lists its workspaces by href and title, and an old { url, name } item shows neither", async () => {
+	const html = await layout("norn-workspaces-home", { workspaces: [{ href: "/alpha/", title: "@acme/alpha", description: "First." }, { url: "/zed/", name: "@acme/zed", description: "Last." }] });
+	assert.match(html, /<h3><a href="\/alpha\/">@acme\/alpha<\/a><\/h3>/);
+	assert.ok(!html.includes('href="/zed/"') && !html.includes("@acme/zed"), "no link and no label from url and name");
+});
+
+test("norn-workspace lists the workspaces in its sidebar by href and title, and an old { url, name } item shows neither", async () => {
+	const workspaces = [{ href: "/here/", title: "@acme/alpha" }, { url: "/zed/", name: "@acme/zed" }];
+	const html = await layout("norn-workspace", { workspaces, workspace: { name: "@acme/alpha", description: "First." } }, { page: { url: "/here/" } });
+	assert.match(html, /<a href="\/here\/" aria-current="page"><span>@acme\/alpha<\/span><\/a>/);
+	assert.ok(!html.includes('href="/zed/"') && !html.includes("@acme/zed"), "no link and no label from url and name");
+	assert.match(html, /<h1>@acme\/alpha<\/h1>/, "the heading is the workspace's package name");
+});

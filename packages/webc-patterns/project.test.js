@@ -132,10 +132,10 @@ test("buildWorkspaces: one entry per workspace, sorted, with its page", () => {
 		...workspace("alpha", "First.", { "README.md": "# alpha\n\nAlpha's readme.\n" }),
 	});
 	assert.deepEqual(
-		buildWorkspaces({ root }).map(({ name, title, description, slug, url }) => ({ name, title, description, slug, url })),
+		buildWorkspaces({ root }).map(({ name, title, description, slug, href, url }) => ({ name, title, description, slug, href, url })),
 		[
-			{ name: "@acme/alpha", title: "@acme/alpha", description: "First.", slug: "alpha", url: "/alpha/" },
-			{ name: "@acme/zed", title: "@acme/zed", description: "Last.", slug: "zed", url: "/zed/" },
+			{ name: "@acme/alpha", title: "@acme/alpha", description: "First.", slug: "alpha", href: "/alpha/", url: undefined },
+			{ name: "@acme/zed", title: "@acme/zed", description: "Last.", slug: "zed", href: "/zed/", url: undefined },
 		],
 	);
 });

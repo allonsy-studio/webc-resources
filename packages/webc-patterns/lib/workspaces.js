@@ -35,7 +35,7 @@ const body = (text) => text.replace(/\r\n?/g, "\n").replace(/^---\n[\s\S]*?\n---
  * Its raw HTML renders as HTML, as on GitHub. Nothing is sanitized: the README is the project's own, and `norn-workspace` compiles it as WebC.
  *
  * @param {{ root: string }} options - The project root, where the `workspaces` field lives
- * @returns {{ name: string, title: string, description?: string, slug: string, url: string, html: string }[]}
+ * @returns {{ name: string, title: string, description?: string, slug: string, href: string, html: string }[]} Each an item, `href`, `title`, and `description`, with the package `name`, its `slug`, and its page `html`
  */
 export function buildWorkspaces({ root }) {
 	// HTML on, as on GitHub and in Eleventy: the README is the project's own, as trusted as its pages. `norn-workspace` compiles it as WebC, and nothing is sanitized.
@@ -64,7 +64,7 @@ export function buildWorkspaces({ root }) {
 				title: pkg.name,
 				description: pkg.description,
 				slug,
-				url: `/${slug}/`,
+				href: `/${slug}/`,
 				html: source ? md.render(body(fs.readFileSync(source, "utf8"))) : "",
 			};
 		});

@@ -31,9 +31,9 @@ const WORKSPACE_FRAMES = ["/frames/patterns/norn-workspace/default/", "/frames/p
 
 /** The layout stories' props: the sample project data, mapped the way an Allons-y Studio project's is, without the OSS site theme. */
 const props = (data, noIndex) => {
-	const workspaces = (data.workspaces ?? []).map((workspace, index) => ({ ...workspace, url: WORKSPACE_FRAMES[index] ?? WORKSPACE_FRAMES[0] }));
+	const workspaces = (data.workspaces ?? []).map((workspace, index) => ({ ...workspace, href: WORKSPACE_FRAMES[index] ?? WORKSPACE_FRAMES[0] }));
 	const docs = (data.collections?.docs ?? []).map((page) => ({ href: page.url, title: page.data?.title, description: page.data?.description }));
-	return { ...ossProps(data.site, data.project, { docs, anchors: data.anchors === true, oss: false }), title: data.title, docs, search: { bundle: noIndex }, workspaces, workspace: data.workspace && { ...data.workspace, url: workspaces.find(({ name }) => name === data.workspace.name)?.url } };
+	return { ...ossProps(data.site, data.project, { docs, anchors: data.anchors === true, oss: false }), title: data.title, docs, search: { bundle: noIndex }, workspaces, workspace: data.workspace && { ...data.workspace, href: workspaces.find(({ name }) => name === data.workspace.name)?.href } };
 };
 
 /** @param {import("@11ty/eleventy").UserConfig} config */
