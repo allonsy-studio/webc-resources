@@ -345,7 +345,7 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager", "norn-skip-link", "norn-search"]) {
+	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);
@@ -354,6 +354,8 @@ test("a component that exposes no custom property of its own reads only global t
 	const skip = cssOf("norn-skip-link");
 	assert.ok(skip.includes("border-radius: var(--norn-ui-border-radius, t('ui.border.radius'))") && skip.includes("background: var(--norn-surface-raised, t('surface.raised'))") && skip.includes("color: var(--norn-text-base, t('text.base'))"), "norn-skip-link: the radius, the raised fill, and the base text");
 	assert.ok(cssOf("norn-search").includes("background: var(--norn-surface-base, t('surface.base'))"), "norn-search: the field on the page surface");
+	const segmented = cssOf("norn-segmented-control");
+	assert.ok(segmented.includes("background: var(--norn-surface-raised, t('surface.raised'))") && segmented.includes("calc(var(--norn-ui-border-radius, t('ui.border.radius')) - var(--_gap))"), "norn-segmented-control: the raised track and the nested radius");
 });
 
 test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
@@ -363,7 +365,7 @@ test("norn-segmented-control draws no thumb, counts no options, and fills its ch
 	assert.ok(!/outline: 3px/.test(css) && css.includes("outline: var(--norn-ui-focus-width,"), "the one ring, inset");
 	const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
 	assert.match(forced, /label:has\(input:checked\) \{ background-color: Highlight; color: HighlightText; forced-color-adjust: none;/, "the label itself is filled");
-	assert.ok(css.includes("--norn-segmented-control-current") && !css.includes("--norn-segmented-control-thumb") && !css.includes("--norn-segmented-control-border"), "the tint replaces the thumb and the border");
+	assert.ok(css.includes("--_current: var(--norn-text-accent, t('text.accent'))") && !/thumb|--norn-segmented-control-/.test(css), "the accent tint replaces the thumb and the border");
 });
 
 test("norn-link-button has primary, secondary, and quiet, and any other value is primary", async () => {

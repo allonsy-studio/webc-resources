@@ -17,9 +17,6 @@
  * @prop {{ value: string, label: string, icon?: string, checked?: boolean }[]} [options] - The options, in place of the default slot. Each label is also its `title`.
  * @slot legend - The group's name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden.
  * @slot - The option labels, when there are no `options`.
- * @cssprop --norn-segmented-control-current - Checked option text, and the tint behind it. Falls back to --norn-text-accent.
- * @cssprop --norn-segmented-control-bg - Track background. Falls back to --norn-surface-raised.
- * @cssprop --norn-segmented-control-radius - Corner radius. Falls back to --norn-ui-border-radius.
  * @category component
  */
 --->
@@ -45,7 +42,7 @@ const grouped = (options, name) => {
 	@layer norn.components {
 		norn-segmented-control {
 			--_gap: 2px;
-			--_current: var(--norn-segmented-control-current, var(--norn-text-accent, t('text.accent')));
+			--_current: var(--norn-text-accent, t('text.accent'));
 			display: inline-flex;
 			max-inline-size: 100%;
 
@@ -59,8 +56,8 @@ const grouped = (options, name) => {
 				margin: 0;
 				padding: var(--_gap);
 				border: 0;
-				border-radius: var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				background: var(--norn-segmented-control-bg, var(--norn-surface-raised, t('surface.raised')));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-raised, t('surface.raised'));
 			}
 
 			& legend,
@@ -88,7 +85,7 @@ const grouped = (options, name) => {
 				min-inline-size: 2.5rem;
 				min-block-size: calc(var(--norn-ui-control-height, t('ui.control.height')) - 2 * var(--_gap));
 				padding-inline: var(--norn-space-s, t('space.s'));
-				border-radius: calc(var(--norn-segmented-control-radius, var(--norn-ui-border-radius, t('ui.border.radius'))) - var(--_gap));
+				border-radius: calc(var(--norn-ui-border-radius, t('ui.border.radius')) - var(--_gap));
 				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
 				color: var(--norn-text-muted, t('text.muted'));
 				cursor: pointer;
