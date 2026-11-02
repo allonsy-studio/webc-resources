@@ -672,6 +672,8 @@ describe("the preview in a browser", () => {
 		assert.deepEqual(await labels.evaluateAll((all) => all.map((label) => label.querySelectorAll("svg[aria-hidden='true']").length)), [1, 1, 1], "an icon each, hidden from assistive tech");
 		assert.equal(await radio(canvas, "scheme", "System").isChecked(), true);
 		assert.equal((await canvas.locator('[data-group="scheme"] legend').textContent()).trim(), "Color scheme");
+		assert.equal(await canvas.getByRole("group", { name: "Color scheme", exact: true }).count(), 1, "the scheme group's accessible name");
+		assert.equal(await canvas.getByRole("group", { name: "Width", exact: true }).count(), 1, "the width group's accessible name");
 		await page.close();
 	});
 

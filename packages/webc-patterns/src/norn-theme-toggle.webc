@@ -14,7 +14,9 @@
 		{ value: '', label: '', icon: 'system', checked: true },
 		{ value: 'dark', label: '', icon: 'moon' }
 	]"
-></norn-segmented-control>
+>
+	<span slot="legend" @text="nornComponentStrings?.('norn-theme-toggle', 'label', $data.page) || 'Color scheme'"></span>
+</norn-segmented-control>
 <span hidden>
 	<span data-string="label"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'label', $data.page) || 'Color scheme'"></span></slot></span>
 	<span data-string="light"><slot name="light"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'light', $data.page) || 'Light'"></span></slot></span>

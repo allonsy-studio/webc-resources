@@ -422,6 +422,20 @@ describe("neutral fixture in a browser", () => {
 		await context.close();
 	});
 
+	test("norn-theme-toggle's group keeps its accessible name in light and dark", async () => {
+		for (const colorScheme of ["light", "dark"]) {
+			const context = await browser.newContext({ colorScheme });
+			const page = await context.newPage();
+			await page.goto(server.url + "/kit/");
+			const [first, second] = [page.locator("norn-theme-toggle").nth(0), page.locator("norn-theme-toggle").nth(1)];
+			assert.equal(await first.getByRole("group", { name: "Color scheme", exact: true }).count(), 1, colorScheme);
+			assert.equal(await second.getByRole("group", { name: "Scheme, again", exact: true }).count(), 1, `${colorScheme}: the label slot wins`);
+			await page.goto(server.url + "/fr/");
+			assert.equal(await page.locator("norn-theme-toggle").getByRole("group", { name: "Thème", exact: true }).count(), 1, `${colorScheme}: from the registry`);
+			await context.close();
+		}
+	});
+
 	test("a saved scheme applies from the head, before any bundle script runs", async () => {
 		const context = await browser.newContext({ colorScheme: "light" });
 		const page = await context.newPage();
@@ -610,7 +624,7 @@ describe("overriding a packaged component", () => {
 				.map(([key, [form]]) =>
 					[
 						`<norn-notice id="notice-${key}" ${form.replace("X", "live")}><p>Note</p></norn-notice>`,
-						`<norn-segmented-control id="control-${key}" ${form.replace("X", "icon-only")} @legend="Pick" @name="pick-${key}" :@options="[{ value: 'a', label: 'A' }]"></norn-segmented-control>`,
+						`<norn-segmented-control id="control-${key}" ${form.replace("X", "icon-only")} @name="pick-${key}" :@options="[{ value: 'a', label: 'A' }]"><span slot="legend">Pick</span></norn-segmented-control>`,
 					].join("\n"),
 				)
 				.join("\n"),
@@ -630,12 +644,23 @@ describe("overriding a packaged component", () => {
 
 	test("norn-segmented-control options without a name fail the build", () => {
 		const content = path.join(here, "content", "nameless.webc");
-		fs.writeFileSync(content, "<norn-segmented-control @legend=\"Pick\" :@options=\"[{ value: 'a', label: 'A' }]\"></norn-segmented-control>");
+		fs.writeFileSync(content, "<norn-segmented-control :@options=\"[{ value: 'a', label: 'A' }]\"><span slot=\"legend\">Pick</span></norn-segmented-control>");
 		try {
 			assert.throws(() => build({ output: "_site-nameless" }), /`:@options` needs `@name`/);
 		} finally {
 			fs.rmSync(content);
 			fs.rmSync(path.join(here, "_site-nameless"), { recursive: true, force: true });
+		}
+	});
+
+	test("norn-segmented-control without a legend fails the build, naming the slot", () => {
+		const content = path.join(here, "content", "unnamed.webc");
+		fs.writeFileSync(content, "<norn-segmented-control @name=\"pick\" :@options=\"[{ value: 'a', label: 'A' }]\"></norn-segmented-control>");
+		try {
+			assert.throws(() => build({ output: "_site-unnamed" }), /norn-segmented-control: .*`legend` slot/);
+		} finally {
+			fs.rmSync(content);
+			fs.rmSync(path.join(here, "_site-unnamed"), { recursive: true, force: true });
 		}
 	});
 

@@ -4,7 +4,8 @@ order: 3
 ---
 <norn-segmented-control
 	webc:for="count of [3, 4, 5, 6, 7, 8]"
-	:@legend="count + ' options'"
 	:@name="'count-' + count"
 	:@options="Array.from({ length: count }, (item, index) => ({ value: 'option-' + index, label: String(index + 1), checked: index === count - 1 }))"
-></norn-segmented-control>
+>
+	<span slot="legend" @text="count + ' options'"></span>
+</norn-segmented-control>

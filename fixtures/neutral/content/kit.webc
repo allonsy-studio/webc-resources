@@ -59,7 +59,8 @@ description: The small components, one of each.
 	</details>
 </norn-accordion>
 <h2>Line breaks inside the tags</h2>
-<norn-segmented-control @legend="Size" @name="size" :@options="[{ value: 's', label: 'Small', checked: true }, { value: 'l', label: 'Large' }]">
+<norn-segmented-control @name="size" :@options="[{ value: 's', label: 'Small', checked: true }, { value: 'l', label: 'Large' }]">
+	<span slot="legend">Size</span>
 </norn-segmented-control>
 <p id="install">npm install @example/project</p>
 <norn-copy-button @source="install">

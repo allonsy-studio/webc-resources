@@ -5,7 +5,7 @@ themeToggle: true
 ---
 <h1>Controls</h1>
 <norn-theme-toggle id="toggle"></norn-theme-toggle>
-<norn-segmented-control id="control" @legend="Size" @name="size" :@options="[{ value: 's', label: 'Small' }, { value: 'm', label: 'Medium', checked: true }, { value: 'l', label: 'Large' }]"></norn-segmented-control>
+<norn-segmented-control id="control" @name="size" :@options="[{ value: 's', label: 'Small' }, { value: 'm', label: 'Medium', checked: true }, { value: 'l', label: 'Large' }]"><span slot="legend">Size</span></norn-segmented-control>
 <p>
 	<norn-link-button id="primary" @href="/docs/">Primary</norn-link-button>
 	<norn-link-button id="secondary" @href="/docs/" @variant="secondary">Secondary</norn-link-button>

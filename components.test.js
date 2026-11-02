@@ -983,6 +983,25 @@ test("every component string is a named slot with the registry as its fallback, 
 		const documented = slotsOf(file);
 		for (const [, name] of withoutDocs(text).matchAll(/<slot name="([a-z-]+)"/g)) assert.ok(documented.has(name), `${file}: <slot name="${name}"> is not documented`);
 	}
+	// A component with no registry entry still takes no prop named like one of its slots.
+	for (const file of sourceFiles()) {
+		const { props, slots } = analyzeFile(file);
+		const names = new Set(props.map(({ name }) => name));
+		for (const { name } of slots) assert.ok(!names.has(name), `${path.relative(PACKAGES, file)}: ${name} is a slot and a prop`);
+	}
+});
+
+test("norn-segmented-control takes its group's name from the legend slot only, and fails the build without one", async () => {
+	const { props, slots } = analyzeFile(path.join(PACKAGES, "webc-patterns/src/norn-segmented-control.webc"));
+	assert.deepEqual(props.map(({ name }) => name).sort(), ["icon-only", "name", "options"]);
+	assert.deepEqual(slots.map(({ name }) => name).sort(), ["default", "legend"]);
+	const options = ":@options=\"[{ value: 'a', label: 'A' }]\"";
+	assert.ok((await render(`<norn-segmented-control @name="s" ${options}><span slot="legend">Size</span></norn-segmented-control>`)).includes("<legend><span>Size</span></legend>"));
+	await assert.rejects(render(`<norn-segmented-control @name="s" ${options}></norn-segmented-control>`), /norn-segmented-control: .*`legend` slot/);
+	await assert.rejects(render('<norn-segmented-control @legend="Size"><label><input type="radio" name="s" value="a" /><span>A</span></label></norn-segmented-control>'), /norn-segmented-control: .*`legend` slot/, "the old prop names nothing");
+	const toggle = await render("<norn-theme-toggle></norn-theme-toggle>");
+	assert.ok(toggle.includes("<legend><span>Color scheme</span></legend>"), "the theme toggle names its group in the page");
+	assert.ok((await render("<norn-theme-toggle></norn-theme-toggle>", { strings: FRENCH })).includes("<legend><span>Thème</span></legend>"), "from the registry");
 });
 
 test("no component writes a string into an aria-label or a data attribute for its script", () => {
@@ -1124,7 +1143,7 @@ test("norn-icon takes its size as a prop mapped to the icon tokens, with no cust
 	await assert.rejects(render('<norn-icon @name="check" @size="xl"></norn-icon>'), /norn-icon: no size "xl". Sizes: s, m/);
 	for (const name of ["norn-notice", "norn-segmented-control"]) assert.ok(!cssOf(name).includes("--norn-icon-size"), `${name} passes the size as a prop`);
 	assert.ok((await render('<norn-notice @severity="warning">x</norn-notice>')).includes('data-size="m"'), "a notice's icon is at the title size");
-	assert.ok((await render("<norn-segmented-control @name=\"s\" :@options=\"[{ value: 'a', label: 'A', icon: 'sun' }]\"></norn-segmented-control>")).includes('data-size="m"'), "and an option's icon");
+	assert.ok((await render("<norn-segmented-control @name=\"s\" :@options=\"[{ value: 'a', label: 'A', icon: 'sun' }]\"><span slot=\"legend\">S</span></norn-segmented-control>")).includes('data-size="m"'), "and an option's icon");
 });
 
 test("norn-icon styles the stroke on built-in icons only, so a project icon keeps its own paint", () => {

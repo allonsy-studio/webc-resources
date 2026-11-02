@@ -12,9 +12,14 @@ const grouped = (options, name) => {
 	if (options && (typeof name !== "string" || !name)) throw new Error("norn-segmented-control: `:@options` needs `@name`, or each radio is its own group and several can be checked at once.");
 	return options;
 };
+
+/** Reached only from the `legend` slot's fallback: a group without a name fails the build. */
+const unnamed = () => {
+	throw new Error('norn-segmented-control: the group needs a name. Put one element in the `legend` slot, such as `<span slot="legend">Size</span>`.');
+};
 </script>
 <fieldset :data-icon-only="iconOnly === true || iconOnly === '' || iconOnly === 'true' ? '' : undefined">
-	<legend><slot name="legend"><span webc:if="legend" @text="legend"></span></slot></legend>
+	<legend><slot name="legend"><span webc:nokeep @text="unnamed()"></span></slot></legend>
 	<template webc:nokeep webc:if="grouped(options, name)">
 		<label webc:for="option of options" :title="option.label">
 			<input type="radio" :name="name" :value="option.value" :checked="option.checked ? '' : undefined" />
