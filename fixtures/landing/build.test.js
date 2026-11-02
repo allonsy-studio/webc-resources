@@ -93,10 +93,12 @@ describe("landing fixture with the OSS site layer", () => {
 		}
 	});
 
-	test("the stripe is a brand rule in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
+	test("the stripe and the footer name are brand rules in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
 		const css = allCss(output, pages["/"]);
 		assert.match(css, /@layer norn\.oss \{\s*(\/\*[^*]*\*\/\s*)?norn-header > header \{[^}]*&::after \{[^}]*background: linear-gradient\(90deg, #d22d6f/);
 		assert.ok(!css.includes("--norn-header-stripe") && !pages["/"].includes("--norn-header-stripe"), "no component custom property, in the theme or on the tag");
+		assert.match(css, /norn-footer > footer > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-accent,[^;]*;\s*font-family: var\(--norn-font-mono,[^;]*;\s*font-size: 1\.2rem;/, "the footer name, in the theme");
+		assert.ok(!/--norn-footer-name/.test(css), "no footer hook");
 		assert.ok(css.includes('src: url("../assets/fonts/pt-mono.woff2")'));
 		assert.deepEqual(fs.readdirSync(path.join(output, "assets", "fonts")).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
 	});

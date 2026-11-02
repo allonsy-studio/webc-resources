@@ -117,7 +117,7 @@ test("the brand tokens set only shared tokens from tokens.json, in the norn.oss 
 	assert.ok(css.trim().startsWith("@layer norn.oss {\n\t:root {"));
 	const shared = new Set(readTokens().map(({ name }) => name));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
-	assert.ok(declarations.length > 0 && declarations.every((name) => shared.has(name) || name.startsWith("--norn-footer-")), declarations.join(", "));
+	assert.ok(declarations.length > 0 && declarations.every((name) => shared.has(name)), declarations.join(", "));
 	assert.ok(declarations.includes("--norn-font-mono"));
 });
 
@@ -130,6 +130,7 @@ test("the brand rules style the Norn components by their tags in the norn.oss la
 	const rules = [...css.matchAll(/^\t(\S[^{\n]*?)\s*\{/gm)].map(([, selector]) => selector);
 	assert.ok(rules.length > 0 && rules.every((selector) => /^norn-[a-z-]+ > /.test(selector)), rules.join(", "));
 	assert.match(css, /norn-header > header \{[\s\S]*?&::after \{[\s\S]*?block-size: 3px;[\s\S]*?background: linear-gradient\(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%\);/, "the header strip");
+	assert.match(css, /norn-footer > footer > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-accent, [^;]+\);\s*font-family: var\(--norn-font-mono, [^;]+\);\s*font-size: 1\.2rem;/, "the footer name");
 });
 
 test("fonts: a forward-slash folder holding the four woff2 files", () => {

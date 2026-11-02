@@ -436,6 +436,7 @@ test("no source draws a focus ring of its own: a ring reads the focus tokens, an
 
 test("type sizes come from the scale: no source sets a font size in rem outside a clamp", () => {
 	for (const { file, text } of sources) {
+		if (file === "webc-oss-site/src/css/brand.css") continue; // The brand's own sizes, such as the footer name at 1.2rem.
 		for (const [, value] of styles(text, file).matchAll(/font-size:\s*([^;]+);/g)) {
 			assert.ok(!/\d(\.\d+)?rem/.test(value) || value.startsWith("clamp(") || value.startsWith("var(--norn-font-size-"), `${file}: font-size: ${value}`);
 		}
@@ -570,6 +571,16 @@ test("norn-header reads the shared tokens and no custom property of its own, and
 	assert.match(await render('<norn-header @logo-height="3rem"><a slot="brand" rel="home" href="/"><img src="l.svg" alt="L"></a></norn-header>'), /<header style="--_logo: 3rem">/, "the prop sets the logo height");
 	assert.match(await render('<norn-header><a slot="brand" rel="home" href="/">Home</a></norn-header>'), /<header>/, "without it, no style");
 	assert.match(await render('<norn-header style="--norn-header-logo: 9rem"><a slot="brand" rel="home" href="/">Home</a></norn-header>'), /<header>/, "the old property sets nothing");
+});
+
+test("norn-footer reads the shared tokens and no custom property of its own, and takes its widths from props", async () => {
+	const css = styles(sources.find(({ file }) => file === "webc-patterns/src/norn-footer.webc").text);
+	assert.ok(!/--norn-footer-/.test(css), "no --norn-footer-* property");
+	assert.ok(!css.includes("strong:first-of-type"), "no rule for the name: the OSS site theme styles its own");
+	assert.ok(css.includes("inline-size: min(100%, var(--_width, var(--norn-layout-width, t('layout.width'))));") && css.includes("grid-template-columns: minmax(0, var(--_lead, 25rem));"));
+	assert.match(await render('<norn-footer @width="50rem" @lead-width="20rem"><div><p>A</p></div></norn-footer>'), /<footer style="--_width: 50rem; --_lead: 20rem">/, "both props");
+	assert.match(await render('<norn-footer @lead-width="20rem"><div><p>A</p></div></norn-footer>'), /<footer style="--_lead: 20rem">/, "one prop");
+	assert.match(await render('<norn-footer style="--norn-footer-width: 9rem"><div><p>A</p></div></norn-footer>'), /<footer>/, "without them, no style, and the old property sets nothing");
 });
 
 test("norn-sidebar-layout folds its navigation into a closed details with a summary from the slot, the registry, then English", async () => {

@@ -15,4 +15,11 @@
 			background: linear-gradient(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%);
 		}
 	}
+
+	/* The project name leads the footer: the lead column's first strong, in the accent color and the mono face. */
+	norn-footer > footer > div:first-child > :first-child strong:first-of-type {
+		color: var(--norn-text-accent, t('text.accent'));
+		font-family: var(--norn-font-mono, t('font.mono'));
+		font-size: 1.2rem;
+	}
 }

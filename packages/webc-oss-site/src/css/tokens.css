@@ -6,10 +6,5 @@
 	:root {
 		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
 		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-
-		/* The project name leads the footer, in the accent color and the mono face. */
-		--norn-footer-name: var(--norn-text-accent, t('text.accent'));
-		--norn-footer-name-face: var(--norn-font-mono, t('font.mono'));
-		--norn-footer-name-size: 1.2rem;
 	}
 }

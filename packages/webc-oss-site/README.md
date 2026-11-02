@@ -85,11 +85,11 @@ The theme is two files in the `norn.oss` layer, which the plugin embeds in every
 | Token | Allons-y Studio value |
 | --- | --- |
 | `--norn-font-mono` | PT Mono, Allons-y Studio's locked monospace |
-| `--norn-footer-name`, `--norn-footer-name-face`, `--norn-footer-name-size` | The footer's project name in the accent color and the mono face |
 
 | Rule in `css/brand.css` | Allons-y Studio look |
 | --- | --- |
 | `norn-header > header::after` | The four-color strip along the header bar |
+| `norn-footer > footer > div:first-child > :first-child strong:first-of-type` | The footer's project name in the accent color and the mono face, at 1.2rem |
 
 The plugin also sets the theme color, `#33394e`, and `og:locale`, `en_US`, as prop defaults under the project's mapping.
 

@@ -10,22 +10,15 @@
  * Site footer: a row of columns, and a colophon below them.
  * The default slot holds the columns: a lead `<div>` first (the name in a `<p><strong>`, a tagline, the license), then the links, then anything else, such as a credit.
  * Put the links in one `<nav aria-labelledby="…">`, pointing at a hidden name: a `<p><strong>` heading and a `<ul>`, or for several groups a `<div>` each holding its heading and list. The groups sit side by side and wrap.
- * When the footer is 60rem or wider, the lead column takes up to 25rem and the others size to their content; narrower, the columns wrap.
+ * When the footer is 60rem or wider, the lead column takes up to 25rem, or the width `lead-width` gives, and the others size to their content; narrower, the columns wrap.
+ * @prop {string} [width] - The content width, as a CSS length. Falls back to --norn-layout-width.
+ * @prop {string} [lead-width] - The widest the lead column gets on a wide footer, as a CSS length. Falls back to 25rem.
  * @slot - The columns.
  * @slot colophon - Full-width content below the columns, as one element.
- * @cssprop --norn-footer-fg - Text color. Falls back to --norn-text-muted.
- * @cssprop --norn-footer-strong - Headings and names. Falls back to --norn-text-base.
- * @cssprop --norn-footer-border - Rule above the footer. Falls back to --norn-ui-border-color.
- * @cssprop --norn-footer-hover - Link hover color. Falls back to --norn-text-accent.
- * @cssprop --norn-footer-width - Content width. Falls back to --norn-layout-width.
- * @cssprop --norn-footer-lead - Widest the lead column gets on a wide footer. Falls back to 25rem.
- * @cssprop --norn-footer-name - Color of the name, the lead column's first `strong`. Falls back to --norn-footer-strong.
- * @cssprop --norn-footer-name-face - Font family of the name. Inherited unless set.
- * @cssprop --norn-footer-name-size - Font size of the name. Inherited unless set.
  * @category landmark
  */
 --->
-<footer>
+<footer :style="[typeof width === 'string' && width ? '--_width: ' + width : '', typeof leadWidth === 'string' && leadWidth ? '--_lead: ' + leadWidth : ''].filter(Boolean).join('; ')">
 	<div><slot></slot></div>
 	<div><slot name="colophon"></slot></div>
 </footer>
@@ -39,13 +32,13 @@
 				display: grid;
 				gap: var(--norn-space-l, t('space.l'));
 				padding: var(--norn-space-l, t('space.l')) var(--norn-space-m, t('space.m'));
-				border-block-start: 1px solid var(--norn-footer-border, var(--norn-ui-border-color, t('ui.border.color')));
-				color: var(--norn-footer-fg, var(--norn-text-muted, t('text.muted')));
+				border-block-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				color: var(--norn-text-muted, t('text.muted'));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
 			& > footer > div {
-				inline-size: min(100%, var(--norn-footer-width, var(--norn-layout-width, t('layout.width'))));
+				inline-size: min(100%, var(--_width, var(--norn-layout-width, t('layout.width'))));
 				margin-inline: auto;
 
 				/* A slot nobody filled leaves its wrapper empty: take it out of the grid. */
@@ -66,12 +59,6 @@
 					gap: var(--norn-space-s, t('space.s'));
 				}
 
-				&:first-child > :first-child strong:first-of-type {
-					color: var(--norn-footer-name, var(--norn-footer-strong, var(--norn-text-base, t('text.base'))));
-					font-family: var(--norn-footer-name-face, inherit);
-					font-size: var(--norn-footer-name-size, inherit);
-				}
-
 				/* A nav of several link groups: one landmark, a column per group. */
 				&:first-child > nav:has(> div) {
 					display: flex;
@@ -88,7 +75,7 @@
 
 			@container (min-width: 60rem) {
 				& > footer > div:first-child {
-					grid-template-columns: minmax(0, var(--norn-footer-lead, 25rem));
+					grid-template-columns: minmax(0, var(--_lead, 25rem));
 					grid-auto-columns: minmax(min-content, max-content);
 					grid-auto-flow: column;
 					justify-content: space-between;
@@ -100,7 +87,7 @@
 			}
 
 			& :where(strong) {
-				color: var(--norn-footer-strong, var(--norn-text-base, t('text.base')));
+				color: var(--norn-text-base, t('text.base'));
 			}
 
 			& :where(small) {
@@ -127,7 +114,7 @@
 			}
 
 			& :where(a:is(:hover, :focus-visible)) {
-				color: var(--norn-footer-hover, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-text-accent, t('text.accent'));
 				text-decoration: underline;
 			}
 

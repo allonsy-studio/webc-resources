@@ -410,7 +410,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-head` | `@title`, `@description`, `@url`, `@theme-color`, `@og-title`, `@og-image`, `@og-image-alt`, `:@theme-toggle` | Head metadata, Open Graph and Twitter card tags, the layer order, and the bundle links. `norn-base` calls it |
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
 | `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary`, `@logo-height` (a CSS length, 2rem by default) | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
-| `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
+| `norn-footer` | default slot (the columns), slot `colophon`, `@width` and `@lead-width` (CSS lengths) | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
 | `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list` with `@gap="l"`, extras) | Page intro |
 | `norn-card` | `@accent` (`accent`, `info`, `success`, `warning`, `danger`, or `none`), `@title-face` (`mono`), default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and an accent draws a 2px line along the top |
 | `norn-card-grid` | `@gap` (`s`, `m`, or `l`), `@min` (a length), default slot (`<li>` cards) | Responsive grid of cards |
