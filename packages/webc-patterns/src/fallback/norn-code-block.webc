@@ -5,22 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * The plain `norn-code-block`, which the Norn plugin registers only when `@allons-y/webc-code-sample` is not installed: the code as `<pre><code>`, with no highlighting and no copy button.
- * It takes the real component's props and slots, so a page, a Markdown fence, and a layout call the same tag either way. The host tag is replaced: an `id` on it lands on the `<pre>`, or on the `<figure>` with a caption. The code reads left to right in any page direction.
- * It has no story: the preview installs the code sample, so the `norn-code-block` stories show the real component. `plugin.test.js` builds a site without it.
- * @prop {string} code
- * @prop {string} [language] - Set as `data-language` on the `<pre>`.
- * @prop {string} [caption] - A `<figcaption>` after the code, in a `<figure>`.
- * @prop {string} [chrome] - Not rendered: the plain sample has no frame.
- * @slot label - Not rendered: the plain sample has no script to name the code.
- * @slot copy-label - Not rendered: the plain sample has no copy button.
- * @slot copy - Not rendered.
- * @slot copied - Not rendered.
- * @slot failed - Not rendered.
- * @category component
- */
 --->
 <figure webc:if="typeof caption === 'string' && caption" webc:root="override"
 	><pre dir="ltr" :data-language="typeof language === 'string' && language ? language : undefined"><code @text="typeof code === 'string' ? code : ''"></code></pre

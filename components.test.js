@@ -74,12 +74,19 @@ const docs = new Map(
 					const doc = csfDoc(meta, effectiveArgTypes(derivedArgTypes(analyzeFile(path.join(PACKAGES, file))), meta.argTypes));
 					return [name, { csf: true, category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
 				}
+				// A fallback has no CSF file: it shares the real component's, and its own props and slots are derived.
+				if (fallback) {
+					const derived = Object.entries(derivedArgTypes(analyzeFile(path.join(PACKAGES, file))));
+					const names = (category) => new Set(derived.filter(([, argType]) => argType.table.category === category).map(([arg]) => arg));
+					return [name, { fallback: true, props: names("props"), slots: names("slots"), text }];
+				}
 				const props = new Set([...text.matchAll(/^ \* @prop \{[^\n]*?\} \[?([\w-]+)/gm)].map(([, prop]) => prop));
 				const slots = new Set([...text.matchAll(/^ \* @slot ([a-z-]+) - /gm)].map(([, slot]) => slot));
 				return [name, { csf: false, category: text.match(/^ \* @category (\w+)$/m)?.[1], slots, props, text }];
 			}),
 	),
 );
+for (const [name, doc] of docs) if (doc.fallback) docs.set(name, { ...docs.get(name.replace(/^fallback:/, "")), ...doc });
 
 /** A component's or layout's docs, by its file. */
 const docsOf = (file) => docs.get(`${/\/fallback\//.test(file) ? "fallback:" : ""}${path.basename(file, ".webc")}`);
@@ -1176,6 +1183,7 @@ test("a layout renders norn-code-block with the code sample, and <pre><code> wit
 	for (const { text } of layouts) assert.ok(!/nornTokenRanges|<pre\b/.test(withoutDocs(text)), "a layout always calls norn-code-block, and never tests for the code sample");
 });
 
+// The plugin registers the plain norn-code-block only without the code sample: `<pre><code>`, with no highlighting and no copy button.
 test("the plain norn-code-block keeps the code, the id, and the caption, and takes the real one's props and slots", async () => {
 	const html = await render('<norn-code-block id="a" @language="html" @code="<p>&amp;</p>" @caption="a.html"><span slot="copy">Copier</span></norn-code-block><norn-code-block id="b" @code="x"></norn-code-block>', { codeSample: false });
 	assert.ok(html.includes('<figure id="a"><pre dir="ltr" data-language="html"><code>&lt;p&gt;&amp;&lt;/p&gt;</code></pre><figcaption>a.html</figcaption></figure>'), html);
@@ -1184,8 +1192,10 @@ test("the plain norn-code-block keeps the code, the id, and the caption, and tak
 	const real = docsOf("webc-code-sample/components/norn-code-block.webc");
 	const plain = docsOf("webc-patterns/fallback/norn-code-block.webc");
 	const sorted = (names) => [...names].sort();
-	assert.deepEqual(sorted(plain.props), sorted(real.props), "the same props");
-	assert.deepEqual(sorted(plain.slots), sorted(real.slots), "the same slots");
+	// Derived from each source. The plain sample takes these and renders none: it has no frame, no script, and no copy button.
+	const unrendered = { props: ["chrome"], slots: ["label", "copy-label", "copy", "copied", "failed"] };
+	assert.deepEqual(sorted([...plain.props, ...unrendered.props]), sorted(real.props), "the same props");
+	assert.deepEqual(sorted([...plain.slots, ...unrendered.slots]), sorted(real.slots), "the same slots");
 });
 
 test("a layout takes its texts from componentStrings under its own name, then English", async () => {

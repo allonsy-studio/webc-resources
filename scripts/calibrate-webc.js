@@ -38,7 +38,7 @@ async function documented(file, analysis) {
 	const name = path.basename(file, ".webc");
 	const packageDir = path.join(PACKAGES, path.relative(PACKAGES, file).split(path.sep)[0]);
 	const stories = csfFile(packageDir, name, layout);
-	if (!file.includes(`${path.sep}fallback${path.sep}`) && fs.existsSync(stories)) {
+	if (fs.existsSync(stories)) {
 		const argTypes = effectiveArgTypes(derivedArgTypes(analysis), (await readCsf(stories)).meta.argTypes);
 		const of = (category) => Object.entries(argTypes).filter(([, argType]) => argType.table?.category === category);
 		return {
@@ -67,6 +67,8 @@ export async function differences() {
 	const helpers = helperNames();
 	const rows = [];
 	for (const file of sourceFiles()) {
+		// A fallback has no docs of its own: components.test.js compares its derived API with the real component's.
+		if (file.includes(`${path.sep}fallback${path.sep}`)) continue;
 		const component = path.relative(PACKAGES, file).replace(/\/src\//, "/");
 		const analysis = analyzeFile(file, { tokens, helpers });
 		const doc = await documented(file, analysis);
