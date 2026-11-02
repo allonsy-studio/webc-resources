@@ -30,7 +30,7 @@ import { HtmlBasePlugin } from "@11ty/eleventy";
 import { fillHooks } from "@allons-y/webc-patterns/plugin";
 import oss, { ossProps } from "@allons-y/webc-oss-site";
 
-const docsOf = (data) => (data.collections?.docs ?? []).map((page) => ({ url: page.url, title: page.data.title, description: page.data.description }));
+const docsOf = (data) => (data.collections?.docs ?? []).map((page) => ({ href: page.url, title: page.data.title, description: page.data.description }));
 
 export default function (config) {
 	config.addPlugin(oss, {

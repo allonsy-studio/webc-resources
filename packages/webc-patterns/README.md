@@ -28,7 +28,7 @@ import norn from "@allons-y/webc-patterns/plugin";
 
 export default function (config) {
 	config.addPlugin(norn, {
-		props: (data) => ({ title: data.title, name: "My project", nav: [{ url: "/docs/", title: "Docs" }] }),
+		props: (data) => ({ title: data.title, name: "My project", nav: [{ href: "/docs/", title: "Docs" }] }),
 	});
 
 	return { markdownTemplateEngine: false };
@@ -94,12 +94,14 @@ config.addPlugin(norn, {
 		description: data.description ?? data.site?.description,
 		url: data.site?.url && new URL(data.page?.url ?? "", data.site.url).href,
 		ogImage: { src: "/img/share.png", alt: data.site?.name },
-		nav: [{ url: "/docs/", title: "Docs", icon: "book" }],
+		nav: [{ href: "/docs/", title: "Docs", icon: "book" }],
 		footer: { license: { name: "MIT", url: "https://opensource.org/license/mit" } },
-		docs: (data.collections?.docs ?? []).map((page) => ({ url: page.url, title: page.data.title })),
+		docs: (data.collections?.docs ?? []).map((page) => ({ href: page.url, title: page.data.title })),
 	}),
 });
 ```
+
+Every list item that links somewhere or describes something has one shape: `href` (the address), `title` (the label), and `description` (the short text), plus `icon` where a layout draws one. That holds for `nav`, the footer's links, `docs`, `prev` and `next`, `features`, `packages`, and `workspaces`, and for the `items` of `norn-side-nav` and `norn-breadcrumbs`. A mapping turns an Eleventy page into an item with `href: page.url`. The props that are not list items keep their names: `name` is the project's own name, `url` the page's canonical address, and `footer.license` is `{ name, url }`.
 
 `norn-base` is the frame of every layout, so its props apply to all of them:
 
@@ -120,12 +122,12 @@ config.addPlugin(norn, {
 | `icon` | `{ href, type? }` or a URL | an empty icon | `<link rel="icon">`. The type comes from the extension. The empty icon stops the `/favicon.ico` request |
 | `touchIcon` | string | none | `<link rel="apple-touch-icon">`, a 180px PNG |
 | `logo` | `{ src, alt? }` or a URL | none | An image in the header in place of the name. `alt` falls back to the name |
-| `nav` | `{ url, title, icon? }[]` | `[]` | The links of `norn-header`. `icon` names a `norn-icon` |
+| `nav` | `{ href, title, icon? }[]` | `[]` | The links of `norn-header`. `icon` names a `norn-icon` |
 | `footer` | object | `{ badges: [], groups: [] }` | `norn-footer`, from the fields below |
 | `footer.name`, `footer.text` | string | the name, the tagline | The lead column's title and line |
 | `footer.license` | `{ name, url }` | none | "Licensed under {license}", linked |
 | `footer.badges` | `{ href, src, alt, width?, height? }[]` | `[]` | Linked images under the lead |
-| `footer.groups` | `{ heading, links: { url, title }[] }[]` | `[]` | The footer navigation, one list per group |
+| `footer.groups` | `{ heading, links: { href, title }[] }[]` | `[]` | The footer navigation, one list per group |
 | `footer.colophon` | string | none | A closing line |
 
 A relative `ogImage.src` resolves against `url`. When `url` is not absolute, the build logs a `norn-head:` warning, leaves out `og:image` and `og:image:alt`, and sets the card to `summary`. A path with a leading slash (`/img/share.png`) resolves against the origin of `url`, one without (`share.png`) against the page. Without an image, no image tag renders and the card is `summary`.
@@ -144,8 +146,8 @@ A docs page: the sidebar with site search, the title, the contents, the body in 
 
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
-| `docs` | `{ url, title, icon? }[]` | `[]` | The sidebar's `norn-side-nav`, in order, with the current page marked |
-| `prev`, `next` | `{ url, title }` | the neighbors in `docs` | The `norn-pager` |
+| `docs` | `{ href, title, icon? }[]` | `[]` | The sidebar's `norn-side-nav`, in order, with the current page marked |
+| `prev`, `next` | `{ href, title }` | the neighbors in `docs` | The `norn-pager` |
 | `search` | `{ bundle?, site? }` or `false` | the Pagefind script at `/pagefind/pagefind.js`, and the host of `url` | `norn-search` above the sidebar list. `false` leaves it out |
 
 The contents come from `nornHeadings` over the body, so they list the headings the Markdown add-on anchors and any `norn-heading-anchor` written by hand. The layout shows the title as the page's h1, so a Markdown body keeps no h1 of its own: a leading `# Title` that repeats the title is dropped, and any other `#` heading renders as an h2 (`singleTitle`). A page 60rem wide or more has them as a sticky column beside the body; narrower, they fold under their title, and the sidebar folds into a closed `<details>` named "Documentation".
@@ -159,7 +161,7 @@ The hero with the install sample, then the docs pages as a contents list, then t
 | `lede` | string | `description` | The hero paragraph |
 | `install` | string | none | The install sample in the hero |
 | `repo` | string | none | The "View on GitHub" button |
-| `docs` | `{ url, title, description? }[]` | `[]` | The contents list, and the "Read the docs" button to the first page |
+| `docs` | `{ href, title, description? }[]` | `[]` | The contents list, and the "Read the docs" button to the first page |
 
 #### `norn-landing.webc`
 
@@ -172,8 +174,8 @@ The hero with a sample, then install, features, and packages sections, then the 
 | `license`, `node` | string | none | Facts under the hero, such as "License: MIT" and "Node 24+" |
 | `install` | string | none | The install sample; with `usage`, its own section |
 | `usage` | `{ language, code, caption? }` | none | The hero's sample |
-| `features` | `{ title, body, href? }[]` | `[]` | Cards in the features section |
-| `packages` | `{ name, description, href? }[]` | `[]` | Cards in the packages section, names in the mono face |
+| `features` | `{ title, description, href? }[]` | `[]` | Cards in the features section |
+| `packages` | `{ title, description, href? }[]` | `[]` | Cards in the packages section, titles in the mono face |
 
 #### `norn-workspaces-home.webc`
 
@@ -184,7 +186,7 @@ A monorepo's home page: the hero with the install sample, then an index of the w
 | `lede` | string | `description` | The hero paragraph |
 | `install` | string | none | The install sample |
 | `repo` | string | none | The "View on GitHub" button |
-| `workspaces` | `{ name, description?, url }[]` | `[]` | Cards in the packages section |
+| `workspaces` | `{ href, title, description? }[]` | `[]` | Cards in the packages section |
 
 #### `norn-workspace.webc`
 
@@ -192,7 +194,7 @@ One workspace's page in the docs frame. Reads `title`.
 
 | Prop | Shape | Default | Rendered as |
 | --- | --- | --- | --- |
-| `workspaces` | `{ url, title, icon? }[]` | `[]` | The sidebar. `name` stands in for a missing `title` |
+| `workspaces` | `{ href, title, icon? }[]` | `[]` | The sidebar |
 | `workspace` | `{ name, description?, html? }` | none | The `<h1>`, the description, and `html`, compiled as WebC. The page's own content follows |
 
 On the three home layouts, the page body follows the shipped sections in a `<section>` of its own, in `norn-rich-text`, and a page with no body renders none. Markdown there is compiled once, as on `norn-docs`.
@@ -397,7 +399,7 @@ Avoid `markdownTemplateEngine: "webc"`. WebC then runs before Markdown, and Mark
 | Export | Purpose |
 | --- | --- |
 | `buildSite({ packagePath, projectPath, host })` | Site facts from `package.json` and `project.json`: name, tagline, description, license, repository links, the Node version, and the URL (the project's, or `host` plus the repository name) |
-| `buildWorkspaces({ root })` | One entry per workspace: its `package.json` and its SKILL.md or README.md, rendered with the site's Markdown add-ons, so headings get the same ids and anchors as a docs page. The README's raw HTML renders as HTML, as on GitHub. Nothing is sanitized: the README is the project's own, and `norn-workspace` compiles it as WebC, as trusted as any page |
+| `buildWorkspaces({ root })` | One entry per workspace, an item for `workspaces`: `href`, `title`, and `description`, with the package `name` and `slug`, and its SKILL.md or README.md as `html`, rendered with the site's Markdown add-ons, so headings get the same ids and anchors as a docs page. The README's raw HTML renders as HTML, as on GitHub. Nothing is sanitized: the README is the project's own, and `norn-workspace` compiles it as WebC, as trusted as any page |
 | `npmRelease(packageName)` | Whether the package has a `latest` release on npm, for badges. Cached an hour; offline is no release |
 | `accentHex(cssPath)` | The `--norn-ui-accent` hex digits a stylesheet sets, for a badge color |
 
@@ -414,10 +416,10 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list` with `@gap="l"`, extras) | Page intro |
 | `norn-card` | `@accent` (`accent`, `info`, `success`, `warning`, `danger`, or `none`), `@title-face` (`mono`), default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and an accent draws a 2px line along the top |
 | `norn-card-grid` | `@gap` (`s`, `m`, or `l`), `@min` (a length), default slot (`<li>` cards) | Responsive grid of cards |
-| `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
+| `norn-side-nav` | `:@items` (`{ href, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
 | `norn-sidebar-layout` | slots `nav` and `summary`, default slot (the body, from its h1), `@nav-width` (a CSS length), `@gap` (`s`, `m`, `l`, `xl`), `@columns` (the body's grid columns) | Navigation column beside a page body. The navigation stays in view; below 37.5rem the columns stack and the navigation folds into a closed `<details>` |
 | `norn-rich-text` | `@measure` (`text` or `none`), default slot | Prose styles for long-form content |
-| `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
+| `norn-pager` | `:@prev`, `:@next` (`{ href, title }`), slot `label` | Links to the neighboring pages |
 | `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), `@tone` (`accent` or `current`), default slot | A link styled as a button, for a call to action |
 | `norn-fact-list` | `@gap` (`xs`, `s`, `m`, or `l`, the space between rows), default slot (`<li>` facts) | A row of short facts, each with an optional icon |
 | `norn-segmented-control` | `:@icon-only`, slot `legend` (required), default slot of `<label>` + radio, or `@name` and `:@options` | One choice from a few, from native radios. The checked option is tinted in the accent. A missing legend fails the build |
@@ -429,7 +431,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
 | `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), `@fold` (`always`, or `narrow` below 60rem), slot `label` | The page's contents, marking the section in view. Folds under its title as `@fold` says |
-| `norn-breadcrumbs` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
+| `norn-breadcrumbs` | `:@items` (`{ href, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |
 | `norn-icon` | `@name`, `@size` (`s` or `m`), slot `label` | An inline icon from a built-in set or the plugin's `icons` option, at 1em, or the title size for `m`. Decorative unless it has a label; directional icons mirror in right-to-left text |
@@ -438,7 +440,7 @@ A component is styled through the shared tokens in `tokens.json` (`--norn-ui-acc
 
 ### Pager
 
-`norn-docs` links the neighbors itself. In a page of the project's own, `adjacent` returns the pages around the current one: map them to `{ url, title }` at the call site, and keep the lookup in the expression: a `webc:setup` block in a layout runs once per template, so a value computed there is shared by every page.
+`norn-docs` links the neighbors itself. In a page of the project's own, `adjacent` returns the pages around the current one: map them to `{ href, title }` at the call site, and keep the lookup in the expression: a `webc:setup` block in a layout runs once per template, so a value computed there is shared by every page.
 
 ```html
 <norn-pager
@@ -447,7 +449,7 @@ A component is styled through the shared tokens in `tokens.json` (`--norn-ui-acc
 ></norn-pager>
 ```
 
-Here `link` is a pure helper in the layout's `webc:setup` block: `(page) => (page ? { url: page.url, title: page.data.title } : undefined)`.
+Here `link` is a pure helper in the layout's `webc:setup` block: `(page) => (page ? { href: page.url, title: page.data.title } : undefined)`.
 
 ### Translating
 

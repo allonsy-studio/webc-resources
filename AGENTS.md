@@ -104,7 +104,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    Return `''` to omit it.
    A prop that isn't passed resolves to a same-named Eleventy helper or page data, not to
    `undefined`: `url` is the `url` filter. Guard with `typeof url === 'string'`.
-   An object literal as a whole expression reads as a block: wrap it, `:@prev="({ url: '#a' })"`.
+   An object literal as a whole expression reads as a block: wrap it, `:@prev="({ href: '#a' })"`.
    A boolean prop is on for `true`, `''` (a bare `@x`), and `'true'`, and off otherwise:
    test `x === true || x === '' || x === 'true'`, so `@x="false"` stays off.
    A prop the output can't do without throws from a `webc:setup` function called in the markup, naming the
