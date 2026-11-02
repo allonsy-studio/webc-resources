@@ -16,10 +16,10 @@ bleed: true
 	<h1>Overview</h1>
 	<section>
 		<h2>First section</h2>
-		<p>Sections and articles inside the body stack with a small gap.</p>
+		<p>A short line of body text.</p>
 	</section>
 	<article>
 		<h2>An article</h2>
-		<p>The gap is the same between a section and an article.</p>
+		<p>A short line of body text.</p>
 	</article>
 </norn-sidebar-layout>

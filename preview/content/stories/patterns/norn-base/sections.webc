@@ -4,10 +4,10 @@ order: 2
 layout: norn-base.webc
 ---
 <section id="install">
-	<h1>Sections on the base layout</h1>
-	<p>A section directly in the page is a centered column at the layout width. Its <code>id</code> is the anchor, and its heading carries the outline.</p>
+	<h1>Install</h1>
+	<p>Install the package from npm.</p>
 </section>
 <section id="usage">
 	<h2>Usage</h2>
-	<p>The next section has the same width and the same padding. It is not a landmark, so it takes no name.</p>
+	<p>Import the package and call <code>greet</code> with a name.</p>
 </section>

@@ -28,7 +28,7 @@ export default {
 		docs: {
 			description: {
 				component:
-					"Code sample tokenized at build time. Its script registers `norn-code-block` as a custom element that adds the highlight colors; without the script the markup is the whole sample. A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction. Shell samples (`sh`, `bash`, `shell`, `shell-session`) color the command, its subcommand, its flags, and its arguments apart. Needs `tokenRanges` registered as the `nornTokenRanges` JavaScript function, and the patterns package's components. The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button. Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.",
+					"Code sample tokenized at build time. Its script registers `norn-code-block` as a custom element that adds the highlight colors; without the script the markup is the whole sample. A compact `norn-copy-button` from `@allons-y/webc-patterns` sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading `$ ` prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction. While the code scrolls sideways, the script makes it a tab stop, so a keyboard can scroll it. Shell samples (`sh`, `bash`, `shell`, `shell-session`) color the command, its subcommand, its flags, and its arguments apart. Needs `tokenRanges` registered as the `nornTokenRanges` JavaScript function, and the patterns package's components. The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button. Each falls back to the site's `componentStrings`, under `norn-code-block` for `label` and `copy-label` and under `norn-copy-button` for the rest, then English.",
 			},
 		},
 	},
@@ -38,6 +38,6 @@ export const Default = { name: "JavaScript with a caption", args: { language: "j
 
 export const Shell = { name: "Shell prompt", args: { language: "sh", code: "$ npm install @example/core\n$ npx example --help\n" } };
 
-export const Overflow = { name: "Long line", args: { language: "js", caption: "long.js", code: "const message = 'This line is long enough to scroll sideways inside the sample, which is when the code becomes a keyboard stop';\n" } };
+export const Overflow = { name: "Long line", args: { language: "js", caption: "long.js", code: "const message = 'Welcome to the example project. Read the getting started guide first, then open the reference for every option and its default value.';\n" } };
 
-export const Plain = { name: "No language", args: { code: "Plain text, with no highlighting.\nA second line.\n" } };
+export const Plain = { name: "No language", args: { code: "Build finished in 1.2 seconds.\nWrote 12 files.\n" } };

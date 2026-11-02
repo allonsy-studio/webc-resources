@@ -4,6 +4,6 @@ order: 1
 layout: norn-base.webc
 ---
 <section>
-	<h1>A page on the base layout</h1>
-	<p>The header, the footer, and the hooks around a page body of its own.</p>
+	<h1>About the project</h1>
+	<p>A short line of body text.</p>
 </section>

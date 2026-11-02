@@ -3,4 +3,3 @@ title: Without an index
 order: 1
 ---
 <norn-search @site="example.com" :@bundle="url('/assets/no-index.js')"></norn-search>
-<p>The preview builds no Pagefind index, so this is the plain form: it searches example.com on the web. The story points <code>@bundle</code> at a script that fails to load, where a site passes Pagefind's own. With an index, results list under the field as you type.</p>

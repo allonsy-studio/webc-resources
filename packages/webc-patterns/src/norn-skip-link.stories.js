@@ -15,7 +15,7 @@ export default {
 	parameters: {
 		docs: {
 			description: {
-				component: 'Link that jumps past the page chrome to the main content. Hidden until it has focus. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.',
+				component: 'Link that jumps past the page chrome to the main content. Hidden until it has focus: press Tab from the top of the page to show it. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.',
 			},
 		},
 	},

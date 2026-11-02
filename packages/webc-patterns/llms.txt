@@ -230,7 +230,7 @@ Global tokens it reads: `--norn-ui-radius-s`, `--norn-ui-state-hover`, `--norn-u
 
 Tag: `<norn-toc>`.
 
-The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page. Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing. The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.
+The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page. Its script marks the section in view with `aria-current="location"`. The marked link takes the accent color. With fewer than two headings it renders nothing. The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.
 
 Props:
 
@@ -367,7 +367,7 @@ Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-icon-m`, `--norn-s
 
 Tag: `<norn-rich-text>`.
 
-Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#`. Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.
+Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#` and takes the same space above as a plain heading. Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.
 
 Props:
 
@@ -535,7 +535,7 @@ Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--n
 
 Tag: `<norn-skip-link>`.
 
-Link that jumps past the page chrome to the main content. Hidden until it has focus. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
+Link that jumps past the page chrome to the main content. Hidden until it has focus: press Tab from the top of the page to show it. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
 
 Props:
 

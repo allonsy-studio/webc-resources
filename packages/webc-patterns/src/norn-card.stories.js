@@ -24,11 +24,11 @@ export default {
 	},
 };
 
-export const Default = { name: "Plain", args: { default: "<h3>Plain card</h3>\n<p>A card with a heading and a body, and no link.</p>" } };
+export const Default = { name: "Plain", args: { default: "<h3>Plain card</h3>\n<p>A short line of body text.</p>" } };
 
-export const Linked = { name: "Linked heading", args: { default: '<h3><a href="https://example.com/">Linked card</a></h3>\n<p>Put a link in the heading to link the card.</p>' } };
+export const Linked = { name: "Linked heading", args: { default: '<h3><a href="https://example.com/">Linked card</a></h3>\n<p>A short line of body text.</p>' } };
 
 export const Long = {
 	name: "Long text",
-	args: { default: "<h3>A heading that runs long enough to wrap onto a second line in a narrow frame</h3>\n<p>The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-ui-border-radius in the tokens.</p>" },
+	args: { default: "<h3>Configure the build for a project with several workspaces and a shared theme</h3>\n<p>Each workspace keeps its own pages and data. The shared theme sets the colors, the type, and the spacing once, and every workspace follows it.</p>" },
 };

@@ -23,7 +23,7 @@ export default {
 		docs: {
 			description: {
 				component:
-					"The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page. Its script marks the section in view with `aria-current=\"location\"`. With fewer than two headings it renders nothing. The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.",
+					"The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page. Its script marks the section in view with `aria-current=\"location\"`. The marked link takes the accent color. With fewer than two headings it renders nothing. The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.",
 			},
 		},
 	},

@@ -7,14 +7,14 @@ hiddenH2: true
 	<li>
 		<norn-card>
 			<h3>Three children</h3>
-			<p>A heading, a body, and a footer share rows with the neighboring cards.</p>
+			<p>A short line of body text.</p>
 			<p><a href="https://example.com/">Read more</a></p>
 		</norn-card>
 	</li>
 	<li>
 		<norn-card>
 			<h3>Four children</h3>
-			<p>A card with a fourth child has no row to put it in, so it lays out on its own.</p>
+			<p>A short line of body text.</p>
 			<p>A second paragraph.</p>
 			<p><a href="https://example.com/">Read more</a></p>
 		</norn-card>
