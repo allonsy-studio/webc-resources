@@ -5,15 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * The OSS site head: the PT Mono preload and the self-hosted `@font-face` rules for PT Mono, Instrument Sans, and Yellowtail, each with a fallback matched to its metrics.
- * The OSS site plugin puts it in `norn-base`'s head hook, followed by the brand tokens from `css/tokens.css`. Call it elsewhere as `<meta webc:is="oss-head" webc:nokeep />`.
- * The `@font-face` rules look for the fonts at `assets/fonts`, one level up from the bundle: the OSS site plugin copies the package's `fonts` folder there.
- * The brand tokens it goes with, in `css/tokens.css` and the `norn.oss` layer, are below. The brand rules in `css/brand.css` follow them in the same layer, such as the four-color strip along the header bar and the footer's project name in the accent color and the mono face, at 1.2rem. A project's unlayered CSS still wins over both.
- * @cssprop --norn-font-mono - Set to PT Mono, Allons-y Studio's locked monospace.
- * @category document
- */
 --->
 <link rel="preload" href="/assets/fonts/pt-mono.woff2" as="font" type="font/woff2" crossorigin />
 <style>
