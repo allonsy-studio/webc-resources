@@ -611,6 +611,12 @@ test("norn-side-nav reads the shared text tokens and no custom property of its o
 	assert.ok(css.includes("color: var(--norn-text-muted, t('text.muted'));") && css.includes("--_tint: color-mix(in oklab, var(--norn-text-accent, t('text.accent')) var(--norn-ui-state-press, t('ui.state.press')), transparent);"));
 });
 
+test("norn-breadcrumbs reads the shared text tokens and no custom property of its own", () => {
+	const css = squash(styles(sources.find(({ file }) => file === "webc-patterns/src/norn-breadcrumbs.webc").text));
+	assert.ok(!/--norn-breadcrumbs-/.test(css), "no --norn-breadcrumbs-* property");
+	assert.ok(css.includes("& nav > ol > li > norn-icon { color: var(--norn-text-muted, t('text.muted')); }") && css.includes("color: var(--norn-text-muted, t('text.muted')); text-decoration: none;"));
+});
+
 test("norn-toc folds under its title through a details, and the title names the landmark", async () => {
 	const html = unid(await render("<norn-toc :@items=\"[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]\"></norn-toc>"));
 	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);

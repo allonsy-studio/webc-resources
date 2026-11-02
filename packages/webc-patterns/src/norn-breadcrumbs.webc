@@ -11,8 +11,6 @@
  * Data-driven, so the last item is always the current one. The separators are decorative chevrons that point the reading way, so they mirror in right-to-left text.
  * @prop {{ url: string, title: string }[]} items - From the top level to the current page.
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Breadcrumb".
- * @cssprop --norn-breadcrumbs-link - Link color. Falls back to --norn-text-muted, and --norn-text-base on hover.
- * @cssprop --norn-breadcrumbs-separator - Separator color. Falls back to --norn-text-muted.
  * @category landmark
  */
 --->
@@ -57,13 +55,13 @@
 			}
 
 			& nav > ol > li > norn-icon {
-				color: var(--norn-breadcrumbs-separator, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-text-muted, t('text.muted'));
 			}
 
 			/* The links are quiet until the pointer or focus is on one. */
 			& nav > ol > li > a {
 				padding-block: var(--norn-space-2xs, t('space.2xs'));
-				color: var(--norn-breadcrumbs-link, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-text-muted, t('text.muted'));
 				text-decoration: none;
 
 				&:is(:hover, :focus-visible) {
