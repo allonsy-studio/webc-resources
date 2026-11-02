@@ -19,7 +19,8 @@ import { tokenRanges } from "./packages/webc-code-sample/index.js";
 import { headings } from "./packages/webc-patterns/markdown.js";
 import { adjacent, componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
 import { compiles, HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
-import { csfDoc, csfFile, readCsf } from "./preview/lib/catalog.js";
+import { csfDoc, csfFile, effectiveArgTypes, readCsf } from "./preview/lib/catalog.js";
+import { analyzeFile, analyzeWebc, compareOwned, derivedArgTypes, helperNames, sourceFiles } from "./scripts/analyze-webc.js";
 import { readTokens, TOKENS_FILE } from "./scripts/build-components.js";
 
 const PACKAGES = path.join(import.meta.dirname, "packages");
@@ -69,7 +70,8 @@ const docs = new Map(
 				const name = `${fallback ? "fallback:" : ""}${path.basename(file, ".webc")}`;
 				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), path.basename(file, ".webc"), layout);
 				if (!fallback && fs.existsSync(stories)) {
-					const doc = csfDoc((await readCsf(stories)).meta);
+					const { meta } = await readCsf(stories);
+					const doc = csfDoc(meta, effectiveArgTypes(derivedArgTypes(analyzeFile(path.join(PACKAGES, file))), meta.argTypes));
 					return [name, { csf: true, category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
 				}
 				const props = new Set([...text.matchAll(/^ \* @prop \{[^\n]*?\} \[?([\w-]+)/gm)].map(([, prop]) => prop));
@@ -1156,4 +1158,23 @@ test("norn-toc emits its escaped outline as it is, and heading text with markup 
 	assert.ok(html.includes("Use &lt;b&gt;bold&lt;/b&gt; &amp; &lt;script&gt;alert(1)&lt;/script&gt;"), "escaped text");
 	assert.ok(!html.includes("<b>") && !html.includes("<script"), "no element from heading text");
 	assert.match(html, /<li><a href="#a">[^]*<ol><li><a href="#b">The (?:"|&quot;)quoted(?:"|&quot;) part<\/a><\/li><\/ol><\/li>/, "nested by level");
+});
+
+/** The component-owned custom properties still read, which a refactor removes: one line per property, and the list only shrinks. */
+const OWNED = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, "scripts", "owned-custom-properties.json"), "utf8"));
+
+test("a source reads global tokens and private --_ properties only, apart from the allowlist of owned ones still to remove", () => {
+	const analyzer = { tokens, helpers: helperNames() };
+	const found = {};
+	for (const file of sourceFiles()) {
+		const owned = analyzeFile(file, analyzer).owned.map(({ name }) => name);
+		if (owned.length) found[`${/\/fallback\//.test(file) ? "fallback/" : ""}${path.basename(file, ".webc")}`] = owned;
+	}
+	const { added, stale } = compareOwned(found, OWNED);
+	assert.deepEqual(added, [], "a component reads a custom property of its own: read a global token from tokens.json, or a private --_ one");
+	assert.deepEqual(stale, [], "the code no longer reads these: remove them from scripts/owned-custom-properties.json");
+	// The same check on a source that adds an owned property, and on a list that holds one the code dropped.
+	const bad = analyzeWebc("<p></p><style>x-a { --_c: var(--norn-text-base, red); color: var(--x-a-fg, var(--_c)); }</style>", analyzer).owned.map(({ name }) => name);
+	assert.deepEqual(compareOwned({ ...found, "x-a": bad }, OWNED).added, ["x-a --x-a-fg"]);
+	assert.deepEqual(compareOwned(found, { ...OWNED, "x-a": ["--x-a-gap"] }).stale, ["x-a --x-a-gap"]);
 });

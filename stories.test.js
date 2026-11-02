@@ -6,6 +6,7 @@
  */
 
 // The CSF files: one per component and layout, beside its source, holding its docs and stories as data.
+// The analyzer derives the props and slots from the source; a CSF file adds the descriptions and the few facts code cannot say.
 // While the move from JSDoc is under way, a component without a CSF file keeps its JSDoc instead.
 
 import assert from "node:assert/strict";
@@ -16,18 +17,36 @@ import test from "node:test";
 import { WebC } from "@11ty/webc";
 
 import { tokenRanges } from "./packages/webc-code-sample/index.js";
-import { CATEGORIES, csfFile, HEAD_COMPONENTS, readCsf } from "./preview/lib/catalog.js";
-import { CSS_PROPS, matrixCells, PROPS, renderStory, SLOTS } from "./preview/lib/render-story.js";
+import { CATEGORIES, csfFile, effectiveArgTypes, HEAD_COMPONENTS, readCsf } from "./preview/lib/catalog.js";
+import { matrixCells, PROPS, renderStory, SLOTS } from "./preview/lib/render-story.js";
+import { analyzeFile, analyzeWebc, derivedArgTypes, helperNames } from "./scripts/analyze-webc.js";
+import { readTokens } from "./scripts/build-components.js";
 
 const PACKAGES = path.join(import.meta.dirname, "packages");
 
 const META_KEYS = ["title", "component", "args", "argTypes", "parameters", "tags"];
 const STORY_KEYS = ["name", "args", "argTypes", "parameters", "tags"];
-const ARG_CATEGORIES = [PROPS, SLOTS, CSS_PROPS];
+const ARG_CATEGORIES = [PROPS, SLOTS];
 const KINDS = CATEGORIES.map(({ id }) => id);
 
 /** The title group of the OSS site package, which holds components of any kind. */
 const OSS_GROUP = "OSS site";
+
+/**
+ * Each fact a CSF file adds over what the analyzer derives, as `component arg field`, with the reason the code cannot say it.
+ * Keep it short: a fact the code says is derived, never written.
+ */
+const OVERRIDES = {
+	"norn-code-block code type": "Required: without it the sample is empty, and no setup function throws.",
+	"norn-link-button href type": "Required: a link needs a URL, and no setup function throws without one.",
+	"norn-landing repo table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
+	"norn-landing install table.type": "Passed on as a child component's prop, so the layout's code does not say it is a string.",
+	"norn-landing usage table.type": "The object's shape: the code reads its fields, not their types.",
+	"norn-landing features table.type": "The items' shape: the code reads their fields, not their types.",
+	"norn-landing packages table.type": "The items' shape: the code reads their fields, not their types.",
+};
+
+const analyzer = { tokens: readTokens(), helpers: helperNames() };
 
 /** Every component and layout source, with its CSF file if it has one. */
 const sources = fs.readdirSync(PACKAGES).flatMap((folder) =>
@@ -40,24 +59,26 @@ const sources = fs.readdirSync(PACKAGES).flatMap((folder) =>
 			.map((file) => {
 				const name = file.slice(0, -".webc".length);
 				const stories = csfFile(path.join(PACKAGES, folder), name, layout);
-				return { folder, name, layout, head: HEAD_COMPONENTS.has(name), text: fs.readFileSync(path.join(dir, file), "utf8"), stories: fs.existsSync(stories) ? stories : undefined };
+				return { folder, name, layout, head: HEAD_COMPONENTS.has(name), file: path.join(dir, file), text: fs.readFileSync(path.join(dir, file), "utf8"), stories: fs.existsSync(stories) ? stories : undefined };
 			});
 	}),
 );
 
-const withCsf = await Promise.all(sources.filter(({ stories }) => stories).map(async (source) => ({ ...source, csf: await readCsf(source.stories), csfText: fs.readFileSync(source.stories, "utf8") })));
+const withCsf = await Promise.all(
+	sources
+		.filter(({ stories }) => stories)
+		.map(async (source) => {
+			const csf = await readCsf(source.stories);
+			const derived = derivedArgTypes(analyzeFile(source.file, analyzer));
+			return { ...source, csf, derived, argTypes: effectiveArgTypes(derived, csf.meta.argTypes), csfText: fs.readFileSync(source.stories, "utf8") };
+		}),
+);
 
-/** Markup without the server-only comment, scripts, and styles. */
-const markupOf = (text) => text.replace(/<!---[\s\S]*?--->/g, "").replace(/<(script|style)\b[\s\S]*?<\/\1>/g, "");
-const cssOf = (text) => [...text.matchAll(/<style\b[^>]*>([\s\S]*?)<\/style>/g)].map(([, css]) => css).join("\n");
+/** Each leaf of a value, by its dotted path: an array is one leaf. */
+const leaves = (value, trail = "") => (value && typeof value === "object" && !Array.isArray(value) ? Object.entries(value).flatMap(([key, child]) => leaves(child, trail ? `${trail}.${key}` : key)) : [[trail, value]]);
 
-/** The slots a component's markup renders: each `<slot name>`, and `default` for an unnamed one. A layout's body is `$data.content`. */
-function markupSlots({ text, layout }) {
-	const markup = markupOf(text);
-	const slots = new Set([...markup.matchAll(/<slot\b[^>]*\bname="([a-z-]+)"/g)].map(([, name]) => name));
-	if (/<slot\b(?![^>]*\bname=)[^>]*>/.test(markup) || (layout && /\$data\.content\b/.test(markup))) slots.add("default");
-	return slots;
-}
+/** The field an override sets, as `OVERRIDES` names it: `type`, `options`, `table.type`, `table.defaultValue`. */
+const fieldOf = (leaf) => (leaf.startsWith("table.") ? leaf.split(".").slice(0, 2).join(".") : leaf.split(".")[0]);
 
 /** Every path in a value that holds a function. */
 const functionsIn = (value, trail = "") => {
@@ -67,13 +88,14 @@ const functionsIn = (value, trail = "") => {
 };
 
 /**
- * What is wrong with one CSF file, as a list of messages: its shape, its title and category, its argTypes, its stories,
- * and its agreement with the component's markup and CSS.
+ * What is wrong with one CSF file, as a list of messages: its shape, its title and category, its argTypes against what the
+ * analyzer derives from the source, and its stories.
  *
- * @param {{ name: string, folder: string, layout: boolean, head: boolean, text: string, csf: Awaited<ReturnType<typeof readCsf>> }} entry
+ * @param {{ name: string, folder: string, layout: boolean, head: boolean, csf: Awaited<ReturnType<typeof readCsf>>, derived: Record<string, object> }} entry
+ * @param {Record<string, string>} [overrides] - The allowed overrides, `OVERRIDES` by default
  * @returns {string[]}
  */
-function problems({ name, folder, layout, head, text, csf }) {
+function problems({ name, folder, layout, head, csf, derived }, overrides = OVERRIDES) {
 	const found = [];
 	const { meta, stories, order, exports } = csf;
 	if (!meta || typeof meta !== "object") return [`${name}: no default export`];
@@ -90,13 +112,29 @@ function problems({ name, folder, layout, head, text, csf }) {
 		if (!KINDS.includes(group?.toLowerCase())) found.push(`${name}: the title's group "${group}" is not a category`);
 		if (meta.parameters?.webc?.category !== undefined) found.push(`${name}: the category comes from the title, so parameters.webc.category is not set`);
 	}
-	const argTypes = meta.argTypes ?? {};
+	const written = meta.argTypes ?? {};
+	for (const [arg, argType] of Object.entries(written)) {
+		if (arg.startsWith("--") || argType.table?.category === "css custom properties") {
+			found.push(`${name}: "${arg}" is a custom property, and a component surfaces none of its own: document the global tokens it reads instead`);
+			continue;
+		}
+		if (!derived[arg]) {
+			found.push(`${name}: the argType "${arg}" is stale: the analyzer finds no such prop or slot in the source`);
+			continue;
+		}
+		const facts = new Map(leaves(derived[arg]));
+		for (const [leaf, value] of leaves(argType).filter(([leaf]) => leaf !== "description")) {
+			const key = `${name} ${arg} ${fieldOf(leaf)}`;
+			if (facts.has(leaf) && JSON.stringify(facts.get(leaf)) === JSON.stringify(value)) found.push(`${name}: the argType "${arg}" restates ${leaf}, which the analyzer derives from the source`);
+			else if (!overrides[key]) found.push(`${name}: the argType "${arg}" sets ${leaf}, an override with no reason in OVERRIDES ("${key}")`);
+		}
+	}
+	const argTypes = effectiveArgTypes(derived, written);
 	for (const [arg, argType] of Object.entries(argTypes)) {
-		if (typeof argType.description !== "string" || !argType.description.trim()) found.push(`${name}: argType "${arg}" has no description`);
+		if (typeof argType.description !== "string" || !argType.description.trim()) found.push(`${name}: the ${argType.table?.category === SLOTS ? "slot" : "prop"} "${arg}" is in the source and has no description in the CSF file`);
 		if (!ARG_CATEGORIES.includes(argType.table?.category)) found.push(`${name}: argType "${arg}" has table.category "${argType.table?.category}", not one of ${ARG_CATEGORIES.join(", ")}`);
 		const control = typeof argType.control === "object" ? argType.control?.type : argType.control;
 		if (control === "select" && !(Array.isArray(argType.options) && argType.options.length)) found.push(`${name}: argType "${arg}" is a select with no options`);
-		if (argType.table?.category === CSS_PROPS && !arg.startsWith("--")) found.push(`${name}: custom property "${arg}" does not start with --`);
 	}
 	for (const story of exports.filter((key) => !order.includes(key))) found.push(`${name}: the story ${story} is not a plain \`export const\`, so its order is unknown`);
 	if (head && stories.length) found.push(`${name}: a head component has no stories`);
@@ -109,12 +147,6 @@ function problems({ name, folder, layout, head, text, csf }) {
 		for (const where of functionsIn(story)) found.push(`${name}: ${story.exportName}${where} is a function`);
 		for (const arg of Object.keys(story.args ?? {})) if (!declared(story)[arg]) found.push(`${name}: ${story.exportName} sets "${arg}", which has no argType`);
 	}
-	const documented = new Set(Object.entries(argTypes).filter(([, argType]) => argType.table?.category === SLOTS).map(([slot]) => slot));
-	const rendered = markupSlots({ text, layout });
-	for (const slot of rendered) if (!documented.has(slot)) found.push(`${name}: the markup renders the ${slot} slot, and no argType documents it`);
-	for (const slot of documented) if (!rendered.has(slot)) found.push(`${name}: the ${slot} slot argType names no slot in the markup`);
-	const css = cssOf(text);
-	for (const [prop, argType] of Object.entries(argTypes)) if (argType.table?.category === CSS_PROPS && !css.includes(prop)) found.push(`${name}: ${prop} is not in the component's CSS`);
 	return found;
 }
 
@@ -127,7 +159,12 @@ test("every component and layout has a CSF file, or keeps its JSDoc until it mov
 });
 
 test("every CSF file has the strict CSF 3 shape and agrees with its component", () => {
-	assert.deepEqual(withCsf.flatMap(problems), []);
+	assert.deepEqual(withCsf.flatMap((entry) => problems(entry)), []);
+});
+
+test("every override in OVERRIDES is one a CSF file sets", () => {
+	const set = new Set(withCsf.flatMap(({ name, csf }) => Object.entries(csf.meta.argTypes ?? {}).flatMap(([arg, argType]) => leaves(argType).filter(([leaf]) => leaf !== "description").map(([leaf]) => `${name} ${arg} ${fieldOf(leaf)}`))));
+	assert.deepEqual(Object.keys(OVERRIDES).filter((key) => !set.has(key)), []);
 });
 
 test("CSF titles are unique", () => {
@@ -140,18 +177,16 @@ test("a CSF file holds no render function and no play, decorator, loader, or hoo
 });
 
 test("the CSF check catches each kind of mistake", () => {
-	const markup = '<!---\n--->\n<div><slot name="heading"></slot><slot></slot></div>\n<style>x-a { color: var(--x-a-color); }</style>';
+	const markup = '<!---\n--->\n<div :data-tone="tone === \'a\' || tone === \'b\' ? tone : \'a\'" :data-size="size"><slot name="heading"></slot><slot></slot></div>\n<style>x-a { color: var(--x-a-color, var(--norn-text-accent, red)); }</style>';
+	const derived = derivedArgTypes(analyzeWebc(markup, analyzer));
+	assert.deepEqual(Object.keys(derived), ["tone", "size", "heading", "default"], "the analyzer derives the props and slots");
 	const meta = {
 		title: "Component/x-a",
 		component: "x-a",
-		argTypes: {
-			tone: { description: "Tone.", control: "select", options: ["a", "b"], table: { category: PROPS } },
-			heading: { description: "Heading.", table: { category: SLOTS } },
-			default: { description: "Body.", table: { category: SLOTS } },
-			"--x-a-color": { description: "Color.", table: { category: CSS_PROPS } },
-		},
+		argTypes: { tone: { description: "Tone." }, size: { description: "Size." }, heading: { description: "Heading." }, default: { description: "Body." } },
 	};
-	const entry = (change = {}, stories = [{ exportName: "Default", args: { tone: "a" } }]) => ({ name: "x-a", folder: "webc-patterns", layout: false, head: false, text: markup, csf: { meta: { ...meta, ...change }, stories, order: stories.map(({ exportName }) => exportName), exports: stories.map(({ exportName }) => exportName) } });
+	const entry = (change = {}, stories = [{ exportName: "Default", args: { tone: "a" } }]) => ({ name: "x-a", folder: "webc-patterns", layout: false, head: false, derived, csf: { meta: { ...meta, ...change }, stories, order: stories.map(({ exportName }) => exportName), exports: stories.map(({ exportName }) => exportName) } });
+	const argTypes = (change) => ({ argTypes: { ...meta.argTypes, ...change } });
 	assert.deepEqual(problems(entry()), [], "a good file passes");
 	const cases = [
 		[entry({ render: "x" }), /meta key "render"/],
@@ -159,17 +194,21 @@ test("the CSF check catches each kind of mistake", () => {
 		[entry({ title: "Component/x-b" }), /is not "<Group>\/x-a"/],
 		[entry({ title: "Widgets/x-a" }), /is not a category/],
 		[entry({ component: "x-b" }), /component is "x-b"/],
-		[entry({ argTypes: { ...meta.argTypes, tone: { control: "select", table: { category: PROPS } } } }), /"tone" has no description[^]*select with no options/],
-		[entry({ argTypes: { ...meta.argTypes, size: { description: "Size.", table: { category: "attributes" } } } }), /table.category "attributes"/],
-		[entry({ argTypes: { ...meta.argTypes, "--x-a-gap": { description: "Gap.", table: { category: CSS_PROPS } } } }), /--x-a-gap is not in the component's CSS/],
-		[entry({ argTypes: { ...meta.argTypes, footer: { description: "Footer.", table: { category: SLOTS } } } }), /the footer slot argType names no slot/],
-		[entry({ argTypes: { tone: meta.argTypes.tone, default: meta.argTypes.default, "--x-a-color": meta.argTypes["--x-a-color"] } }), /renders the heading slot, and no argType/],
+		[entry({ argTypes: { tone: meta.argTypes.tone, size: meta.argTypes.size, default: meta.argTypes.default } }), /the slot "heading" is in the source and has no description in the CSF file/],
+		[entry(argTypes({ footer: { description: "Footer." } })), /"footer" is stale/],
+		[entry(argTypes({ tone: { description: "Tone.", options: ["a", "b"] } })), /"tone" restates options/],
+		[entry(argTypes({ heading: { description: "Heading.", table: { category: SLOTS } } })), /"heading" restates table.category/],
+		[entry(argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } })), /"tone" sets table.defaultValue.summary, an override with no reason in OVERRIDES \("x-a tone table.defaultValue"\)/],
+		[entry(argTypes({ "--x-a-color": { description: "Color." } })), /"--x-a-color" is a custom property, and a component surfaces none of its own/],
+		[entry(argTypes({ size: { description: "Size.", control: "select" } })), /"size" is a select with no options/],
+		[entry(argTypes({ size: { description: "Size.", table: { category: "attributes" } } })), /table.category "attributes"/],
 		[entry({}, [{ exportName: "default_story", args: {} }]), /not PascalCase/],
 		[entry({}, [{ exportName: "Default", render: "x" }]), /the key "render"/],
-		[entry({}, [{ exportName: "Default", args: { size: "l" } }]), /sets "size", which has no argType/],
+		[entry({}, [{ exportName: "Default", args: { width: "l" } }]), /sets "width", which has no argType/],
 		[{ ...entry(), csf: { ...entry().csf, exports: ["Default", "Other"] } }, /Other is not a plain `export const`/],
 	];
 	for (const [broken, message] of cases) assert.match(problems(broken).join("\n"), message);
+	assert.deepEqual(problems(entry(argTypes({ tone: { description: "Tone.", table: { defaultValue: { summary: "b" } } } })), { "x-a tone table.defaultValue": "A reason." }), [], "an override with a reason passes");
 	const oss = { ...entry({ title: "OSS site/x-a" }), folder: "webc-oss-site" };
 	assert.match(problems(oss).join("\n"), /parameters.webc.category/, "an OSS site component names its category");
 });
@@ -203,11 +242,11 @@ async function checkRender(label, tag, args, argTypes) {
 }
 
 test("every CSF story and every matrix cell renders through WebC with the compiled components", async () => {
-	for (const { name, layout, head, csf } of withCsf) {
+	for (const { name, layout, head, csf, argTypes } of withCsf) {
 		if (layout || head) continue;
-		for (const story of csf.stories) await checkRender(`${name} ${story.exportName}`, name, { ...csf.meta.args, ...story.args }, { ...csf.meta.argTypes, ...story.argTypes });
-		for (const cell of matrixCells(csf.meta, csf.stories.find(({ exportName }) => exportName === "Default"))) {
-			await checkRender(`${name} matrix ${cell.label}`, name, cell.args, csf.meta.argTypes);
+		for (const story of csf.stories) await checkRender(`${name} ${story.exportName}`, name, { ...csf.meta.args, ...story.args }, { ...argTypes, ...story.argTypes });
+		for (const cell of matrixCells({ ...csf.meta, argTypes }, csf.stories.find(({ exportName }) => exportName === "Default"))) {
+			await checkRender(`${name} matrix ${cell.label}`, name, cell.args, argTypes);
 		}
 	}
 });
@@ -231,12 +270,12 @@ test("the matrix varies one prop at a time: every option of a select, and both v
 	assert.deepEqual(matrixCells({ argTypes: { size: { table: { category: PROPS } } } }), [], "nothing enumerable, no matrix");
 });
 
-test("the default renderer writes props, slots, and custom properties the way a page would", () => {
-	const argTypes = { variant: { table: { category: PROPS } }, open: { table: { category: PROPS } }, hidden: { table: { category: PROPS } }, items: { table: { category: PROPS } }, code: { table: { category: PROPS } }, heading: { table: { category: SLOTS } }, default: { table: { category: SLOTS } }, "--x-color": { table: { category: CSS_PROPS } } };
+test("the default renderer writes props and slots the way a page would", () => {
+	const argTypes = { variant: { table: { category: PROPS } }, open: { table: { category: PROPS } }, hidden: { table: { category: PROPS } }, items: { table: { category: PROPS } }, code: { table: { category: PROPS } }, heading: { table: { category: SLOTS } }, default: { table: { category: SLOTS } } };
 	assert.equal(renderStory("x-a", { variant: 'a "b" & c', open: true, hidden: false }, argTypes), '<x-a @variant="a &quot;b&quot; &amp; c" @open></x-a>');
 	assert.equal(renderStory("x-a", { items: [{ url: "#" }] }, argTypes), '<x-a :@items="([{&quot;url&quot;:&quot;#&quot;}])"></x-a>');
 	assert.equal(renderStory("x-a", { code: "a\n'b'\n" }, argTypes), "<x-a :@code=\"'a\\n\\'b\\'\\n'\"></x-a>");
-	assert.equal(renderStory("x-a", { default: "<p>a</p>\n<p>b</p>", heading: "<span>H</span>", "--x-color": "red" }, argTypes), '<x-a style="--x-color: red">\n\t<template slot="heading" webc:nokeep><span>H</span></template>\n\t<p>a</p>\n\t<p>b</p>\n</x-a>');
+	assert.equal(renderStory("x-a", { default: "<p>a</p>\n<p>b</p>", heading: "<span>H</span>" }, argTypes), '<x-a>\n\t<template slot="heading" webc:nokeep><span>H</span></template>\n\t<p>a</p>\n\t<p>b</p>\n</x-a>');
 	assert.equal(renderStory("x-a", { default: "Go" }, argTypes), "<x-a>Go</x-a>");
 	assert.throws(() => renderStory("x-a", { size: "l" }, argTypes), /the arg "size" has no argType/);
 });
