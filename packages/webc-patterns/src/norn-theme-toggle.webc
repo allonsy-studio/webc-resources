@@ -5,18 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Light, system, or dark: a `norn-segmented-control` that sets the page's `color-scheme` and remembers the choice in `localStorage` under `color-scheme`.
- * System clears the choice, so the visitor's setting decides. Every toggle on the page, and in other tabs, follows the same choice.
- * Without a script it stays hidden and the page follows the system. Pass `:@theme-toggle="true"` to `norn-head` so a saved choice applies before the first paint.
- * The names are in the page, hidden, and the script shows them, since the toggle only exists with a script. Each falls back to the site's `componentStrings`, then English.
- * @slot label - The group's name, as one element. Falls back to "Color scheme".
- * @slot light - The light option's name. Falls back to "Light".
- * @slot system - The system option's name. Falls back to "System".
- * @slot dark - The dark option's name. Falls back to "Dark".
- * @category component
- */
 --->
 <norn-segmented-control
 	:@icon-only="true"
