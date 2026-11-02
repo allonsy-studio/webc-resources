@@ -1,6 +1,6 @@
 {
 	"name": "@allons-y/webc-patterns",
-	"version": "0.1.0-beta.1",
+	"version": "0.1.0-beta.2",
 	"description": "Generic WebC components and Eleventy layouts for page and docs sites, with the Norn plugin that registers them: header, footer, hero, cards, side nav, docs shell, and pager.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
