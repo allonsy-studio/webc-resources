@@ -802,6 +802,15 @@ test("norn-code-block takes every string as a slot, and leaves the default mark 
 	assert.ok(!/\b(Copy|Copied|code)\b/.test(html.replace(/<(script|style)[\s\S]*?<\/\1>/g, "").replace(/<[^>]+>/g, " ").replace(/\bx\b/, "")));
 });
 
+test("norn-code-tabs reads the shared tokens, with no custom property of its own, and its samples take the terminal frame as their own prop", async () => {
+	const css = cssOf("norn-code-tabs");
+	assert.ok(!/--norn-code-tabs-/.test(css), "no --norn-code-tabs-* property");
+	assert.ok(css.includes("border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));"), "the rule from the hairline token");
+	assert.match(css, /&\[aria-selected="true"\] \{ border-block-end-color: var\(--norn-text-accent, t\('text\.accent'\)\); color: var\(--norn-text-accent, t\('text\.accent'\)\);/, "the selected tab in the accent text");
+	const html = await render('<norn-code-tabs><norn-code-block @chrome="terminal" @language="sh" @code="a"></norn-code-block><norn-code-block @chrome="terminal" @language="sh" @code="b"></norn-code-block></norn-code-tabs>');
+	assert.equal((html.match(/<figure data-chrome="terminal">/g) ?? []).length, 2, "each sample frames itself");
+});
+
 test("norn-code-tabs holds its tab list name and fallback tab name as hidden text, in English or from its slots", async () => {
 	const html = unid(await render("<norn-code-tabs></norn-code-tabs>"));
 	assert.ok(html.includes('<span data-string="label">Code samples</span>') && html.includes('<span data-string="sample">Sample {n}</span>'));

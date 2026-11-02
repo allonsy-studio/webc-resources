@@ -11,11 +11,9 @@
  * Pass the samples in the default slot. Each tab is named by the sample's `data-tab` attribute, else its caption, else its `label` slot, else its language, all read from the markup. A name two samples share gets a number after the first, such as `sh` and `sh 2`, so every tab name is its own.
  * The tabs follow the ARIA tabs pattern: arrow keys move between them, in the reading direction, and Home and End jump to the ends. Tabs that share a `@group` switch together, and the choice is remembered in this browser.
  * @prop {string} [group] - Tabs with the same group, on any page, show the same choice.
- * @slot - The samples, each a `norn-code-block`.
+ * @slot - The samples, each a `norn-code-block`. For the terminal frame, give each sample `@chrome="terminal"`: a slot can't take props from the tabs.
  * @slot label - The tab list's name, as one element, such as `<span slot="label">Install commands</span>`. Falls back to the site's `componentStrings`, then "Code samples".
  * @slot sample - A tab's name when its sample has no `data-tab`, caption, label, or language, with `{n}` for its number. Falls back to the site's `componentStrings`, then "Sample {n}".
- * @cssprop --norn-code-tabs-current - The selected tab's text and underline. Falls back to --norn-text-accent.
- * @cssprop --norn-code-tabs-rule - The line under the tabs. Falls back to --norn-ui-border-color.
  * @category container
  */
 --->
@@ -38,7 +36,7 @@
 				display: flex;
 				flex-wrap: wrap;
 				gap: var(--norn-space-xs, t('space.xs'));
-				border-block-end: 1px solid var(--norn-code-tabs-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
 			}
 
 			& > div > [role="tablist"] > [role="tab"] {
@@ -73,8 +71,8 @@
 				}
 
 				&[aria-selected="true"] {
-					border-block-end-color: var(--norn-code-tabs-current, var(--norn-text-accent, t('text.accent')));
-					color: var(--norn-code-tabs-current, var(--norn-text-accent, t('text.accent')));
+					border-block-end-color: var(--norn-text-accent, t('text.accent'));
+					color: var(--norn-text-accent, t('text.accent'));
 					font-weight: 600;
 				}
 			}
