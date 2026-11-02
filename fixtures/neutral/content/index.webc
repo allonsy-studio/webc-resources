@@ -38,7 +38,7 @@ facts:
 			<li webc:for="(action, index) of actions"><norn-link-button :@href="action.href" :@variant="index ? 'secondary' : 'primary'" @text="action.text"></norn-link-button></li>
 		</ul>
 	</nav>
-	<norn-fact-list>
+	<norn-fact-list @gap="l">
 		<li webc:for="fact of facts" @text="fact"></li>
 	</norn-fact-list>
 </norn-hero>

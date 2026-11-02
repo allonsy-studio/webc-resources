@@ -404,7 +404,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
 | `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary` | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
-| `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
+| `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list` with `@gap="l"`, extras) | Page intro |
 | `norn-card` | `@accent` (`accent`, `info`, `success`, `warning`, `danger`, or `none`), `@title-face` (`mono`), default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and an accent draws a 2px line along the top |
 | `norn-card-grid` | `@gap` (`s`, `m`, or `l`), `@min` (a length), default slot (`<li>` cards) | Responsive grid of cards |
 | `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
@@ -412,7 +412,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-rich-text` | `@measure` (`text` or `none`), default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
 | `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), default slot | A link styled as a button, for a call to action |
-| `norn-fact-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |
+| `norn-fact-list` | `@gap` (`xs`, `s`, `m`, or `l`, the space between rows), default slot (`<li>` facts) | A row of short facts, each with an optional icon |
 | `norn-segmented-control` | `:@icon-only`, slot `legend`, default slot of `<label>` + radio, or `@legend`, `@name`, `:@options` | One choice from a few, from native radios. The checked option is tinted in the accent |
 | `norn-theme-toggle` | slots `label`, `light`, `system`, `dark` | Light, system, or dark, saved in this browser. Hidden without a script. Pair with `norn-head`'s `:@theme-toggle="true"` |
 | `norn-copy-button` | `@value` or `@source` (an id), `:@compact`, `@surface` (`base`, `raised`, or `code`), slots `copy`, `copied`, `failed`, `label` | Copies text and says so. Hidden where the Clipboard API is missing |

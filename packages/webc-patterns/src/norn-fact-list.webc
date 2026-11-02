@@ -9,14 +9,12 @@
 /**
  * Short facts in a row, such as a license or a runtime: an optional icon and a few words each, with no box. Static text, not controls.
  * Pass each fact as an `<li>`, which may start with a `norn-icon`. The list has `role="list"`, which Safari needs once the markers are gone.
+ * @prop {string} [gap] - The space between rows: `xs`, the default, `s`, `m`, or `l`, each a `--norn-space-*` step. The facts in a row are always `m` apart. A hero sets `l`.
  * @slot - The facts, as `<li>` elements.
- * @cssprop --norn-fact-list-fg - Text color. Falls back to --norn-text-muted.
- * @cssprop --norn-fact-list-icon - Icon color. Falls back to --norn-text-accent.
- * @cssprop --norn-fact-list-gap - Space between rows and between facts. Falls back to --norn-space-xs and --norn-space-m.
  * @category component
  */
 --->
-<ul role="list"><slot></slot></ul>
+<ul role="list" :data-gap="['s', 'm', 'l'].includes(gap) ? gap : undefined"><slot></slot></ul>
 <style>
 	@layer norn.components {
 		norn-fact-list {
@@ -25,12 +23,24 @@
 			& ul {
 				display: flex;
 				flex-wrap: wrap;
-				gap: var(--norn-fact-list-gap, var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m')));
+				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
 				margin: 0;
 				padding: 0;
 				list-style: none;
-				color: var(--norn-fact-list-fg, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-text-muted, t('text.muted'));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
+
+				&[data-gap="s"] {
+					row-gap: var(--norn-space-s, t('space.s'));
+				}
+
+				&[data-gap="m"] {
+					row-gap: var(--norn-space-m, t('space.m'));
+				}
+
+				&[data-gap="l"] {
+					row-gap: var(--norn-space-l, t('space.l'));
+				}
 			}
 
 			& li {
@@ -43,7 +53,7 @@
 			}
 
 			& norn-icon {
-				color: var(--norn-fact-list-icon, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-text-accent, t('text.accent'));
 			}
 		}
 	}

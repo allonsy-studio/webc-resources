@@ -802,6 +802,21 @@ test("norn-code-block takes every string as a slot, and leaves the default mark 
 	assert.ok(!/\b(Copy|Copied|code)\b/.test(html.replace(/<(script|style)[\s\S]*?<\/\1>/g, "").replace(/<[^>]+>/g, " ").replace(/\bx\b/, "")));
 });
 
+test("norn-fact-list reads the shared tokens and takes its row gap as a prop, with no custom property of its own", async () => {
+	const css = cssOf("norn-fact-list");
+	assert.ok(!/--norn-fact-list-/.test(css), "no --norn-fact-list-* property");
+	assert.ok(css.includes("gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));"), "xs rows and m facts by default");
+	assert.ok(css.includes("color: var(--norn-text-muted, t('text.muted'));") && css.includes("& norn-icon { color: var(--norn-text-accent, t('text.accent')); }"), "the text and icon tokens");
+	for (const step of ["s", "m", "l"]) {
+		assert.ok(css.includes(`&[data-gap="${step}"] { row-gap: var(--norn-space-${step}, t('space.${step}')); }`), `${step} from its spacing token`);
+		assert.ok((await render(`<norn-fact-list @gap="${step}"><li>x</li></norn-fact-list>`)).includes(`<ul role="list" data-gap="${step}">`), step);
+	}
+	for (const none of ["", ' @gap="xs"', ' @gap="2rem"']) assert.ok((await render(`<norn-fact-list${none}><li>x</li></norn-fact-list>`)).includes('<ul role="list">'), `the default for${none || " no gap"}`);
+	assert.ok(!cssOf("norn-hero").includes("--norn-fact-list"), "a hero no longer sets the gap");
+	const landing = fs.readFileSync(path.join(PACKAGES, "webc-patterns/src/layouts/norn-landing.webc"), "utf8");
+	assert.ok(landing.includes('<norn-fact-list @gap="l">'), "the landing hero passes the gap");
+});
+
 test("norn-code-tabs reads the shared tokens, with no custom property of its own, and its samples take the terminal frame as their own prop", async () => {
 	const css = cssOf("norn-code-tabs");
 	assert.ok(!/--norn-code-tabs-/.test(css), "no --norn-code-tabs-* property");
