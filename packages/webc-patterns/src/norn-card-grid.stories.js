@@ -35,7 +35,7 @@ export const Default = {
 	name: "Accent cycle",
 	args: {
 		default:
-			'<li><norn-card><h3>Plain card</h3><p>A card with no link.</p></norn-card></li>\n<li><norn-card><h3><a href="https://example.com/">Linked card</a></h3><p>A card whose heading links somewhere.</p></norn-card></li>\n<li><norn-card><h3>Third card</h3><p>Cards share one fill, and a row lines up.</p></norn-card></li>\n<li><norn-card><h3>Fourth card</h3><p>A fourth card wraps to the next row when the grid is narrow.</p></norn-card></li>\n<li><norn-card><h3>Fifth card</h3><p>A fifth card, alone on its row at some widths.</p></norn-card></li>',
+			'<li><norn-card><h3>Plain card</h3><p>A short line of body text.</p></norn-card></li>\n<li><norn-card><h3><a href="https://example.com/">Linked card</a></h3><p>A short line of body text.</p></norn-card></li>\n<li><norn-card><h3>Third card</h3><p>A short line of body text.</p></norn-card></li>\n<li><norn-card><h3>Fourth card</h3><p>A short line of body text.</p></norn-card></li>\n<li><norn-card><h3>Fifth card</h3><p>A short line of body text.</p></norn-card></li>',
 	},
 };
 
@@ -50,6 +50,6 @@ export const Aligned = {
 	name: "Aligned rows",
 	args: {
 		default:
-			'<li>\n\t<norn-card>\n\t\t<h3>Short</h3>\n\t\t<p>A short body.</p>\n\t\t<p><a href="https://example.com/">Read more</a></p>\n\t</norn-card>\n</li>\n<li>\n\t<norn-card>\n\t\t<h3>A heading that wraps onto a second and a third line in a narrow card</h3>\n\t\t<p>A longer body, so the bodies of the cards in a row differ in height. Each heading, body, and footer still starts at the same line across the row.</p>\n\t\t<p><a href="https://example.com/">Read more</a></p>\n\t</norn-card>\n</li>\n<li>\n\t<norn-card>\n\t\t<h3>No footer</h3>\n\t\t<p>A card without a third child leaves its footer row empty.</p>\n\t</norn-card>\n</li>',
+			'<li>\n\t<norn-card>\n\t\t<h3>Short</h3>\n\t\t<p>A short body.</p>\n\t\t<p><a href="https://example.com/">Read more</a></p>\n\t</norn-card>\n</li>\n<li>\n\t<norn-card>\n\t\t<h3>Configure the build for a project with several workspaces and a shared theme</h3>\n\t\t<p>Each workspace keeps its own pages and data. The shared theme sets the colors, the type, and the spacing once, and every workspace follows it.</p>\n\t\t<p><a href="https://example.com/">Read more</a></p>\n\t</norn-card>\n</li>\n<li>\n\t<norn-card>\n\t\t<h3>No footer</h3>\n\t\t<p>A short line of body text.</p>\n\t</norn-card>\n</li>',
 	},
 };
