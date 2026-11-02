@@ -142,7 +142,7 @@ test("a source declares a shared token only to set it for the project, and never
 	for (const { file, text } of sources) {
 		for (const [, name] of styles(text, file).matchAll(/^\s*(--norn-[\w-]+)\s*:/gm)) {
 			if (!byName.has(name)) continue;
-			assert.equal(file, "webc-oss-site/src/css/tokens.css", `${file}: ${name} is set only in the Allons-y Studio brand`);
+			assert.ok(["webc-oss-site/src/css/tokens.css", "webc-oss-site/src/oss-cta.webc"].includes(file), `${file}: ${name} is set only in the Allons-y Studio brand, or by oss-cta for its own actions`);
 		}
 	}
 });

@@ -6,6 +6,7 @@
  */
 
 import assert from "node:assert/strict";
+import fs from "node:fs";
 import path from "node:path";
 import { test } from "node:test";
 
@@ -36,4 +37,10 @@ test("oss-cta: @level picks h3 or h4", async () => {
 
 test("oss-cta: a level outside 2 to 4 falls back to h2", async () => {
 	for (const level of ["1", "5", "6", "x"]) assert.match(await render(`@level="${level}"`), /<h2>Let's build/, level);
+});
+
+test("oss-cta: colors its actions by setting the global accent tokens, not norn-link-button properties", () => {
+	const source = fs.readFileSync(path.join(components, "oss-cta.webc"), "utf8");
+	for (const declaration of ["--norn-ui-accent: var(--oss-link);", "--norn-text-accent: var(--oss-link);", "--norn-text-on-accent: var(--oss-navy);"]) assert.ok(source.includes(declaration), declaration);
+	assert.ok(!source.includes("--norn-link-button-"), "no norn-link-button property");
 });

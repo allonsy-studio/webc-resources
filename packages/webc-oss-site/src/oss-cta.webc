@@ -9,7 +9,7 @@
 /**
  * OSS call to action, at the foot of the page. Locked: its copy and actions are fixed, and it takes no slots. The one setting is the heading level.
  * Closes the page body, above the footer: the `cta` hook places it last. The Allons-y Studio name is signed in the signature face, Yellowtail, which `oss-head` declares.
- * Its actions are `norn-link-button`s, colored through the norn-link-button tokens. The one place Allons-y Studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
+ * Its actions are `norn-link-button`s, colored by setting the global accent tokens on `oss-cta`. The one place Allons-y Studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
  * @prop {number} [level] - The heading level, 2 to 4, to fit the page outline. Anything else falls back to 2.
  * @cssprop --oss-navy - Background. Defined here.
  * @cssprop --oss-ink - Text color. Defined here.
@@ -39,10 +39,9 @@
 			--oss-ink: #ffffff;
 			--oss-link: #ffd36b;
 			--oss-signature: "Yellowtail", "Yellowtail Fallback", cursive;
-			--norn-link-button-accent: var(--oss-link);
-			--norn-link-button-on-accent: var(--oss-navy);
-			--norn-link-button-link: var(--oss-link);
-			--norn-link-button-border: var(--oss-link);
+			--norn-ui-accent: var(--oss-link);
+			--norn-text-accent: var(--oss-link);
+			--norn-text-on-accent: var(--oss-navy);
 			display: block;
 			container-type: inline-size;
 			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), 64rem);
