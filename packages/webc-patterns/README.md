@@ -425,7 +425,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-breadcrumbs` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |
-| `norn-icon` | `@name`, slot `label` | An inline icon from a built-in set or the plugin's `icons` option. Decorative unless it has a label; directional icons mirror in right-to-left text |
+| `norn-icon` | `@name`, `@size` (`s` or `m`), slot `label` | An inline icon from a built-in set or the plugin's `icons` option, at 1em, or the title size for `m`. Decorative unless it has a label; directional icons mirror in right-to-left text |
 
 A component is styled through the shared tokens in `tokens.json` (`--norn-ui-accent`, `--norn-ui-border-color`, `--norn-space-m`, and so on). The component preview lists the tokens each one reads, from its source. Each token falls back to its default, compiled into the component, so a component renders the same with no tokens set, and no stylesheet defines them. A custom property of a component's own is not part of its documented API.
 

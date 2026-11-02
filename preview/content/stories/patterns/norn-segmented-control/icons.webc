@@ -4,7 +4,7 @@ order: 2
 ---
 <norn-segmented-control :@icon-only="true">
 	<span slot="legend">Color scheme</span>
-	<label title="Light"><input type="radio" name="scheme" value="light" /><norn-icon @name="sun"></norn-icon><span>Light</span></label>
-	<label title="System"><input type="radio" name="scheme" value="" checked /><norn-icon @name="system"></norn-icon><span>System</span></label>
-	<label title="Dark"><input type="radio" name="scheme" value="dark" /><norn-icon @name="moon"></norn-icon><span>Dark</span></label>
+	<label title="Light"><input type="radio" name="scheme" value="light" /><norn-icon @name="sun" @size="m"></norn-icon><span>Light</span></label>
+	<label title="System"><input type="radio" name="scheme" value="" checked /><norn-icon @name="system" @size="m"></norn-icon><span>System</span></label>
+	<label title="Dark"><input type="radio" name="scheme" value="dark" /><norn-icon @name="moon" @size="m"></norn-icon><span>Dark</span></label>
 </norn-segmented-control>

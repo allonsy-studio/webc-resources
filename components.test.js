@@ -944,6 +944,22 @@ test("norn-icon without the plugin draws the built-in icons, and an unknown name
 	await assert.rejects(render('<norn-icon @name="nope"></norn-icon>', { helpers: { nornIcons: () => PROJECT_ICONS } }), /no icon named "nope". Built-in: accessibility[^]*Project: ring, solid, arrow-end/);
 });
 
+test("norn-icon takes its size as a prop mapped to the icon tokens, with no custom property of its own", async () => {
+	const css = cssOf("norn-icon");
+	assert.ok(!/--norn-icon-/.test(css), "no --norn-icon-* property");
+	assert.match(css, /& svg \{ inline-size: var\(--norn-ui-icon-s, t\('ui\.icon\.s'\)\); block-size: var\(--norn-ui-icon-s, t\('ui\.icon\.s'\)\);/, "s by default");
+	assert.match(css, /&\[data-size="m"\] \{ inline-size: var\(--norn-ui-icon-m, t\('ui\.icon\.m'\)\); block-size: var\(--norn-ui-icon-m, t\('ui\.icon\.m'\)\); \}/, "m from the title token");
+	assert.ok(css.includes("stroke-width: 2;"), "a fixed line weight");
+	assert.ok(!(await render('<norn-icon @name="check"></norn-icon>')).includes("data-size"), "no size attribute by default");
+	assert.ok(!(await render('<norn-icon @name="check" @size="s"></norn-icon>')).includes("data-size"), "none for s either");
+	assert.ok((await render('<norn-icon @name="check" @size="m"></norn-icon>')).includes('<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">'), "m on a built-in icon");
+	assert.ok((await render('<norn-icon @name="solid" @size="m"></norn-icon>', { helpers: { nornIcons: () => PROJECT_ICONS } })).includes('aria-hidden="true" data-size="m" data-project>'), "and on a project icon");
+	await assert.rejects(render('<norn-icon @name="check" @size="xl"></norn-icon>'), /norn-icon: no size "xl". Sizes: s, m/);
+	for (const name of ["norn-notice", "norn-segmented-control"]) assert.ok(!cssOf(name).includes("--norn-icon-size"), `${name} passes the size as a prop`);
+	assert.ok((await render('<norn-notice @severity="warning">x</norn-notice>')).includes('data-size="m"'), "a notice's icon is at the title size");
+	assert.ok((await render("<norn-segmented-control @name=\"s\" :@options=\"[{ value: 'a', label: 'A', icon: 'sun' }]\"></norn-segmented-control>")).includes('data-size="m"'), "and an option's icon");
+});
+
 test("norn-icon styles the stroke on built-in icons only, so a project icon keeps its own paint", () => {
 	const css = styles(components.find(({ file }) => file === "webc-patterns/components/norn-icon.webc").text);
 	assert.match(squash(css), /&:not\(\[data-project\]\) \{ fill: none; stroke: currentcolor;/);

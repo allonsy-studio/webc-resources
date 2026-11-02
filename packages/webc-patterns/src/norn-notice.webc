@@ -30,7 +30,7 @@ const level = (severity) => (Object.hasOwn(SEVERITIES, severity) ? severity : "i
 const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ? "alert" : "status");
 </script>
 <div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
-	<norn-icon :@name="SEVERITIES[level(severity)][1]"></norn-icon>
+	<norn-icon :@name="SEVERITIES[level(severity)][1]" @size="m"></norn-icon>
 	<div>
 		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
 		<slot></slot>
@@ -70,7 +70,6 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 			}
 
 			& > div > norn-icon {
-				--norn-icon-size: var(--norn-ui-icon-m, t('ui.icon.m'));
 				flex: none;
 				align-self: start;
 				margin-block-start: calc((1lh - var(--norn-ui-icon-m, t('ui.icon.m'))) / 2);

@@ -8,7 +8,7 @@
 
 /**
  * A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value.
- * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
+ * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon` with `@size="m"`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
  * The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths.
  * A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.
  * @prop {boolean} [icon-only] - Hides the option text visually; it stays the radio's name. On for `@icon-only`, `@icon-only="true"`, or `:@icon-only="true"`.
@@ -35,7 +35,7 @@ const grouped = (options, name) => {
 	<template webc:nokeep webc:if="grouped(options, name)">
 		<label webc:for="option of options" :title="option.label">
 			<input type="radio" :name="name" :value="option.value" :checked="option.checked ? '' : undefined" />
-			<norn-icon webc:if="option.icon" :@name="option.icon"></norn-icon>
+			<norn-icon webc:if="option.icon" :@name="option.icon" @size="m"></norn-icon>
 			<span @text="option.label"></span>
 		</label>
 	</template>
@@ -123,10 +123,6 @@ const grouped = (options, name) => {
 				margin: 0;
 				opacity: 0;
 				cursor: pointer;
-			}
-
-			& norn-icon {
-				--norn-icon-size: var(--norn-ui-icon-m, t('ui.icon.m'));
 			}
 
 			@media (pointer: coarse) {

@@ -14,9 +14,8 @@
  * WebC can't tell whether a slot has content, so the drawing stays `aria-hidden` either way and an empty slot adds nothing to read.
  * Directional icons (`arrow-start`, `arrow-end`, `chevron-end`, and a project icon set to `mirror`) mirror in a right-to-left context.
  * @prop {string} name - A built-in icon or a project icon. The built-in names are: accessibility, arrow-end, arrow-start, book, caution, check, chevron-down, chevron-end, copy, desktop, error, external, fill, hash, important, info, link, loading, moon, phone, search, success, sun, system, tablet, tip, warning.
+ * @prop {string} [size] - `s`, the default, is --norn-ui-icon-s, which is 1em and follows the text. `m` is --norn-ui-icon-m, for an icon beside a heading or a title. Another value fails the build.
  * @slot label - The icon's name, as one element, read but not shown. Leave it out for a decorative icon.
- * @cssprop --norn-icon-size - Width and height. Falls back to --norn-ui-icon-s, which is 1em. A component sets it to --norn-ui-icon-m beside a title.
- * @cssprop --norn-icon-stroke - Line weight of a built-in icon. Falls back to 2.
  * @category component
  */
 --->
@@ -56,6 +55,9 @@ const ICONS = {
 
 const MIRROR = ["arrow-end", "arrow-start", "chevron-end"];
 
+/** The sizes, each a shared icon token. */
+const SIZES = ["s", "m"];
+
 /** The project's icons from the Norn plugin, by name. None without the plugin. */
 const project = () => (typeof nornIcons === "function" ? nornIcons() : {});
 
@@ -76,18 +78,29 @@ function icon(name) {
 const attr = (value) => String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
 /**
- * The whole `<svg>` for a name, as markup, so the template has one expression to compile.
+ * The size attribute: none for the default, `s`. An unknown size fails the build rather than drawing at the wrong size.
+ * @param {string} size
+ */
+function sized(size) {
+	if (!size || size === "s") return "";
+	if (!SIZES.includes(size)) throw new Error(`norn-icon: no size "${size}". Sizes: ${SIZES.join(", ")}`);
+	return ` data-size="${size}"`;
+}
+
+/**
+ * The whole `<svg>` for a name and a size, as markup, so the template has one expression to compile.
  * A project icon keeps its own `viewBox` and body.
  */
-function drawing(name) {
+function drawing(name, size) {
 	const { viewBox, mirror, body, d, fill } = icon(name);
 	const flip = mirror ? " data-mirror" : "";
-	if (body) return `<svg${viewBox ? ` viewBox="${attr(viewBox)}"` : ""} aria-hidden="true"${flip} data-project>\n\t${body}\n</svg>`;
+	const scale = sized(size);
+	if (body) return `<svg${viewBox ? ` viewBox="${attr(viewBox)}"` : ""} aria-hidden="true"${flip}${scale} data-project>\n\t${body}\n</svg>`;
 	const extra = fill ? `\n\t<path d="${attr(fill)}" data-fill></path>` : "";
-	return `<svg viewBox="0 0 24 24" aria-hidden="true"${flip}>\n\t<path d="${attr(d)}"></path>${extra}\n</svg>`;
+	return `<svg viewBox="0 0 24 24" aria-hidden="true"${flip}${scale}>\n\t<path d="${attr(d)}"></path>${extra}\n</svg>`;
 }
 </script>
-<template webc:nokeep @raw="drawing(name)"></template>
+<template webc:nokeep @raw="drawing(name, typeof size === 'string' ? size : '')"></template>
 <slot name="label"></slot>
 <style>
 	@layer norn.components {
@@ -97,15 +110,20 @@ function drawing(name) {
 			vertical-align: -0.125em;
 
 			& svg {
-				inline-size: var(--norn-icon-size, var(--norn-ui-icon-s, t('ui.icon.s')));
-				block-size: var(--norn-icon-size, var(--norn-ui-icon-s, t('ui.icon.s')));
+				inline-size: var(--norn-ui-icon-s, t('ui.icon.s'));
+				block-size: var(--norn-ui-icon-s, t('ui.icon.s'));
+
+				&[data-size="m"] {
+					inline-size: var(--norn-ui-icon-m, t('ui.icon.m'));
+					block-size: var(--norn-ui-icon-m, t('ui.icon.m'));
+				}
 
 				&:not([data-project]) {
 					fill: none;
 					stroke: currentcolor;
 					stroke-linecap: round;
 					stroke-linejoin: round;
-					stroke-width: var(--norn-icon-stroke, 2);
+					stroke-width: 2;
 				}
 
 				&[data-project] {
