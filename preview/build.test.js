@@ -123,7 +123,7 @@ describe("the preview build", () => {
 			assert.ok(fs.existsSync(path.join(output, "components", component.packageId, component.name, "index.html")), component.slug);
 			for (const story of component.stories) assert.ok(fs.existsSync(path.join(output, ...story.frameUrl.split("/").filter(Boolean), "index.html")), story.frameUrl);
 		}
-		assert.ok(fs.existsSync(path.join(output, "index.html")) && fs.existsSync(path.join(output, "foundations", "index.html")));
+		assert.ok(fs.existsSync(path.join(output, "index.html")) && fs.existsSync(path.join(output, "theme", "index.html")));
 	});
 
 	test("the nav groups the components by category, then lists the OSS site components in a group of their own", () => {
@@ -220,8 +220,8 @@ describe("the preview build", () => {
 		assert.ok(checked > 0, "the norn-callout Variants page reads its options from $data.csf");
 	});
 
-	test("the foundations page lists every token in tokens.json, with its group, default, and comment", () => {
-		const html = pageFor(output, "/foundations/");
+	test("the theme page lists every token in tokens.json, with its group, default, and comment", () => {
+		const html = pageFor(output, "/theme/");
 		const tokens = readTokens();
 		assert.ok(tokens.length > 20);
 		for (const { name, group, resolved, comment } of tokens) {
@@ -242,7 +242,7 @@ describe("the preview build", () => {
 	});
 
 	test("the output has no HTML comments and no empty bundle tags", () => {
-		for (const url of [...catalog.components.map(({ url }) => url), "/", "/foundations/"]) {
+		for (const url of [...catalog.components.map(({ url }) => url), "/", "/theme/"]) {
 			const html = pageFor(output, url);
 			assert.ok(!html.includes("<!--") && !/\ssrc=""|\shref=""/.test(html), url);
 		}
@@ -329,7 +329,7 @@ describe("the preview in a browser", () => {
 	test("every page passes axe in light, dark, and forced colors, and keeps its list semantics", async () => {
 		assert.deepEqual(await audit(browser, server.url, pagesOf(output)), []);
 		const page = await browser.newPage();
-		for (const url of ["/", "/foundations/", "/frames/patterns/norn-card-grid/default/", "/frames/patterns/norn-landing/default/"]) {
+		for (const url of ["/", "/theme/", "/frames/patterns/norn-card-grid/default/", "/frames/patterns/norn-landing/default/"]) {
 			await page.goto(server.url + url);
 			assert.deepEqual(await listsNeedingRole(page), [], url);
 		}
@@ -406,28 +406,28 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	test("no preview page scrolls sideways on a phone: the foundations table scrolls in its own box", async () => {
+	test("no preview page scrolls sideways on a phone: the theme table scrolls in its own box", async () => {
 		for (const width of [390, 320]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			for (const url of pagesOf(output).filter((entry) => !entry.startsWith("/frames/"))) {
 				await page.goto(server.url + url);
 				assert.ok(await page.evaluate((limit) => document.documentElement.scrollWidth <= limit, width), `${url} at ${width}`);
 			}
-			await page.goto(server.url + "/foundations/");
+			await page.goto(server.url + "/theme/");
 			assert.ok(await page.$eval("preview-tokens norn-simple-table > div", (box) => box.scrollWidth > box.clientWidth), `${width}: the table scrolls instead`);
 			await page.close();
 		}
 	});
 
 	test("on a phone the pages pass axe with the component list closed and open", async () => {
-		const pages = ["/", "/foundations/", "/components/patterns/norn-callout/", "/components/patterns/norn-card/", "/components/patterns/norn-docs/", "/components/oss-site/oss-head/"];
+		const pages = ["/", "/theme/", "/components/patterns/norn-callout/", "/components/patterns/norn-card/", "/components/patterns/norn-docs/", "/components/oss-site/oss-head/"];
 		assert.deepEqual(await audit(browser, server.url, pages, { width: 390 }), [], "closed");
 		assert.deepEqual(await audit(browser, server.url, pages, { width: 390, prepare: (page) => page.locator(NAV_BAR).click() }), [], "open");
 	});
 
 	test("on a phone the component list is one closed disclosure, and the page's heading is on the first screen", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
-		for (const url of ["/", "/components/patterns/norn-callout/", "/foundations/"]) {
+		for (const url of ["/", "/components/patterns/norn-callout/", "/theme/"]) {
 			await page.goto(server.url + url);
 			const bar = page.locator(NAV_BAR);
 			assert.equal((await bar.textContent()).replace(/\s+/g, " ").trim(), `Components (${catalog.components.length})`, url);
@@ -671,7 +671,7 @@ describe("the preview in a browser", () => {
 		const errors = [];
 		page.on("pageerror", (error) => errors.push(error.message));
 		page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
-		for (const url of ["/", "/foundations/", "/components/patterns/norn-card/", "/components/code-sample/norn-code-block/"]) {
+		for (const url of ["/", "/theme/", "/components/patterns/norn-card/", "/components/code-sample/norn-code-block/"]) {
 			await page.goto(server.url + url);
 			await page.waitForLoadState("networkidle");
 		}
@@ -877,9 +877,9 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	/** Type a value into a token's text field on the Foundations page. */
+	/** Type a value into a token's text field on the Theme page. */
 	const override = (page, token, value) => page.locator(`preview-tokens input[type="text"][data-token="${token}"]`).fill(value);
-	/** Set a color token's light and dark pickers on the Foundations page. */
+	/** Set a color token's light and dark pickers on the Theme page. */
 	const overrideColor = (page, token, light, dark) =>
 		page.locator("preview-tokens [data-pair]", { has: page.locator(`[data-token="${token}"]`) }).evaluate(
 			(pair, [lightValue, darkValue]) => {
@@ -903,10 +903,10 @@ describe("the preview in a browser", () => {
 	const near = (found, expected) => found.every((value, index) => Math.abs(value - expected[index]) <= 1);
 	const rootToken = (page, token) => page.evaluate((name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(), token);
 
-	test("an override set on Foundations is saved, and every kind of preview page applies it", async () => {
+	test("an override set on Theme is saved, and every kind of preview page applies it", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		await overrideColor(page, "--norn-ui-accent", "#c2185b", "#00897b");
 		assert.deepEqual(JSON.parse(await page.evaluate(() => localStorage.getItem("norn-preview-tokens"))), { "--norn-ui-accent": "light-dark(#c2185b, #00897b)" });
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "this page, at once");
@@ -939,7 +939,7 @@ describe("the preview in a browser", () => {
 	test("the fields show what is saved when the page loads, and an override survives a reload", async () => {
 		const context = await browser.newContext();
 		const page = await context.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		await override(page, "--norn-ui-border-radius", "1rem");
 		await page.reload();
 		assert.equal(await page.locator('preview-tokens input[type="text"][data-token="--norn-ui-border-radius"]').inputValue(), "1rem");
@@ -952,7 +952,7 @@ describe("the preview in a browser", () => {
 		const editor = await context.newPage();
 		const demo = await context.newPage();
 		await demo.goto(server.url + "/frames/patterns/norn-card/default/");
-		await editor.goto(server.url + "/foundations/");
+		await editor.goto(server.url + "/theme/");
 		await overrideColor(editor, "--norn-ui-accent", "#00897b", "#00897b");
 		await demo.waitForFunction(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim() === "light-dark(#00897b, #00897b)");
 		await editor.locator('preview-tokens [data-action="clear"][data-token="--norn-ui-accent"]').click();
@@ -965,7 +965,7 @@ describe("the preview in a browser", () => {
 		const page = await context.newPage();
 		await page.goto(server.url + "/");
 		assert.equal(await page.locator("preview-overrides p").isHidden(), true);
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		await override(page, "--norn-space-m", "2rem");
 		await override(page, "--norn-ui-border-radius", "0");
 		await page.goto(server.url + "/components/patterns/norn-card-grid/");
@@ -981,7 +981,7 @@ describe("the preview in a browser", () => {
 	test("a color token has a light and a dark picker that start at what it resolves to, and a reset", async () => {
 		const context = await browser.newContext();
 		const page = await context.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		const pair = (token) => page.locator("preview-tokens [data-pair]", { has: page.locator(`[data-token="${token}"]`) });
 		const value = (token, scheme) => pair(token).locator(`[data-scheme="${scheme}"]`).inputValue();
 		assert.deepEqual([await value("--norn-surface-base", "light"), await value("--norn-surface-base", "dark")], ["#ffffff", "#101216"], "from the default");
@@ -1004,7 +1004,7 @@ describe("the preview in a browser", () => {
 
 	test("only color tokens get color pickers, and every picker is named for its token and scheme", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		assert.equal(await page.locator('preview-tokens [data-token="--norn-space-m"]').evaluate((field) => field.type), "text");
 		assert.equal(await page.locator('preview-tokens [data-token="--norn-font-mono"]').evaluate((field) => field.type), "text");
 		assert.equal(await page.locator('preview-tokens input[type="color"]').count(), 2 * (await page.locator("preview-tokens [data-pair]").count()));
@@ -1014,7 +1014,7 @@ describe("the preview in a browser", () => {
 
 	test("a font sample has no border, and the other samples keep theirs", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		const border = (kind) => page.locator(`.sample[data-kind="${kind}"]`).first().evaluate((element) => getComputedStyle(element).borderTopWidth);
 		assert.equal(await border("font"), "0px");
 		assert.equal(await border("color"), "1px");
@@ -1034,7 +1034,7 @@ describe("the preview in a browser", () => {
 				},
 			});
 		});
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		await override(page, "--norn-ui-border-radius", "1rem");
 		assert.equal(await rootToken(page, "--norn-ui-border-radius"), "1rem");
 		assert.deepEqual(errors, []);
@@ -1044,7 +1044,7 @@ describe("the preview in a browser", () => {
 	test("a table override still wins over a saved one, and clearing it hands back to the saved one", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		await override(page, "--norn-ui-border-radius", "1rem");
 		await page.goto(server.url + "/components/patterns/norn-card/");
 		const frame = await frameOf(page);
@@ -1059,7 +1059,7 @@ describe("the preview in a browser", () => {
 
 	test("a space is a rule as wide as the token, centered, with a mark at each end, in the text color", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/foundations/");
+		await page.goto(server.url + "/theme/");
 		for (const [token, width] of [["--norn-space-xs", 8], ["--norn-space-m", 20], ["--norn-space-xl", 64]]) {
 			const row = page.locator("tr", { has: page.locator(`th code:text-is("${token}")`) });
 			const sample = row.locator(".sample");

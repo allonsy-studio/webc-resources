@@ -16,6 +16,7 @@
 	],
 	"scripts": {
 		"build": "node scripts/build-components.js",
+		"llms": "node scripts/build-llms.js",
 		"format": "opx lint --fix",
 		"lint": "opx lint",
 		"pack:check": "yarn build && yarn workspaces foreach --all --no-private pack --dry-run",

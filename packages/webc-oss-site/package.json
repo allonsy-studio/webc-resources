@@ -32,7 +32,8 @@
 		"schema/",
 		"index.js",
 		"LICENSE",
-		"README.md"
+		"README.md",
+		"llms.txt"
 	],
 	"scripts": {
 		"prepack": "node ../../scripts/build-components.js webc-oss-site && yarn copy:svg && yarn copy:fonts",

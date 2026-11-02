@@ -41,7 +41,8 @@
 		"plugin.js",
 		"project.js",
 		"LICENSE",
-		"README.md"
+		"README.md",
+		"llms.txt"
 	],
 	"scripts": {
 		"prepack": "node ../../scripts/build-components.js webc-patterns"

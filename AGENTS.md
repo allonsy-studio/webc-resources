@@ -4,6 +4,10 @@ Studio-wide voice, style, licensing, and attribution rules live in the org
 [`AGENTS.md`](https://github.com/allonsy-studio/.github/blob/main/AGENTS.md). This file
 covers only this repo.
 
+## If you are using Norn, not changing it
+
+Read [`llms.txt`](llms.txt), then the `llms.txt` of the package you use (`packages/<name>/llms.txt`, also at `node_modules/@allons-y/<name>/llms.txt` once installed). It holds the setup, the data shapes, the rules for calling components and styling them, and a reference of every component's props, slots, and tokens. The rest of this file is for changing the repository.
+
 ## What this repo is
 
 A Yarn workspaces monorepo that publishes three npm packages of WebC components and layouts for
@@ -26,7 +30,8 @@ neither of them knows the OSS site theme exists.
 ```text
 packages/<name>/   src/*.webc, src/layouts/*.webc, src/fallback/*.webc, src/css/*.css (the sources); src/**/*.stories.js (each component's CSF file, not shipped); components/, layouts/, fallback/, css/ (compiled from src, not committed); index.js, README.md
 tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
-scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json; analyze-webc.js: derives a source's props, slots, and tokens
+scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json; analyze-webc.js: derives a source's props, slots, and tokens; build-llms.js: writes the llms.txt files (guides in scripts/llms/)
+llms.txt           the agent entry point; packages/<name>/llms.txt is each package's guide plus a reference generated from its sources (published)
 fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
 preview/           the component preview: an Eleventy site with a page and stories per component (private)
 ```
@@ -36,6 +41,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 | Command | Does |
 | --- | --- |
 | `yarn build` | Compile every package's `src/` into `components/`, `layouts/`, and `css/`. The commands below that need the compiled files run it first |
+| `yarn llms` | Regenerate `llms.txt` and each package's `llms.txt`. Run it after changing a component's props, slots, tokens, or description, a CSF file, or a guide in `scripts/llms/`: `llms.test.js` fails when they are stale |
 | `yarn lint` | Lint JS, JSON, and Markdown with opx, including the MPL-2.0 header rule |
 | `yarn format` | Same, with fixes applied |
 | `yarn test` | Unit tests with `node --test`, `stories.test.js` (the CSF files) included |

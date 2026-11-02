@@ -14,7 +14,7 @@
 --->
 <p data-js hidden>
 	<span data-count role="status"></span>
-	<a href="/foundations/">Edit on Foundations</a>
+	<a href="/theme/">Edit in Theme</a>
 	<button type="button" data-action="reset">Reset</button>
 </p>
 <style>

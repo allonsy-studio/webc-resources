@@ -39,7 +39,7 @@ On a phone (48rem and narrower) the navigation is one closed disclosure, "Compon
 
 ## Try the tokens
 
-The Foundations page lists every shared `--norn-` token in `tokens.json` with its group, default, comment, a preview, and an Override column. A space is drawn as a rule as wide as the token with a mark at each end.
+The Theme page lists every shared `--norn-` token in `tokens.json` with its group, default, comment, a preview, and an Override column. A space is drawn as a rule as wide as the token with a mark at each end.
 
 - A color token has a Light picker and a Dark picker, both `type="color"`, that start at what the token resolves to in each scheme, and a Reset. Setting either saves `light-dark(light, dark)`, so the other keeps its value. Every other token has a text field that takes any CSS value, such as `1.5rem`.
 - A value is saved in `localStorage` (key `norn-preview-tokens`) and applied to every preview page, frames and the preview's own pages alike, before the page first paints.
@@ -85,8 +85,8 @@ A new component or layout with no story fails `yarn test`. For a layout, the sto
 | `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, the virtual templates for the CSF frames, and the watch targets |
 | `lib/catalog.js` | The CSF reader and the component and story catalog |
 | `lib/render-story.js` | The default renderer, which writes a CSF story's args as WebC, and the matrix |
-| `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
+| `_data/` | The catalog, the theme tokens, and the sample site, project, and workspace data |
 | `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
 | `_layouts/` | The page shell, and the plain and OSS story frames: layouts of the preview's own, which call `norn-head` and link the reset, base, and print styles |
-| `content/` | The index, foundations, and component pages, `stories/`, and `assets/` (the token loader and the preview CSS) |
+| `content/` | The index, theme, and component pages, `stories/`, and `assets/` (the token loader and the preview CSS) |
 | `build.test.js` | Builds the preview and audits its pages |

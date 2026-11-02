@@ -8,7 +8,7 @@
 
 
 /**
- * The Foundations table's editor: a field per token, saved to localStorage through `previewTokens` so every preview page applies it.
+ * The Theme table's editor: a field per token, saved to localStorage through `previewTokens` so every preview page applies it.
  * Without a script the table is read-only.
  * Fields are any element in the default slot with a `data-token` attribute, holding an `--norn-` token name.
  * A color token has a `[data-pair]` with a light and a dark color input (`data-scheme`) and a `[data-action="clear"]` button; the saved value is `light-dark(light, dark)`.
