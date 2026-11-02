@@ -5,16 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way.
- * Pass the `<table>` in the default slot, with a `<caption>` when it can have one. Cells and code in them wrap between words, never mid-word.
- * While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables.
- * @slot - The table.
- * @slot label - The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.
- * Row rules take --norn-ui-border-color, and the scroll shadows are drawn against the page surface, --norn-surface-base. The header row has no fill.
- * @category container
- */
 --->
 <span hidden :id="'norn-simple-table-' + uid"><slot name="label"></slot></span>
 <div><slot></slot></div>
