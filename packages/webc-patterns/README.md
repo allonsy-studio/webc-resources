@@ -404,7 +404,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-skip-link` | `@href`, slot `label` (the text) | Link past the page chrome to the main content |
 | `norn-header` | slot `brand` (the home link), default slot (the links), slots `label` and `summary` | Brand link and primary navigation. Below 40rem the links fold into a closed `<details>` |
 | `norn-footer` | default slot (the columns), slot `colophon` | Footer lock-up: a lead column up to 25rem, then columns sized to their content |
-| `norn-hero` | default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
+| `norn-hero` | `@width` (`layout` or `measure`), default slot (h1, lede, actions, `norn-fact-list`, extras) | Page intro |
 | `norn-card` | `@accent` (`accent`, `info`, `success`, `warning`, `danger`, or `none`), `@title-face` (`mono`), default slot (a heading, then the body) | Card on a raised surface. A heading link covers the whole card, and an accent draws a 2px line along the top |
 | `norn-card-grid` | `@gap` (`s`, `m`, or `l`), `@min` (a length), default slot (`<li>` cards) | Responsive grid of cards |
 | `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |

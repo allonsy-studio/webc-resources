@@ -461,6 +461,15 @@ test("norn-card-grid takes its gap from the space scale and its narrowest card a
 	assert.ok((await render("<norn-card-grid><li>A</li></norn-card-grid>")).includes('<ul role="list">'), "no style without @min");
 });
 
+test("norn-hero takes its width as a prop, from the layout width or the measure, and its tagline from the shared accent", async () => {
+	const css = cssOf("norn-hero");
+	assert.ok(!/--norn-hero-/.test(css), "no --norn-hero-* custom property");
+	assert.ok(css.includes("--_width: var(--norn-layout-width, t('layout.width'));") && css.includes('& > header[data-width="measure"] { --_width: var(--norn-text-measure, t(\'text.measure\')); }'), "layout, or the measure");
+	assert.ok(css.includes("color: var(--norn-text-accent, t('text.accent'));"), "the tagline");
+	assert.ok((await render('<norn-hero @width="measure"><h1>A</h1></norn-hero>')).includes('<header data-width="measure">'), "@width=\"measure\" renders");
+	for (const value of ["layout", "wide"]) assert.ok((await render(`<norn-hero @width="${value}"><h1>A</h1></norn-hero>`)).includes("<header><h1>"), `@width="${value}" is the layout width`);
+});
+
 test("the build script runs when it is started through a symlinked path", () => {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-link-"));
 	try {
