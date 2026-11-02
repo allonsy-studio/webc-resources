@@ -27,10 +27,10 @@ export default {
 		icon: { description: "The favicon, or its URL. Without it the page links an empty icon, so browsers skip `/favicon.ico`.", table: { type: { summary: "{ href: string, type?: string }" } } },
 		touchIcon: { description: "A 180px PNG for home screens." },
 		logo: { description: "The brand image, or its URL, in place of the name. The brand link renders only with a logo or a name.", table: { type: { summary: "{ src: string, alt?: string }" } } },
-		nav: { description: "The header links. `icon` names a `norn-icon`.", table: { type: { summary: "{ url: string, title: string, icon?: string }[]" } } },
+		nav: { description: "The header links. `icon` names a `norn-icon`.", table: { type: { summary: "{ href: string, title: string, icon?: string }[]" } } },
 		footer: {
 			description: "The footer: the lead column (`name` falls back to the site name, `text` to the tagline), its badges and license, one navigation of grouped links, and a closing line.",
-			table: { type: { summary: "{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { url: string, title: string }[] }[], colophon?: string }" } },
+			table: { type: { summary: "{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { href: string, title: string }[] }[], colophon?: string }" } },
 		},
 		default: { description: "The page content, in `main`, before the `cta` hook." },
 	},

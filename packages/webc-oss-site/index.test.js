@@ -72,6 +72,14 @@ test("ossProps: the head, header, and footer props from the site facts and proje
 	]);
 });
 
+test("ossProps: every header and footer link is an item, { href, title }", () => {
+	const props = ossProps(SITE, { usage: { language: "js", code: "x" }, features: [{ title: "Fast", description: "Quick." }] }, { anchors: true });
+	const links = [...props.nav, ...props.footer.groups.flatMap((group) => group.links)];
+	assert.ok(links.length > 0);
+	for (const link of links) assert.deepEqual(Object.keys(link).filter((key) => key !== "icon").sort(), ["href", "title"], JSON.stringify(link));
+	assert.deepEqual(props.nav.map(({ href }) => href), ["#install", "#usage", "#features", SITE.repo, SITE.npm]);
+});
+
 test("ossProps: a tagline that already ends in a period is not given a second one", () => {
 	assert.equal(ossProps({ ...SITE, tagline: "Fast. Small." }, {}).footer.text, "Fast. Small.");
 	assert.equal(ossProps(SITE, {}).footer.text, "Builds widgets.");
@@ -79,15 +87,15 @@ test("ossProps: a tagline that already ends in a period is not given a second on
 
 test("ossProps: conduct and security come from the project first, and Allons-y Studio's policies only with the OSS site theme on", () => {
 	const help = (options) => ossProps(SITE, {}, options).footer.groups[1].links;
-	assert.deepEqual(help().slice(2).map(({ url }) => url), [SITE.conductUrl, policies.security]);
-	assert.deepEqual(help({ oss: false }).slice(2).map(({ url }) => url), [SITE.conductUrl], "no Allons-y Studio policy");
+	assert.deepEqual(help().slice(2).map(({ href }) => href), [SITE.conductUrl, policies.security]);
+	assert.deepEqual(help({ oss: false }).slice(2).map(({ href }) => href), [SITE.conductUrl], "no Allons-y Studio policy");
 });
 
 test("ossProps: missing data gives empty props and Allons-y Studio's policies, never a throw", () => {
 	for (const args of [[], [undefined, undefined], [{}, {}], [null, "x", { docs: "x" }]]) {
 		const props = ossProps(...args);
 		assert.deepEqual([props.nav, props.features, props.packages, props.footer.badges], [[], [], [], []], JSON.stringify(args));
-		assert.deepEqual(props.footer.groups.flatMap(({ links }) => links.map(({ url }) => url)), [policies.conduct, policies.security]);
+		assert.deepEqual(props.footer.groups.flatMap(({ links }) => links.map(({ href }) => href)), [policies.conduct, policies.security]);
 	}
 	assert.deepEqual(ossProps(undefined, undefined, { oss: false }).footer.groups, [], "with the OSS site theme off, no group is left empty");
 });

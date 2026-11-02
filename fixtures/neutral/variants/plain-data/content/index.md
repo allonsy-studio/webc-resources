@@ -4,7 +4,7 @@ title: Plain data
 name: Plain name
 tagline: Read off the page data
 nav:
-  - url: /
+  - href: /
     title: Plain home
 footer: not an object
 ---

@@ -103,7 +103,7 @@
 				<img webc:if="$data.norn.logo" :src="$data.norn.logo.src" :alt="$data.norn.logo.alt || $data.norn.name || ''" />
 				<span webc:else @text="$data.norn.name || ''"></span>
 			</a>
-			<a webc:for="link of $data.norn.nav" :href="link.url" :aria-current="link.url === $data.page.url ? 'page' : undefined"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
+			<a webc:for="link of $data.norn.nav" :href="link.href" :aria-current="link.href === $data.page.url ? 'page' : undefined"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
 		</norn-header>
 		<main id="main" tabindex="-1"><template webc:if="nornCompiles($data, 'norn-base')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
 		<norn-footer>
@@ -126,7 +126,7 @@
 				<div webc:for="group of $data.norn.footer.groups">
 					<p><strong @text="group.heading"></strong></p>
 					<ul>
-						<li webc:for="link of group.links"><a :href="link.url" @text="link.title"></a></li>
+						<li webc:for="link of group.links"><a :href="link.href" @text="link.title"></a></li>
 					</ul>
 				</div>
 			</nav>

@@ -3,15 +3,15 @@ layout: norn-base.webc
 title: Header
 name: Design pass
 nav:
-  - url: /docs/
+  - href: /docs/
     title: Install
-  - url: /docs/
+  - href: /docs/
     title: Usage
-  - url: /header/
+  - href: /header/
     title: Features
-  - url: https://example.com/docs
+  - href: https://example.com/docs
     title: Docs
-  - url: https://example.com/source
+  - href: https://example.com/source
     title: GitHub
 ---
 

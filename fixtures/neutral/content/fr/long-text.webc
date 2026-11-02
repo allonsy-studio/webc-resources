@@ -5,18 +5,18 @@ description: Chaque composant reçoit des chaînes bien plus longues que celles 
 frame:
   name: Le laboratoire de développement des composants accessibles
   nav:
-    - url: /docs/one/
+    - href: /docs/one/
       title: Documentation complète et détaillée
-    - url: https://example.com/source
+    - href: https://example.com/source
       title: Code source et journal des modifications
   footer:
     text: Un très long texte d’introduction au pied de page, écrit pour vérifier que les colonnes s’adaptent à un contenu bien plus long que prévu.
     groups:
       - heading: Ressources complémentaires
         links:
-          - url: https://example.com/source
+          - href: https://example.com/source
             title: Dépôt du code source et des contributions
-          - url: https://example.com/changelog
+          - href: https://example.com/changelog
             title: Journal des modifications publiées
     colophon: Une très longue ligne de clôture, avec des accents, des œuvres, des cœurs et des àéîõü pour tester la césure des mots.
 ---

@@ -276,9 +276,9 @@ test("eleventyComputed.norn maps the page data through props over the theme's de
 test("without props each layout prop is the same-named page data, and missing or odd data never throws", () => {
 	const config = fakeConfig();
 	norn(config, { layouts: false });
-	const props = computed(config, { title: "Plain", name: "Site", nav: [{ url: "/", title: "Home" }], footer: "not an object", icon: "/assets/icon.svg", logo: "/assets/logo.svg", heading: "ignored", page: { lang: "fr" } });
+	const props = computed(config, { title: "Plain", name: "Site", nav: [{ href: "/", title: "Home" }], footer: "not an object", icon: "/assets/icon.svg", logo: "/assets/logo.svg", heading: "ignored", page: { lang: "fr" } });
 	assert.equal(props.title, "Plain");
-	assert.deepEqual(props.nav, [{ url: "/", title: "Home" }]);
+	assert.deepEqual(props.nav, [{ href: "/", title: "Home" }]);
 	assert.deepEqual(props.footer, { badges: [], groups: [] });
 	assert.deepEqual(props.icon, { href: "/assets/icon.svg", type: "image/svg+xml" });
 	assert.deepEqual(props.logo, { src: "/assets/logo.svg" });

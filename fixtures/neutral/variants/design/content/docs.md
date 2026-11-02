@@ -5,9 +5,9 @@ name: Design pass
 url: https://example.com/docs/
 themeToggle: true
 nav:
-  - url: /docs/
+  - href: /docs/
     title: Docs
-  - url: https://example.com/source
+  - href: https://example.com/source
     title: Source
 docs:
   - url: /docs/
@@ -25,9 +25,9 @@ footer:
   groups:
     - heading: Project
       links:
-        - url: https://example.com/source
+        - href: https://example.com/source
           title: Source
-        - url: https://example.com/changelog
+        - href: https://example.com/changelog
           title: Changelog
 ---
 

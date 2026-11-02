@@ -32,8 +32,8 @@ export const STRINGS = {
 const FRAME = {
 	name: "Neutral fixture",
 	nav: [
-		{ url: "/docs/one/", title: "Docs", icon: "book" },
-		{ url: "https://example.com/source", title: "Source" },
+		{ href: "/docs/one/", title: "Docs", icon: "book" },
+		{ href: "https://example.com/source", title: "Source" },
 	],
 	footer: {
 		text: "Patterns only.",
@@ -41,8 +41,8 @@ const FRAME = {
 			{
 				heading: "Project",
 				links: [
-					{ url: "https://example.com/source", title: "Source" },
-					{ url: "https://example.com/changelog", title: "Changelog" },
+					{ href: "https://example.com/source", title: "Source" },
+					{ href: "https://example.com/changelog", title: "Changelog" },
 				],
 			},
 		],
