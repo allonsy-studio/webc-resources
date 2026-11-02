@@ -9,7 +9,7 @@ export default {
 	title: "Landmark/norn-breadcrumbs",
 	component: "norn-breadcrumbs",
 	argTypes: {
-		items: { description: "From the top level to the current page.", type: { name: "array", required: true }, table: { type: { summary: "{ url: string, title: string }[]" } } },
+		items: { description: "From the top level to the current page.", type: { name: "array", required: true }, table: { type: { summary: "{ href: string, title: string }[]" } } },
 		label: { description: 'The landmark name, read but not shown, as one element. Falls back to the site\'s `componentStrings`, then "Breadcrumb".' },
 	},
 	parameters: {
@@ -30,9 +30,9 @@ export default {
 export const Default = {
 	args: {
 		items: [
-			{ url: "#home", title: "Home" },
-			{ url: "#docs", title: "Docs" },
-			{ url: "/frames/patterns/norn-breadcrumbs/default/", title: "Configuration" },
+			{ href: "#home", title: "Home" },
+			{ href: "#docs", title: "Docs" },
+			{ href: "/frames/patterns/norn-breadcrumbs/default/", title: "Configuration" },
 		],
 	},
 };

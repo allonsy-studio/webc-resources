@@ -39,10 +39,10 @@ frame:
 	<h1>Un titre de page extraordinairement long, avec des mots accentués comme écoresponsabilité et hétérogénéité</h1>
 	<norn-breadcrumbs
 		:@items="[
-			{ url: '/', title: 'Accueil du laboratoire de développement des composants' },
-			{ url: '/docs/one/', title: 'Documentation complète et détaillée des composants accessibles' },
-			{ url: '/fr/', title: 'Guides pratiques pour les équipes éditoriales et techniques' },
-			{ url: '/fr/long-text/', title: 'Textes longs et accentués : un cas limite pour chaque composant' }
+			{ href: '/', title: 'Accueil du laboratoire de développement des composants' },
+			{ href: '/docs/one/', title: 'Documentation complète et détaillée des composants accessibles' },
+			{ href: '/fr/', title: 'Guides pratiques pour les équipes éditoriales et techniques' },
+			{ href: '/fr/long-text/', title: 'Textes longs et accentués : un cas limite pour chaque composant' }
 		]"
 	>
 		<span slot="label">Fil d’Ariane montrant le chemin complet jusqu’à la page courante</span>

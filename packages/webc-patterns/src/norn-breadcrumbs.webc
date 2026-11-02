@@ -11,7 +11,7 @@
 	<ol>
 		<li webc:for="(item, index) of items">
 			<norn-icon webc:if="index" @name="chevron-end"></norn-icon>
-			<a :href="item.url" :aria-current="index === items.length - 1 ? 'page' : undefined" @text="item.title"></a>
+			<a :href="item.href" :aria-current="index === items.length - 1 ? 'page' : undefined" @text="item.title"></a>
 		</li>
 	</ol>
 </nav>
