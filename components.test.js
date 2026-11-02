@@ -327,7 +327,8 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 	const [callout, notice] = ["norn-callout", "norn-notice"].map((name) => squash(styles(sources.find(({ file }) => file === `webc-patterns/src/${name}.webc`).text)));
 	assert.ok(!/light-dark\(#/.test(notice), "norn-notice: no hard-coded color pair");
 	assert.ok(notice.includes("border-inline-start: 3px solid var(--_color)"), "norn-notice: the bar");
-	assert.ok(notice.includes("color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base,"), "norn-notice: the tint");
+	assert.ok(notice.includes("background: color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base,"), "norn-notice: the tint");
+	assert.ok(notice.includes("--_color: var(--norn-status-info, t('status.info'))") && !notice.includes("--norn-notice-"), "norn-notice: each severity sets the private --_color, with no property of its own");
 	assert.ok(!/border: |border-inline-start-width|border-color/.test(notice.replace(/@media \(forced-colors: active\) \{.*$/, "")), "norn-notice: no other border");
 	for (const status of ["info", "success", "warning", "danger"]) assert.ok(notice.includes(`t('status.${status}')`), `norn-notice reads status.${status}`);
 	const screen = callout.replace(/\/\*.*?\*\//g, "").replace(/@media print \{.*$/, "").replace(/@media \(forced-colors: active\) \{.*?\} \}/, "");
@@ -346,7 +347,7 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control", "norn-callout", "norn-link-button"]) {
+	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control", "norn-callout", "norn-link-button", "norn-notice"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);
