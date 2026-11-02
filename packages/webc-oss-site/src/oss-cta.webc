@@ -5,14 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * OSS call to action, at the foot of the page. Locked: its copy and actions are fixed, and it takes no slots. The one setting is the heading level.
- * Closes the page body, above the footer: the `cta` hook places it last. The Allons-y Studio name is signed in the signature face, Yellowtail, which `oss-head` declares.
- * Its actions are `norn-link-button`s, colored by setting the global accent tokens on `oss-cta`. The one place Allons-y Studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
- * @prop {number} [level] - The heading level, 2 to 4, to fit the page outline. Anything else falls back to 2.
- * @category container
- */
 --->
 <section>
 	<svg aria-hidden="true" width="72" height="72" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M 433.41 375.67 A 214 214 0 0 1 209.68 464.93" fill="none" stroke="#7BD1E6" stroke-width="42" stroke-linecap="butt"/><circle cx="433.41" cy="375.67" r="21.00" fill="#7BD1E6"/><path d="M 188.10 458.94 A 214 214 0 0 1 42.29 267.20" fill="none" stroke="#C92C6B" stroke-width="42" stroke-linecap="butt"/><path d="M 42.29 244.80 A 214 214 0 0 1 188.10 53.06" fill="none" stroke="#FF9A56" stroke-width="42" stroke-linecap="butt"/><path d="M 209.68 47.07 A 214 214 0 0 1 433.41 136.33" fill="none" stroke="#FFD36C" stroke-width="42" stroke-linecap="butt"/><circle cx="433.41" cy="136.33" r="21.00" fill="#FFD36C"/><rect x="374" y="224" width="118" height="64" rx="26" fill="#EFEBDF" stroke="#33394E" stroke-width="16"/><circle cx="256" cy="256" r="150" fill="#EFEBDF" stroke="#33394E" stroke-width="16"/><circle cx="256" cy="256" r="104" fill="#C2B1A6"/></svg>
