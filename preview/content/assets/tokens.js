@@ -5,7 +5,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-// Token overrides for the preview. Every page loads this in its head: the overrides saved from the Foundations page apply before first paint.
+// Token overrides for the preview. Every page loads this in its head: the overrides saved from the Theme page apply before first paint.
 // They live in localStorage under one key, so a change in one tab reaches the other open tabs and frames through the `storage` event.
 
 (() => {

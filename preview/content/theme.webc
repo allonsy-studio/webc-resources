@@ -1,9 +1,9 @@
 ---
 layout: shell.webc
-title: Foundations
+title: Theme
 description: The shared design tokens, from tokens.json.
 ---
-<h1>Foundations</h1>
+<h1>Theme</h1>
 <p class="lead">
 	The shared tokens in <code>tokens.json</code>. Each component reads a token as the custom property with its default as the fallback, so
 	nothing defines them until a project does. Every one carries the <code>--norn-</code> prefix, so it can sit next to a project's own
@@ -22,7 +22,7 @@ description: The shared design tokens, from tokens.json.
 			<tr><th scope="col">Token</th><th scope="col">Group</th><th scope="col">Preview</th><th scope="col">Default</th><th scope="col">Override</th><th scope="col">Use</th></tr>
 		</thead>
 		<tbody>
-			<tr webc:for="token of $data.foundations">
+			<tr webc:for="token of $data.theme">
 				<th scope="row"><code @text="token.name"></code></th>
 				<td @text="token.group"></td>
 				<td class="preview" aria-hidden="true"><span class="sample" :data-kind="token.kind" :style="'--sample: var(' + token.name + ')'"></span></td>
