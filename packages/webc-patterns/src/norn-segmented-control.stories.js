@@ -5,15 +5,21 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+/** The Text story's group, shared with the matrix so each cell draws a named control. */
+const TEXT = {
+	legend: "<span>View</span>",
+	default: ['<label><input type="radio" name="view" value="list" checked /><span>List</span></label>', '<label><input type="radio" name="view" value="grid" /><span>Grid</span></label>', '<label><input type="radio" name="view" value="table" /><span>Table</span></label>'].join("\n"),
+};
+
 export default {
 	title: "Component/norn-segmented-control",
 	component: "norn-segmented-control",
+	args: TEXT,
 	argTypes: {
 		"icon-only": { description: "Hides the option text visually; it stays the radio's name." },
-		legend: { description: "The group's name, when the `legend` slot is empty." },
 		name: { description: "The radios' shared name. Required with `options`: the build fails without it." },
 		options: { description: "The options, in place of the default slot. Each label is also its `title`.", table: { type: { summary: "{ value: string, label: string, icon?: string, checked?: boolean }[]" } } },
-		"slot:legend": { description: 'The group\'s name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden.' },
+		legend: { description: 'The group\'s name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden. Required: the build fails without it.' },
 		default: { description: "The option labels, when there are no `options`." },
 	},
 	parameters: {
@@ -33,17 +39,14 @@ export default {
 
 export const Text = {
 	name: "Text options",
-	args: {
-		"slot:legend": "<span>View</span>",
-		default: ['<label><input type="radio" name="view" value="list" checked /><span>List</span></label>', '<label><input type="radio" name="view" value="grid" /><span>Grid</span></label>', '<label><input type="radio" name="view" value="table" /><span>Table</span></label>'].join("\n"),
-	},
+	args: TEXT,
 };
 
 export const Icons = {
 	name: "Icon options",
 	args: {
 		"icon-only": true,
-		"slot:legend": "<span>Color scheme</span>",
+		legend: "<span>Color scheme</span>",
 		default: [
 			'<label title="Light"><input type="radio" name="scheme" value="light" /><norn-icon @name="sun" @size="m"></norn-icon><span>Light</span></label>',
 			'<label title="System"><input type="radio" name="scheme" value="" checked /><norn-icon @name="system" @size="m"></norn-icon><span>System</span></label>',
