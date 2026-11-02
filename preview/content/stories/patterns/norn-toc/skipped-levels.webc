@@ -16,13 +16,13 @@ bleed: true
 	></norn-toc>
 	<h1>Getting started</h1>
 	<norn-rich-text>
-		<p id="overview">Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p id="setup">Setup: a level 2 heading.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
-		<p id="tokens">Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p id="usage">Usage: a level 2 heading.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p id="overview">An overview of the project and what it does.</p>
+		<p>Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.</p>
+		<p id="setup">Set up the project folder before the first build.</p>
+		<p>The package needs Node 24 or later. Check the version with <code>node --version</code> first.</p>
+		<p id="tokens">Design tokens set the colors, the type, and the spacing.</p>
+		<p>Override a token in the project's own stylesheet, and every component follows it.</p>
+		<p id="usage">Import the package and call it with a name.</p>
+		<p>It returns the greeting as a string, and keeps no state between calls.</p>
 	</norn-rich-text>
 </norn-sidebar-layout>

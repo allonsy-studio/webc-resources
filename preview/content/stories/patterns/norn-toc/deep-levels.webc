@@ -17,17 +17,17 @@ bleed: true
 	></norn-toc>
 	<h1>Getting started</h1>
 	<norn-rich-text>
-		<p>The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.</p>
 		<norn-heading-anchor @slug="install">Install</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>The package needs Node 24 or later. Check the version with <code>node --version</code> first.</p>
 		<norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>Run <code>npm install --save-dev @example/core</code> in the project folder. npm writes the version to the lockfile.</p>
 		<norn-heading-anchor @slug="pinned" :@level="4">Pinned versions</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Pass an exact version, such as <code>@example/core@1.2.0</code>, to install that release and no other.</p>
 		<norn-heading-anchor @slug="ranges" :@level="5">Version ranges</norn-heading-anchor>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>A range lets npm pick the newest release that fits, each time the lockfile is updated.</p>
 		<norn-heading-anchor @slug="carets" :@level="6">Caret ranges</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>A caret range, such as <code>^1.2.0</code>, accepts any 1.x release from 1.2.0 up.</p>
+		<p>npm writes a caret range by default when it adds a package.</p>
 	</norn-rich-text>
 </norn-sidebar-layout>
