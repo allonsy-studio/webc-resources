@@ -8,10 +8,6 @@
 export default {
 	title: "OSS site/oss-bar",
 	component: "oss-bar",
-	argTypes: {
-		"--oss-navy": { description: "Banner background. Defined here.", control: "color", table: { category: "css custom properties" } },
-		"--oss-link": { description: "Focus ring color. Defined here.", control: "color", table: { category: "css custom properties" } },
-	},
 	parameters: {
 		docs: {
 			description: {

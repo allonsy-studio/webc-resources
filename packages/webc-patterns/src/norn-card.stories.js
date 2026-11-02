@@ -9,13 +9,7 @@ export default {
 	title: "Container/norn-card",
 	component: "norn-card",
 	argTypes: {
-		default: { description: "The heading, then the body.", control: "text", table: { category: "slots" } },
-		"--norn-card-bg": { description: "Background.", control: "color", table: { category: "css custom properties", defaultValue: { summary: "--norn-surface-raised" } } },
-		"--norn-card-radius": { description: "Corner radius.", control: "text", table: { category: "css custom properties", defaultValue: { summary: "--norn-ui-border-radius" } } },
-		"--norn-card-padding": { description: "Inner spacing.", control: "text", table: { category: "css custom properties", defaultValue: { summary: "--norn-space-m" } } },
-		"--norn-card-accent": { description: "Color of a 2px line along the top. Unset, there is none. Set it on a card, or on the `<li>` of a card in a grid.", control: "color", table: { category: "css custom properties" } },
-		"--norn-card-link": { description: "Heading link color.", control: "color", table: { category: "css custom properties", defaultValue: { summary: "--norn-text-accent" } } },
-		"--norn-card-title-face": { description: "Inherited. Set to `mono` for a heading in the mono face.", control: "text", table: { category: "css custom properties" } },
+		default: { description: "The heading, then the body." },
 	},
 	parameters: {
 		docs: {
@@ -34,5 +28,5 @@ export const Linked = { name: "Linked heading", args: { default: '<h3><a href="h
 
 export const Long = {
 	name: "Long text",
-	args: { default: "<h3>A heading that runs long enough to wrap onto a second line in a narrow frame</h3>\n<p>The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-card-radius in the custom properties.</p>" },
+	args: { default: "<h3>A heading that runs long enough to wrap onto a second line in a narrow frame</h3>\n<p>The body wraps too. Resize the canvas to a phone width to see how the card holds its padding and its top band, and try --norn-ui-border-radius in the tokens.</p>" },
 };

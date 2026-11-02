@@ -9,24 +9,9 @@ export default {
 	title: "Container/norn-callout",
 	component: "norn-callout",
 	argTypes: {
-		variant: {
-			description: "The kind of aside.",
-			control: "select",
-			options: ["note", "tip", "important", "warning", "caution"],
-			table: { category: "props", type: { summary: "string" }, defaultValue: { summary: "note" } },
-		},
-		heading: {
-			description: 'The label over the body, as one element, such as `<span slot="heading">Did you know?</span>`. Falls back to the site\'s `componentStrings` for the variant, then the variant\'s name, such as "Note".',
-			control: "text",
-			table: { category: "slots" },
-		},
-		default: { description: "The body.", control: "text", table: { category: "slots" } },
-		"--norn-callout-color": {
-			description: "The label, icon, and rule color.",
-			control: "color",
-			table: { category: "css custom properties", defaultValue: { summary: "--norn-text-accent for `note` and `important`, and to a status color for the others" } },
-		},
-		"--norn-callout-bg": { description: "Background.", control: "color", table: { category: "css custom properties", defaultValue: { summary: "--norn-surface-raised" } } },
+		variant: { description: "The kind of aside." },
+		heading: { description: 'The label over the body, as one element, such as `<span slot="heading">Did you know?</span>`. Falls back to the site\'s `componentStrings` for the variant, then the variant\'s name, such as "Note".' },
+		default: { description: "The body." },
 	},
 	parameters: {
 		docs: {
