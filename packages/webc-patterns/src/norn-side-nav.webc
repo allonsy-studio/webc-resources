@@ -5,16 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Sidebar navigation from a list of pages. Marks the current page with `aria-current="page"`, and a page holding it with `aria-current="true"`.
- * An item may carry a `norn-icon` name and child pages, which list under it, indented. The current page takes a tint of the accent and the accent as its text color, and the pointer takes a lighter layer.
- * In a sticky `norn-sidebar-layout` column only the list scrolls, so a search field in the `search` slot stays put.
- * @prop {{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]} items
- * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
- * @slot search - A search field above the list, as one element.
- * @category landmark
- */
 --->
 <nav :aria-labelledby="'norn-side-nav-' + uid">
 	<span data-label :id="'norn-side-nav-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-side-nav', 'label', $data.page) || 'Pages'"></span></slot></span>
