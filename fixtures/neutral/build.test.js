@@ -126,9 +126,11 @@ describe("neutral fixture build", () => {
 		assert.ok(pages.three.includes('rel="prev" href="/docs/two/"') && !pages.three.includes('rel="next"'));
 	});
 
-	test("norn-card-grid sets the mono title variant only when asked", () => {
-		assert.equal((pages.index.match(/style="--norn-card-title-face: mono"/g) ?? []).length, 1);
-		assert.equal((pages.index.match(/<norn-card-grid>\s*<ul role="list">/g) ?? []).length, 1);
+	test("norn-card sets the mono title face only when asked", () => {
+		const packages = pages.index.slice(pages.index.indexOf('<section id="packages">'));
+		assert.ok((packages.match(/<article data-title-face="mono">/g) ?? []).length > 0, "the package cards");
+		assert.equal((pages.index.match(/data-title-face/g) ?? []).length, (packages.match(/data-title-face/g) ?? []).length, "no other card");
+		assert.ok(!/--norn-card-title-face/.test(pages.index));
 	});
 
 	test("the layer order is declared inline first, and the base, print, and project's reset styles bundle with the page", () => {
@@ -148,7 +150,7 @@ describe("neutral fixture build", () => {
 		const [cards] = bundles(output, pages.index);
 		for (const name of ["norn-hero", "norn-link-button", "norn-fact-list", "norn-card", "norn-card-grid", "norn-header", "norn-footer", "norn-skip-link"]) assert.ok(cards.includes(`${name} {`), name);
 		assert.ok(!/norn-sidebar-layout \{[^}]*container-type|norn-pager|norn-side-nav/.test(cards), "no component rule of one the page lacks");
-		assert.equal((cards.match(/norn-card \{/g) ?? []).length, 1);
+		assert.equal((cards.match(/^\s*norn-card \{/gm) ?? []).length, 1, "the card's own rules, once");
 		assert.ok(!cards.includes("--norn-chrome"), "the hero no longer turns on the terminal frame");
 		const [docs] = bundles(output, pages.one);
 		for (const name of ["norn-sidebar-layout", "norn-side-nav", "norn-pager", "norn-header"]) assert.ok(docs.includes(`${name} {`), name);
@@ -605,7 +607,6 @@ describe("overriding a packaged component", () => {
 			Object.entries(forms)
 				.map(([key, [form]]) =>
 					[
-						`<norn-card-grid id="grid-${key}" ${form.replace("X", "mono")}><li>Card</li></norn-card-grid>`,
 						`<norn-notice id="notice-${key}" ${form.replace("X", "live")}><p>Note</p></norn-notice>`,
 						`<norn-segmented-control id="control-${key}" ${form.replace("X", "icon-only")} @legend="Pick" @name="pick-${key}" :@options="[{ value: 'a', label: 'A' }]"></norn-segmented-control>`,
 					].join("\n"),
@@ -616,7 +617,6 @@ describe("overriding a packaged component", () => {
 			const html = read(build(), "booleans", "index.html");
 			const element = (tag, id) => html.match(new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`))[0];
 			for (const [key, [form, on]] of Object.entries(forms)) {
-				assert.equal(element("norn-card-grid", `grid-${key}`).includes("title-face: mono"), on, `norn-card-grid ${form}`);
 				assert.equal(/role="(status|alert)"/.test(element("norn-notice", `notice-${key}`)), on, `norn-notice ${form}`);
 				assert.equal(element("norn-segmented-control", `control-${key}`).includes("data-icon-only"), on, `norn-segmented-control ${form}`);
 			}

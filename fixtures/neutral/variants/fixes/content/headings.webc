@@ -7,7 +7,7 @@ title: Headings
 <section id="section-wrapped"><norn-heading-anchor @slug="section-wrapped-heading">A heading</norn-heading-anchor></section>
 <norn-card id="card-plain"><h3><a href="#top">A heading</a></h3><p>Body.</p></norn-card>
 <norn-card id="card-wrapped"><norn-heading-anchor @slug="card-wrapped-heading" :@level="3">A heading</norn-heading-anchor><p>Body.</p></norn-card>
-<norn-card-grid :@mono="true">
-	<li><norn-card id="mono-plain"><h3><a href="#top">A heading</a></h3><p>Body.</p></norn-card></li>
-	<li><norn-card id="mono-wrapped"><norn-heading-anchor @slug="mono-wrapped-heading" :@level="3">A heading</norn-heading-anchor><p>Body.</p></norn-card></li>
+<norn-card-grid>
+	<li><norn-card id="mono-plain" @title-face="mono"><h3><a href="#top">A heading</a></h3><p>Body.</p></norn-card></li>
+	<li><norn-card id="mono-wrapped" @title-face="mono"><norn-heading-anchor @slug="mono-wrapped-heading" :@level="3">A heading</norn-heading-anchor><p>Body.</p></norn-card></li>
 </norn-card-grid>

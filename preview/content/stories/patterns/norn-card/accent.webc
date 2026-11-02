@@ -4,10 +4,10 @@ order: 5
 hiddenH2: true
 ---
 <norn-card-grid>
-	<li style="--norn-card-accent: var(--norn-ui-accent, #2346d4)">
-		<norn-card>
+	<li>
+		<norn-card @accent="accent">
 			<h3><a href="https://example.com/">An accent line</a></h3>
-			<p>Set --norn-card-accent on the card or its list item to draw a 2px line along the top.</p>
+			<p>Set the accent prop on the card to draw a 2px line along the top.</p>
 		</norn-card>
 	</li>
 	<li>

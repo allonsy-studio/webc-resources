@@ -10,14 +10,14 @@
  * Responsive grid of cards.
  * Pass each card in an `<li>`, as in `<li><norn-card>…</norn-card></li>`. The list has `role="list"`, which Safari needs once the markers are gone.
  * Each card spans three rows of the grid, with `grid-template-rows: subgrid`, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box.
+ * Settings for a card, such as its title face or its top line, go on the card as props: `<norn-card @title-face="mono">`.
  * @slot - The cards, each in an `<li>`.
- * @prop {boolean} [mono] - Set the card titles in the mono face. On for `@mono`, `@mono="true"`, or `:@mono="true"`.
  * @cssprop --norn-card-grid-min - Narrowest card. Falls back to 17rem.
  * @cssprop --norn-card-grid-gap - Space between cards. Falls back to --norn-space-m.
  * @category container
  */
 --->
-<ul role="list" :style="mono === true || mono === '' || mono === 'true' ? '--norn-card-title-face: mono' : ''"><slot></slot></ul>
+<ul role="list"><slot></slot></ul>
 <style>
 	@layer norn.components {
 		norn-card-grid {
@@ -45,12 +45,16 @@
 					display: grid;
 					grid-row: span 3;
 					grid-template-rows: subgrid;
-					--norn-card-rows: subgrid;
 					margin-block-end: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
 				}
 
 				& > ul > li > * {
 					grid-row: 1 / -1;
+				}
+
+				/* A card lays its heading, body, and footer on the rows of its tag. */
+				& > ul > li > norn-card {
+					grid-template-rows: subgrid;
 				}
 			}
 		}

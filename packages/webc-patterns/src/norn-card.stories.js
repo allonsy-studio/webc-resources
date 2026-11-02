@@ -10,6 +10,8 @@ export default {
 	component: "norn-card",
 	argTypes: {
 		default: { description: "The heading, then the body." },
+		accent: { description: "A 2px line along the top, in a global color: `accent` takes --norn-ui-accent, and `info`, `success`, `warning`, and `danger` take the matching --norn-status-* color. `none` draws no line." },
+		"title-face": { description: "`mono` sets the heading in the mono face, as for package names." },
 	},
 	parameters: {
 		docs: {

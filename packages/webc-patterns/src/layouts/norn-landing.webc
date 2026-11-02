@@ -53,9 +53,9 @@ nornCompiled: true
 </section>
 <section webc:if="$data.norn.packages.length" id="packages">
 	<h2 @text="nornComponentStrings?.('norn-landing', 'packages', $data.page) || 'Packages'"></h2>
-	<norn-card-grid :@mono="true">
+	<norn-card-grid>
 		<li webc:for="pkg of $data.norn.packages">
-			<norn-card>
+			<norn-card @title-face="mono">
 				<h3>
 					<a webc:if="pkg.href" :href="pkg.href" @text="pkg.name"></a>
 					<span webc:else @text="pkg.name"></span>

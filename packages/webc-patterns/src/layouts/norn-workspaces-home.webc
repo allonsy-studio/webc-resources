@@ -39,9 +39,9 @@ nornCompiled: true
 </norn-hero>
 <section webc:if="$data.norn.workspaces.length" id="packages">
 	<h2 @text="nornComponentStrings?.('norn-workspaces-home', 'packages', $data.page) || 'Packages'"></h2>
-	<norn-card-grid :@mono="true">
+	<norn-card-grid>
 		<li webc:for="workspace of $data.norn.workspaces">
-			<norn-card>
+			<norn-card @title-face="mono">
 				<h3><a :href="workspace.url" @text="workspace.name || workspace.title"></a></h3>
 				<p webc:if="workspace.description" @text="workspace.description"></p>
 			</norn-card>

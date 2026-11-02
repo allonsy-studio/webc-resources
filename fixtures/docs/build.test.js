@@ -52,7 +52,7 @@ describe("docs fixture", () => {
 			["/usage/", "Usage"],
 			["/reference/", "Reference"],
 		]);
-		assert.ok(index.includes("Install the project and run it once.") && !index.includes("--norn-card-title-face"));
+		assert.ok(index.includes("Install the project and run it once.") && !index.includes("data-title-face"));
 	});
 
 	test("the sidebar marks the current page, and the pager links the neighbors", () => {

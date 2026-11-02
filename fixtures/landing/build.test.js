@@ -50,7 +50,7 @@ describe("landing fixture with the OSS site layer", () => {
 		assert.equal((between(html, '<section id="features"', "</section>").match(/<norn-card>/g) ?? []).length, 4);
 		const packages = between(html, '<section id="packages"', "</section>");
 		assert.equal((packages.match(/<norn-card>/g) ?? []).length, 2);
-		assert.ok(packages.includes('style="--norn-card-title-face: mono"'));
+		assert.equal((packages.match(/<article data-title-face="mono">/g) ?? []).length, 2, "each package card takes the mono title face");
 		assert.ok(packages.includes('<a href="https://example.com/core">@example/core</a>'));
 	});
 

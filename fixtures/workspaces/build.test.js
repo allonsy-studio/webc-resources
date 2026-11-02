@@ -35,7 +35,7 @@ describe("workspaces fixture", () => {
 		const hero = between(html, "<norn-hero>", "</norn-hero>");
 		assert.ok(hero.includes('<a href="#packages" data-variant="primary">Browse packages</a>') && hero.includes('<norn-code-block id="install">'));
 		const index = between(html, '<section id="packages"', "</section>");
-		assert.ok(index.includes('style="--norn-card-title-face: mono"'));
+		assert.ok(index.includes('<article data-title-face="mono">'));
 		assert.deepEqual([...index.matchAll(/<a href="([^"]+)">([^<]+)<\/a>/g)].map((match) => [match[1], match[2]]), [
 			["/plugin-a/", "@example/plugin-a"],
 			["/plugin-b/", "@example/plugin-b"],

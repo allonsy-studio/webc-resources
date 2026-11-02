@@ -11,9 +11,9 @@ description: Norn's WebC components for Eleventy, rendered from the packages the
 <template webc:for="category of $data.catalog.categories" webc:nokeep>
 	<h2 @text="category.title"></h2>
 	<p @text="category.description"></p>
-	<norn-card-grid :@mono="true">
+	<norn-card-grid>
 		<li webc:for="component of category.components">
-			<norn-card>
+			<norn-card @title-face="mono">
 				<h3><a :href="component.url" @text="component.name"></a></h3>
 				<p @text="component.summaryText"></p>
 			</norn-card>

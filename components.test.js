@@ -419,12 +419,32 @@ test("norn-card has a fill and no band, border, or underline at rest, and its he
 	const css = cssOf("norn-card");
 	assert.ok(!/::before/.test(css), "no band");
 	assert.ok(!/border: 1px|--norn-card-border/.test(css.replace(/@media \(forced-colors: active\) \{.*$/, "")), "no border, but in forced colors, which drop the fill");
-	assert.ok(css.includes("border-block-start: 2px solid var(--norn-card-accent);"), "a set accent draws a 2px line, and unset draws nothing");
+	assert.ok(css.includes("--_accent: initial;") && css.includes("border-block-start: 2px solid var(--_accent);"), "an accent draws a 2px line, and none draws nothing");
 	assert.ok(css.includes("&::after { content: \"\"; position: absolute; inset: 0; }"), "the link reaches over the card");
 	assert.ok(css.includes("&:has(a:hover)") && css.includes("&:has(a:focus-visible)"), "the card takes the hover layer and the ring");
-	assert.match(css, /a \{ color: var\(--norn-card-link, [^;]+; text-decoration: none;/, "no underline at rest");
+	assert.match(css, /a \{ color: var\(--norn-text-accent, [^;]+; text-decoration: none;/, "no underline at rest");
 	const grid = cssOf("norn-card-grid");
 	assert.ok(!/ActiveText|VisitedText|GrayText|accent|feature/.test(grid + sources.find(({ file }) => file.endsWith("/norn-card-grid.webc")).text), "no accent cycle and no system color");
+});
+
+test("norn-card takes its accent and title face as props, mapped to global tokens, and reads no custom property of its own", async () => {
+	const css = cssOf("norn-card");
+	assert.ok(!/--norn-card-/.test(css), "no --norn-card-* custom property");
+	assert.ok(!/@container style/.test(css), "no inherited mode flag");
+	const accents = { accent: "--norn-ui-accent", info: "--norn-status-info", success: "--norn-status-success", warning: "--norn-status-warning", danger: "--norn-status-danger" };
+	for (const [value, token] of Object.entries(accents)) {
+		assert.ok(css.includes(`&[data-accent="${value}"] { --_accent: var(${token}, `), `${value} maps to ${token}`);
+		assert.ok((await render(`<norn-card @accent="${value}"><h3>T</h3></norn-card>`)).includes(`<article data-accent="${value}">`), `@accent="${value}" renders`);
+	}
+	for (const value of ["none", "red", ""]) assert.ok((await render(`<norn-card @accent="${value}"><h3>T</h3></norn-card>`)).includes("<article><h3>"), `@accent="${value}" draws no line`);
+	assert.ok((await render("<norn-card><h3>T</h3></norn-card>")).includes("<article><h3>"), "no accent by default");
+	assert.ok((await render('<norn-card @title-face="mono"><h3>T</h3></norn-card>')).includes('<article data-title-face="mono">'), "the mono title face");
+	assert.ok(css.includes('& > article[data-title-face="mono"] > :is(h2, h3, h4, h5, h6),'), "the mono face styles the heading");
+	assert.ok(css.includes("& > article { --_state: 0%; --_accent: initial;") && css.includes("grid-template-rows: inherit;"), "the article takes the rows of its tag");
+	const grid = cssOf("norn-card-grid");
+	assert.ok(grid.includes("& > ul > li > norn-card { grid-template-rows: subgrid; }"), "a card grid gives each card subgrid rows");
+	assert.ok(!/--norn-card-(?!grid-)/.test(grid + sources.find(({ file }) => file.endsWith("/norn-card-grid.webc")).text), "the card grid sets no card custom property");
+	assert.ok(!(await render("<norn-card-grid @mono><li><norn-card><h3>T</h3></norn-card></li></norn-card-grid>")).includes("style="), "the grid has no mono prop");
 });
 
 test("the build script runs when it is started through a symlinked path", () => {

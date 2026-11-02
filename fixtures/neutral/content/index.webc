@@ -58,9 +58,9 @@ facts:
 </section>
 <section id="packages">
 	<h2>Packages</h2>
-	<norn-card-grid :@mono="true">
+	<norn-card-grid>
 		<li webc:for="item of packages">
-			<norn-card>
+			<norn-card @title-face="mono">
 				<h3><a :href="item.href" @text="item.title"></a></h3>
 				<p @text="item.body"></p>
 			</norn-card>
