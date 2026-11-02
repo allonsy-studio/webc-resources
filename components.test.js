@@ -605,6 +605,12 @@ test("norn-sidebar-layout reads the shared tokens and no custom property of its 
 	assert.ok(docs.includes("norn-sidebar-layout > div > article:has(> norn-toc > nav) { grid-auto-columns: 12rem; }") && !docs.includes("--norn-sidebar-layout"), "norn-docs puts its contents in an implicit column");
 });
 
+test("norn-side-nav reads the shared text tokens and no custom property of its own", () => {
+	const css = styles(sources.find(({ file }) => file === "webc-patterns/src/norn-side-nav.webc").text);
+	assert.ok(!/--norn-side-nav-/.test(css), "no --norn-side-nav-* property");
+	assert.ok(css.includes("color: var(--norn-text-muted, t('text.muted'));") && css.includes("--_tint: color-mix(in oklab, var(--norn-text-accent, t('text.accent')) var(--norn-ui-state-press, t('ui.state.press')), transparent);"));
+});
+
 test("norn-toc folds under its title through a details, and the title names the landmark", async () => {
 	const html = unid(await render("<norn-toc :@items=\"[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]\"></norn-toc>"));
 	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);

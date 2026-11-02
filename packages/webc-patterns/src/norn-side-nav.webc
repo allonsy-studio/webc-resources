@@ -13,9 +13,6 @@
  * @prop {{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]} items
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
  * @slot search - A search field above the list, as one element.
- * @cssprop --norn-side-nav-link - Link color. Falls back to --norn-text-muted.
- * @cssprop --norn-side-nav-icon - Icon color. Falls back to --norn-text-accent.
- * @cssprop --norn-side-nav-current - Current page text, and the tint behind it. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
@@ -102,7 +99,7 @@
 				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
 				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
 				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
-				color: var(--norn-side-nav-link, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-text-muted, t('text.muted'));
 				text-decoration: none;
 				overflow-wrap: anywhere;
 
@@ -115,14 +112,14 @@
 				}
 
 				&[aria-current="page"] {
-					--_tint: color-mix(in oklab, var(--norn-side-nav-current, var(--norn-text-accent, t('text.accent'))) var(--norn-ui-state-press, t('ui.state.press')), transparent);
-					color: var(--norn-side-nav-current, var(--norn-text-accent, t('text.accent')));
+					--_tint: color-mix(in oklab, var(--norn-text-accent, t('text.accent')) var(--norn-ui-state-press, t('ui.state.press')), transparent);
+					color: var(--norn-text-accent, t('text.accent'));
 				}
 			}
 
 			& nav > ul norn-icon {
 				flex: none;
-				color: var(--norn-side-nav-icon, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-text-accent, t('text.accent'));
 			}
 
 			@media (pointer: coarse) {
