@@ -5,14 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Page intro, in the default slot: an h1, a lede, the actions, the facts, and anything after, such as an install `norn-code-block`.
- * Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-fact-list` with `@gap="l"`.
- * @slot - The h1, lede, actions, facts, and extras, in that order.
- * @prop {string} [width] - Content width: `layout`, --norn-layout-width, or `measure`, the prose line length, --norn-text-measure. Falls back to `layout`.
- * @category container
- */
 --->
 <header :data-width="width === 'measure' ? 'measure' : undefined"><slot></slot></header>
 <style>
