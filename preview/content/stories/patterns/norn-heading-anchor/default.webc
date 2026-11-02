@@ -3,6 +3,6 @@ title: Levels
 order: 1
 ---
 <norn-heading-anchor @slug="install">Install</norn-heading-anchor>
-<p>The heading text links to its own section, so a reader can copy the link.</p>
+<p>Install the package from npm.</p>
 <norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
-<p>A third-level heading takes the same mark.</p>
+<p>Run the install command in the project folder.</p>
