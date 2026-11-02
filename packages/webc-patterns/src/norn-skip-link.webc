@@ -5,14 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Link that jumps past the page chrome to the main content. Hidden until it has focus.
- * Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
- * @prop {string} [href] - The target's fragment. Falls back to `#main`.
- * @slot label - The link text, as one element, such as `<span slot="label">Aller au contenu</span>`. Falls back to the site's `componentStrings`, then "Skip to content".
- * @category component
- */
 --->
 <a :href="href || '#main'"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-skip-link', 'label', $data.page) || 'Skip to content'"></span></slot></a>
 <style>
