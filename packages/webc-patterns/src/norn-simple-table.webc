@@ -12,9 +12,7 @@
  * While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables.
  * @slot - The table.
  * @slot label - The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.
- * @cssprop --norn-simple-table-rule - Row rules. Falls back to --norn-ui-border-color.
- * @cssprop --norn-simple-table-head - Header row background. Unset, there is none.
- * @cssprop --norn-simple-table-bg - The surface the table sits on, which the scroll shadows are drawn against. Falls back to --norn-surface-base.
+ * Row rules take --norn-ui-border-color, and the scroll shadows are drawn against the page surface, --norn-surface-base. The header row has no fill.
  * @category container
  */
 --->
@@ -28,7 +26,7 @@
 
 			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
 			& > div {
-				--_bg: var(--norn-simple-table-bg, var(--norn-surface-base, t('surface.base')));
+				--_bg: var(--norn-surface-base, t('surface.base'));
 				--_shadow: color-mix(in oklab, var(--norn-text-base, t('text.base')) 18%, transparent);
 				overflow-x: auto;
 				background:
@@ -41,7 +39,7 @@
 			& > div > table {
 				min-inline-size: 100%;
 				border-collapse: collapse;
-				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
 			}
 
 			& > div > table > caption {
@@ -50,14 +48,10 @@
 				text-align: start;
 			}
 
-			& > div > table > thead {
-				background: var(--norn-simple-table-head, none);
-			}
-
 			& > div > table :is(th, td) {
 				min-inline-size: 7rem;
 				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
-				border-block-end: 1px solid var(--norn-simple-table-rule, var(--norn-ui-border-color, t('ui.border.color')));
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
 				text-align: start;
 				vertical-align: top;
 			}

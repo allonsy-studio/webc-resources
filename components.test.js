@@ -482,6 +482,14 @@ test("norn-rich-text takes its measure as a prop, and its rules and code fill fr
 	assert.ok(!/--norn-rich-text-/.test(sources.find(({ file }) => file.endsWith("/layouts/norn-base.webc")).text), "norn-base sets no rich-text property");
 });
 
+test("norn-simple-table reads its rules and its surface from shared tokens, and has no custom property of its own", () => {
+	const css = cssOf("norn-simple-table");
+	assert.ok(!/--norn-simple-table-/.test(css), "no --norn-simple-table-* custom property");
+	assert.ok(css.includes("--_bg: var(--norn-surface-base, t('surface.base'));"), "the shadows' surface");
+	assert.equal((css.match(/solid var\(--norn-ui-border-color, t\('ui\.border\.color'\)\)/g) ?? []).length, 2, "the row rules");
+	assert.ok(!/thead \{/.test(css), "no header fill");
+});
+
 test("the build script runs when it is started through a symlinked path", () => {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-link-"));
 	try {
