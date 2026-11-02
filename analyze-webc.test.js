@@ -102,6 +102,20 @@ const icon = (variant) => kind(variant);
 	assert.deepEqual(propOf(analysis, "variant"), { name: "variant", options: ["note", "tip"], default: "note", type: "string", how: propOf(analysis, "variant").how });
 });
 
+test("a prop passed to a setup function through a guard is followed, and an early return on its absence keeps it optional", () => {
+	const analysis = analyze(`<script webc:setup>
+const SIZES = ["s", "m"];
+function sized(size) {
+	if (!size || size === "s") return "";
+	if (!SIZES.includes(size)) throw new Error("x-a: size");
+	return size;
+}
+const draw = (size) => sized(size);
+</script><p :data-size="draw(typeof size === 'string' ? size : '')"></p>`);
+	assert.deepEqual(propOf(analysis, "size").options, ["s", "m"]);
+	assert.equal(propOf(analysis, "size").required, undefined);
+});
+
 test("a boolean prop is the one boolean rule, and its comparisons are not options", () => {
 	const analysis = analyze("<p :data-on=\"on === true || on === '' || on === 'true' ? '' : undefined\" :data-half=\"half === true || half === 'true' ? '' : undefined\"></p>");
 	assert.equal(propOf(analysis, "on").boolean, true);

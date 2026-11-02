@@ -93,14 +93,22 @@ function parentsOf(ast) {
  * or a branch of a conditional.
  */
 function isValueOf(node, parents) {
+	return ["Program", "ExpressionStatement"].includes(parents.get(valueTop(node, parents))?.type);
+}
+
+/** The outermost expression whose value is the node's own, by the same steps as `isValueOf`: a guard such as `typeof x === 'string' ? x : ''` is x's value. */
+function valueTop(node, parents) {
 	let top = node;
 	for (let parent = parents.get(top); parent; parent = parents.get(top)) {
 		const passes = (parent.type === "LogicalExpression" && (parent.operator !== "&&" || parent.right === top)) || (parent.type === "ConditionalExpression" && parent.test !== top);
 		if (!passes) break;
 		top = parent;
 	}
-	return ["Program", "ExpressionStatement"].includes(parents.get(top)?.type);
+	return top;
 }
+
+/** The operands of a chain of `||`. */
+const disjuncts = (node) => (node.type === "LogicalExpression" && node.operator === "||" ? [...disjuncts(node.left), ...disjuncts(node.right)] : [node]);
 
 /** Every node under one, itself included. */
 const nodesIn = (node) => [node, ...childrenOf(node).flatMap(nodesIn)];
@@ -310,8 +318,13 @@ export function analyzeWebc(source, { layout = false, tokens = [], helpers = [],
 		if (context.kind === "setup") {
 			let statement = node;
 			while (statement && !/Statement$|Declaration$/.test(statement.type)) statement = parents.get(statement);
-			const throws = (branch) => branch?.type === "ThrowStatement" || (branch?.type === "BlockStatement" && branch.body.some(({ type }) => type === "ThrowStatement"));
-			if (statement?.type === "IfStatement" && nodesIn(statement.test).includes(ref) && throws(statement.consequent) && readsIn(statement.test, parents).every(({ name }) => context.allowed(name))) {
+			const has = (kind) => (branch) => branch?.type === kind || (branch?.type === "BlockStatement" && branch.body.some(({ type }) => type === kind));
+			const throws = has("ThrowStatement");
+			// An earlier `if (!x …) return` lets the value be absent, so a later throw does not make it required.
+			const block = parents.get(statement);
+			const earlier = block?.type === "BlockStatement" ? block.body.slice(0, block.body.indexOf(statement)) : [];
+			const optional = earlier.some((before) => before.type === "IfStatement" && has("ReturnStatement")(before.consequent) && disjuncts(before.test).some((part) => part.type === "UnaryExpression" && part.operator === "!" && part.argument.type === "Identifier" && context.mentions(part.argument)));
+			if (statement?.type === "IfStatement" && !optional && nodesIn(statement.test).includes(ref) && throws(statement.consequent) && readsIn(statement.test, parents).every(({ name }) => context.allowed(name))) {
 				entry.required = true;
 				entry.how.add("required: a setup function throws without it");
 			}
@@ -330,7 +343,9 @@ export function analyzeWebc(source, { layout = false, tokens = [], helpers = [],
 		const allowed = (name) => name === param.name || setup.declared.has(name) || JS_GLOBALS.has(name);
 		for (const { identifier } of variable?.references ?? []) {
 			const parent = setup.parents.get(identifier);
-			if (parent?.type === "CallExpression" && parent.callee.type === "Identifier" && setup.functions.has(parent.callee.name) && parent.arguments.includes(identifier)) follow(parent.callee.name, parent.arguments.indexOf(identifier), target);
+			const passed = valueTop(identifier, setup.parents);
+			const call = setup.parents.get(passed);
+			if (call?.type === "CallExpression" && call.callee.type === "Identifier" && setup.functions.has(call.callee.name) && call.arguments.includes(passed)) follow(call.callee.name, call.arguments.indexOf(passed), target);
 			if (target.prop) {
 				inspect(identifier, setup.parents, prop(target.prop), { kind: "setup", allowed, mentions: (test) => readsIn(test, setup.parents).some(({ name }) => name === param.name) });
 			} else if (parent?.type === "MemberExpression" && parent.object === identifier && !parent.computed) {
@@ -385,7 +400,7 @@ export function analyzeWebc(source, { layout = false, tokens = [], helpers = [],
 		}
 		for (const call of nodesIn(ast).filter((node) => node.type === "CallExpression" && node.callee.type === "Identifier" && setup.functions.has(node.callee.name))) {
 			call.arguments.forEach((argument, index) => {
-				const ref = refs.find(({ node }) => node === argument);
+				const ref = refs.find(({ node }) => valueTop(node, parents) === argument);
 				if (ref && !inheritedSet.has(ref.name)) follow(call.callee.name, index, { prop: ref.name });
 				if (layout && isNorn(argument)) follow(call.callee.name, index, {});
 			});
