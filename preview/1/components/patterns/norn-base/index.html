@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-rJm_z"><span data-label="" id="norn-header-webc-rJm_z"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-RRL_O"><span data-label="" id="norn-header-webc-RRL_O"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -356,7 +356,7 @@ layout: norn-base.webc
 <section>
 	<h1>A page on the base layout</h1>
 	<p>The header, the footer, and the hooks around a page body of its own.</p>
-</section>" data-strings="norn-code-block-webc-oT7Vn" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</section>" data-strings="norn-code-block-webc-dq_WW" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -382,8 +382,8 @@ layout: norn-base.webc
 	&lt;h1&gt;A page on the base layout&lt;/h1&gt;
 	&lt;p&gt;The header, the footer, and the hooks around a page body of its own.&lt;/p&gt;
 &lt;/section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-oT7Vn">
-		<span data-string="label" id="norn-code-block-webc-oT7Vn-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-dq_WW">
+		<span data-string="label" id="norn-code-block-webc-dq_WW-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -525,7 +525,7 @@ layout: norn-base.webc
 <section id=&quot;usage&quot;>
 	<h2>Usage</h2>
 	<p>The next section has the same width and the same padding. It is not a landmark, so it takes no name.</p>
-</section>" data-strings="norn-code-block-webc-UbDZ0" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</section>" data-strings="norn-code-block-webc-0wz0S" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -555,8 +555,8 @@ layout: norn-base.webc
 	&lt;h2&gt;Usage&lt;/h2&gt;
 	&lt;p&gt;The next section has the same width and the same padding. It is not a landmark, so it takes no name.&lt;/p&gt;
 &lt;/section&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-UbDZ0">
-		<span data-string="label" id="norn-code-block-webc-UbDZ0-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-0wz0S">
+		<span data-string="label" id="norn-code-block-webc-0wz0S-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -574,7 +574,7 @@ layout: norn-base.webc
 	<h2>Props</h2>
 	<p>The plugin's <code>props</code> mapping sets them on each page, and the layout reads them as <code>$data.norn</code>.</p>
 	
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-djMUE"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-76dFh"></span>
 <div>
 		<table>
 			<thead>
@@ -658,12 +658,12 @@ layout: norn-base.webc
 				</tr>
 <tr>
 					<th scope="row"><code>nav</code></th>
-					<td data-label="Type"><code>{ url: string, title: string, icon?: string }[]</code></td>
+					<td data-label="Type"><code>{ href: string, title: string, icon?: string }[]</code></td>
 					<td>The header links. <code>icon</code> names a <code>norn-icon</code>.</td>
 				</tr>
 <tr>
 					<th scope="row"><code>footer</code></th>
-					<td data-label="Type"><code>{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { url: string, title: string }[] }[], colophon?: string }</code></td>
+					<td data-label="Type"><code>{ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { href: string, title: string }[] }[], colophon?: string }</code></td>
 					<td>The footer: the lead column (<code>name</code> falls back to the site name, <code>text</code> to the tagline), its badges and license, one navigation of grouped links, and a closing line.</td>
 				</tr>
 			</tbody>
@@ -676,7 +676,7 @@ layout: norn-base.webc
 
 
 	<h2>Slots</h2>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-Oiw3n"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-9VB7G"></span>
 <div>
 		<table>
 			<thead>
