@@ -1,5 +1,11 @@
 # @allons-y/webc-code-sample
 
+## 0.1.0-beta.2
+
+### Patch Changes
+
+-   651b259: Ships `llms.txt` with each package: the rules for calling and styling the components, the data shapes, and a reference of every component's props, slots, and tokens, generated from the sources.
+
 ## 0.1.0-beta.1
 
 ### Minor Changes

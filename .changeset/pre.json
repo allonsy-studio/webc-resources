@@ -13,6 +13,7 @@
   },
   "changesets": [
     "code-sample-first-beta",
+    "llms-txt",
     "oss-site-first-beta",
     "patterns-first-beta"
   ]
