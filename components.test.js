@@ -470,6 +470,18 @@ test("norn-hero takes its width as a prop, from the layout width or the measure,
 	for (const value of ["layout", "wide"]) assert.ok((await render(`<norn-hero @width="${value}"><h1>A</h1></norn-hero>`)).includes("<header><h1>"), `@width="${value}" is the layout width`);
 });
 
+test("norn-rich-text takes its measure as a prop, and its rules and code fill from shared tokens", async () => {
+	const css = cssOf("norn-rich-text");
+	assert.ok(!/--norn-rich-text-/.test(css), "no --norn-rich-text-* custom property");
+	assert.ok(css.includes("max-inline-size: var(--norn-text-measure, t('text.measure')); &[data-measure=\"none\"] { max-inline-size: none; }"), "the measure, or none");
+	assert.equal((css.match(/solid var\(--norn-ui-border-color, t\('ui\.border\.color'\)\)/g) ?? []).length, 4, "the quote bar and the rules");
+	assert.ok(css.includes("background: var(--norn-surface-code, t('surface.code'));"), "inline code");
+	assert.ok((await render('<norn-rich-text @measure="none" id="a"><p>A</p></norn-rich-text>')).includes('<norn-rich-text data-measure="none" id="a"><p>A</p></norn-rich-text>'), "@measure=\"none\" renders on the tag, beside its attributes");
+	assert.ok((await render('<norn-rich-text id="a"><p>A</p></norn-rich-text>')).includes('<norn-rich-text id="a"><p>A</p></norn-rich-text>'), "the measure by default");
+	for (const name of ["norn-docs", "norn-workspace"]) assert.ok(sources.find(({ file }) => file.endsWith(`/layouts/${name}.webc`)).text.includes('<norn-rich-text @measure="none"'), `${name} lets its prose take the column`);
+	assert.ok(!/--norn-rich-text-/.test(sources.find(({ file }) => file.endsWith("/layouts/norn-base.webc")).text), "norn-base sets no rich-text property");
+});
+
 test("the build script runs when it is started through a symlinked path", () => {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-link-"));
 	try {

@@ -25,7 +25,7 @@ nornCompiled: true
 		><span slot="label" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span
 	></norn-side-nav>
 	<h1 @text="($data.norn.workspace && $data.norn.workspace.name) || $data.norn.title || ''"></h1>
-	<norn-rich-text>
+	<norn-rich-text @measure="none">
 		<p webc:if="$data.norn.workspace && $data.norn.workspace.description" @text="$data.norn.workspace.description"></p>
 		<template webc:nokeep @html="($data.norn.workspace && $data.norn.workspace.html) || ''"></template>
 		<template webc:if="nornCompiles($data, 'norn-workspace')" webc:nokeep @html="$data.content || ''"></template>

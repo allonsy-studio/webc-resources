@@ -36,7 +36,7 @@ describe("docs fixture", () => {
 		assert.ok(!fs.existsSync(path.join(here, "src", "_layouts")), "the project keeps no layout");
 		assert.ok(!fs.existsSync(path.join(output, "src", "_layouts")), "no stray page for a layout outside the input folder");
 		assert.ok(pages["/"].includes("<norn-hero>") && pages["/"].includes('<section id="docs">'), "norn-docs-home");
-		for (const url of ["/getting-started/", "/usage/", "/reference/"]) assert.ok(pages[url].includes("<norn-sidebar-layout>") && pages[url].includes("<norn-rich-text data-pagefind-body>"), `${url}: norn-docs`);
+		for (const url of ["/getting-started/", "/usage/", "/reference/"]) assert.ok(pages[url].includes("<norn-sidebar-layout>") && pages[url].includes('<norn-rich-text data-measure="none" data-pagefind-body>'), `${url}: norn-docs`);
 	});
 
 	test("the home page links the first docs page and indexes every page with its description", () => {
@@ -91,7 +91,7 @@ describe("docs fixture", () => {
 			assert.ok(labelledBy(nav, "search", "Search the docs") !== -1 && labelledBy(nav, "search", "Search the docs") < nav.indexOf("<ul>"), `${url}: search comes first`);
 			assert.ok(nav.includes('<input type="hidden" name="sites" value="projects.allons-y.studio">'));
 			assert.equal((pages[url].match(/data-pagefind-body/g) ?? []).length, 1);
-			assert.ok(pages[url].includes("<norn-rich-text data-pagefind-body>"));
+			assert.ok(pages[url].includes('<norn-rich-text data-measure="none" data-pagefind-body>'));
 		}
 		const toc = namedBetween(pages["/reference/"], "nav", "On this page", "</nav>");
 		assert.ok(toc.includes('<a href="#options">Options</a>') && toc.includes('<a href="#install-with-your-package-manager">Install with your package manager</a>'));
@@ -146,7 +146,7 @@ describe("docs fixture", () => {
 	test("a Markdown h1 never makes a second h1: one that repeats the title goes, and any other becomes an anchored h2", () => {
 		const start = pages["/getting-started/"];
 		assert.equal((start.match(/<h1\b/g) ?? []).length, 1);
-		assert.ok(!/<h[1-6][^>]*>Getting started<\/h[1-6]>/.test(between(start, "<norn-rich-text data-pagefind-body>", "</norn-rich-text>")), "the repeated title is gone from the body");
+		assert.ok(!/<h[1-6][^>]*>Getting started<\/h[1-6]>/.test(between(start, '<norn-rich-text data-measure="none" data-pagefind-body>', "</norn-rich-text>")), "the repeated title is gone from the body");
 		const usage = pages["/usage/"];
 		assert.equal((usage.match(/<h1\b/g) ?? []).length, 1);
 		assert.ok(usage.includes('<h2 id="from-a-template"><a href="#from-a-template">From a template</a></h2>'), "demoted, with its anchor");

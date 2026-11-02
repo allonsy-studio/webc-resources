@@ -93,8 +93,6 @@
 
 				/* The page title and the body's line length in a page with a navigation column, for norn-docs and norn-workspace. The base styles set the title's face and wrapping. */
 				norn-sidebar-layout {
-					--norn-rich-text-measure: none;
-
 					& > div > article > h1 {
 						margin: 0;
 						font-size: clamp(1.9rem, 4vw, 2.5rem);

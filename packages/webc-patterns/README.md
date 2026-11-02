@@ -409,7 +409,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-card-grid` | `@gap` (`s`, `m`, or `l`), `@min` (a length), default slot (`<li>` cards) | Responsive grid of cards |
 | `norn-side-nav` | `:@items` (`{ url, title, icon?, children? }[]`), slots `label` and `search` | Page links, with `aria-current` on the current page and its parent |
 | `norn-sidebar-layout` | slots `nav` and `summary`, default slot (the body, from its h1) | Navigation column beside a page body. The navigation stays in view; below 37.5rem the columns stack and the navigation folds into a closed `<details>` |
-| `norn-rich-text` | default slot | Prose styles for long-form content |
+| `norn-rich-text` | `@measure` (`text` or `none`), default slot | Prose styles for long-form content |
 | `norn-pager` | `:@prev`, `:@next` (`{ url, title }`), slot `label` | Links to the neighboring pages |
 | `norn-link-button` | `@href`, `@variant` (`primary`, `secondary`, or `quiet`), default slot | A link styled as a button, for a call to action |
 | `norn-fact-list` | default slot (`<li>` facts) | A row of short facts, each with an optional icon |

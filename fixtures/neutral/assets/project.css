@@ -12,10 +12,8 @@ main:has(> norn-sidebar-layout) {
 	padding-block: 0;
 }
 
-/* The frame is layout only: the project sets the page title and the body's line length. */
+/* The frame is layout only: the project sets the page title. The body's line length is norn-rich-text's measure prop. */
 norn-sidebar-layout {
-	--norn-rich-text-measure: none;
-
 	& > div > article > h1 {
 		margin: 0;
 		font-size: clamp(1.9rem, 4vw, 2.5rem);

@@ -55,7 +55,7 @@ const searchSite = (norn) => {
 	</norn-side-nav>
 	<h1 @text="$data.norn.title || ''"></h1>
 	<template webc:nokeep webc:for="toc of [nornHeadings($data.content)]"><norn-toc webc:if="toc.length > 1" :@items="toc"></norn-toc></template>
-	<norn-rich-text data-pagefind-body
+	<norn-rich-text @measure="none" data-pagefind-body
 		><template webc:if="nornCompiles($data, 'norn-docs')" webc:nokeep @html="$data.content"></template
 		><template webc:else webc:nokeep @raw="$data.content"></template
 	></norn-rich-text>
