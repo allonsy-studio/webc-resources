@@ -578,8 +578,8 @@ export function analyzeFile(file, { tokens = readTokens(), helpers = helperNames
 
 /**
  * The argTypes an analysis gives, in the CSF shape: props, then slots. A CSF file adds the descriptions and the few
- * facts code cannot say. Custom properties are not API, so there are none. A slot that shares a prop's name is keyed
- * `slot:<name>`, with its own name in `name`, so neither replaces the other.
+ * facts code cannot say. Custom properties are not API, so there are none. No slot shares a prop's name:
+ * `components.test.js` checks it.
  *
  * @param {ReturnType<typeof analyzeWebc>} analysis
  * @returns {Record<string, object>}
@@ -598,7 +598,7 @@ export function derivedArgTypes({ props, slots }) {
 		if (entry.required) argType.type = { name: entry.type || "string", required: true };
 		argTypes[entry.name] = { ...argType, table };
 	}
-	for (const { name } of slots) argTypes[name in argTypes ? `slot:${name}` : name] = { ...(name in argTypes ? { name } : {}), control: "text", table: { category: "slots" } };
+	for (const { name } of slots) argTypes[name] = { control: "text", table: { category: "slots" } };
 	return argTypes;
 }
 

@@ -44,7 +44,7 @@ function prop(name, value) {
  *
  * @param {string} tag - The component's tag
  * @param {Record<string, unknown>} args
- * @param {Record<string, { name?: string, table?: { category?: string } }>} argTypes
+ * @param {Record<string, { table?: { category?: string } }>} argTypes
  * @returns {string} The WebC source
  * @throws {Error} When an arg has no argType
  */
@@ -58,8 +58,7 @@ export function renderStory(tag, args = {}, argTypes = {}) {
 		if (category === PROPS) attributes.push(prop(name, value));
 		else if (category === SLOTS && value !== undefined && value !== "") {
 			if (name === "default") body = String(value);
-			// A slot keyed apart from a prop of the same name carries its own name.
-			else named.push(`<template slot="${argTypes[name].name ?? name}" webc:nokeep>${value}</template>`);
+			else named.push(`<template slot="${name}" webc:nokeep>${value}</template>`);
 		}
 	}
 	const open = [tag, ...attributes.filter(Boolean)].join(" ");

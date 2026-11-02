@@ -203,14 +203,6 @@ test("the argTypes an analysis gives: props with their facts, then slots, and no
 	});
 });
 
-test("a slot that shares a prop's name keeps its own argType, keyed apart and named for the slot", () => {
-	const argTypes = derivedArgTypes(analyze('<fieldset><legend><slot name="legend"><span webc:if="legend" @text="legend"></span></slot></legend></fieldset>'));
-	assert.deepEqual(argTypes, {
-		legend: { control: "text", table: { category: "props", type: { summary: "string" } } },
-		"slot:legend": { name: "legend", control: "text", table: { category: "slots" } },
-	});
-});
-
 /** A source file of a package. */
 const source = (...parts) => path.join(PACKAGES, ...parts);
 

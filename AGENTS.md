@@ -26,7 +26,7 @@ neither of them knows the OSS site theme exists.
 ```text
 packages/<name>/   src/*.webc, src/layouts/*.webc, src/fallback/*.webc, src/css/*.css (the sources); src/**/*.stories.js (each component's CSF file, not shipped); components/, layouts/, fallback/, css/ (compiled from src, not committed); index.js, README.md
 tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
-scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json; analyze-webc.js: derives a source's props, slots, and tokens; calibrate-webc.js: compares that with the docs
+scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json; analyze-webc.js: derives a source's props, slots, and tokens
 fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
 preview/           the component preview: an Eleventy site with a page and stories per component (private)
 ```
@@ -139,8 +139,7 @@ preview/           the component preview: an Eleventy site with a page and stori
     The component description is `parameters.docs.description.component`. A fact lives in one place. Phase A moved
     `norn-callout`, `norn-card`, `norn-link-button`, `norn-code-block`, `oss-bar`, and `norn-landing`; the rest still use JSDoc
     until they move. `stories.test.js` checks the shape, an undocumented derived arg, a stale argType, a restated fact, an
-    override without a reason, and a custom property entry. `node scripts/calibrate-webc.js` prints where the analysis and the
-    docs differ.
+    override without a reason, and a custom property entry.
     Every component outside the document head, and every layout, has at least one story: a CSF story, or a page in
     `preview/content/stories/<package>/<name>/`. A CSF story is a single instance from its args, rendered in a frame by the
     default renderer; a page is for anything more, such as a composition, Markdown, or a whole page on a layout

@@ -116,7 +116,7 @@ export function csfDoc(meta, argTypes = meta.argTypes) {
 		text: paragraphs,
 		category: meta.parameters?.webc?.category ?? meta.title.split("/")[0].toLowerCase(),
 		props: argTypesIn(argTypes, PROPS).map(([name, argType]) => ({ name, type: argType.table?.type?.summary ?? argType.type?.name ?? "", optional: argType.type?.required !== true, description: inline(propText(argType)) })),
-		slots: argTypesIn(argTypes, SLOTS).map(([key, argType]) => ({ name: argType.name ?? key, description: inline(argType.description ?? "") })),
+		slots: argTypesIn(argTypes, SLOTS).map(([name, argType]) => ({ name, description: inline(argType.description ?? "") })),
 	};
 }
 
