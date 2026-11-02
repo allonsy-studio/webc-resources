@@ -395,12 +395,24 @@ test("norn-copy-button reads the shared tokens and takes its fill as a surface p
 test("norn-code-block overlays a compact copy button, and its terminal frame is flat, with no dots, no shadow, and no border", async () => {
 	const css = cssOf("norn-code-block");
 	assert.ok(!/border: 1px|--norn-code-block-border|radial-gradient|box-shadow|--norn-code-block-(dot|shadow)|::before/.test(css), "no border, dots, or shadow");
-	assert.ok(css.includes("@container style(--norn-chrome: terminal)"), "the frame is still there for whoever sets it");
+	assert.ok(css.includes('& figure:where([data-chrome="terminal"]) > figcaption {'), "the frame is still there for whoever asks for it");
 	assert.ok(css.includes("block-size: 2rem"), "a 2rem header");
 	assert.match(css, /norn-copy-button \{[^}]*grid-area: 2 \/ 1;[^}]*justify-self: end;[^}]*align-self: start;/, "over the top end corner of the code");
 	assert.ok(unid(await render('<norn-code-block @language="js" @code="x"></norn-code-block>')).includes("<norn-copy-button"), "the button is still part of the sample");
 	assert.ok((await render('<norn-code-block @language="js" @code="x"></norn-code-block>')).includes("data-compact"), "and compact");
 	assert.ok(!cssOf("norn-hero").includes("--norn-chrome"), "a hero no longer turns the frame on");
+});
+
+test("norn-code-block reads the shared tokens, and its terminal frame is a prop, not an inherited custom property", async () => {
+	const css = cssOf("norn-code-block");
+	assert.ok(!/--norn-code-block-|--norn-chrome|@container style/.test(css), "no --norn-code-block-* property and no mode flag");
+	for (const read of ["background: var(--norn-surface-code, t('surface.code'));", "color: var(--norn-text-base, t('text.base'));", "font-family: var(--norn-font-mono, t('font.mono'));", "padding: var(--norn-space-m, t('space.m'));", "border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));"]) assert.ok(css.includes(read), read);
+	assert.ok((await render('<norn-code-block @chrome="terminal" @language="sh" @code="x"></norn-code-block>')).includes('<figure data-chrome="terminal">'), "the prop marks the frame");
+	assert.ok(!(await render('<norn-code-block @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "no frame by default");
+	assert.ok(!(await render('<norn-code-block @chrome="window" @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "nor for an unknown value");
+	assert.ok(!(await render('<div style="--norn-chrome: terminal"><norn-code-block @language="sh" @code="x"></norn-code-block></div>')).includes("data-chrome"), "an ancestor's custom property does nothing");
+	assert.match(css, /& figure:where\(\[data-chrome="terminal"\]\), & figure:where\(\[data-chrome="terminal"\]\):has\(> figcaption\) \{ overflow: hidden; row-gap: 0;/, "the frame clips its corners and closes the gap");
+	assert.ok(css.indexOf('figure:where([data-chrome="terminal"]):has(> figcaption)') > css.indexOf("& figure:has(> figcaption) {"), "after the plain caption gap, at the same specificity");
 });
 
 test("norn-search has a field edge from the strong border, a leading magnifier, and floating results on the raised surface with the shadow and no border", async () => {

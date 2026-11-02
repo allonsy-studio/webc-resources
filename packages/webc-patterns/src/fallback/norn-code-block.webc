@@ -13,6 +13,7 @@
  * @prop {string} code
  * @prop {string} [language] - Set as `data-language` on the `<pre>`.
  * @prop {string} [caption] - A `<figcaption>` after the code, in a `<figure>`.
+ * @prop {string} [chrome] - Not rendered: the plain sample has no frame.
  * @slot label - Not rendered: the plain sample has no script to name the code.
  * @slot copy-label - Not rendered: the plain sample has no copy button.
  * @slot copy - Not rendered.

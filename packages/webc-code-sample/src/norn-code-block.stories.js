@@ -12,6 +12,7 @@ export default {
 		code: { description: "The code to show.", type: { name: "string", required: true } },
 		language: { description: "A language Shiki has loaded: the defaults or one added with `loadLanguages`. Unknown or empty renders plain text." },
 		caption: { description: "Also names the code and its copy button." },
+		chrome: { description: "`terminal` frames the code with a header bar for the caption. Without it the code sits on its surface with the caption above." },
 		label: { description: 'The code\'s name without a caption, as one element. Falls back to "{language} code", with the language filled in, or "code" with no language.' },
 		"copy-label": { description: 'The copy button\'s name, with `{name}` for the code\'s name, as one element. Falls back to "Copy {name} to clipboard".' },
 		copy: { description: 'The copy button\'s text. Falls back to "Copy".' },

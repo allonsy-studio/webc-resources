@@ -86,15 +86,20 @@ The code stays readable plain text, and is not a tab stop: the script makes it a
 
 ### Customizing
 
-Custom properties, each falling back to a shared token, which falls back to its default compiled into the component, so the sample keeps its look with no stylesheet beside it:
+`@chrome="terminal"` frames the code with a header bar for the caption:
 
-| Property | Controls |
+```html
+<norn-code-block @chrome="terminal" @language="sh" @caption="Terminal" @code="npm install"></norn-code-block>
+```
+
+The sample reads shared tokens only, each falling back to its default compiled into the component, so it keeps its look with no stylesheet beside it. Set them in a project `tokens.css`:
+
+| Token | Controls |
 | --- | --- |
-| `--norn-code-block-bg`, `--norn-code-block-fg` | Surface and text colors |
-| `--norn-code-block-radius`, `--norn-code-block-padding` | Corner radius and inner spacing |
-| `--norn-code-block-font` | Font stack |
+| `--norn-surface-code`, `--norn-text-base` | Surface and text colors |
+| `--norn-ui-border-radius`, `--norn-space-m` | Corner radius and inner spacing |
+| `--norn-font-mono` | Font stack |
 | `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number`, `--norn-code-flag` | Syntax colors |
-| `--norn-chrome: terminal` | Set on an ancestor for the frame with a header bar for the caption |
 
 ## Exports
 

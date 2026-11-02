@@ -21,7 +21,7 @@ const nameOf = (language, label) =>
 		.replace(/\s+/g, " ")
 		.trim();
 </script>
-<figure>
+<figure :data-chrome="chrome === 'terminal' ? 'terminal' : undefined">
 	<figcaption webc:if="caption" @text="caption"></figcaption>
 	<norn-copy-button :@value="pasteable(code)" :@strings="'norn-code-block-' + uid" :@compact="true" @surface="code"></norn-copy-button>
 	<pre dir="ltr" :data-language="typeof language === 'string' && language ? language : undefined"><code :data-tokens="nornTokenRanges(code, language)" @text="code"></code></pre>
@@ -52,7 +52,7 @@ const nameOf = (language, label) =>
 			& figcaption {
 				grid-area: 1 / 1;
 				color: var(--norn-text-muted, t('text.muted'));
-				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
+				font-family: var(--norn-font-mono, t('font.mono'));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
 			}
 
@@ -69,11 +69,11 @@ const nameOf = (language, label) =>
 				grid-area: 2 / 1;
 				margin: 0;
 				overflow-x: auto;
-				padding: var(--norn-code-block-padding, var(--norn-space-m, t('space.m')));
-				border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				background: var(--norn-code-block-bg, var(--norn-surface-code, t('surface.code')));
-				color: var(--norn-code-block-fg, var(--norn-text-base, t('text.base')));
-				font-family: var(--norn-code-block-font, var(--norn-font-mono, t('font.mono')));
+				padding: var(--norn-space-m, t('space.m'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-code, t('surface.code'));
+				color: var(--norn-text-base, t('text.base'));
+				font-family: var(--norn-font-mono, t('font.mono'));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
 				line-height: 1.5;
 			}
@@ -98,27 +98,25 @@ const nameOf = (language, label) =>
 				font: inherit;
 			}
 
-			/* A frame with a header bar for the caption, set with `--norn-chrome: terminal` on an ancestor. */
-			@container style(--norn-chrome: terminal) {
-				& figure,
-				& figure:has(> figcaption) {
-					overflow: hidden;
-					row-gap: 0;
-					border-radius: var(--norn-code-block-radius, var(--norn-ui-border-radius, t('ui.border.radius')));
-				}
+			/* A frame with a header bar for the caption, for `@chrome="terminal"`. `:where()` keeps each rule as specific as the plain one it follows, so a container's rules still win. */
+			& figure:where([data-chrome="terminal"]),
+			& figure:where([data-chrome="terminal"]):has(> figcaption) {
+				overflow: hidden;
+				row-gap: 0;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+			}
 
-				& figcaption {
-					box-sizing: border-box;
-					display: flex;
-					align-items: center;
-					block-size: 2rem;
-					padding-inline: var(--norn-space-s, t('space.s'));
-					background: var(--norn-surface-raised, t('surface.raised'));
-				}
+			& figure:where([data-chrome="terminal"]) > figcaption {
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				block-size: 2rem;
+				padding-inline: var(--norn-space-s, t('space.s'));
+				background: var(--norn-surface-raised, t('surface.raised'));
+			}
 
-				& pre {
-					border-radius: 0;
-				}
+			& figure:where([data-chrome="terminal"]) > pre {
+				border-radius: 0;
 			}
 
 			/* Colors for the ranges the script registers, set on `code` as Firefox ignores them on an ancestor. Plain text without Custom Highlight API support. */
