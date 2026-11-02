@@ -9,15 +9,6 @@ nornCompiled: true
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * One workspace's page in the docs frame: the workspaces sidebar, its name, its description, and its page, such as its SKILL.md or README.md rendered to HTML. Extends `norn-base`.
- * The page's own content follows the workspace's, so a pagination template can leave its body empty.
- * The sidebar's name ("Packages") comes from `componentStrings` under `norn-workspace`, then English.
- * @prop {{ url: string, title: string }[]} [workspaces] - The workspaces, for the sidebar. `name` stands in for a missing `title`.
- * @prop {{ name: string, description?: string, html?: string }} [workspace] - The workspace on this page. Its `html` is compiled as WebC, so it may hold components.
- * @category template
- */
 --->
 <norn-sidebar-layout>
 	<span slot="summary" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span>
