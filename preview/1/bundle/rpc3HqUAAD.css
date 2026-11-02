@@ -143,7 +143,7 @@
 				--_color: var(--norn-status-warning, light-dark(#9a4a00, #ffb36b));
 			}
 
-			&:has(> [data-severity="error"]) {
+			&:has(> [data-severity="danger"]) {
 				--_color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
 			}
 
