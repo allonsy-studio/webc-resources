@@ -5,16 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Links to the pages before and after this one. Renders nothing when both are missing.
- * Get the pages from `adjacent`, registered as `nornAdjacent`, at the call site.
- * The arrows are `norn-icon`s, which point the other way in right-to-left text.
- * @prop {{ url: string, title: string }} [prev]
- * @prop {{ url: string, title: string }} [next]
- * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pager".
- * @category landmark
- */
 --->
 <nav :aria-labelledby="'norn-pager-' + uid" webc:if="prev || next">
 	<span data-label :id="'norn-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-pager', 'label', $data.page) || 'Pager'"></span></slot></span>

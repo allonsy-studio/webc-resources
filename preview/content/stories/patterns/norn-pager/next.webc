@@ -1,5 +1,0 @@
----
-title: Next only
-order: 2
----
-<norn-pager :@next="({ url: '#next', title: 'Usage' })"></norn-pager>
