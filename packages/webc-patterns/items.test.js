@@ -132,3 +132,9 @@ test("norn-workspace lists the workspaces in its sidebar by href and title, and 
 	assert.ok(!html.includes('href="/zed/"') && !html.includes("@acme/zed"), "no link and no label from url and name");
 	assert.match(html, /<h1>@acme\/alpha<\/h1>/, "the heading is the workspace's package name");
 });
+
+test("norn-landing titles its package cards by title, and a card with only name shows no label", async () => {
+	const html = await layout("norn-landing", { packages: [{ title: "@acme/core", description: "The core.", href: "/core/" }, { name: "@acme/old", description: "The old one.", href: "/old/" }] });
+	assert.ok(html.includes('<a href="/core/">@acme/core</a>') && html.includes("The core."), "the new card");
+	assert.ok(!html.includes("@acme/old"), "no label from name");
+});

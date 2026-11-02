@@ -13,7 +13,7 @@
 		{ "title": "Easy to restyle", "body": "Custom properties and unlayered CSS beat every packaged layer." }
 	],
 	"packages": [
-		{ "name": "@example/core", "description": "The core package.", "href": "https://example.com/core" },
-		{ "name": "@example/cli", "description": "The command line.", "href": "https://example.com/cli" }
+		{ "title": "@example/core", "description": "The core package.", "href": "https://example.com/core" },
+		{ "title": "@example/cli", "description": "The command line.", "href": "https://example.com/cli" }
 	]
 }

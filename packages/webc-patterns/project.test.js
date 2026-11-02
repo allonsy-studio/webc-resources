@@ -267,3 +267,44 @@ test("buildWorkspaces: a README renders with the site's add-ons and ids, and its
 	assert.ok(entry.html.includes("<norn-simple-table><table>"), entry.html);
 	assert.deepEqual([...entry.html.matchAll(/<norn-heading-anchor @slug="([^"]+)">/g)].map((match) => match[1]), ["install", "install-2"]);
 });
+
+/** The `project.json` schema the package ships. */
+const SCHEMA = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, "schema", "project.schema.json"), "utf8"));
+
+/**
+ * The errors of a value against a schema, for the keywords `project.schema.json` uses: `type`, `required`, `properties`, `additionalProperties`, `items`, `minLength`, `enum`, and `not`.
+ *
+ * @param {object} schema - A JSON schema, or one of its subschemas
+ * @param {unknown} value - The value to check
+ * @param {string} [at] - The value's path, for the messages
+ * @returns {string[]} One message per error; none when the value is valid
+ */
+function errors(schema, value, at = "") {
+	const kind = Array.isArray(value) ? "array" : value === null ? "null" : typeof value;
+	if (schema.not) return errors(schema.not, value, at).length ? [] : [`${at}: matches a forbidden schema`];
+	if (schema.type && schema.type !== kind) return [`${at}: is not ${schema.type}`];
+	if (schema.enum && !schema.enum.includes(value)) return [`${at}: is not one of ${schema.enum.join(", ")}`];
+	if (kind === "string" && value.length < (schema.minLength ?? 0)) return [`${at}: is too short`];
+	if (kind === "array" && schema.items) return value.flatMap((item, index) => errors(schema.items, item, `${at}[${index}]`));
+	if (kind !== "object") return [];
+	return [
+		...(schema.required ?? []).filter((key) => !(key in value)).map((key) => `${at}: has no ${key}`),
+		...Object.entries(value).flatMap(([key, child]) => {
+			if (schema.properties?.[key]) return errors(schema.properties[key], child, `${at}.${key}`);
+			return schema.additionalProperties === false ? [`${at}: has an unknown key ${key}`] : [];
+		}),
+	];
+}
+
+test("project.schema.json: a package card is { title, description, href? }, and a card with name in place of title fails", () => {
+	assert.deepEqual(errors(SCHEMA, { packages: [{ title: "@acme/core", description: "The core.", href: "https://example.com/core" }] }), []);
+	assert.deepEqual(errors(SCHEMA, { packages: [{ name: "@acme/core", description: "The core." }] }), [".packages[0]: has no title"]);
+	assert.equal(SCHEMA.properties.packages.items.additionalProperties, undefined, "other keys stay allowed, as before");
+});
+
+test("project.schema.json: the fixtures' and the preview's project data validate", () => {
+	const root = path.resolve(import.meta.dirname, "..", "..");
+	for (const file of ["fixtures/landing/src/_data/project.json", "fixtures/docs/src/_data/project.json", "fixtures/workspaces/src/_data/project.json", "preview/_data/project.json"]) {
+		assert.deepEqual(errors(SCHEMA, JSON.parse(fs.readFileSync(path.join(root, file), "utf8"))), [], file);
+	}
+});

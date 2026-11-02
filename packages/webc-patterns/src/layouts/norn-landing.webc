@@ -57,8 +57,8 @@ nornCompiled: true
 		<li webc:for="pkg of $data.norn.packages">
 			<norn-card @title-face="mono">
 				<h3>
-					<a webc:if="pkg.href" :href="pkg.href" @text="pkg.name"></a>
-					<span webc:else @text="pkg.name"></span>
+					<a webc:if="pkg.href" :href="pkg.href" @text="pkg.title"></a>
+					<span webc:else @text="pkg.title"></span>
 				</h3>
 				<p @text="pkg.description"></p>
 			</norn-card>
