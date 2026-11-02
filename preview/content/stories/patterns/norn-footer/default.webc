@@ -26,6 +26,6 @@ bleed: true
 				</ul>
 			</div>
 		</nav>
-		<p slot="colophon"><small>Full-width content below the columns.</small></p>
+		<p slot="colophon"><small>Built with Eleventy.</small></p>
 	</norn-footer>
 </div>

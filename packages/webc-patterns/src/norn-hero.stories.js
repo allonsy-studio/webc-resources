@@ -9,7 +9,7 @@ export default {
 	title: "Container/norn-hero",
 	component: "norn-hero",
 	// The matrix cells show a lede, so each width has something to hold.
-	args: { default: "<p>One or two sentences on why a reader would want it, and what they get in the first minute.</p>" },
+	args: { default: "<p>Greet anyone by name, from code or from the command line, with no setup.</p>" },
 	argTypes: {
 		default: { description: "The h1, lede, actions, facts, and extras, in that order." },
 		width: { description: "Content width: `layout`, --norn-layout-width, or `measure`, the prose line length, --norn-text-measure.", options: ["layout", "measure"], table: { defaultValue: { summary: "layout" } } },
