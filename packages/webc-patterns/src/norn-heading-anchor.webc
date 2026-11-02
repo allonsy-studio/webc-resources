@@ -11,8 +11,8 @@
  * The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes this component for Markdown headings.
  * @prop {string} slug - The heading's id, and the link's fragment. Required: the build fails without it.
  * @prop {number} [level] - 2 to 6. Falls back to 2.
+ * The `#` takes --norn-text-muted.
  * @slot - The heading text.
- * @cssprop --norn-heading-anchor-mark - The `#` color. Falls back to --norn-text-muted.
  * @category component
  */
 --->
@@ -40,7 +40,7 @@ const required = (value) => {
 				&::before {
 					content: "#" / "";
 					margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
-					color: var(--norn-heading-anchor-mark, var(--norn-text-muted, t('text.muted')));
+					color: var(--norn-text-muted, t('text.muted'));
 				}
 			}
 

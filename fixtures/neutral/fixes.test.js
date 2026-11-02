@@ -199,13 +199,14 @@ describe("the component fixes, built from content with only the data a page name
 		});
 	});
 
-	test("--norn-heading-anchor-mark colors the # inside norn-rich-text too", async () => {
+	test("the # takes --norn-text-muted inside norn-rich-text too, and no --norn-heading-anchor-mark", async () => {
 		await onPage("/toc-by-hand/", async (page) => {
 			const mark = () => page.$eval("norn-rich-text norn-heading-anchor h2", (heading) => getComputedStyle(heading, "::before").color);
 			const muted = await mark();
 			await page.evaluate(() => document.documentElement.style.setProperty("--norn-heading-anchor-mark", "rgb(255, 0, 0)"));
-			assert.equal(await mark(), "rgb(255, 0, 0)");
-			assert.notEqual(muted, "rgb(255, 0, 0)");
+			assert.equal(await mark(), muted, "the old property does nothing");
+			await page.evaluate(() => document.documentElement.style.setProperty("--norn-text-muted", "rgb(0, 128, 0)"));
+			assert.equal(await mark(), "rgb(0, 128, 0)");
 		});
 	});
 

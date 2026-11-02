@@ -503,7 +503,7 @@ test("one heading anchor recipe: norn-heading-anchor draws the # and styles its 
 	const rich = styles(sources.find(({ file }) => file.endsWith("/norn-rich-text.webc")).text).replace(/\/\*[\s\S]*?\*\//g, "");
 	assert.ok(!/::before|>\s*a\b/.test(rich), "norn-rich-text has no rule for the mark or the heading link");
 	const anchor = styles(sources.find(({ file }) => file.endsWith("/norn-heading-anchor.webc")).text);
-	assert.ok(anchor.includes("var(--norn-heading-anchor-mark,"), "the component reads its custom property");
+	assert.ok(anchor.includes("color: var(--norn-text-muted, t('text.muted'));") && !/--norn-heading-anchor-/.test(anchor), "the # takes the shared muted color, with no custom property of its own");
 });
 
 test("::highlight() rules sit on the element that holds the text, which Firefox needs", () => {
