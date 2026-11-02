@@ -7,22 +7,25 @@
  */
 
 /**
- * A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and sets `--norn-rich-text-measure`, as `norn-docs` and `norn-workspace` do.
+ * A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and the body's line length, as `norn-docs` and `norn-workspace` do.
  * Wrap prose in `norn-rich-text`.
  * Pass the navigation as one element in the `nav` slot, such as `<norn-side-nav slot="nav" …>`, and the body, starting with its h1, in the default slot.
  * The navigation stays in view while the page scrolls, and a long list scrolls inside it. When the frame is narrower than 37.5rem the columns stack, and the navigation folds into a closed `<details>` above the body, under the `summary` text. A browser without `::details-content` always shows the fold.
  * Sections and articles inside the body stack with a small gap.
+ * The frame is as wide as --norn-layout-width allows. A project sets another width with CSS against the tag, in its own unlayered stylesheet.
+ * @prop {string} [nav-width] - The navigation column's width, as a CSS length. Falls back to 14rem.
+ * @prop {"s" | "m" | "l" | "xl"} [gap] - The space between the navigation and the body, a step of --norn-space-*. Falls back to `l`.
+ * @prop {string} [columns] - The body's grid columns, as a `grid-template-columns` value, to put something beside the prose. Falls back to one column.
  * @slot nav - The navigation, as one element.
  * @slot summary - The text of the control that opens the navigation on a narrow frame, as one element. Falls back to the site's `componentStrings`, then "Menu". A layout passes the navigation's own name.
  * @slot - The page body, starting with its h1.
- * @cssprop --norn-sidebar-layout-nav - Navigation column width. Falls back to 14rem.
- * @cssprop --norn-sidebar-layout-width - Overall width. Falls back to --norn-layout-width.
- * @cssprop --norn-sidebar-layout-gap - Space between the navigation and the body. Falls back to --norn-space-l.
- * @cssprop --norn-sidebar-layout-columns - The body's grid columns. Falls back to one column. A page sets it on the body's `article` to put something beside its prose, as `norn-docs` does with its contents.
  * @category layout
  */
 --->
-<div>
+<div
+	:style="[typeof navWidth === 'string' && navWidth ? '--_nav: ' + navWidth : '', typeof columns === 'string' && columns ? '--_columns: ' + columns : ''].filter(Boolean).join('; ')"
+	:data-gap="['s', 'm', 'l', 'xl'].includes(gap) ? gap : undefined"
+>
 	<details>
 		<summary><slot name="summary"><span webc:nokeep @text="nornComponentStrings?.('norn-sidebar-layout', 'summary', $data.page) || 'Menu'"></span></slot></summary>
 		<slot name="nav"></slot>
@@ -34,15 +37,27 @@
 		norn-sidebar-layout {
 			display: block;
 			container-type: inline-size;
-			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-sidebar-layout-width, var(--norn-layout-width, t('layout.width'))));
+			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-layout-width, t('layout.width')));
 			margin-inline: auto;
 			padding-block: var(--norn-space-l, t('space.l'));
 
 			& > div {
 				display: grid;
-				grid-template-columns: var(--norn-sidebar-layout-nav, 14rem) minmax(0, 1fr);
+				grid-template-columns: var(--_nav, 14rem) minmax(0, 1fr);
 				align-items: start;
-				gap: var(--norn-sidebar-layout-gap, var(--norn-space-l, t('space.l')));
+				gap: var(--norn-space-l, t('space.l'));
+
+				&[data-gap="s"] {
+					gap: var(--norn-space-s, t('space.s'));
+				}
+
+				&[data-gap="m"] {
+					gap: var(--norn-space-m, t('space.m'));
+				}
+
+				&[data-gap="xl"] {
+					gap: var(--norn-space-xl, t('space.xl'));
+				}
 			}
 
 			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. The details is only a column here: its summary is hidden, and its content always shows. */
@@ -65,7 +80,7 @@
 
 			& > div > article {
 				display: grid;
-				grid-template-columns: var(--norn-sidebar-layout-columns, minmax(0, 1fr));
+				grid-template-columns: var(--_columns, minmax(0, 1fr));
 				align-content: start;
 				gap: var(--norn-space-m, t('space.m'));
 				min-inline-size: 0;

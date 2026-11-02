@@ -591,6 +591,20 @@ test("norn-sidebar-layout folds its navigation into a closed details with a summ
 	assert.equal(defaultStrings["norn-sidebar-layout"].summary, "Menu");
 });
 
+test("norn-sidebar-layout reads the shared tokens and no custom property of its own, and takes its column width, gap, and body columns from props", async () => {
+	const css = styles(sources.find(({ file }) => file === "webc-patterns/src/norn-sidebar-layout.webc").text);
+	assert.ok(!/--norn-sidebar-layout-/.test(css), "no --norn-sidebar-layout-* property");
+	assert.ok(css.includes("inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-layout-width, t('layout.width')));"), "the width is the layout token");
+	assert.ok(css.includes("grid-template-columns: var(--_nav, 14rem) minmax(0, 1fr);") && css.includes("grid-template-columns: var(--_columns, minmax(0, 1fr));"));
+	for (const step of ["s", "m", "xl"]) assert.ok(squash(css).includes(`&[data-gap="${step}"] { gap: var(--norn-space-${step}, t('space.${step}')); }`), step);
+	const html = await render('<norn-sidebar-layout @nav-width="10rem" @gap="s" @columns="minmax(0, 1fr) 10rem"><h1>T</h1></norn-sidebar-layout>');
+	assert.match(html, /<norn-sidebar-layout><div data-gap="s" style="--_nav: 10rem; --_columns: minmax\(0, 1fr\) 10rem">/, "the props");
+	assert.match(await render('<norn-sidebar-layout @gap="huge"><h1>T</h1></norn-sidebar-layout>'), /<norn-sidebar-layout><div>/, "an unknown gap, and no other prop, leave the div bare");
+	assert.match(await render('<norn-sidebar-layout style="--norn-sidebar-layout-nav: 9rem"><h1>T</h1></norn-sidebar-layout>'), /<div>/, "the old property sets nothing");
+	const docs = squash(styles(sources.find(({ file }) => file.endsWith("/layouts/norn-docs.webc")).text));
+	assert.ok(docs.includes("norn-sidebar-layout > div > article:has(> norn-toc > nav) { grid-auto-columns: 12rem; }") && !docs.includes("--norn-sidebar-layout"), "norn-docs puts its contents in an implicit column");
+});
+
 test("norn-toc folds under its title through a details, and the title names the landmark", async () => {
 	const html = unid(await render("<norn-toc :@items=\"[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]\"></norn-toc>"));
 	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);

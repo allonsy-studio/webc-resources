@@ -73,8 +73,9 @@ const searchSite = (norn) => {
 		}
 
 		@container (width >= 60rem) {
+			/* The contents take a second, implicit column beside the body's one. */
 			norn-sidebar-layout > div > article:has(> norn-toc > nav) {
-				--norn-sidebar-layout-columns: minmax(0, 1fr) 12rem;
+				grid-auto-columns: 12rem;
 			}
 
 			norn-sidebar-layout > div > article > * {
