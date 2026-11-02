@@ -10,6 +10,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
 
+import { tokenize } from "../../packages/webc-code-sample/tokenize.js";
 import { audit, launch, listsNeedingRole, pagesOf, serve } from "../lib/browser.js";
 import { allCss, between, buildFixture, headOf, namedBetween, pagesIn, read } from "../lib/build.js";
 import { sharedChecks } from "../lib/checks.js";
@@ -189,7 +190,7 @@ describe("landing fixture in a browser", () => {
 		await page.goto(server.url + "/");
 		const result = await page.evaluate(() => {
 			const original = document.querySelector("norn-code-block");
-			const group = JSON.parse(original.querySelector("code").dataset.tokens)[0][0];
+			const [[group]] = JSON.parse(original.querySelector("code").dataset.tokens);
 			const size = () => CSS.highlights.get(`tok-${group}`)?.size ?? 0;
 			const before = size();
 			const added = original.cloneNode(true);
@@ -204,6 +205,24 @@ describe("landing fixture in a browser", () => {
 		assert.ok(result.withSample > result.before, "its ranges were added");
 		assert.equal(result.buttons, 1, "still one copy button after a move");
 		assert.equal(result.after, result.before, "its ranges were released");
+		await page.close();
+	});
+
+	test("the highlight registry holds each sample's ranges, the ones the plain range list names for its code", async () => {
+		const page = await browser.newPage();
+		await page.goto(server.url + "/");
+		await page.waitForFunction(() => CSS.highlights.size > 0);
+		const samples = await page.evaluate(() => {
+			const codes = [...document.querySelectorAll("norn-code-block code")];
+			const found = codes.map(() => []);
+			for (const [name, highlight] of CSS.highlights) {
+				for (const range of highlight) found[codes.findIndex((code) => code.contains(range.startContainer))]?.push([name.replace("tok-", ""), range.startOffset, range.endOffset]);
+			}
+			return codes.map((code, index) => ({ text: code.textContent, language: code.closest("pre").dataset.language, found: found[index].sort((a, b) => a[1] - b[1]) }));
+		});
+		assert.ok(samples.length >= 2, `${samples.length} samples`);
+		assert.ok(samples.some(({ language }) => language === "js"), "a JavaScript sample");
+		for (const { text, language, found } of samples) assert.deepEqual(found, tokenize(text, language), language);
 		await page.close();
 	});
 

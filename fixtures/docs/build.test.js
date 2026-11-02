@@ -216,6 +216,34 @@ describe("docs fixture in a browser", () => {
 		await page.close();
 	});
 
+	test("a sample whose token data is unusable has no highlight ranges, and the others keep theirs", async () => {
+		const page = await browser.newPage();
+		const errors = [];
+		page.on("pageerror", (error) => errors.push(error.message));
+		let tokens;
+		await page.route("**/reference/", async (route) => {
+			const response = await route.fetch();
+			await route.fulfill({ response, body: (await response.text()).replace(/data-tokens="[^"]*"/, `data-tokens="${tokens.replaceAll('"', "&quot;")}"`) });
+		});
+		const unusable = { "not JSON": "not json", empty: "", "the plain range list": '[["function",0,3]]', "a range past the end": '[["function"],[0,0,9999]]', "a missing group": '[["function"],[4,0,3]]', "a short list": '[["function"],[0,0]]', "no list": '[["function"]]' };
+		for (const [label, value] of Object.entries(unusable)) {
+			tokens = value;
+			await page.goto(server.url + "/reference/");
+			await page.waitForFunction(() => CSS.highlights.size > 0);
+			const counts = await page.evaluate(() =>
+				[...document.querySelectorAll("norn-code-block code[data-tokens]")].map((code) => {
+					let count = 0;
+					for (const highlight of CSS.highlights.values()) for (const range of highlight) if (code.contains(range.startContainer)) count += 1;
+					return count;
+				}),
+			);
+			assert.equal(counts[0], 0, `${label}: plain`);
+			assert.ok(counts.length > 1 && counts.slice(1).every((count) => count > 0), `${label}: the others are highlighted`);
+		}
+		assert.deepEqual(errors, []);
+		await page.close();
+	});
+
 	test("the copy button strips the shell prompt", async () => {
 		const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
 		const page = await context.newPage();

@@ -14,6 +14,7 @@ import path from "node:path";
 import { after, before, describe, test } from "node:test";
 
 import { audit, launch, listsNeedingRole, pagesOf, serve } from "../fixtures/lib/browser.js";
+import { decodeRanges } from "../packages/webc-code-sample/index.js";
 import { readTokens } from "../scripts/build-components.js";
 import { buildCatalog, csfFile, readCsf } from "./lib/catalog.js";
 import { matrixCells } from "./lib/render-story.js";
@@ -377,15 +378,17 @@ describe("the preview in a browser", () => {
 		await page.goto(`${server.url}/many/`);
 		await page.waitForFunction(() => CSS.highlights.size > 0);
 		/** Each sample's registered ranges as `group:start:end`, against its own `data-tokens`. */
-		const registered = () =>
-			page.evaluate(() => {
-				const codes = [...document.querySelectorAll("norn-code-block code")];
-				const found = codes.map(() => []);
-				for (const [name, highlight] of CSS.highlights) {
-					for (const range of highlight) found[codes.findIndex((code) => code.contains(range.startContainer))]?.push(`${name.replace("tok-", "")}:${range.startOffset}:${range.endOffset}`);
-				}
-				return codes.map((code, index) => [found[index].sort(), JSON.parse(code.dataset.tokens).map((entry) => entry.join(":")).sort()]);
-			});
+		const registered = async () =>
+			(
+				await page.evaluate(() => {
+					const codes = [...document.querySelectorAll("norn-code-block code")];
+					const found = codes.map(() => []);
+					for (const [name, highlight] of CSS.highlights) {
+						for (const range of highlight) found[codes.findIndex((code) => code.contains(range.startContainer))]?.push(`${name.replace("tok-", "")}:${range.startOffset}:${range.endOffset}`);
+					}
+					return codes.map((code, index) => [found[index].sort(), code.dataset.tokens]);
+				})
+			).map(([found, tokens]) => [found, decodeRanges(tokens).map((entry) => entry.join(":")).sort()]);
 		const samples = await registered();
 		assert.equal(samples.length, 60, "sixty samples");
 		for (const [index, [found, expected]] of samples.entries()) assert.deepEqual(found, expected, `sample ${index}`);
