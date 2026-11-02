@@ -31,7 +31,7 @@ export default {
 		docs: {
 			description: {
 				component:
-					"A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value. Each option is a `<label>` holding an `<input type=\"radio\">`, an optional `norn-icon` with `@size=\"m\"`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden. The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths. A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.",
+					"A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value. Each option is a `<label>` holding an `<input type=\"radio\">`, an optional `norn-icon` with `@size=\"m\"`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden. The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths. A component that builds one from its own props passes the `legend` slot, `@name`, and `:@options` instead, since its props don't reach slot content.",
 			},
 		},
 	},
