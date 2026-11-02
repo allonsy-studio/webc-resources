@@ -57,8 +57,8 @@ const compiledFrom = (file) => file.replace(/\/src\/layouts\//, "/layouts/").rep
 const squash = (value) => value.replace(/\s+/g, " ").trim();
 
 /**
- * Each component's and layout's docs, by name: from its CSF file where it has one, else from its JSDoc.
- * While the move to CSF is under way, a check reads whichever the component has.
+ * Each component's and layout's docs, by name, from its CSF file.
+ * The plain fallback has none: it takes the real component's, with its own props and slots derived from its source.
  */
 const docs = new Map(
 	await Promise.all(
@@ -67,22 +67,16 @@ const docs = new Map(
 			.concat(filesIn("src/layouts").map((entry) => ({ ...entry, layout: true })))
 			.concat(filesIn("src/fallback").map((entry) => ({ ...entry, layout: false, fallback: true })))
 			.map(async ({ file, text, layout, fallback }) => {
-				const name = `${fallback ? "fallback:" : ""}${path.basename(file, ".webc")}`;
-				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), path.basename(file, ".webc"), layout);
-				if (!fallback && fs.existsSync(stories)) {
-					const { meta } = await readCsf(stories);
-					const doc = csfDoc(meta, effectiveArgTypes(derivedArgTypes(analyzeFile(path.join(PACKAGES, file))), meta.argTypes));
-					return [name, { csf: true, category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
-				}
-				// A fallback has no CSF file: it shares the real component's, and its own props and slots are derived.
+				const derived = derivedArgTypes(analyzeFile(path.join(PACKAGES, file)));
 				if (fallback) {
-					const derived = Object.entries(derivedArgTypes(analyzeFile(path.join(PACKAGES, file))));
-					const names = (category) => new Set(derived.filter(([, argType]) => argType.table.category === category).map(([arg]) => arg));
-					return [name, { fallback: true, props: names("props"), slots: names("slots"), text }];
+					const names = (category) => new Set(Object.entries(derived).filter(([, argType]) => argType.table.category === category).map(([arg]) => arg));
+					return [`fallback:${path.basename(file, ".webc")}`, { fallback: true, props: names("props"), slots: names("slots"), text }];
 				}
-				const props = new Set([...text.matchAll(/^ \* @prop \{[^\n]*?\} \[?([\w-]+)/gm)].map(([, prop]) => prop));
-				const slots = new Set([...text.matchAll(/^ \* @slot ([a-z-]+) - /gm)].map(([, slot]) => slot));
-				return [name, { csf: false, category: text.match(/^ \* @category (\w+)$/m)?.[1], slots, props, text }];
+				const stories = csfFile(path.join(PACKAGES, file.split("/")[0]), path.basename(file, ".webc"), layout);
+				if (!fs.existsSync(stories)) throw new Error(`${file}: no CSF file at ${path.relative(PACKAGES, stories)}`);
+				const { meta } = await readCsf(stories);
+				const doc = csfDoc(meta, effectiveArgTypes(derived, meta.argTypes));
+				return [path.basename(file, ".webc"), { category: doc.category, slots: new Set(doc.slots.map(({ name: slot }) => slot)), props: new Set(doc.props.map(({ name: prop }) => prop)), text: fs.readFileSync(stories, "utf8") }];
 			}),
 	),
 );
@@ -91,10 +85,10 @@ for (const [name, doc] of docs) if (doc.fallback) docs.set(name, { ...docs.get(n
 /** A component's or layout's docs, by its file. */
 const docsOf = (file) => docs.get(`${/\/fallback\//.test(file) ? "fallback:" : ""}${path.basename(file, ".webc")}`);
 
-/** The server-only comment, `<!--- … --->`, which holds a file's license header and JSDoc. WebC drops it at render. */
+/** The server-only comment, `<!--- … --->`, which holds a file's license header. WebC drops it at render. */
 const SERVER_COMMENT = /<!---[\s\S]*?--->/g;
 
-/** A file's markup, scripts, and styles without its server-only comment, so the JSDoc's examples are not read as markup. */
+/** A file's markup, scripts, and styles without its server-only comment. */
 const withoutDocs = (text) => text.replace(SERVER_COMMENT, "");
 
 /** The CSS of a file: a stylesheet's whole text, or every `<style>` block of a component or layout. */
@@ -672,29 +666,24 @@ test("the docs never name a token with a stray number after it", () => {
 
 const CATEGORIES = ["layout", "landmark", "container", "component", "template", "document"];
 
-test("every component and layout names its category: the first part of its CSF title, or its JSDoc's @category", () => {
+test("every component and layout names its category: the first part of its CSF title", () => {
 	for (const { file } of [...components, ...layouts, ...fallbacks]) {
 		const { category } = docsOf(file);
 		assert.ok(CATEGORIES.includes(category), `${file}: the category is one of ${CATEGORIES.join(", ")}`);
 	}
 });
 
-/** The license header alone, as a component with a CSF file keeps it. */
+/** The license header alone: a source's one server-only comment. */
 const LICENSE_COMMENT = "<!---\n/*\n * SPDX-License-Identifier: MPL-2.0\n * This Source Code Form is subject to the terms of the Mozilla Public\n * License, v. 2.0. If a copy of the MPL was not distributed with this\n * file, You can obtain one at https://mozilla.org/MPL/2.0/.\n */\n--->";
 
-test("every component and layout keeps its license header in one server-only comment, with its JSDoc until it has a CSF file, and its setup block holds only code", () => {
+test("every component and layout keeps its license header alone in one server-only comment, and its setup block holds only code", () => {
 	for (const { file, text } of sources.filter(({ file }) => file.endsWith(".webc"))) {
 		const comments = text.match(SERVER_COMMENT) ?? [];
 		assert.equal(comments.length, 1, `${file}: one <!--- … ---> comment`);
-		const [comment] = comments;
-		assert.ok(comment.startsWith("<!---\n/*\n * SPDX-License-Identifier: MPL-2.0\n"), `${file}: the comment opens with the license header`);
-		if (docsOf(file).csf) assert.equal(comment, LICENSE_COMMENT, `${file}: with a CSF file, the comment is the license header alone`);
-		else assert.ok(/\n \* @category \w+\n \*\/\n--->$/.test(comment), `${file}: the JSDoc ends the comment`);
-		// A closer inside the comment ends it early, and WebC then prints the rest.
-		assert.ok(!/--!?>/.test(comment.slice(0, -"--->".length)), `${file}: the comment holds no --> or --!>`);
+		assert.equal(comments[0], LICENSE_COMMENT, `${file}: the comment is the license header alone, and the API lives in the CSF file`);
 		for (const [, code] of text.matchAll(/<script webc:setup>([\s\S]*?)<\/script>/g)) {
 			assert.ok(code.replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, "").trim() !== "", `${file}: a webc:setup block holds code, not only comments`);
-			assert.ok(!code.includes("SPDX-License-Identifier") && !code.includes("@category"), `${file}: the license header and JSDoc sit in the top comment`);
+			assert.ok(!code.includes("SPDX-License-Identifier"), `${file}: the license header sits in the top comment`);
 		}
 		const shipped = [...components, ...layouts, ...fallbacks].find((entry) => entry.file === compiledFrom(file));
 		assert.deepEqual(shipped.text.match(SERVER_COMMENT), comments, `${file}: the build keeps the comment as written`);
@@ -933,7 +922,7 @@ test("norn-code-tabs holds its tab list name and fallback tab name as hidden tex
 	assert.ok(!/data-(label|sample)=/.test(html + own));
 });
 
-/** Each component's documented slot names: its CSF slot argTypes, or its JSDoc `@slot` lines. */
+/** Each component's documented slot names: its CSF slot argTypes. */
 const slotsOf = (file) => docsOf(file).slots;
 
 test("defaultStrings lists every string a component or layout looks up, with the default it falls back to", () => {
@@ -1305,8 +1294,7 @@ test("norn-base passes ogImage {src, alt} to the head, and a page without one ge
 });
 
 test("the server-only comment never reaches the output: a component, a component with a setup block, a component with a CSF file, and a layout", async () => {
-	// The JSDoc pieces stay in the pattern while a component may still carry JSDoc.
-	const LEAK = /SPDX|@prop\b|@slot\b|@cssprop\b|@category\b|<!--|-->/;
+	const LEAK = /SPDX|<!--|-->/;
 	const base = { name: "widget", title: "Usage", url: "https://example.com/widget/usage/", lang: "en", nav: [], footer: { badges: [], groups: [] } };
 	const page = await render(layoutText("norn-base"), { helpers: { ...HEAD_HELPERS, nornHook: () => "" }, data: { content: "", norn: base } });
 	assert.ok(page.startsWith("<!doctype html>"), "the doctype stays first");

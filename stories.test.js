@@ -7,7 +7,6 @@
 
 // The CSF files: one per component and layout, beside its source, holding its docs and stories as data.
 // The analyzer derives the props and slots from the source; a CSF file adds the descriptions and the few facts code cannot say.
-// While the move from JSDoc is under way, a component without a CSF file keeps its JSDoc instead.
 
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -17,7 +16,7 @@ import test from "node:test";
 import { WebC } from "@11ty/webc";
 
 import { tokenRanges } from "./packages/webc-code-sample/index.js";
-import { CATEGORIES, csfFile, effectiveArgTypes, HEAD_COMPONENTS, readCsf } from "./preview/lib/catalog.js";
+import { CATEGORIES, effectiveArgTypes, HEAD_COMPONENTS, readCsf } from "./preview/lib/catalog.js";
 import { matrixCells, PROPS, renderStory, SLOTS } from "./preview/lib/render-story.js";
 import { analyzeFile, analyzeWebc, derivedArgTypes, helperNames } from "./scripts/analyze-webc.js";
 import { readTokens } from "./scripts/build-components.js";
@@ -34,21 +33,30 @@ const OSS_GROUP = "OSS site";
 
 const analyzer = { tokens: readTokens(), helpers: helperNames() };
 
-/** Every component and layout source, with its CSF file if it has one. */
-const sources = fs.readdirSync(PACKAGES).flatMap((folder) =>
-	[false, true].flatMap((layout) => {
-		const dir = path.join(PACKAGES, folder, "src", ...(layout ? ["layouts"] : []));
+/**
+ * Every source in one `src` folder of each package, with the CSF file beside it if there is one.
+ *
+ * @param {string[]} folders - Under `src`: `[]`, `["layouts"]`, or `["fallback"]`
+ */
+const sourcesIn = (...folders) =>
+	fs.readdirSync(PACKAGES).flatMap((folder) => {
+		const dir = path.join(PACKAGES, folder, "src", ...folders);
 		if (!fs.existsSync(dir)) return [];
 		return fs
 			.readdirSync(dir)
 			.filter((file) => file.endsWith(".webc"))
 			.map((file) => {
 				const name = file.slice(0, -".webc".length);
-				const stories = csfFile(path.join(PACKAGES, folder), name, layout);
-				return { folder, name, layout, head: HEAD_COMPONENTS.has(name), file: path.join(dir, file), text: fs.readFileSync(path.join(dir, file), "utf8"), stories: fs.existsSync(stories) ? stories : undefined };
+				const stories = path.join(dir, `${name}.stories.js`);
+				return { folder, name, layout: folders[0] === "layouts", head: HEAD_COMPONENTS.has(name), file: path.join(dir, file), stories: fs.existsSync(stories) ? stories : undefined };
 			});
-	}),
-);
+	});
+
+/** Every component and layout source, with its CSF file. */
+const sources = [...sourcesIn(), ...sourcesIn("layouts")];
+
+/** The plain fallbacks, which share the real component's CSF file. */
+const fallbacks = sourcesIn("fallback");
 
 const withCsf = await Promise.all(
 	sources
@@ -138,11 +146,26 @@ function problems({ name, folder, layout, head, csf, derived }, overrides = {}) 
 	return found;
 }
 
-test("every component and layout has a CSF file, or keeps its JSDoc until it moves, and never both", () => {
-	for (const { folder, name, text, stories } of sources) {
-		const jsdoc = /<!---[\s\S]*?\/\*\*[\s\S]*?--->/.test(text);
-		assert.ok(stories || jsdoc, `${folder}/${name}: no CSF file and no JSDoc`);
-		assert.ok(!(stories && jsdoc), `${folder}/${name}: the docs live in the CSF file, so the comment holds the license header alone`);
+/**
+ * The sources with no CSF file beside them.
+ *
+ * @param {{ folder: string, name: string, stories?: string }[]} entries
+ * @returns {string[]}
+ */
+const missingCsf = (entries) => entries.filter(({ stories }) => !stories).map(({ folder, name }) => `${folder}/${name}`);
+
+test("every component and layout has a CSF file", () => {
+	assert.deepEqual(missingCsf(sources), [], "a source without a CSF file: document its API in src/<name>.stories.js beside it");
+	assert.deepEqual(missingCsf([...sources, { folder: "webc-patterns", name: "x-a" }]), ["webc-patterns/x-a"], "the check catches one");
+});
+
+// The plain norn-code-block is the one source without a CSF file. It is not in the preview, which installs the code sample, and
+// its API is the real component's: components.test.js derives its props and slots and compares them with the real one's.
+test("the plain fallback has no CSF file: it shares the real component's", () => {
+	assert.deepEqual(fallbacks.map(({ folder, name }) => `${folder}/${name}`), ["webc-patterns/norn-code-block"]);
+	for (const { folder, name, stories } of fallbacks) {
+		assert.equal(stories, undefined, `${folder}/${name}: a fallback documents nothing of its own`);
+		assert.ok(sources.some((source) => source.name === name && source.stories), `${folder}/${name}: the real ${name} has the CSF file`);
 	}
 });
 

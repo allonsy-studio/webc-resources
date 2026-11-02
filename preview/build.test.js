@@ -9,6 +9,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import { createRequire } from "node:module";
+import os from "node:os";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
 
@@ -44,8 +45,8 @@ describe("the catalog", () => {
 		assert.equal(catalog.components.filter(({ layout }) => layout).length, 6, "the six layouts");
 	});
 
-	test("reads props and slots from the source and the CSF file, or from the JSDoc of a component that has none, and the tokens from the source", () => {
-		for (const component of catalog.components) assert.equal(Boolean(component.csf), fs.existsSync(csfFile(path.join(here, "..", "packages", `webc-${component.packageId}`), component.name, component.layout)), `${component.slug}: docs from ${component.csf ? "CSF" : "JSDoc"}`);
+	test("reads props and slots from the source and the CSF file, and the tokens from the source", () => {
+		for (const component of catalog.components) assert.equal(component.csf, csfFile(path.join(here, "..", "packages", `webc-${component.packageId}`), component.name, component.layout), `${component.slug}: docs from its CSF file`);
 		const button = catalog.components.find(({ name }) => name === "norn-link-button");
 		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border. Falls back to <code>primary</code>." });
 		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
@@ -55,6 +56,23 @@ describe("the catalog", () => {
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
 		assert.ok(footer.tokens.some(({ name }) => name === "--norn-text-muted"), "the tokens it reads");
 		assert.deepEqual(footer.slots.map(({ name }) => name), ["default", "colophon"], "an unnamed slot is the default one");
+	});
+
+	test("a component or layout without a CSF file fails the catalog, naming the file to add", async () => {
+		const packagesDir = fs.mkdtempSync(path.join(os.tmpdir(), "norn-catalog-"));
+		try {
+			for (const folder of fs.readdirSync(path.join(here, "..", "packages"))) {
+				for (const part of ["package.json", "src", "components", "layouts"]) {
+					const from = path.join(here, "..", "packages", folder, part);
+					if (fs.existsSync(from)) fs.cpSync(from, path.join(packagesDir, folder, part), { recursive: true });
+				}
+			}
+			await buildCatalog({ packagesDir, storiesDir: path.join(here, "content", "stories") });
+			fs.rmSync(path.join(packagesDir, "webc-patterns", "src", "norn-card.stories.js"));
+			await assert.rejects(buildCatalog({ packagesDir, storiesDir: path.join(here, "content", "stories") }), { message: `patterns/norn-card: no CSF file. Document its API in ${path.join("webc-patterns", "src", "norn-card.stories.js")}.` });
+		} finally {
+			fs.rmSync(packagesDir, { recursive: true, force: true });
+		}
 	});
 
 	test("every component outside the head has a story, and the head components have none", () => {
@@ -75,7 +93,7 @@ describe("the catalog", () => {
 		for (const name of ["norn-card"]) assert.equal(where[name], "container", name);
 		assert.equal(where["norn-head"], "document");
 		assert.equal(where["oss-head"], "oss-site", "grouped by package");
-		assert.equal(catalog.components.find(({ name }) => name === "oss-head").category, "document", "and still a document by its own JSDoc");
+		assert.equal(catalog.components.find(({ name }) => name === "oss-head").category, "document", "and still a document by its CSF file");
 		assert.ok(catalog.components.every(({ category }) => category), "every component keeps its category");
 		for (const name of ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspaces-home", "norn-workspace"]) assert.equal(where[name], "template", name);
 		assert.deepEqual(catalog.categories.find(({ id }) => id === "template").components.map(({ name }) => name), ["norn-base", "norn-docs", "norn-docs-home", "norn-landing", "norn-workspace", "norn-workspaces-home"], "the layouts, and nothing else");
