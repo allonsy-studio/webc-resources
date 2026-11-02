@@ -12,24 +12,33 @@
  * Each card spans three rows of the grid, with `grid-template-rows: subgrid`, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box.
  * Settings for a card, such as its title face or its top line, go on the card as props: `<norn-card @title-face="mono">`.
  * @slot - The cards, each in an `<li>`.
- * @cssprop --norn-card-grid-min - Narrowest card. Falls back to 17rem.
- * @cssprop --norn-card-grid-gap - Space between cards. Falls back to --norn-space-m.
+ * @prop {string} [min] - Narrowest card, as a CSS length, such as `12rem`. Falls back to 17rem.
+ * @prop {string} [gap] - Space between cards: `s`, `m`, or `l`, for --norn-space-s, -m, or -l. Falls back to `m`.
  * @category container
  */
 --->
-<ul role="list"><slot></slot></ul>
+<ul role="list" :data-gap="['s', 'l'].includes(gap) ? gap : undefined" :style="typeof min === 'string' && min ? '--_min: ' + min : ''"><slot></slot></ul>
 <style>
 	@layer norn.components {
 		norn-card-grid {
 			display: block;
 
 			& > ul {
+				--_gap: var(--norn-space-m, t('space.m'));
 				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--norn-card-grid-min, 17rem)), 1fr));
-				gap: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
+				grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_min, 17rem)), 1fr));
+				gap: var(--_gap);
 				margin: 0;
 				padding: 0;
 				list-style: none;
+			}
+
+			& > ul[data-gap="s"] {
+				--_gap: var(--norn-space-s, t('space.s'));
+			}
+
+			& > ul[data-gap="l"] {
+				--_gap: var(--norn-space-l, t('space.l'));
 			}
 		}
 
@@ -38,14 +47,14 @@
 			norn-card-grid {
 				& > ul {
 					row-gap: 0;
-					margin-block-end: calc(-1 * var(--norn-card-grid-gap, var(--norn-space-m, t('space.m'))));
+					margin-block-end: calc(-1 * var(--_gap));
 				}
 
 				& > ul > li {
 					display: grid;
 					grid-row: span 3;
 					grid-template-rows: subgrid;
-					margin-block-end: var(--norn-card-grid-gap, var(--norn-space-m, t('space.m')));
+					margin-block-end: var(--_gap);
 				}
 
 				& > ul > li > * {

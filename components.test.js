@@ -447,6 +447,20 @@ test("norn-card takes its accent and title face as props, mapped to global token
 	assert.ok(!(await render("<norn-card-grid @mono><li><norn-card><h3>T</h3></norn-card></li></norn-card-grid>")).includes("style="), "the grid has no mono prop");
 });
 
+test("norn-card-grid takes its gap from the space scale and its narrowest card as props", async () => {
+	const css = cssOf("norn-card-grid");
+	assert.ok(!/--norn-card-grid-/.test(css), "no --norn-card-grid-* custom property");
+	assert.ok(css.includes("--_gap: var(--norn-space-m, t('space.m'));") && css.includes("gap: var(--_gap);"), "m by default");
+	for (const step of ["s", "l"]) {
+		assert.ok(css.includes(`& > ul[data-gap="${step}"] { --_gap: var(--norn-space-${step}, t('space.${step}')); }`), `${step} maps to --norn-space-${step}`);
+		assert.ok((await render(`<norn-card-grid @gap="${step}"><li>A</li></norn-card-grid>`)).includes(`<ul role="list" data-gap="${step}">`), `@gap="${step}" renders`);
+	}
+	for (const step of ["m", "xl", ""]) assert.ok((await render(`<norn-card-grid @gap="${step}"><li>A</li></norn-card-grid>`)).includes('<ul role="list">'), `@gap="${step}" is the default`);
+	assert.ok(css.includes("minmax(min(100%, var(--_min, 17rem)), 1fr)"), "17rem by default");
+	assert.ok((await render('<norn-card-grid @min="12rem"><li>A</li></norn-card-grid>')).includes('<ul role="list" style="--_min: 12rem">'), "@min sets the private minimum");
+	assert.ok((await render("<norn-card-grid><li>A</li></norn-card-grid>")).includes('<ul role="list">'), "no style without @min");
+});
+
 test("the build script runs when it is started through a symlinked path", () => {
 	const root = fs.mkdtempSync(path.join(os.tmpdir(), "norn-link-"));
 	try {
