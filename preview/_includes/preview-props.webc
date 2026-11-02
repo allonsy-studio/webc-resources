@@ -7,15 +7,15 @@
  */
 
 /**
- * The component's custom properties as a table. When the page has examples, each row takes an override that every canvas on the page applies live, with a reset after each field.
- * @prop {{ name: string, description: string, type: string, fallback: string, fallbackValue: string }[]} cssprops
+ * The global tokens a component reads, as a table. When the page has examples, each row takes an override that every canvas on the page applies live, with a reset after each field.
+ * @prop {{ name: string, description: string, type: string, value: string }[]} tokens
  * @prop {boolean} [editable] - Adds the override column and the shared accent row.
  */
 --->
 <table>
 	<thead>
 		<tr>
-			<th scope="col">Property</th>
+			<th scope="col">Token</th>
 			<th scope="col">Type</th>
 			<th scope="col">Default</th>
 			<th scope="col" webc:if="editable">Override</th>
@@ -33,20 +33,14 @@
 				</span>
 			</td>
 		</tr>
-		<tr webc:for="prop of cssprops">
-			<th scope="row"><code @text="prop.name"></code><small webc:if="prop.description" @html="prop.description"></small></th>
-			<td data-col="type" data-label="Type"><code webc:if="prop.type" @text="prop.type"></code><span webc:else>none</span></td>
-			<td data-label="Default">
-				<template webc:if="prop.fallback" webc:nokeep>
-					<code @text="prop.fallback"></code>
-					<small webc:if="prop.fallbackValue" @text="prop.fallbackValue"></small>
-				</template>
-				<span webc:else>none</span>
-			</td>
+		<tr webc:for="token of tokens.filter((token) => !editable || token.name !== '--norn-ui-accent')">
+			<th scope="row"><code @text="token.name"></code><small webc:if="token.description" @html="token.description"></small></th>
+			<td data-col="type" data-label="Type"><code webc:if="token.type" @text="token.type"></code><span webc:else>none</span></td>
+			<td data-label="Default"><code @text="token.value"></code></td>
 			<td webc:if="editable" data-label="Override">
 				<span data-field>
-					<input type="text" :data-prop="prop.name" :aria-label="'Override ' + prop.name" autocomplete="off" spellcheck="false" />
-					<button type="button" data-action="reset" :data-prop="prop.name" :aria-label="'Reset ' + prop.name" disabled>Reset</button>
+					<input type="text" :data-prop="token.name" :aria-label="'Override ' + token.name" autocomplete="off" spellcheck="false" />
+					<button type="button" data-action="reset" :data-prop="token.name" :aria-label="'Reset ' + token.name" disabled>Reset</button>
 				</span>
 			</td>
 		</tr>
@@ -70,6 +64,10 @@
 
 		preview-props th[scope="row"] {
 			font-weight: 400;
+		}
+
+		preview-props td[data-label="Default"] code {
+			overflow-wrap: anywhere;
 		}
 
 		preview-props th[scope="row"] code {

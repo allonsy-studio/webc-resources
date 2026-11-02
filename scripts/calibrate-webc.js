@@ -7,12 +7,14 @@
 
 // Compare what the analyzer derives from each source with what its docs say: the CSF file where there is one,
 // else the JSDoc. Prints a Markdown table of every difference. Run `node scripts/calibrate-webc.js`.
+// A custom property a component owns is checked against `owned-custom-properties.json` by components.test.js, so only a
+// documented one the code does not read is listed here.
 
 import fs from "node:fs";
 import path from "node:path";
 
-import { csfFile, parseDoc, readCsf } from "../preview/lib/catalog.js";
-import { analyzeFile, helperNames, sourceFiles } from "./analyze-webc.js";
+import { csfFile, effectiveArgTypes, parseDoc, readCsf } from "../preview/lib/catalog.js";
+import { analyzeFile, derivedArgTypes, helperNames, sourceFiles } from "./analyze-webc.js";
 import { PACKAGES, readTokens } from "./build-components.js";
 
 /** The coarse type a JSDoc or CSF type names. */
@@ -27,16 +29,18 @@ const coarse = (type = "") => {
 
 /**
  * The documented API of a source: props with type, default, and whether required, slots, and custom properties.
+ * A CSF file is read with the derived argTypes under it, as the preview reads it, so a difference there is an override.
  *
  * @param {string} file
+ * @param {ReturnType<typeof analyzeFile>} analysis
  */
-async function documented(file) {
+async function documented(file, analysis) {
 	const layout = path.basename(path.dirname(file)) === "layouts";
 	const name = path.basename(file, ".webc");
 	const packageDir = path.join(PACKAGES, path.relative(PACKAGES, file).split(path.sep)[0]);
 	const stories = csfFile(packageDir, name, layout);
 	if (!file.includes(`${path.sep}fallback${path.sep}`) && fs.existsSync(stories)) {
-		const { argTypes = {} } = (await readCsf(stories)).meta;
+		const argTypes = effectiveArgTypes(derivedArgTypes(analysis), (await readCsf(stories)).meta.argTypes);
 		const of = (category) => Object.entries(argTypes).filter(([, argType]) => argType.table?.category === category);
 		return {
 			source: "CSF",
@@ -66,7 +70,7 @@ export async function differences() {
 	for (const file of sourceFiles()) {
 		const component = path.relative(PACKAGES, file).replace(/\/src\//, "/");
 		const analysis = analyzeFile(file, { tokens, helpers });
-		const doc = await documented(file);
+		const doc = await documented(file, analysis);
 		const row = (fact, derived, written) => rows.push([`${component} (${doc.source})`, fact, derived, written]);
 		const docProps = new Map(doc.props.map((entry) => [entry.name, entry]));
 		for (const prop of analysis.props) {
@@ -88,7 +92,6 @@ export async function differences() {
 		for (const slot of doc.slots) if (!slots.includes(slot)) row(`slot ${slot}`, "not found", "documented");
 		const owned = analysis.owned.map(({ name }) => name);
 		for (const prop of doc.cssprops) if (!owned.includes(prop)) row(`custom property ${prop}`, analysis.tokens.some(({ name }) => name === prop) ? "a global token" : "not read", "documented");
-		for (const prop of owned) if (!doc.cssprops.includes(prop)) row(`custom property ${prop}`, "owned, read", "not documented");
 	}
 	return rows;
 }

@@ -63,8 +63,9 @@
 	</norn-simple-table>
 </template>
 
-<template webc:if="$data.component.cssprops.length" webc:nokeep>
-	<h2>Custom properties</h2>
+<template webc:if="$data.component.tokens.length" webc:nokeep>
+	<h2>Tokens</h2>
+	<p>The global tokens from <code>tokens.json</code> the component reads. Set one in a project's <code>tokens.css</code> to change it everywhere.</p>
 	<p webc:if="$data.component.stories.length">Type a value to try it in every example above. Reset puts the default back.</p>
-	<preview-props :@cssprops="$data.component.cssprops" :@editable="$data.component.stories.length > 0"></preview-props>
+	<preview-props :@tokens="$data.component.tokens" :@editable="$data.component.stories.length > 0"></preview-props>
 </template>

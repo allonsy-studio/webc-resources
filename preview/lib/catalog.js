@@ -9,8 +9,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
+import { analyzeFile, derivedArgTypes, helperNames, kindOf } from "../../scripts/analyze-webc.js";
 import { readTokens as readTokensFile } from "../../scripts/build-components.js";
-import { CSS_PROPS, matrixCells, PROPS, renderMatrix, renderStory, SLOTS } from "./render-story.js";
+import { matrixCells, PROPS, renderMatrix, renderStory, SLOTS } from "./render-story.js";
 
 /** Components that live in the document head: they have no canvas, since every frame renders them. */
 export const HEAD_COMPONENTS = new Set(["norn-head", "oss-head"]);
@@ -43,23 +44,8 @@ const escapeHtml = (text) => text.replace(/&/g, "&amp;").replace(/</g, "&lt;").r
 /** Escape text and turn `code` spans into elements: the only Markdown the docs use. */
 export const inline = (text) => escapeHtml(text).replace(/`([^`]+)`/g, "<code>$1</code>");
 
-/** What a shared token looks like, so a page can show a swatch or a sample, and a custom property that falls back to it has a type. */
-export const kindOf = (tokenPath) => {
-	if (tokenPath.startsWith("space.")) return "space";
-	if (tokenPath.startsWith("font.size.")) return "length";
-	if (tokenPath.startsWith("font.")) return "font";
-	if (tokenPath === "ui.border.radius" || tokenPath === "ui.radius.s") return "radius";
-	if (tokenPath === "ui.shadow") return "shadow";
-	if (tokenPath === "text.measure" || tokenPath === "layout.width") return "measure";
-	if (["ui.focus.width", "ui.focus.offset", "ui.control.height", "ui.icon.s", "ui.icon.m"].includes(tokenPath)) return "length";
-	if (tokenPath.startsWith("ui.state.")) return "percentage";
-	if (tokenPath === "ui.motion.duration") return "time";
-	if (tokenPath === "ui.motion.easing") return "easing";
-	return "color";
-};
-
-/** The CSS type each kind of shared token has. */
-const KIND_TYPES = { color: "<color>", space: "<length>", length: "<length>", radius: "<length>", measure: "<length>", percentage: "<percentage>", time: "<time>", font: "<font-family>", shadow: "<shadow>" };
+/** What a shared token looks like: the analyzer's reading of its path. */
+export { kindOf };
 
 /**
  * The shared tokens in tokens.json, by custom property, with their defaults.
@@ -68,34 +54,6 @@ const KIND_TYPES = { color: "<color>", space: "<length>", length: "<length>", ra
  */
 export function readTokens() {
 	return new Map(readTokensFile().map(({ name, path: tokenPath, group, resolved, comment }) => [name, { path: tokenPath, group, value: resolved.replace(/\s+/g, " ").trim(), comment, kind: kindOf(tokenPath) }]));
-}
-
-/**
- * A custom property's description, fallback, type, and default value.
- * The type comes from the shared token it falls back to, or from a literal such as `17rem`. Where neither tells, it is left empty.
- *
- * @param {string} summary - What it is, such as "Border color."
- * @param {string} fallback - What it falls back to, such as "--norn-ui-border-color"
- * @param {Map<string, { value: string, kind: string }>} tokens
- */
-function describeFallback(summary, fallback, tokens) {
-	const known = [...fallback.matchAll(/--norn-[a-z0-9-]+/g)].map(([name]) => name).find((name) => tokens.has(name));
-	let type = known ? (KIND_TYPES[tokens.get(known).kind] ?? "") : "";
-	if (!type && /\d(rem|em|px)\b/.test(fallback)) type = "<length>";
-	if (!type && /#[0-9a-f]{3,8}\b|Text\b|Canvas|Allons-y Studio (magenta|orange|yellow|teal)/i.test(fallback)) type = "<color>";
-	const single = /^--norn-[a-z0-9-]+$/.test(fallback) && tokens.has(fallback);
-	return { description: inline(summary.trim()), fallback, fallbackValue: single ? tokens.get(fallback).value : "", type };
-}
-
-/**
- * Split a JSDoc custom property's note into what it is and what it falls back to.
- *
- * @param {string} text - The raw note, such as "Border color. Falls back to --norn-ui-border-color."
- * @param {Map<string, { value: string, kind: string }>} tokens
- */
-function describeProp(text, tokens) {
-	const [summary, rest] = text.split(/\s*Falls back to\s+/);
-	return describeFallback(summary, rest?.replace(/\.$/, "") ?? "", tokens);
 }
 
 /** Paragraphs separated by a blank line, each on one line. */
@@ -125,7 +83,7 @@ function takeType(text) {
  * Read a component's JSDoc, the block inside the `<!--- … --->` server-only comment at the top of its file.
  *
  * @param {string} source - The `.webc` file
- * @returns {{ description: string[], text: string[], category: string, props: object[], slots: object[], cssprops: { name: string, raw: string }[] }}
+ * @returns {{ description: string[], text: string[], category: string, props: object[], slots: object[], cssprops: { name: string, raw: string }[] }} The `cssprops` are read for the calibration only: the preview lists the tokens a component reads instead
  */
 export function parseDoc(source) {
 	const comment = source.match(/<!---([\s\S]*?)--->/)?.[1] ?? "";
@@ -206,21 +164,40 @@ function propText({ description = "", options, table }) {
 }
 
 /**
- * A component's docs from its CSF meta, in the shape `parseDoc` gives the JSDoc.
+ * A component's docs from its CSF meta and its effective argTypes, in the shape `parseDoc` gives the JSDoc.
  * The category is the title's first part, lowercased, except where `parameters.webc.category` names it (the OSS site group).
  *
  * @param {{ title: string, argTypes?: object, parameters?: { docs?: { description?: { component?: string } }, webc?: { category?: string } } }} meta
+ * @param {object} [argTypes] - The effective argTypes, the derived ones with the CSF file's over them
  */
-export function csfDoc(meta) {
+export function csfDoc(meta, argTypes = meta.argTypes) {
 	const paragraphs = paragraphsOf(meta.parameters?.docs?.description?.component ?? "");
 	return {
 		description: paragraphs.map(inline),
 		text: paragraphs,
 		category: meta.parameters?.webc?.category ?? meta.title.split("/")[0].toLowerCase(),
-		props: argTypesIn(meta.argTypes, PROPS).map(([name, argType]) => ({ name, type: argType.table?.type?.summary ?? argType.type?.name ?? "", optional: argType.type?.required !== true, description: inline(propText(argType)) })),
-		slots: argTypesIn(meta.argTypes, SLOTS).map(([name, argType]) => ({ name, description: inline(argType.description ?? "") })),
-		cssprops: argTypesIn(meta.argTypes, CSS_PROPS).map(([name, argType]) => ({ name, description: argType.description ?? "", fallback: argType.table?.defaultValue?.summary ?? "" })),
+		props: argTypesIn(argTypes, PROPS).map(([name, argType]) => ({ name, type: argType.table?.type?.summary ?? argType.type?.name ?? "", optional: argType.type?.required !== true, description: inline(propText(argType)) })),
+		slots: argTypesIn(argTypes, SLOTS).map(([name, argType]) => ({ name, description: inline(argType.description ?? "") })),
 	};
+}
+
+/** A plain object, not an array. */
+const isRecord = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+
+/** `over` deep-merged onto `base`: objects merge key by key, and any other value replaces. */
+const deepMerge = (base, over) => (isRecord(base) && isRecord(over) ? Object.fromEntries([...new Set([...Object.keys(base), ...Object.keys(over)])].map((key) => [key, key in over ? deepMerge(base[key], over[key]) : structuredClone(base[key])])) : structuredClone(over));
+
+/**
+ * The argTypes the preview, the renderer, and the matrix read: the derived ones with the CSF file's deep-merged over them.
+ * They follow the CSF file's order, then any derived argType it does not name.
+ *
+ * @param {Record<string, object>} derived - From `derivedArgTypes`
+ * @param {Record<string, object>} [written] - The CSF meta's `argTypes`
+ * @returns {Record<string, object>}
+ */
+export function effectiveArgTypes(derived, written = {}) {
+	const names = [...new Set([...Object.keys(written), ...Object.keys(derived)])];
+	return Object.fromEntries(names.map((name) => [name, name in derived ? (name in written ? deepMerge(derived[name], written[name]) : structuredClone(derived[name])) : structuredClone(written[name])]));
 }
 
 /**
@@ -228,14 +205,15 @@ export function csfDoc(meta) {
  * and the stories with their resolved args. A page reads the options, defaults, and slots from here instead of repeating them.
  *
  * @param {Awaited<ReturnType<typeof readCsf>>} csf
+ * @param {object} argTypes - The effective argTypes
  */
-export function csfData({ meta, stories }) {
-	const byCategory = (category) => Object.fromEntries(argTypesIn(meta.argTypes, category).map(([name, argType]) => [name, structuredClone(argType)]));
+export function csfData({ meta, stories }, argTypes) {
+	const byCategory = (category) => Object.fromEntries(argTypesIn(argTypes, category).map(([name, argType]) => [name, structuredClone(argType)]));
 	return {
 		title: meta.title,
 		component: meta.component,
 		args: structuredClone(meta.args ?? {}),
-		argTypes: { props: byCategory(PROPS), slots: byCategory(SLOTS), cssprops: byCategory(CSS_PROPS) },
+		argTypes: { props: byCategory(PROPS), slots: byCategory(SLOTS) },
 		stories: stories.map(({ exportName, name, args }) => ({ exportName, name: name ?? startCase(exportName), args: structuredClone({ ...meta.args, ...args }) })),
 	};
 }
@@ -248,13 +226,14 @@ const FRAME_DATA = ["hiddenH2", "ownH1"];
  * A story's args and argTypes are the meta's with its own over them, and its frame data is the meta's `parameters.webc` with its own over it.
  *
  * @param {Awaited<ReturnType<typeof readCsf>>} csf
+ * @param {object} effective - The meta's effective argTypes
  * @param {{ packageId: string, name: string, layout: boolean, head: boolean }} component
  */
-function csfStories({ meta, stories }, { packageId, name, layout, head }) {
+function csfStories({ meta, stories }, effective, { packageId, name, layout, head }) {
 	const frameData = (...sources) => Object.fromEntries(FRAME_DATA.map((key) => [key, sources.reduce((value, parameters) => parameters?.webc?.[key] ?? value, false)]));
 	const rendered = stories.map((story) => {
 		const slug = kebabCase(story.exportName);
-		const argTypes = { ...meta.argTypes, ...story.argTypes };
+		const argTypes = { ...effective, ...story.argTypes };
 		return {
 			slug,
 			title: story.name ?? startCase(story.exportName),
@@ -265,8 +244,8 @@ function csfStories({ meta, stories }, { packageId, name, layout, head }) {
 		};
 	});
 	if (layout || head) return { stories: rendered, matrix: undefined };
-	const cells = matrixCells(meta, stories.find(({ exportName }) => exportName === "Default"));
-	const matrix = cells.length ? { slug: "matrix", title: "Matrix", language: "html", source: renderMatrix(meta.component, cells, meta.argTypes), frameUrl: `/frames/${packageId}/${name}/matrix/`, frame: frameData(meta.parameters), matrix: true } : undefined;
+	const cells = matrixCells({ ...meta, argTypes: effective }, stories.find(({ exportName }) => exportName === "Default"));
+	const matrix = cells.length ? { slug: "matrix", title: "Matrix", language: "html", source: renderMatrix(meta.component, cells, effective), frameUrl: `/frames/${packageId}/${name}/matrix/`, frame: frameData(meta.parameters), matrix: true } : undefined;
 	return { stories: rendered, matrix };
 }
 
@@ -327,14 +306,33 @@ const FOLDERS = [
 export const csfFile = (packageDir, name, layout) => path.join(packageDir, "src", ...(layout ? ["layouts"] : []), `${name}.stories.js`);
 
 /**
+ * A component's source in `src/`, which the analyzer reads: the compiled copy has its tokens filled in.
+ *
+ * @param {string} packageDir
+ * @param {string} name
+ * @param {boolean} layout
+ */
+export const sourceFile = (packageDir, name, layout) => path.join(packageDir, "src", ...(layout ? ["layouts"] : []), `${name}.webc`);
+
+/**
+ * The tokens table of a component: each global token it reads, with its type and default from tokens.json.
+ *
+ * @param {ReturnType<typeof analyzeFile>} analysis
+ * @param {Map<string, { comment: string }>} tokens
+ */
+const tokensTable = (analysis, tokens) => analysis.tokens.map(({ name, type, value }) => ({ name, description: inline(tokens.get(name)?.comment ?? ""), type, value }));
+
+/**
  * Every package, with its components and layouts documented from their CSF files and joined to their stories.
- * A component with no CSF file yet is documented from its JSDoc.
+ * The props, slots, and tokens are derived from each source by the analyzer, and the CSF file adds the rest.
+ * A component with no CSF file yet is documented from its JSDoc, with its tokens derived.
  * `frames` lists every frame a CSF file renders, which the preview builds as virtual templates.
  *
  * @param {{ packagesDir: string, storiesDir: string }} options
  */
 export async function buildCatalog({ packagesDir, storiesDir }) {
 	const tokens = readTokens();
+	const analyzer = { tokens: readTokensFile(), helpers: helperNames() };
 	const packages = await Promise.all(PACKAGES.map(async ([folder, title]) => {
 		const id = folder.replace(/^webc-/, "");
 		const pkg = JSON.parse(fs.readFileSync(path.join(packagesDir, folder, "package.json"), "utf8"));
@@ -351,9 +349,10 @@ export async function buildCatalog({ packagesDir, storiesDir }) {
 			const head = HEAD_COMPONENTS.has(name);
 			const stories = csfFile(path.join(packagesDir, folder), name, layout);
 			const csf = fs.existsSync(stories) ? await readCsf(stories) : undefined;
-			const doc = csf ? csfDoc(csf.meta) : parseDoc(fs.readFileSync(file, "utf8"));
-			const cssprops = csf ? doc.cssprops.map(({ name: prop, description, fallback }) => ({ name: prop, ...describeFallback(description, fallback, tokens) })) : doc.cssprops.map(({ name: prop, raw }) => ({ name: prop, ...describeProp(raw, tokens) }));
-			const own = csf ? csfStories(csf, { packageId: id, name, layout, head }) : { stories: [], matrix: undefined };
+			const analysis = analyzeFile(sourceFile(path.join(packagesDir, folder), name, layout), analyzer);
+			const argTypes = csf ? effectiveArgTypes(derivedArgTypes(analysis), csf.meta.argTypes) : undefined;
+			const doc = csf ? csfDoc(csf.meta, argTypes) : parseDoc(fs.readFileSync(file, "utf8"));
+			const own = csf ? csfStories(csf, argTypes, { packageId: id, name, layout, head }) : { stories: [], matrix: undefined };
 			const pages = readStories(storiesDir, id, name);
 			const all = [...own.stories, ...pages, ...(own.matrix ? [own.matrix] : [])];
 			const clash = all.find((story, index) => all.findIndex(({ slug }) => slug === story.slug) !== index);
@@ -370,13 +369,14 @@ export async function buildCatalog({ packagesDir, storiesDir }) {
 				category: doc.category,
 				head,
 				csf: csf ? stories : undefined,
-				csfData: csf ? csfData(csf) : undefined,
+				argTypes,
+				csfData: csf ? csfData(csf, argTypes) : undefined,
 				summary: doc.description[0]?.split(/(?<=\.)\s/)[0] ?? "",
 				summaryText: (doc.text[0]?.split(/(?<=\.)\s/)[0] ?? "").replaceAll("`", ""),
 				description: doc.description,
 				props: doc.props,
 				slots: doc.slots,
-				cssprops,
+				tokens: tokensTable(analysis, tokens),
 				stories: all,
 			};
 		}));

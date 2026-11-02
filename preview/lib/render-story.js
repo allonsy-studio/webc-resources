@@ -11,7 +11,6 @@
 /** The argType categories, as `table.category` names them. */
 export const PROPS = "props";
 export const SLOTS = "slots";
-export const CSS_PROPS = "css custom properties";
 
 /** Escape a value for a double-quoted attribute. */
 const attribute = (value) => String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;");
@@ -40,8 +39,8 @@ function prop(name, value) {
 }
 
 /**
- * Write a component tag with its args: props as attributes, custom properties as a `style`, each named slot as a
- * `<template slot>`, then the `default` slot. Slot args are HTML strings.
+ * Write a component tag with its args: props as attributes, each named slot as a `<template slot>`, then the `default` slot.
+ * Slot args are HTML strings.
  *
  * @param {string} tag - The component's tag
  * @param {Record<string, unknown>} args
@@ -51,20 +50,17 @@ function prop(name, value) {
  */
 export function renderStory(tag, args = {}, argTypes = {}) {
 	const attributes = [];
-	const styles = [];
 	const named = [];
 	let body = "";
 	for (const [name, value] of Object.entries(args)) {
 		const category = argTypes[name]?.table?.category;
 		if (!category) throw new Error(`${tag}: the arg "${name}" has no argType.`);
 		if (category === PROPS) attributes.push(prop(name, value));
-		else if (category === CSS_PROPS && value !== undefined && value !== "") styles.push(`${name}: ${value}`);
 		else if (category === SLOTS && value !== undefined && value !== "") {
 			if (name === "default") body = String(value);
 			else named.push(`<template slot="${name}" webc:nokeep>${value}</template>`);
 		}
 	}
-	if (styles.length) attributes.push(`style="${attribute(styles.join("; "))}"`);
 	const open = [tag, ...attributes.filter(Boolean)].join(" ");
 	const children = [...named, body].filter(Boolean).join("\n");
 	if (!children) return `<${open}></${tag}>`;

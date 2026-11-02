@@ -44,13 +44,15 @@ describe("the catalog", () => {
 		assert.equal(catalog.components.filter(({ layout }) => layout).length, 6, "the six layouts");
 	});
 
-	test("reads props, slots, and custom properties from a CSF file, or from the JSDoc of a component that has none", () => {
+	test("reads props and slots from the source and the CSF file, or from the JSDoc of a component that has none, and the tokens from the source", () => {
 		for (const component of catalog.components) assert.equal(Boolean(component.csf), fs.existsSync(csfFile(path.join(here, "..", "packages", `webc-${component.packageId}`), component.name, component.layout)), `${component.slug}: docs from ${component.csf ? "CSF" : "JSDoc"}`);
 		const button = catalog.components.find(({ name }) => name === "norn-link-button");
 		assert.deepEqual(button.props.find(({ name }) => name === "variant"), { name: "variant", type: "string", optional: true, description: "<code>primary</code>, a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border. Falls back to <code>primary</code>." });
 		assert.equal(button.props.find(({ name }) => name === "href").optional, false);
-		assert.ok(button.cssprops.some(({ name }) => name === "--norn-link-button-accent"));
+		assert.ok(button.tokens.some(({ name }) => name === "--norn-ui-accent"), "a global token it reads");
+		assert.ok(button.tokens.every(({ name }) => !name.startsWith("--norn-link-button-")), "never a custom property of its own");
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
+		assert.ok(footer.tokens.some(({ name }) => name === "--norn-text-muted"), "a component without a CSF file lists its tokens too");
 		assert.equal(footer.csf, undefined, "norn-footer still has its JSDoc");
 		assert.deepEqual(footer.slots.map(({ name }) => name), ["default", "colophon"], "an unnamed slot is the default one");
 	});
@@ -122,10 +124,10 @@ describe("the preview build", () => {
 		assert.ok(html.includes('<a href="/components/patterns/norn-card/" aria-current="page">norn-card</a>'));
 	});
 
-	test("a component page shows its docs, each from the JSDoc", () => {
+	test("a component page shows its docs, its tokens, and its stories", () => {
 		const html = pageFor(output, "/components/patterns/norn-link-button/");
 		assert.ok(html.includes("<code>@variant</code>") && html.includes("a filled accent; <code>secondary</code>, a 1px outline; or <code>quiet</code>, text with no border."));
-		assert.ok(html.includes("<code>--norn-link-button-accent</code>"));
+		assert.ok(html.includes("<code>--norn-text-on-accent</code>") && !html.includes("<code>--norn-link-button-accent</code>"), "the tokens it reads, and no custom property of its own");
 		assert.ok(pageFor(output, "/components/patterns/norn-footer/").includes("<code>colophon</code>"));
 		assert.ok(html.includes("<norn-code-block"), "the source is shown with norn-code-block");
 		assert.equal((html.match(/<preview-canvas>/g) ?? []).length, catalog.components.find(({ name }) => name === "norn-link-button").stories.length);
@@ -164,9 +166,11 @@ describe("the preview build", () => {
 	});
 
 	test("a component with enumerable props has a matrix frame after its other stories: one labeled cell per option, one prop at a time", async () => {
+		const matrices = [];
 		for (const component of catalog.components.filter(({ csf, layout, head }) => csf && !layout && !head)) {
 			const { meta, stories } = await readCsf(component.csf);
-			const cells = matrixCells(meta, stories.find(({ exportName }) => exportName === "Default"));
+			// The options come from the effective argTypes: derived from the source, with the CSF file's over them.
+			const cells = matrixCells({ ...meta, argTypes: component.argTypes }, stories.find(({ exportName }) => exportName === "Default"));
 			const matrix = component.stories.find(({ slug }) => slug === "matrix");
 			if (!cells.length) {
 				assert.equal(matrix, undefined, `${component.slug}: nothing enumerable, no matrix`);
@@ -177,7 +181,9 @@ describe("the preview build", () => {
 			assert.deepEqual([...html.matchAll(/<p><code>([^<]+)<\/code><\/p>/g)].map(([, label]) => label), cells.map(({ label }) => label), `${component.slug}: the cells`);
 			assert.equal(html.split(`<${component.name}`).length - 1, cells.length, `${component.slug}: one instance per cell`);
 			assert.ok(pageFor(output, component.url).includes(`src="${matrix.frameUrl}"`), `${component.slug}: the page shows the matrix`);
+			matrices.push(component.name);
 		}
+		for (const name of ["norn-callout", "norn-link-button"]) assert.ok(matrices.includes(name), `${name}: the derived options give it a matrix`);
 	});
 
 	test("a story page that loops over a prop's options in $data.csf renders one instance per option, in order", () => {
@@ -496,18 +502,18 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	test("on a phone a custom property is a block: name, type, default, then its field and reset, all inside the screen", async () => {
+	test("on a phone a token is a block: name, type, default, then its field and reset, all inside the screen", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
 		await page.goto(server.url + "/components/patterns/norn-card/");
-		const row = page.locator("preview-props tbody tr", { has: page.locator('input[data-prop="--norn-card-radius"]') });
+		const row = page.locator("preview-props tbody tr", { has: page.locator('input[data-prop="--norn-ui-border-radius"]') });
 		const [name, type, fallback, field] = await Promise.all(["th", "td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"].map((selector) => row.locator(selector).boundingBox()));
 		assert.ok(name.y < type.y && type.y < fallback.y && fallback.y < field.y, "one under the other");
 		for (const box of [name, type, fallback, field]) assert.ok(box.x >= 0 && box.x + box.width <= 390, "inside the screen");
-		const reset = await row.getByRole("button", { name: "Reset --norn-card-radius" }).boundingBox();
+		const reset = await row.getByRole("button", { name: "Reset --norn-ui-border-radius" }).boundingBox();
 		assert.ok(reset.x + reset.width <= 390 - 1, "the reset is in reach");
 		assert.equal(await page.locator("preview-props").evaluate((box) => box.scrollWidth <= box.clientWidth), true, "nothing to scroll");
 		await row.locator("input").fill("1px");
-		assert.equal(await row.getByRole("button", { name: "Reset --norn-card-radius" }).isEnabled(), true);
+		assert.equal(await row.getByRole("button", { name: "Reset --norn-ui-border-radius" }).isEnabled(), true);
 		await page.close();
 	});
 
@@ -758,30 +764,31 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	test("the custom properties table holds the overrides: name, type, default, and the field with its reset", async () => {
+	test("the tokens table holds the overrides: name, type, default, and the field with its reset", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(server.url + "/components/patterns/norn-card/");
 		assert.equal(await page.locator("preview-canvas details").count(), 0, "no panel in the canvas");
 		const table = page.locator("preview-props");
-		assert.deepEqual(await table.locator("thead th").allTextContents(), ["Property", "Type", "Default", "Override"]);
-		const row = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-card-radius"]') });
-		assert.equal(await row.locator("th code").textContent(), "--norn-card-radius");
+		assert.deepEqual(await table.locator("thead th").allTextContents(), ["Token", "Type", "Default", "Override"]);
+		const row = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-ui-border-radius"]') });
+		assert.equal(await row.locator("th code").textContent(), "--norn-ui-border-radius");
 		assert.equal(await row.locator('[data-col="type"]').textContent(), "<length>");
-		assert.match(await row.locator("td").nth(1).textContent(), /--norn-ui-border-radius\s+6px/);
-		assert.equal(await row.locator("input").getAttribute("aria-label"), "Override --norn-card-radius");
-		assert.equal(await row.getByRole("button", { name: "Reset --norn-card-radius" }).isDisabled(), true, "nothing to reset yet");
-		const color = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-card-bg"]') });
+		assert.equal((await row.locator("td").nth(1).textContent()).trim(), "6px");
+		assert.equal(await row.locator("input").getAttribute("aria-label"), "Override --norn-ui-border-radius");
+		assert.equal(await row.getByRole("button", { name: "Reset --norn-ui-border-radius" }).isDisabled(), true, "nothing to reset yet");
+		const color = table.locator("tbody tr", { has: page.locator('input[data-prop="--norn-surface-raised"]') });
 		assert.equal(await color.locator('[data-col="type"]').textContent(), "<color>");
-		assert.match(await color.locator("td").nth(1).textContent(), /--norn-surface-raised\s+light-dark\(hsl\(40, 14%, 96%\), #242932\)/);
-		assert.equal(await table.locator("tbody tr").count(), 1 + 6, "the shared accent, then the component's six");
+		assert.equal((await color.locator("td").nth(1).textContent()).trim(), "light-dark(hsl(40, 14%, 96%), #242932)");
+		const card = catalog.components.find(({ name }) => name === "norn-card");
+		assert.equal(await table.locator("tbody tr").count(), 1 + card.tokens.length, "the shared accent, then each token the card reads");
+		assert.equal(await table.locator('input[data-prop="--norn-card-bg"]').count(), 0, "no custom property of the card's own");
 		await page.close();
 	});
 
-	test("a page with no examples lists its properties without override fields", async () => {
+	test("a page whose component reads no token has no tokens table", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 		await page.goto(server.url + "/components/oss-site/oss-head/");
-		assert.deepEqual(await page.locator("preview-props thead th").allTextContents(), ["Property", "Type", "Default"]);
-		assert.equal(await page.locator("preview-props input").count(), 0);
+		assert.equal(await page.locator("preview-props").count(), 0);
 		await page.close();
 	});
 
@@ -822,13 +829,13 @@ describe("the preview in a browser", () => {
 		const frames = await Promise.all([0, 1].map((index) => frameOf(page, index)));
 		const radius = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		const before = await radius(frames[0]);
-		await page.locator('preview-props input[data-prop="--norn-card-radius"]').fill("1px");
+		await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').fill("1px");
 		for (const frame of frames) assert.equal(await radius(frame), "1px");
-		const reset = page.getByRole("button", { name: "Reset --norn-card-radius" });
+		const reset = page.getByRole("button", { name: "Reset --norn-ui-border-radius" });
 		assert.equal(await reset.isEnabled(), true);
 		await reset.click();
 		assert.equal(await radius(frames[0]), before);
-		assert.equal(await page.locator('preview-props input[data-prop="--norn-card-radius"]').inputValue(), "");
+		assert.equal(await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').inputValue(), "");
 		assert.equal(await reset.isDisabled(), true);
 		await page.close();
 	});
@@ -1020,9 +1027,9 @@ describe("the preview in a browser", () => {
 		const frame = await frameOf(page);
 		const radius = () => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		assert.equal(await radius(), "16px", "the saved override");
-		await page.locator('preview-props input[data-prop="--norn-card-radius"]').fill("2px");
+		await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').fill("2px");
 		assert.equal(await radius(), "2px", "the table field");
-		await page.locator('preview-props input[data-prop="--norn-card-radius"]').fill("");
+		await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').fill("");
 		assert.equal(await radius(), "16px", "the saved override again");
 		await context.close();
 	});
