@@ -54,7 +54,7 @@ const searchSite = (norn) => {
 		></norn-search>
 	</norn-side-nav>
 	<h1 @text="$data.norn.title || ''"></h1>
-	<template webc:nokeep webc:for="toc of [nornHeadings($data.content)]"><norn-toc webc:if="toc.length > 1" :@items="toc"></norn-toc></template>
+	<template webc:nokeep webc:for="toc of [nornHeadings($data.content)]"><norn-toc webc:if="toc.length > 1" :@items="toc" @fold="narrow"></norn-toc></template>
 	<norn-rich-text @measure="none" data-pagefind-body
 		><template webc:if="nornCompiles($data, 'norn-docs')" webc:nokeep @html="$data.content"></template
 		><template webc:else webc:nokeep @raw="$data.content"></template
@@ -65,13 +65,7 @@ const searchSite = (norn) => {
 </norn-sidebar-layout>
 <style>
 	@layer norn.layout {
-		/* The contents sit beside the body once the page is 60rem wide, and fold under their title until then. */
-		@container (width < 60rem) {
-			norn-sidebar-layout > div > article > norn-toc {
-				--norn-toc-fold: on;
-			}
-		}
-
+		/* The contents sit beside the body once the page is 60rem wide. Narrower, they fold under their title, by norn-toc's fold prop. */
 		@container (width >= 60rem) {
 			/* The contents take a second, implicit column beside the body's one. */
 			norn-sidebar-layout > div > article:has(> norn-toc > nav) {

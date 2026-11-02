@@ -9,12 +9,10 @@
 /**
  * The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page.
  * Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing.
- * The title is the summary of a `<details>`, shown open and unclickable until `--norn-toc-fold: on` is set on the host, as `norn-docs` does below 60rem: then the list folds away under the title. A browser without `::details-content` always shows the fold.
+ * The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.
  * @prop {{ id: string, text: string, level: number }[]} items
  * @slot label - The landmark name and visible title, as one element. Falls back to the site's `componentStrings`, then "On this page".
- * @cssprop --norn-toc-link - Link color. Falls back to --norn-text-muted.
- * @cssprop --norn-toc-current - The current section's color and marker. Falls back to --norn-text-accent.
- * @cssprop --norn-toc-fold - Inherited. Set to `on` to fold the list under its title.
+ * @prop {"always" | "narrow"} [fold] - When the list folds under its title: `always`, or `narrow`, while the nearest container is narrower than 60rem. Unset, it never folds.
  * @category landmark
  */
 --->
@@ -35,7 +33,7 @@ function outline(items) {
 	return list(root.nodes);
 }
 </script>
-<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-toc-' + uid">
+<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-toc-' + uid" :data-fold="['always', 'narrow'].includes(fold) ? fold : undefined">
 	<details>
 		<summary><span :id="'norn-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot></span></summary>
 		<template webc:nokeep @raw="outline(items)"></template>
@@ -118,7 +116,7 @@ function outline(items) {
 				border-start-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
 				border-end-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
 				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
-				color: var(--norn-toc-link, var(--norn-text-muted, t('text.muted')));
+				color: var(--norn-text-muted, t('text.muted'));
 				text-decoration: none;
 
 				&:hover {
@@ -131,13 +129,24 @@ function outline(items) {
 				}
 
 				&[aria-current] {
-					border-inline-start-color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
-					color: var(--norn-toc-current, var(--norn-text-accent, t('text.accent')));
+					border-inline-start-color: var(--norn-text-accent, t('text.accent'));
+					color: var(--norn-text-accent, t('text.accent'));
+				}
+			}
+
+			/* The fold prop turns the fold on, always or while the nearest container is narrow. */
+			& > nav[data-fold="always"] {
+				--_folded: on;
+			}
+
+			@container (width < 60rem) {
+				& > nav[data-fold="narrow"] {
+					--_folded: on;
 				}
 			}
 
 			/* Folded, the title is a control that opens the list. */
-			@container style(--norn-toc-fold: on) {
+			@container style(--_folded: on) {
 				& > nav > details > summary {
 					--_fold: block;
 					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));

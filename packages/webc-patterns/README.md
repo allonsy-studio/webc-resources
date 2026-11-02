@@ -428,7 +428,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-callout` | `@variant` (`note`, `tip`, `important`, `warning`, `caution`), slot `heading`, default slot | An aside in long-form text, set like a pull quote on a raised panel with an eyebrow label, as `role="note"`. For a status message, use `norn-notice` |
 | `norn-accordion` | default slot (`<details>` sections) | Disclosures from native `details`. Give them one `name` to open one at a time |
 | `norn-heading-anchor` | `@slug`, `:@level`, default slot | A heading whose text links to its own section |
-| `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), slot `label` | The page's contents, marking the section in view. Folds under its title when `--norn-toc-fold: on` is set |
+| `norn-toc` | `:@items` (`{ id, text, level }[]`, from `nornHeadings`), `@fold` (`always`, or `narrow` below 60rem), slot `label` | The page's contents, marking the section in view. Folds under its title as `@fold` says |
 | `norn-breadcrumbs` | `:@items` (`{ url, title }[]`), slot `label` | The trail to the current page, with chevrons that mirror in right-to-left text |
 | `norn-code-tabs` | `@group`, default slot (`norn-code-block`s), slots `label` and `sample` | Tabs over code samples, kept in step by group; stacked without a script |
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |

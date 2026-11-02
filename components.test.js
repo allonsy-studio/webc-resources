@@ -175,7 +175,7 @@ test("a compiled fallback is the default in tokens.json, resolved", () => {
 	assert.ok(checked > 100, "a real sweep");
 	const toc = compiled.get("webc-patterns/components/norn-toc.webc");
 	assert.ok(toc.includes("gap: var(--norn-space-xs, 0.5rem);"), "a spacing step");
-	assert.ok(toc.includes("color: var(--norn-toc-link, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));"), "a component token falls back to the shared one");
+	assert.ok(toc.includes("color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));"), "a component reads the shared token, with its default");
 });
 
 test("the base styles define no token: base.css sets color-scheme, norn-head declares the layer order, and the components carry the defaults", () => {
@@ -620,6 +620,18 @@ test("norn-breadcrumbs reads the shared text tokens and no custom property of it
 test("norn-toc folds under its title through a details, and the title names the landmark", async () => {
 	const html = unid(await render("<norn-toc :@items=\"[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]\"></norn-toc>"));
 	assert.match(html, /<nav>\s*<details>\s*<summary><span>On this page<\/span><\/summary>\s*<ol><li><a href="#a">/);
+});
+
+test("norn-toc reads the shared text tokens, folds by its fold prop, and reads no custom property of its own", async () => {
+	const css = squash(styles(sources.find(({ file }) => file === "webc-patterns/src/norn-toc.webc").text));
+	assert.ok(!/--norn-toc-/.test(css), "no --norn-toc-* property, inherited or not");
+	assert.ok(css.includes('& > nav[data-fold="always"] { --_folded: on; }') && css.includes('@container (width < 60rem) { & > nav[data-fold="narrow"] { --_folded: on; } }') && css.includes("@container style(--_folded: on) {"));
+	const items = "[{ id: 'a', text: 'A', level: 2 }, { id: 'b', text: 'B', level: 2 }]";
+	for (const fold of ["always", "narrow"]) assert.match(unid(await render(`<norn-toc :@items="${items}" @fold="${fold}"></norn-toc>`)), new RegExp(`<nav data-fold="${fold}">`), fold);
+	assert.match(unid(await render(`<norn-toc :@items="${items}" @fold="sometimes"></norn-toc>`)), /<nav>/, "an unknown value never folds");
+	assert.match(unid(await render(`<norn-toc :@items="${items}" style="--norn-toc-fold: on"></norn-toc>`)), /<nav>/, "the old property sets nothing");
+	const docs = sources.find(({ file }) => file.endsWith("/layouts/norn-docs.webc")).text;
+	assert.ok(docs.includes('@fold="narrow"') && !docs.includes("--norn-toc-fold"), "norn-docs passes the prop");
 });
 
 test("the docs never name a token with a stray number after it", () => {
