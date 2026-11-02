@@ -377,6 +377,21 @@ test("norn-copy-button has no border, stacks its icons and texts in one cell, an
 	assert.ok(unid(await render('<norn-copy-button @value="x" @compact></norn-copy-button>')).includes("data-compact"), "compact when asked");
 });
 
+test("norn-copy-button reads the shared tokens and takes its fill as a surface prop, with no custom property of its own", async () => {
+	const css = cssOf("norn-copy-button");
+	assert.ok(!/--norn-copy-button-/.test(css), "no --norn-copy-button-* property");
+	assert.ok(css.includes("border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));") && css.includes("color: var(--norn-text-muted, t('text.muted'));"), "the radius and text tokens");
+	assert.ok(css.includes("background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg, transparent));"), "no fill by default");
+	for (const surface of ["base", "raised", "code"]) {
+		assert.ok(css.includes(`&[data-surface="${surface}"] { --_bg: var(--norn-surface-${surface}, t('surface.${surface}')); }`), `${surface} fills from its token`);
+		assert.ok((await render(`<norn-copy-button @value="x" @surface="${surface}"></norn-copy-button>`)).includes(`data-surface="${surface}"`), surface);
+	}
+	assert.ok(!(await render('<norn-copy-button @value="x"></norn-copy-button>')).includes("data-surface"), "none by default");
+	assert.ok(!(await render('<norn-copy-button @value="x" @surface="red"></norn-copy-button>')).includes("data-surface"), "an unknown surface is ignored");
+	assert.ok((await render('<norn-code-block @language="js" @code="x"></norn-code-block>')).includes('data-surface="code"'), "a code block's button sits on the code surface");
+	assert.ok(!cssOf("norn-code-block").includes("--norn-copy-button"), "set by the prop, not a custom property");
+});
+
 test("norn-code-block overlays a compact copy button, and its terminal frame is flat, with no dots, no shadow, and no border", async () => {
 	const css = cssOf("norn-code-block");
 	assert.ok(!/border: 1px|--norn-code-block-border|radial-gradient|box-shadow|--norn-code-block-(dot|shadow)|::before/.test(css), "no border, dots, or shadow");
