@@ -1293,7 +1293,7 @@ test("norn-base passes ogImage {src, alt} to the head, and a page without one ge
 	assert.ok(!without.includes("og:image") && without.includes('<meta name="twitter:card" content="summary">'));
 });
 
-test("the server-only comment never reaches the output: a component, a component with a setup block, a component with a CSF file, and a layout", async () => {
+test("the server-only comment never reaches the output: a component, a component with a setup block, a container, and a layout", async () => {
 	const LEAK = /SPDX|<!--|-->/;
 	const base = { name: "widget", title: "Usage", url: "https://example.com/widget/usage/", lang: "en", nav: [], footer: { badges: [], groups: [] } };
 	const page = await render(layoutText("norn-base"), { helpers: { ...HEAD_HELPERS, nornHook: () => "" }, data: { content: "", norn: base } });

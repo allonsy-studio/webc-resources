@@ -8,7 +8,7 @@
 // Each story is a page of its own, shown in a frame: /stories/<package>/<component>/<story> becomes /frames/…/.
 // A story page reads its component's CSF file as `$data.csf`, so it can loop over the options instead of listing them.
 
-/** The CSF data of the component a story page belongs to, or undefined when it has no CSF file. */
+/** The CSF data of the component a story page belongs to, or undefined outside a story folder. */
 const csf = (data) => {
 	const [, , packageId, name, slug] = data.page.filePathStem.split("/");
 	if (!slug) return undefined;

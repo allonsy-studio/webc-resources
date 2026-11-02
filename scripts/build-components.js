@@ -108,7 +108,7 @@ function writeResolved(tokens, file) {
 	fs.writeFileSync(file, JSON.stringify(tree, null, "\t"));
 }
 
-/** A server-only comment: `<!--- … --->`. WebC drops it from the output, and it holds the file's license header and JSDoc. */
+/** A server-only comment: `<!--- … --->`. WebC drops it from the output, and it holds the file's license header. */
 const SERVER_COMMENT = /<!---[\s\S]*?--->/g;
 
 /**
@@ -152,7 +152,7 @@ const TARGETS = [
 
 /**
  * Compile one source file: fill each `t()` in its CSS from the resolved tokens.
- * The server-only comment at the top (`<!--- … --->`) is kept as written: the tooling that reads a component's docs reads it from the compiled file, and WebC drops it at render.
+ * The server-only comment at the top (`<!--- … --->`) is kept as written: it carries the license header into the shipped file, and WebC drops it at render.
  *
  * @param {string} from - Absolute path of the source
  * @param {string} imported - The `@tokens` rule that loads the resolved tokens

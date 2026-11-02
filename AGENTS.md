@@ -85,9 +85,7 @@ preview/           the component preview: an Eleventy site with a page and stori
 6. Props use the `@` prefix at every call site (`@title="…"`, `:@title="expr"`).
 7. No HTML comments in components: they ship to every page. The one exception is the three-dash server-only
    comment, `<!--- … --->`, which WebC drops from the output. A file has exactly one. It sits at the top, after any front matter,
-   and holds the license header (rule 13). The component's API lives in its CSF file (rule 15). The move is partial: a component
-   without a CSF file still keeps a JSDoc block for its props, slots, custom properties, and category after the header, in the
-   `/** … */` and ` * ` line format the preview and `components.test.js` read until it moves.
+   and holds the license header alone (rule 13). The component's API lives in its CSF file (rule 15), never in the comment.
    `norn-base` holds it in `<head>`: a comment ahead of the doctype makes WebC render the page without its doctype and shell. The comment ends at the first `-->` or `--!>`, so its text never contains either. Close it with `--->`. A `--`, a brace, a backtick, or a tag name such as `<slot>` is safe. A `<script webc:setup>` holds code,
    never only comments. It can't import npm modules, and in a layout or page it runs once per template: compute per-page values
    in the attribute expressions, not in the setup block.
@@ -120,13 +118,13 @@ preview/           the component preview: an Eleventy site with a page and stori
 12. Spec links point to the section anchor, never a spec's home page.
 13. Every `.js` file starts with the MPL-2.0 SPDX block comment (see `eslint.config.js`). Every `.webc` file carries the same
     block as the first lines of its `<!--- … --->` comment (rule 7), never in a `webc:setup` block. The lint rule covers `.js`; `components.test.js` checks the `.webc` files.
-14. Every component names its category as the first part of its CSF title (`Container/norn-card`), or with `@category` in its JSDoc until it has a CSF file: `layout` (arranges other things: page
+14. Every component names its category as the first part of its CSF title (`Container/norn-card`): `layout` (arranges other things: page
     frames), `landmark` (renders a page region with a role and a name), `container` (a bounded surface that holds
     content), `component` (a self-contained element), `template` (an Eleventy layout: a whole page, filled from props;
     only the `norn-*` layouts), or `document` (head components). An OSS site component is titled `OSS site/<tag>` and names
     its category in `parameters.webc.category`.
     `components.test.js` checks it, and the preview groups its navigation by it.
-15. A component's API is documented in its CSF file, `src/<name>.stories.js` beside it (`src/layouts/<name>.stories.js` for a
+15. A component's API is derived from its source and documented in its CSF file, `src/<name>.stories.js` beside it (`src/layouts/<name>.stories.js` for a
     layout), in strict CSF 3: a default export with `title`, `component`, `args`, `argTypes`, `parameters`, and `tags`, and stories
     as named exports of data (`name`, `args`, `argTypes`, `parameters`, `tags`). No `render`, `play`, `decorators`, or `loaders`.
     `scripts/analyze-webc.js` derives the argTypes from the source in `src/`: each prop (a free name in the markup's
@@ -136,10 +134,11 @@ preview/           the component preview: an Eleventy site with a page and stori
     `$data.content`). The CSF file gives each derived prop and slot a `description`, and nothing the code already says. Where
     the code cannot say a fact, such as a required prop or an object's shape, the entry overrides it, with a reason in the
     file's own `parameters.webc.overrides` (`"<arg> <field>": "why"`), which `stories.test.js` requires and checks is used. There is no custom property argType: the preview lists the global tokens the CSS reads.
-    The component description is `parameters.docs.description.component`. A fact lives in one place. Phase A moved
-    `norn-callout`, `norn-card`, `norn-link-button`, `norn-code-block`, `oss-bar`, and `norn-landing`; the rest still use JSDoc
-    until they move. `stories.test.js` checks the shape, an undocumented derived arg, a stale argType, a restated fact, an
-    override without a reason, and a custom property entry.
+    The component description is `parameters.docs.description.component`. A fact lives in one place. Every component and
+    layout has a CSF file, and the preview fails the build without one. The plain `norn-code-block` in `src/fallback/` is the
+    one exception: its API is the real component's, and `components.test.js` derives its props and slots and compares them.
+    `stories.test.js` checks that every CSF file is there, its shape, an undocumented derived arg, a stale argType, a restated
+    fact, an override without a reason, and a custom property entry.
     Every component outside the document head, and every layout, has at least one story: a CSF story, or a page in
     `preview/content/stories/<package>/<name>/`. A CSF story is a single instance from its args, rendered in a frame by the
     default renderer; a page is for anything more, such as a composition, Markdown, or a whole page on a layout
@@ -151,7 +150,7 @@ preview/           the component preview: an Eleventy site with a page and stori
     Headings, text, links, and lists are the caller's markup, so the caller picks heading levels and adds icons.
     A list component takes `<li>` children in its default slot. Props are for settings (`@variant`, `@href`),
     and for data a component must compute from, such as `norn-side-nav` marking the current page. Document an
-    unnamed slot as the `default` slot argType (`@slot - …` in JSDoc); WebC can't test a slot for content, so hide an empty wrapper with
+    unnamed slot as the `default` slot argType; WebC can't test a slot for content, so hide an empty wrapper with
     `:not(:has(*))` in CSS.
     Never put a fallback in a default slot: any child, a line break included, replaces it. A short label with a
     default is a named slot (`norn-skip-link`'s `label`), and a data-driven alternative to the slot uses `webc:if` with
@@ -172,7 +171,7 @@ preview/           the component preview: an Eleventy site with a page and stori
     copy button). Never build a sentence by joining words around a value: take a template with a placeholder
     (`{count}`, `{name}`). Counts use `Intl.PluralRules` and `Intl.NumberFormat` for the nearest `lang`. The Markdown
     add-on (`@allons-y/webc-patterns/markdown`, `@allons-y/webc-code-sample/markdown`) writes no string and fills no slot: it writes the tag an author would write, and the registry supplies the texts.
-    `components.test.js` checks that the registry, the slots, and the documented slots (CSF, or JSDoc until it moves) agree.
+    `components.test.js` checks that the registry, the slots, and the CSF slot argTypes agree.
 18. Component CSS uses native nesting with an explicit `&`: the host tag appears once and the rest nests inside it (Baseline 2023: Chrome 120, Safari 17.2, Firefox 117). A nested selector keeps the specificity of the flat one, so `:where()` and `:is()` wrappers stay where they were.
 
 ## Lightweight baseline

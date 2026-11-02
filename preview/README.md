@@ -15,8 +15,8 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 
 | Part | Comes from |
 | --- | --- |
-| Props and slots | Derived from the component's source by `scripts/analyze-webc.js`, with the descriptions and the few overrides of its CSF file, `src/<name>.stories.js` in its package, merged over them. A component that has not moved to CSF yet is read from the JSDoc in the `<!--- … --->` comment at the top of its file |
-| Description | The CSF file's `parameters.docs.description.component`, or the JSDoc |
+| Props and slots | Derived from the component's source by `scripts/analyze-webc.js`, with the descriptions and the few overrides of its CSF file, `src/<name>.stories.js` in its package, merged over them. A component or layout without a CSF file fails the build |
+| Description | The CSF file's `parameters.docs.description.component` |
 | Tokens | The global tokens from `tokens.json` the component's CSS reads, derived by the analyzer, with each one's type and default |
 | Examples | The CSF stories, in export order, then the story pages in `content/stories/<package>/<component>/`, then the matrix, each rendered in its own frame |
 | Source | The markup the default renderer writes from a CSF story's args, or the story page's file, shown with `norn-code-block` |
@@ -24,7 +24,7 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 
 Head components (`norn-head`, `oss-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
 
-The navigation and the index group the components by category: the first part of the CSF title (`Container/norn-card`), or the `@category` in the JSDoc of a component without a CSF file. The categories are layout, landmark, container, component, template, and document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
+The navigation and the index group the components by category: the first part of the CSF title (`Container/norn-card`). The categories are layout, landmark, container, component, template, and document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
 
 On a phone (48rem and narrower) the navigation is one closed disclosure, "Components" with the count, above the page. On a wide screen the groups are the sidebar, and the disclosure's bar is hidden where the browser supports `::details-content`. A touch screen gets 44px targets for the navigation and the canvas controls.
 
@@ -83,7 +83,7 @@ A new component or layout with no story fails `yarn test`. For a layout, the sto
 | Path | Holds |
 | --- | --- |
 | `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, the virtual templates for the CSF frames, and the watch targets |
-| `lib/catalog.js` | The CSF reader, the JSDoc parser for components that have no CSF file yet, and the component and story catalog |
+| `lib/catalog.js` | The CSF reader and the component and story catalog |
 | `lib/render-story.js` | The default renderer, which writes a CSF story's args as WebC, and the matrix |
 | `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
 | `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
