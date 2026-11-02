@@ -5,14 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A stack of disclosures, from native `<details>` elements: the browser handles the keyboard, find-in-page, and links into a closed section.
- * Pass each section as a `<details>` with a `<summary>` in the default slot. Give them one `name` to keep only one open at a time.
- * A section slides open where the browser can animate to an intrinsic size, unless motion is reduced; elsewhere it opens at once.
- * @slot - The sections, each a `<details>`.
- * @category container
- */
 --->
 <div><slot></slot></div>
 <style>
