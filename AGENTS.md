@@ -16,7 +16,7 @@ its page data to the layout props.
 | --- | --- | --- |
 | `@allons-y/webc-patterns` | Generic components, the six `norn-*` layouts, the base and print styles and the optional reset (`css/`), the Norn plugin (`/plugin`), the helpers components call, the Markdown add-on (`/markdown`), and the optional project data builders (`/project`) | `hosted-git-info`, `semver`, `markdown-it` (for `/project`); `@allons-y/webc-code-sample` as an optional peer |
 | `@allons-y/webc-code-sample` | `norn-code-block`, `tokenRanges`, and the Markdown add-on `highlightFences` (`/markdown`) | `shiki`, `@shikijs/langs` |
-| `@allons-y/webc-oss-site` | The OSS site theme: brand tokens (`css/tokens.css`), fonts, the locked `oss-bar`, `oss-cta`, and `oss-credit`, `oss-head`, `ossProps`, and the OSS site plugin | None; the patterns package as a peer |
+| `@allons-y/webc-oss-site` | The OSS site theme: brand tokens and rules (`css/tokens.css`, `css/brand.css`), fonts, the locked `oss-bar`, `oss-cta`, and `oss-credit`, `oss-head`, `ossProps`, and the OSS site plugin | None; the patterns package as a peer |
 
 Dependencies point one way: `webc-oss-site` peers on patterns, patterns optionally on the code sample, and
 neither of them knows the OSS site theme exists.
@@ -213,8 +213,8 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
   own CSS sits in `norn.layout` and starts at a `data-norn-*` attribute or a component tag of its own markup.
 - **Hooks.** `norn-base` renders `head`, `banner`, `cta`, and `credit` with `<template webc:nokeep @html="nornHook('name')">`.
   `fillHooks(config, fills)` appends markup; an unknown name throws; page data can't change a hook.
-- **Themes.** A theme is a CSS file of custom properties plus hook fills and components, added through the plugin's
-  `components` option. The OSS site plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css`,
+- **Themes.** A theme is CSS in its own layer (shared token values, and rules against the component tags by child paths) plus hook fills and components, added through the plugin's
+  `components` option. The OSS site plugin adds the Norn plugin with its components, fills the hooks, embeds `css/tokens.css` and `css/brand.css`,
   sets `themeColor` and `locale` as `defaults`, and copies the fonts.
 - **Icons.** The `icons` option takes a glob or list of globs of `.svg` files, or a record of names to a path or `{ src, mirror }`. `lib/icons.js` reads them at build time and the `nornIcons` helper hands them to `norn-icon`, which draws a project icon over a built-in of the same name, with the file's `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and its own paint.
 - **Code samples.** `@allons-y/webc-code-sample` is an optional peer of patterns. Every call site, a layout's included, calls
@@ -235,7 +235,7 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
 9. Shared design tokens are compiled `var()` fallbacks: `tokens.json` holds the defaults, the build writes them into each component, and a project overrides any token with its own `tokens.css`. No stylesheet has to define them.
 10. The Norn plugin owns the one plugin-webc registration; a theme or project adds globs through its `components` option, and nothing touches plugin-webc's internals.
 11. `norn-base` exposes four hooks (`head`, `banner`, `cta`, `credit`) through the `nornHook` helper. Fills append; an unknown name throws.
-12. A theme is a CSS file of custom properties. There is no theme API for styling.
+12. A theme is CSS: shared token values, and rules against the component tags in its own layer. No component exposes a custom property for a theme to set.
 13. `@allons-y/webc-code-sample` is an optional peer of patterns: present, the plugin registers it; absent, it registers a plain `norn-code-block` that renders `<pre><code>`.
 14. The reset is optional: Norn looks the same without it.
 15. Browser support is evergreen browsers from about 2024 (`@layer`, `light-dark()`, `:has()`, container queries). A feature newer than that (`@scope`, `::details-content`, `interpolate-size`, the CSS Custom Highlight API) degrades gracefully: the content stays readable and usable without it, with no polyfill. The root README and each package README say so in one line.
