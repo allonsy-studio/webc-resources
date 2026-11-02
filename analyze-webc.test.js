@@ -58,6 +58,21 @@ test("a default comes from ||, ??, and a conditional that falls back to a litera
 	assert.equal(propOf(analysis, "empty").default, undefined, "an empty string is not a default");
 });
 
+test("a default and an option come from a heading chain's webc:else when each branch's tag names the level it tests", () => {
+	const analysis = analyze(`<div><h3 webc:if="Number(level) === 3">A</h3><h4 webc:elseif="Number(level) === 4">A</h4><h2 webc:else>A</h2></div>
+<h4 webc:if="depth == 4">B</h4>
+<h5 webc:elseif="depth == 5">B</h5>
+<h3 webc:else>B</h3>
+<h3 webc:if="rank === 3">C</h3><p webc:else>C</p>
+<h3 webc:if="size === 4">D</h3><h2 webc:else>D</h2>`);
+	assert.deepEqual(propOf(analysis, "level").options, [2, 3, 4]);
+	assert.equal(propOf(analysis, "level").default, 2);
+	assert.deepEqual(propOf(analysis, "depth").options, [3, 4, 5]);
+	assert.equal(propOf(analysis, "depth").default, 3);
+	assert.equal(propOf(analysis, "rank").default, undefined, "a webc:else that is not a heading names no level");
+	assert.equal(propOf(analysis, "size").default, undefined, "a branch whose tag is not the level it tests names no level");
+});
+
 test("options come from comparisons, .includes(), and a setup table's keys", () => {
 	const analysis = analyze(`<script webc:setup>const TONES = { calm: 1, loud: 2 }; const SIZES = ["s", "m"];</script>
 <p :data-a="kind === 'x' || kind === 'y' ? kind : 'z'" :data-b="['ltr', 'rtl'].includes(dir) ? dir : 'ltr'" :data-c="TONES[tone]" :data-d="SIZES.includes(size)" :data-e="Object.hasOwn(TONES, other)" :data-f="third in TONES" :data-g="blank !== ''"></p>`);

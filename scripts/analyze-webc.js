@@ -405,6 +405,44 @@ export function analyzeWebc(source, { layout = false, tokens = [], helpers = [],
 		}
 	}
 
+	/** A branch's test as the prop and the level it compares with: `level == 3`, `Number(level) === 3`, or `$data.norn.level === 3`. */
+	const levelTest = (code) => {
+		let test;
+		try {
+			test = espree.parse(`(${code}\n)`, PARSE).body[0]?.expression;
+		} catch {
+			return undefined;
+		}
+		if (test?.type !== "BinaryExpression" || !["==", "==="].includes(test.operator)) return undefined;
+		const [subject, value] = test.right.type === "Literal" ? [test.left, test.right] : [test.right, test.left];
+		if (value.type !== "Literal" || typeof value.value !== "number") return undefined;
+		const inner = subject.type === "CallExpression" && subject.callee.type === "Identifier" && subject.callee.name === "Number" && subject.arguments.length === 1 ? subject.arguments[0] : subject;
+		if (layout) {
+			const norn = inner.type === "MemberExpression" && !inner.computed && inner.object.type === "MemberExpression" && !inner.object.computed && inner.object.property.name === "norn" && inner.object.object.name === "$data";
+			return norn ? { name: inner.property.name, value: value.value } : undefined;
+		}
+		return inner.type === "Identifier" ? { name: kebab(inner.name), value: value.value } : undefined;
+	};
+
+	// A heading chain: when each branch tests one prop against the level its tag names, the `webc:else` heading's level is the default.
+	for (const { element } of all) {
+		const level = element.tagName.match(/^h([1-6])$/)?.[1];
+		if (!level || !element.attrs.some(({ name }) => name === "webc:else")) continue;
+		const siblings = (element.parentNode?.childNodes ?? []).filter((node) => node.tagName);
+		const tests = [];
+		let opened = false;
+		for (let index = siblings.indexOf(element) - 1; index >= 0 && !opened; index--) {
+			const branch = siblings[index].attrs.find(({ name }) => name === "webc:if" || name === "webc:elseif");
+			if (!branch) break;
+			tests.push({ tag: siblings[index].tagName, ...levelTest(branch.value) });
+			opened = branch.name === "webc:if";
+		}
+		const name = tests[0]?.name;
+		if (!opened || !props.has(name) || !tests.every((entry) => entry.name === name && entry.tag === `h${entry.value}`)) continue;
+		props.get(name).defaults.push(Number(level));
+		props.get(name).how.add("default from a heading chain's webc:else");
+	}
+
 	// The CSS: every custom property read with var() or tested in a style() query, and the attribute values the selectors test.
 	const tokensByName = new Map(tokens.map((token) => [token.name, token]));
 	const used = new Map();
