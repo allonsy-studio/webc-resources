@@ -334,7 +334,8 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 	assert.ok(!screen.includes("3px"), "norn-callout: no bar");
 	assert.ok(!/color-mix\(/.test(screen), "norn-callout: no tint");
 	assert.ok(!/(?:^|[;{ ])border(?!-radius)[a-z-]*:/.test(screen), "norn-callout: no border");
-	assert.ok(callout.includes("background: var(--norn-callout-bg, var(--norn-surface-raised, t('surface.raised')))"), "norn-callout: the raised fill");
+	assert.ok(callout.includes("background: var(--norn-surface-raised, t('surface.raised'))"), "norn-callout: the raised fill");
+	assert.ok(callout.includes("--_color: var(--norn-text-accent, t('text.accent'))") && !callout.includes("--norn-callout-"), "norn-callout: each variant sets the private --_color, with no property of its own");
 	assert.ok(/text-transform: uppercase/.test(callout) && callout.includes("font-size: var(--norn-font-size-s, t('font.size.s'))") && callout.includes("font-weight: 600"), "norn-callout: the eyebrow label");
 	assert.ok(callout.includes("font-size: var(--norn-font-size-l, t('font.size.l'))"), "norn-callout: the body at the large step");
 	assert.ok(callout.includes("--norn-text-accent, t('text.accent')") && !callout.includes("#6b2fc2"), "note and important take the accent");
@@ -345,7 +346,7 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control"]) {
+	for (const name of ["norn-pager", "norn-skip-link", "norn-search", "norn-segmented-control", "norn-callout"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);

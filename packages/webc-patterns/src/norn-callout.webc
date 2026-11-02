@@ -19,19 +19,19 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 <style>
 	@layer norn.components {
 		norn-callout {
-			--_color: var(--norn-callout-color, var(--norn-text-accent, t('text.accent')));
+			--_color: var(--norn-text-accent, t('text.accent'));
 			display: block;
 
 			&:has(> [data-variant="tip"]) {
-				--_color: var(--norn-callout-color, var(--norn-status-success, t('status.success')));
+				--_color: var(--norn-status-success, t('status.success'));
 			}
 
 			&:has(> [data-variant="warning"]) {
-				--_color: var(--norn-callout-color, var(--norn-status-warning, t('status.warning')));
+				--_color: var(--norn-status-warning, t('status.warning'));
 			}
 
 			&:has(> [data-variant="caution"]) {
-				--_color: var(--norn-callout-color, var(--norn-status-danger, t('status.danger')));
+				--_color: var(--norn-status-danger, t('status.danger'));
 			}
 
 			/* A quiet raised panel: a short rule, a small label, then the body set like a pull quote. */
@@ -42,7 +42,7 @@ const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
 				padding: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
 				overflow-wrap: anywhere;
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--norn-callout-bg, var(--norn-surface-raised, t('surface.raised')));
+				background: var(--norn-surface-raised, t('surface.raised'));
 				color: var(--norn-text-base, t('text.base'));
 				font-family: var(--norn-font-heading, t('font.heading'));
 				font-size: var(--norn-font-size-l, t('font.size.l'));
