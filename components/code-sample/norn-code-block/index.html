@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-erYBS"><span data-label="" id="norn-header-webc-erYBS"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-9wU4i"><span data-label="" id="norn-header-webc-9wU4i"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/theme/">Theme</a>
@@ -217,7 +217,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-code-block</h1>
-<p class="lead">Code sample tokenized at build time. Its script registers <code>norn-code-block</code> as a custom element that adds the highlight colors; without the script the markup is the whole sample. A compact <code>norn-copy-button</code> from <code>@allons-y/webc-patterns</code> sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading <code>$ </code> prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction. Shell samples (<code>sh</code>, <code>bash</code>, <code>shell</code>, <code>shell-session</code>) color the command, its subcommand, its flags, and its arguments apart. Needs <code>tokenRanges</code> registered as the <code>nornTokenRanges</code> JavaScript function, and the patterns package's components. The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button. Each falls back to the site's <code>componentStrings</code>, under <code>norn-code-block</code> for <code>label</code> and <code>copy-label</code> and under <code>norn-copy-button</code> for the rest, then English.</p>
+<p class="lead">Code sample tokenized at build time. Its script registers <code>norn-code-block</code> as a custom element that adds the highlight colors; without the script the markup is the whole sample. A compact <code>norn-copy-button</code> from <code>@allons-y/webc-patterns</code> sits over the top end corner of the code, as its icon until the pointer or focus is on it, and copies the code without any leading <code>$ </code> prompts. While the button shows, the code scrolls in an area that stops short of it, so no code runs beneath it. A caption, when there is one, sits above the code. The code reads left to right in any page direction. While the code scrolls sideways, the script makes it a tab stop, so a keyboard can scroll it. Shell samples (<code>sh</code>, <code>bash</code>, <code>shell</code>, <code>shell-session</code>) color the command, its subcommand, its flags, and its arguments apart. Needs <code>tokenRanges</code> registered as the <code>nornTokenRanges</code> JavaScript function, and the patterns package's components. The names and the copy button's texts are in the page, hidden: the script names the code while it scrolls, and shows the button. Each falls back to the site's <code>componentStrings</code>, under <code>norn-code-block</code> for <code>label</code> and <code>copy-label</code> and under <code>norn-copy-button</code> for the rest, then English.</p>
 <p class="meta">
 	<code>&lt;norn-code-block&gt;</code>
 	a <span>component</span>, from
@@ -347,7 +347,7 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-code-block @language=&quot;js&quot; @caption=&quot;example.js&quot; :@code=&quot;'import { greet } from \'@example/core\';\n\nconsole.log(greet(\'world\')); // hello, world\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-7B13V" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-code-block @language=&quot;js&quot; @caption=&quot;example.js&quot; :@code=&quot;'import { greet } from \'@example/core\';\n\nconsole.log(greet(\'world\')); // hello, world\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-hbSyI" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -365,8 +365,8 @@
 
 </norn-copy-button>
 	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,9,0,0,1,3,0,4,2,1,8,0,0,1,3,0,12,2,1,6,0,0,1,3,0,96,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block @language="js" @caption="example.js" :@code="'import { greet } from \'@example/core\';\n\nconsole.log(greet(\'world\')); // hello, world\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-7B13V">
-		<span data-string="label" id="norn-code-block-webc-7B13V-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-hbSyI">
+		<span data-string="label" id="norn-code-block-webc-hbSyI-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -496,7 +496,7 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-code-block @language=&quot;sh&quot; :@code=&quot;'$ npm install @example/core\n$ npx example --help\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-ZlTBK" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-code-block @language=&quot;sh&quot; :@code=&quot;'$ npm install @example/core\n$ npx example --help\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-ebE1X" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -514,8 +514,8 @@
 
 </norn-copy-button>
 	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,9,0,0,1,3,0,4,2,1,6,0,0,1,3,0,55,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block @language="sh" :@code="'$ npm install @example/core\n$ npx example --help\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-ZlTBK">
-		<span data-string="label" id="norn-code-block-webc-ZlTBK-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-ebE1X">
+		<span data-string="label" id="norn-code-block-webc-ebE1X-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -645,7 +645,7 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-code-block @language=&quot;js&quot; @caption=&quot;long.js&quot; :@code=&quot;'const message = \'This line is long enough to scroll sideways inside the sample, which is when the code becomes a keyboard stop\';\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-s1VzF" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-code-block @language=&quot;js&quot; @caption=&quot;long.js&quot; :@code=&quot;'const message = \'Welcome to the example project. Read the getting started guide first, then open the reference for every option and its default value.\';\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-gep80" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -662,9 +662,9 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,9,0,0,1,3,0,4,2,1,8,0,0,1,3,0,9,2,1,6,0,0,1,3,0,136,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block @language="js" @caption="long.js" :@code="'const message = \'This line is long enough to scroll sideways inside the sample, which is when the code becomes a keyboard stop\';\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-s1VzF">
-		<span data-string="label" id="norn-code-block-webc-s1VzF-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,9,0,0,1,3,0,4,2,1,8,0,0,1,3,0,9,2,1,6,0,0,1,3,0,160,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block @language="js" @caption="long.js" :@code="'const message = \'Welcome to the example project. Read the getting started guide first, then open the reference for every option and its default value.\';\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-gep80">
+		<span data-string="label" id="norn-code-block-webc-gep80-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -794,7 +794,7 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-code-block :@code=&quot;'Plain text, with no highlighting.\nA second line.\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-NvMs0" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-code-block :@code=&quot;'Build finished in 1.2 seconds.\nWrote 12 files.\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-hV7Eo" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -811,9 +811,9 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,6,0,0,1,3,0,55,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block :@code="'Plain text, with no highlighting.\nA second line.\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-NvMs0">
-		<span data-string="label" id="norn-code-block-webc-NvMs0-copy">Copy {name} to clipboard</span>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,6,0,0,1,3,0,53,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block :@code="'Build finished in 1.2 seconds.\nWrote 12 files.\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-hV7Eo">
+		<span data-string="label" id="norn-code-block-webc-hV7Eo-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -943,7 +943,7 @@
 <figure>
 	
 	<norn-copy-button>
-<button type="button" hidden="" data-value="<norn-code-block @chrome=&quot;terminal&quot; @language=&quot;sh&quot; @caption=&quot;Terminal&quot; :@code=&quot;'$ npm install @example/core\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-R_t8E" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<button type="button" hidden="" data-value="<norn-code-block @chrome=&quot;terminal&quot; @language=&quot;sh&quot; @caption=&quot;Terminal&quot; :@code=&quot;'$ npm install @example/core\n'&quot;></norn-code-block>" data-strings="norn-code-block-webc-vMKtp" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -961,8 +961,8 @@
 
 </norn-copy-button>
 	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,15,2,1,7,0,0,1,3,0,10,2,1,9,0,0,1,3,0,4,2,1,8,0,0,1,3,0,10,2,1,6,0,0,1,3,0,33,0,0,3,1,0,15,0,0,1]]">&lt;norn-code-block @chrome="terminal" @language="sh" @caption="Terminal" :@code="'$ npm install @example/core\n'"&gt;&lt;/norn-code-block&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-R_t8E">
-		<span data-string="label" id="norn-code-block-webc-R_t8E-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-vMKtp">
+		<span data-string="label" id="norn-code-block-webc-vMKtp-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -1099,7 +1099,7 @@
 			<norn-code-block @language=&quot;js&quot; @caption=&quot;example.js&quot; :@code=&quot;'import { greet } from \'@example/core\';\n\nconsole.log(greet(\'world\')); // hello, world\n'&quot; @chrome=&quot;terminal&quot;></norn-code-block>
 		</div>
 	</div>
-</div>" data-strings="norn-code-block-webc-HeS3e" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</div>" data-strings="norn-code-block-webc-YgbG5" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -1124,8 +1124,8 @@
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-HeS3e">
-		<span data-string="label" id="norn-code-block-webc-HeS3e-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-YgbG5">
+		<span data-string="label" id="norn-code-block-webc-YgbG5-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -1143,7 +1143,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-D5kIl"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-JgxVH"></span>
 <div>
 		<table>
 			<thead>
@@ -1180,7 +1180,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-Ghz48"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-8ynXc"></span>
 <div>
 		<table>
 			<thead>

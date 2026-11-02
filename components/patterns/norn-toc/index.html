@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-Cra47"><span data-label="" id="norn-header-webc-Cra47"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-9ck5v"><span data-label="" id="norn-header-webc-9ck5v"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/theme/">Theme</a>
@@ -217,7 +217,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-toc</h1>
-<p class="lead">The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from <code>headings</code> (registered as <code>nornHeadings</code>), so it stays in step with the page. Its script marks the section in view with <code>aria-current="location"</code>. With fewer than two headings it renders nothing. The title is the summary of a <code>&lt;details&gt;</code>, shown open and unclickable unless <code>fold</code> says otherwise: then the list folds away under the title. <code>norn-docs</code> passes <code>narrow</code>. A browser without <code>::details-content</code> always shows the fold.</p>
+<p class="lead">The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from <code>headings</code> (registered as <code>nornHeadings</code>), so it stays in step with the page. Its script marks the section in view with <code>aria-current="location"</code>. The marked link takes the accent color. With fewer than two headings it renders nothing. The title is the summary of a <code>&lt;details&gt;</code>, shown open and unclickable unless <code>fold</code> says otherwise: then the list folds away under the title. <code>norn-docs</code> passes <code>narrow</code>. A browser without <code>::details-content</code> always shows the fold.</p>
 <p class="meta">
 	<code>&lt;norn-toc&gt;</code>
 	a <span>landmark</span>, from
@@ -358,19 +358,19 @@
 	></norn-toc>
 	<h1>Getting started</h1>
 	<norn-rich-text>
-		<p>A page with a contents list in the navigation column. The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.</p>
 		<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>The package needs Node 24 or later. Check the version with <code>node --version</code> first.</p>
+		<p>Add the package to the project as a development dependency, so it stays out of the production install.</p>
 		<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
-		<p>A third-level heading nests one list down. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Run <code>npm install --save-dev @example/core</code> in the project folder. npm writes the version to the lockfile.</p>
+		<p>Commit the lockfile with the change, so every machine installs the same version.</p>
 		<norn-heading-anchor @slug=&quot;usage&quot;>Usage</norn-heading-anchor>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>Import <code>greet</code> from the package and call it with a name. It returns the greeting as a string.</p>
+		<p>Pass a second argument to change the greeting, such as <code>&quot;Good morning&quot;</code> in place of <code>&quot;hello&quot;</code>.</p>
+		<p>Call it as often as needed: it keeps no state between calls.</p>
 	</norn-rich-text>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc-Mb8uV" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-Ocs_R" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -387,7 +387,7 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,48,3,1,50,3,1,43,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,0,0,1,0,215,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,9,0,0,1,0,7,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,10,2,1,7,0,0,1,3,0,3,0,0,1,0,8,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,209,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,7,0,0,1,0,5,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,48,3,1,50,3,1,43,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,0,0,1,0,106,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,9,0,0,1,0,7,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,59,1,1,0,4,0,0,1,0,14,2,1,0,4,0,0,1,0,7,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,102,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,10,2,1,7,0,0,1,3,0,3,0,0,1,0,8,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,4,1,1,0,4,0,0,1,0,36,2,1,0,4,0,0,1,0,63,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,80,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,7,0,0,1,0,5,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,7,1,1,0,4,0,0,1,0,5,2,1,0,4,0,0,1,0,79,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,55,1,1,0,4,0,0,1,0,14,2,1,0,4,0,0,1,0,13,1,1,0,4,0,0,1,0,7,2,1,0,4,0,0,1,0,1,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,60,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
 	&lt;norn-toc
 		slot="nav"
 		:@items="[
@@ -398,21 +398,21 @@
 	&gt;&lt;/norn-toc&gt;
 	&lt;h1&gt;Getting started&lt;/h1&gt;
 	&lt;norn-rich-text&gt;
-		&lt;p&gt;A page with a contents list in the navigation column. The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;The package needs Node 24 or later. Check the version with &lt;code&gt;node --version&lt;/code&gt; first.&lt;/p&gt;
+		&lt;p&gt;Add the package to the project as a development dependency, so it stays out of the production install.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;A third-level heading nests one list down. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Run &lt;code&gt;npm install --save-dev @example/core&lt;/code&gt; in the project folder. npm writes the version to the lockfile.&lt;/p&gt;
+		&lt;p&gt;Commit the lockfile with the change, so every machine installs the same version.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="usage"&gt;Usage&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;Import &lt;code&gt;greet&lt;/code&gt; from the package and call it with a name. It returns the greeting as a string.&lt;/p&gt;
+		&lt;p&gt;Pass a second argument to change the greeting, such as &lt;code&gt;"Good morning"&lt;/code&gt; in place of &lt;code&gt;"hello"&lt;/code&gt;.&lt;/p&gt;
+		&lt;p&gt;Call it as often as needed: it keeps no state between calls.&lt;/p&gt;
 	&lt;/norn-rich-text&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-Mb8uV">
-		<span data-string="label" id="norn-code-block-webc-Mb8uV-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-Ocs_R">
+		<span data-string="label" id="norn-code-block-webc-Ocs_R-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -555,20 +555,20 @@
 	></norn-toc>
 	<h1>Getting started</h1>
 	<norn-rich-text>
-		<p>The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.</p>
 		<norn-heading-anchor @slug=&quot;install&quot;>Install</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>The package needs Node 24 or later. Check the version with <code>node --version</code> first.</p>
 		<norn-heading-anchor @slug=&quot;with-npm&quot; :@level=&quot;3&quot;>With npm</norn-heading-anchor>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>Run <code>npm install --save-dev @example/core</code> in the project folder. npm writes the version to the lockfile.</p>
 		<norn-heading-anchor @slug=&quot;pinned&quot; :@level=&quot;4&quot;>Pinned versions</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Pass an exact version, such as <code>@example/core@1.2.0</code>, to install that release and no other.</p>
 		<norn-heading-anchor @slug=&quot;ranges&quot; :@level=&quot;5&quot;>Version ranges</norn-heading-anchor>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>A range lets npm pick the newest release that fits, each time the lockfile is updated.</p>
 		<norn-heading-anchor @slug=&quot;carets&quot; :@level=&quot;6&quot;>Caret ranges</norn-heading-anchor>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>A caret range, such as <code>^1.2.0</code>, accepts any 1.x release from 1.2.0 up.</p>
+		<p>npm writes a caret range by default when it adds a package.</p>
 	</norn-rich-text>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc--0Fuk" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-Ge90F" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -585,7 +585,7 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,48,3,1,50,3,1,55,3,1,54,3,1,51,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,0,0,1,0,245,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,9,0,0,1,0,7,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,10,2,1,7,0,0,1,3,0,3,0,0,1,0,8,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,15,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,14,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,12,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,48,3,1,50,3,1,55,3,1,54,3,1,51,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,0,0,1,0,106,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,9,0,0,1,0,7,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,59,1,1,0,4,0,0,1,0,14,2,1,0,4,0,0,1,0,7,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,10,2,1,7,0,0,1,3,0,3,0,0,1,0,8,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,4,1,1,0,4,0,0,1,0,36,2,1,0,4,0,0,1,0,63,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,15,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,31,1,1,0,4,0,0,1,0,19,2,1,0,4,0,0,1,0,39,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,14,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,86,2,1,0,1,0,0,1,0,3,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,12,2,1,0,19,0,0,1,0,3,1,1,0,1,0,0,1,0,23,1,1,0,4,0,0,1,0,6,2,1,0,4,0,0,1,0,40,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,59,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
 	&lt;norn-toc
 		slot="nav"
 		:@items="[
@@ -598,22 +598,22 @@
 	&gt;&lt;/norn-toc&gt;
 	&lt;h1&gt;Getting started&lt;/h1&gt;
 	&lt;norn-rich-text&gt;
-		&lt;p&gt;The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="install"&gt;Install&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;The package needs Node 24 or later. Check the version with &lt;code&gt;node --version&lt;/code&gt; first.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="with-npm" :@level="3"&gt;With npm&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;Run &lt;code&gt;npm install --save-dev @example/core&lt;/code&gt; in the project folder. npm writes the version to the lockfile.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="pinned" :@level="4"&gt;Pinned versions&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
+		&lt;p&gt;Pass an exact version, such as &lt;code&gt;@example/core@1.2.0&lt;/code&gt;, to install that release and no other.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="ranges" :@level="5"&gt;Version ranges&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;A range lets npm pick the newest release that fits, each time the lockfile is updated.&lt;/p&gt;
 		&lt;norn-heading-anchor @slug="carets" :@level="6"&gt;Caret ranges&lt;/norn-heading-anchor&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p&gt;A caret range, such as &lt;code&gt;^1.2.0&lt;/code&gt;, accepts any 1.x release from 1.2.0 up.&lt;/p&gt;
+		&lt;p&gt;npm writes a caret range by default when it adds a package.&lt;/p&gt;
 	&lt;/norn-rich-text&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc--0Fuk">
-		<span data-string="label" id="norn-code-block-webc--0Fuk-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-Ge90F">
+		<span data-string="label" id="norn-code-block-webc-Ge90F-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -755,16 +755,16 @@
 	></norn-toc>
 	<h1>Getting started</h1>
 	<norn-rich-text>
-		<p id=&quot;overview&quot;>Overview: a level 3 heading first, so it has no parent and sits at the top.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p id=&quot;setup&quot;>Setup: a level 2 heading.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
-		<p id=&quot;tokens&quot;>Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.</p>
-		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
-		<p id=&quot;usage&quot;>Usage: a level 2 heading.</p>
-		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p id=&quot;overview&quot;>An overview of the project and what it does.</p>
+		<p>Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.</p>
+		<p id=&quot;setup&quot;>Set up the project folder before the first build.</p>
+		<p>The package needs Node 24 or later. Check the version with <code>node --version</code> first.</p>
+		<p id=&quot;tokens&quot;>Design tokens set the colors, the type, and the spacing.</p>
+		<p>Override a token in the project's own stylesheet, and every component follows it.</p>
+		<p id=&quot;usage&quot;>Import the package and call it with a name.</p>
+		<p>It returns the greeting as a string, and keeps no state between calls.</p>
 	</norn-rich-text>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc-Ibm1C" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-bkGVI" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -781,7 +781,7 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,50,3,1,44,3,1,53,3,1,43,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,10,0,0,1,0,75,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,7,0,0,1,0,25,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,8,0,0,1,0,103,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,161,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,7,0,0,1,0,25,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,166,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,19,0,0,1,0,2,1,1,0,8,2,3,4,0,0,1,3,0,5,2,3,7,0,0,1,3,0,2,3,1,50,3,1,44,3,1,53,3,1,43,3,1,4,0,2,3,1,0,8,0,0,1,0,2,1,1,0,2,0,0,1,0,15,2,1,0,2,0,0,1,0,2,1,1,0,14,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,10,0,0,1,0,44,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,106,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,7,0,0,1,0,49,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,59,1,1,0,4,0,0,1,0,14,2,1,0,4,0,0,1,0,7,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,8,0,0,1,0,56,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,81,2,1,0,1,0,0,1,0,3,1,1,0,1,2,1,2,0,0,1,3,0,7,0,0,1,0,43,2,1,0,1,0,0,1,0,3,1,1,0,1,0,0,1,0,70,2,1,0,1,0,0,1,0,2,2,1,0,14,0,0,1,0,1,2,1,0,19,0,0,1]]">&lt;norn-sidebar-layout&gt;
 	&lt;norn-toc
 		slot="nav"
 		:@items="[
@@ -793,18 +793,18 @@
 	&gt;&lt;/norn-toc&gt;
 	&lt;h1&gt;Getting started&lt;/h1&gt;
 	&lt;norn-rich-text&gt;
-		&lt;p id="overview"&gt;Overview: a level 3 heading first, so it has no parent and sits at the top.&lt;/p&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
-		&lt;p id="setup"&gt;Setup: a level 2 heading.&lt;/p&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
-		&lt;p id="tokens"&gt;Design tokens: a level 4 heading under a level 2, so it nests one list down with no empty list between.&lt;/p&gt;
-		&lt;p&gt;The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.&lt;/p&gt;
-		&lt;p id="usage"&gt;Usage: a level 2 heading.&lt;/p&gt;
-		&lt;p&gt;Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.&lt;/p&gt;
+		&lt;p id="overview"&gt;An overview of the project and what it does.&lt;/p&gt;
+		&lt;p&gt;Install the project, then run it once to see it work. The steps below take a few minutes on a new machine.&lt;/p&gt;
+		&lt;p id="setup"&gt;Set up the project folder before the first build.&lt;/p&gt;
+		&lt;p&gt;The package needs Node 24 or later. Check the version with &lt;code&gt;node --version&lt;/code&gt; first.&lt;/p&gt;
+		&lt;p id="tokens"&gt;Design tokens set the colors, the type, and the spacing.&lt;/p&gt;
+		&lt;p&gt;Override a token in the project's own stylesheet, and every component follows it.&lt;/p&gt;
+		&lt;p id="usage"&gt;Import the package and call it with a name.&lt;/p&gt;
+		&lt;p&gt;It returns the greeting as a string, and keeps no state between calls.&lt;/p&gt;
 	&lt;/norn-rich-text&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-Ibm1C">
-		<span data-string="label" id="norn-code-block-webc-Ibm1C-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-bkGVI">
+		<span data-string="label" id="norn-code-block-webc-bkGVI-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -947,7 +947,7 @@
 			<norn-toc @fold=&quot;narrow&quot;></norn-toc>
 		</div>
 	</div>
-</div>" data-strings="norn-code-block-webc-WpXmX" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</div>" data-strings="norn-code-block-webc-GGSyN" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -978,8 +978,8 @@
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-WpXmX">
-		<span data-string="label" id="norn-code-block-webc-WpXmX-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-GGSyN">
+		<span data-string="label" id="norn-code-block-webc-GGSyN-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -997,7 +997,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-kIsMs"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-EvOOL"></span>
 <div>
 		<table>
 			<thead>
@@ -1024,7 +1024,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-KKsLQ"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-Ym6IO"></span>
 <div>
 		<table>
 			<thead>

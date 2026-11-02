@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-dTNva"><span data-label="" id="norn-header-webc-dTNva"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-IvVK-"><span data-label="" id="norn-header-webc-IvVK-"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/theme/">Theme</a>
@@ -217,7 +217,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-rich-text</h1>
-<p class="lead">Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a <code>norn-heading-anchor</code>, which styles its own <code>#</code>. Wrap the content in it: <code>&lt;norn-rich-text&gt;&lt;template webc:nokeep @html="content"&gt;&lt;/template&gt;&lt;/norn-rich-text&gt;</code>. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.</p>
+<p class="lead">Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a <code>norn-heading-anchor</code>, which styles its own <code>#</code> and takes the same space above as a plain heading. Wrap the content in it: <code>&lt;norn-rich-text&gt;&lt;template webc:nokeep @html="content"&gt;&lt;/template&gt;&lt;/norn-rich-text&gt;</code>. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.</p>
 <p class="meta">
 	<code>&lt;norn-rich-text&gt;</code>
 	a <span>container</span>, from
@@ -348,18 +348,18 @@
 	
 	<norn-copy-button>
 <button type="button" hidden="" data-value="<norn-rich-text>
-	<p>Prose styles cover what Markdown produces. A paragraph with <code>inline code</code> and a <a href=&quot;https://example.com/&quot;>link</a>.</p>
+	<p>A paragraph with <code>inline code</code> and a <a href=&quot;https://example.com/&quot;>link</a>.</p>
 	<h2>A second-level heading</h2>
 	<ul>
 		<li>A list item</li>
-		<li>Another, with enough text that it wraps in a narrow frame, to show the line length and the wrapping</li>
+		<li>Run the build once before changing any file, so the output folder exists and the cache is warm</li>
 	</ul>
 	<ol>
 		<li>First</li>
 		<li>Second</li>
 	</ol>
 	<h3>A third-level heading</h3>
-	<blockquote>A quotation, set off with a bar.</blockquote>
+	<blockquote>Simple things should be simple, and complex things should be possible.</blockquote>
 	<table>
 		<thead><tr><th>Option</th><th>Default</th></tr></thead>
 		<tbody>
@@ -369,7 +369,7 @@
 	</table>
 	<hr />
 	<p>After the rule.</p>
-</norn-rich-text>" data-strings="norn-code-block-webc-REE0C" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</norn-rich-text>" data-strings="norn-code-block-webc-G8j0b" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -386,19 +386,19 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,1,0,0,1,0,60,1,1,0,4,0,0,1,0,11,2,1,0,4,0,0,1,0,7,1,1,0,1,2,1,4,0,0,1,3,0,22,0,0,1,0,4,2,1,0,1,0,0,1,0,1,2,1,0,1,0,0,1,0,2,1,1,0,2,0,0,1,0,22,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,11,2,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,99,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,5,2,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,6,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,21,2,1,0,2,0,0,1,0,2,1,1,0,10,0,0,1,0,32,2,1,0,10,0,0,1,0,2,1,1,0,5,0,0,1,0,3,1,1,0,5,0,0,2,1,0,2,0,0,2,1,0,2,0,0,1,0,6,2,1,0,2,0,0,2,1,0,2,0,0,1,0,7,2,1,0,2,0,0,3,1,0,2,0,0,3,1,0,5,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,2,2,1,0,4,0,0,3,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,3,2,1,0,4,0,0,3,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,2,2,1,0,5,0,0,1,0,2,1,1,0,2,0,1,2,0,2,1,1,0,1,0,0,1,0,15,2,1,0,1,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
-	&lt;p&gt;Prose styles cover what Markdown produces. A paragraph with &lt;code&gt;inline code&lt;/code&gt; and a &lt;a href="https://example.com/"&gt;link&lt;/a&gt;.&lt;/p&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,1,0,0,1,0,17,1,1,0,4,0,0,1,0,11,2,1,0,4,0,0,1,0,7,1,1,0,1,2,1,4,0,0,1,3,0,22,0,0,1,0,4,2,1,0,1,0,0,1,0,1,2,1,0,1,0,0,1,0,2,1,1,0,2,0,0,1,0,22,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,11,2,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,94,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,5,2,1,0,2,0,0,1,0,3,1,1,0,2,0,0,1,0,6,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,1,0,2,1,1,0,2,0,0,1,0,21,2,1,0,2,0,0,1,0,2,1,1,0,10,0,0,1,0,70,2,1,0,10,0,0,1,0,2,1,1,0,5,0,0,1,0,3,1,1,0,5,0,0,2,1,0,2,0,0,2,1,0,2,0,0,1,0,6,2,1,0,2,0,0,2,1,0,2,0,0,1,0,7,2,1,0,2,0,0,3,1,0,2,0,0,3,1,0,5,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,2,2,1,0,4,0,0,3,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,3,2,1,0,4,0,0,3,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,2,2,1,0,5,0,0,1,0,2,1,1,0,2,0,1,2,0,2,1,1,0,1,0,0,1,0,15,2,1,0,1,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
+	&lt;p&gt;A paragraph with &lt;code&gt;inline code&lt;/code&gt; and a &lt;a href="https://example.com/"&gt;link&lt;/a&gt;.&lt;/p&gt;
 	&lt;h2&gt;A second-level heading&lt;/h2&gt;
 	&lt;ul&gt;
 		&lt;li&gt;A list item&lt;/li&gt;
-		&lt;li&gt;Another, with enough text that it wraps in a narrow frame, to show the line length and the wrapping&lt;/li&gt;
+		&lt;li&gt;Run the build once before changing any file, so the output folder exists and the cache is warm&lt;/li&gt;
 	&lt;/ul&gt;
 	&lt;ol&gt;
 		&lt;li&gt;First&lt;/li&gt;
 		&lt;li&gt;Second&lt;/li&gt;
 	&lt;/ol&gt;
 	&lt;h3&gt;A third-level heading&lt;/h3&gt;
-	&lt;blockquote&gt;A quotation, set off with a bar.&lt;/blockquote&gt;
+	&lt;blockquote&gt;Simple things should be simple, and complex things should be possible.&lt;/blockquote&gt;
 	&lt;table&gt;
 		&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Option&lt;/th&gt;&lt;th&gt;Default&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
 		&lt;tbody&gt;
@@ -409,8 +409,8 @@
 	&lt;hr /&gt;
 	&lt;p&gt;After the rule.&lt;/p&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-REE0C">
-		<span data-string="label" id="norn-code-block-webc-REE0C-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-G8j0b">
+		<span data-string="label" id="norn-code-block-webc-G8j0b-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -542,10 +542,10 @@
 	<norn-copy-button>
 <button type="button" hidden="" data-value="<norn-rich-text>
 	<norn-heading-anchor @slug=&quot;first&quot;>A linked second-level heading</norn-heading-anchor>
-	<p>The heading anchor gives its own space above, and prose after it keeps the rhythm.</p>
+	<p>A short line of body text.</p>
 	<norn-heading-anchor @slug=&quot;second&quot; :@level=&quot;3&quot;>A linked third-level heading</norn-heading-anchor>
-	<p>The same space applies to the third level.</p>
-</norn-rich-text>" data-strings="norn-code-block-webc-uWIfD" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+	<p>A short line of body text.</p>
+</norn-rich-text>" data-strings="norn-code-block-webc-yJC_w" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -562,14 +562,14 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,19,2,1,5,0,0,1,3,0,7,0,0,1,0,29,2,1,0,19,0,0,1,0,2,1,1,0,1,0,0,1,0,82,2,1,0,1,0,0,1,0,2,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,28,2,1,0,19,0,0,1,0,2,1,1,0,1,0,0,1,0,42,2,1,0,1,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,19,2,1,5,0,0,1,3,0,7,0,0,1,0,29,2,1,0,19,0,0,1,0,2,1,1,0,1,0,0,1,0,26,2,1,0,1,0,0,1,0,2,1,1,0,19,2,1,5,0,0,1,3,0,8,2,1,7,0,0,1,3,0,3,0,0,1,0,28,2,1,0,19,0,0,1,0,2,1,1,0,1,0,0,1,0,26,2,1,0,1,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
 	&lt;norn-heading-anchor @slug="first"&gt;A linked second-level heading&lt;/norn-heading-anchor&gt;
-	&lt;p&gt;The heading anchor gives its own space above, and prose after it keeps the rhythm.&lt;/p&gt;
+	&lt;p&gt;A short line of body text.&lt;/p&gt;
 	&lt;norn-heading-anchor @slug="second" :@level="3"&gt;A linked third-level heading&lt;/norn-heading-anchor&gt;
-	&lt;p&gt;The same space applies to the third level.&lt;/p&gt;
+	&lt;p&gt;A short line of body text.&lt;/p&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-uWIfD">
-		<span data-string="label" id="norn-code-block-webc-uWIfD-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-yJC_w">
+		<span data-string="label" id="norn-code-block-webc-yJC_w-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -700,12 +700,11 @@
 	
 	<norn-copy-button>
 <button type="button" hidden="" data-value="<norn-rich-text>
-	<p>A picture never overflows the column.</p>
 	<picture>
 		<source media=&quot;(min-width: 600px)&quot; srcset=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
 		<img alt=&quot;A wide gray bar&quot; src=&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E&quot; />
 	</picture>
-</norn-rich-text>" data-strings="norn-code-block-webc-h6u9d" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</norn-rich-text>" data-strings="norn-code-block-webc-K-lZW" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -722,15 +721,14 @@
 
 
 </norn-copy-button>
-	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,1,0,0,1,0,37,2,1,0,1,0,0,1,0,2,1,1,0,7,0,0,1,0,3,1,1,0,6,2,1,5,0,0,1,3,0,20,2,1,6,0,0,1,3,0,152,0,1,2,0,3,1,1,0,3,2,1,3,0,0,1,3,0,17,2,1,3,0,0,1,3,0,152,0,1,2,0,2,2,1,0,7,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
-	&lt;p&gt;A picture never overflows the column.&lt;/p&gt;
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,14,0,0,1,0,2,1,1,0,7,0,0,1,0,3,1,1,0,6,2,1,5,0,0,1,3,0,20,2,1,6,0,0,1,3,0,152,0,1,2,0,3,1,1,0,3,2,1,3,0,0,1,3,0,17,2,1,3,0,0,1,3,0,152,0,1,2,0,2,2,1,0,7,0,0,1,0,1,2,1,0,14,0,0,1]]">&lt;norn-rich-text&gt;
 	&lt;picture&gt;
 		&lt;source media="(min-width: 600px)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" /&gt;
 		&lt;img alt="A wide gray bar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" /&gt;
 	&lt;/picture&gt;
 &lt;/norn-rich-text&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-h6u9d">
-		<span data-string="label" id="norn-code-block-webc-h6u9d-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-K-lZW">
+		<span data-string="label" id="norn-code-block-webc-K-lZW-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -873,7 +871,7 @@
 			<norn-rich-text @measure=&quot;none&quot;></norn-rich-text>
 		</div>
 	</div>
-</div>" data-strings="norn-code-block-webc-2fSt4" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+</div>" data-strings="norn-code-block-webc-k7Spz" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -904,8 +902,8 @@
 		&lt;/div&gt;
 	&lt;/div&gt;
 &lt;/div&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-2fSt4">
-		<span data-string="label" id="norn-code-block-webc-2fSt4-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-k7Spz">
+		<span data-string="label" id="norn-code-block-webc-k7Spz-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -923,7 +921,7 @@
 	<h2>Props</h2>
 	
 	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-0h5cU"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-Bkw2J"></span>
 <div>
 		<table>
 			<thead>
@@ -945,7 +943,7 @@
 
 
 	<h2>Slots</h2>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-pKrLa"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-G5SU6"></span>
 <div>
 		<table>
 			<thead>
