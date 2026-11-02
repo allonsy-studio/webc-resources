@@ -5,17 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * The same thing in a few forms, such as npm, yarn, and pnpm, as tabs over `norn-code-block`s. Without a script every sample shows, stacked.
- * Pass the samples in the default slot. Each tab is named by the sample's `data-tab` attribute, else its caption, else its `label` slot, else its language, all read from the markup. A name two samples share gets a number after the first, such as `sh` and `sh 2`, so every tab name is its own.
- * The tabs follow the ARIA tabs pattern: arrow keys move between them, in the reading direction, and Home and End jump to the ends. Tabs that share a `@group` switch together, and the choice is remembered in this browser.
- * @prop {string} [group] - Tabs with the same group, on any page, show the same choice.
- * @slot - The samples, each a `norn-code-block`. For the terminal frame, give each sample `@chrome="terminal"`: a slot can't take props from the tabs.
- * @slot label - The tab list's name, as one element, such as `<span slot="label">Install commands</span>`. Falls back to the site's `componentStrings`, then "Code samples".
- * @slot sample - A tab's name when its sample has no `data-tab`, caption, label, or language, with `{n}` for its number. Falls back to the site's `componentStrings`, then "Sample {n}".
- * @category container
- */
 --->
 <span hidden>
 	<span data-string="label" :id="'norn-code-tabs-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-code-tabs', 'label', $data.page) || 'Code samples'"></span></slot></span>
