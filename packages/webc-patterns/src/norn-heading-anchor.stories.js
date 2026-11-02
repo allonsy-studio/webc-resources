@@ -12,16 +12,10 @@ export default {
 	args: { slug: "section", default: "Section" },
 	argTypes: {
 		slug: { description: "The heading's id, and the link's fragment." },
-		level: { description: "The heading level.", options: [2, 3, 4, 5, 6], table: { defaultValue: { summary: "2" } } },
+		level: { description: "The heading level." },
 		default: { description: "The heading text." },
 	},
 	parameters: {
-		webc: {
-			overrides: {
-				"level options": "The `webc:else` branch renders the h2 for any other value, so the comparisons name 3 to 6 only.",
-				"level table.defaultValue": "Only the `webc:else` branch gives the h2, so no expression holds the default.",
-			},
-		},
 		docs: {
 			description: {
 				component:
