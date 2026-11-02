@@ -41,6 +41,6 @@ test("oss-cta: a level outside 2 to 4 falls back to h2", async () => {
 
 test("oss-cta: colors its actions by setting the global accent tokens, not norn-link-button properties", () => {
 	const source = fs.readFileSync(path.join(components, "oss-cta.webc"), "utf8");
-	for (const declaration of ["--norn-ui-accent: var(--oss-link);", "--norn-text-accent: var(--oss-link);", "--norn-text-on-accent: var(--oss-navy);"]) assert.ok(source.includes(declaration), declaration);
+	for (const declaration of ["--norn-ui-accent: var(--_link);", "--norn-text-accent: var(--_link);", "--norn-text-on-accent: var(--_navy);"]) assert.ok(source.includes(declaration), declaration);
 	assert.ok(!source.includes("--norn-link-button-"), "no norn-link-button property");
 });

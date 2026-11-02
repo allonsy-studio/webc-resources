@@ -10,16 +10,16 @@
 <style>
 	@layer norn.oss {
 		oss-bar {
-			--oss-navy: #33394e;
-			--oss-link: #ffd36b;
+			--_navy: #33394e;
+			--_link: #ffd36b;
 			display: block;
-			background: var(--oss-navy);
+			background: var(--_navy);
 
 			& a {
 				display: block;
 
 				&:focus-visible {
-					outline-color: var(--oss-link);
+					outline-color: var(--_link);
 				}
 			}
 

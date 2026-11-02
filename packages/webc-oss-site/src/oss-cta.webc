@@ -11,10 +11,6 @@
  * Closes the page body, above the footer: the `cta` hook places it last. The Allons-y Studio name is signed in the signature face, Yellowtail, which `oss-head` declares.
  * Its actions are `norn-link-button`s, colored by setting the global accent tokens on `oss-cta`. The one place Allons-y Studio's contact address appears. The mark is inlined from the org's assets by `scripts/inline-svg.js`.
  * @prop {number} [level] - The heading level, 2 to 4, to fit the page outline. Anything else falls back to 2.
- * @cssprop --oss-navy - Background. Defined here.
- * @cssprop --oss-ink - Text color. Defined here.
- * @cssprop --oss-link - Action color. Defined here.
- * @cssprop --oss-signature - The face the Allons-y Studio name is signed in. Defined here.
  * @category container
  */
 --->
@@ -35,13 +31,13 @@
 <style>
 	@layer norn.oss {
 		oss-cta {
-			--oss-navy: #33394e;
-			--oss-ink: #ffffff;
-			--oss-link: #ffd36b;
-			--oss-signature: "Yellowtail", "Yellowtail Fallback", cursive;
-			--norn-ui-accent: var(--oss-link);
-			--norn-text-accent: var(--oss-link);
-			--norn-text-on-accent: var(--oss-navy);
+			--_navy: #33394e;
+			--_ink: #ffffff;
+			--_link: #ffd36b;
+			--_signature: "Yellowtail", "Yellowtail Fallback", cursive;
+			--norn-ui-accent: var(--_link);
+			--norn-text-accent: var(--_link);
+			--norn-text-on-accent: var(--_navy);
 			display: block;
 			container-type: inline-size;
 			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), 64rem);
@@ -54,8 +50,8 @@
 				gap: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
 				padding: var(--norn-space-l, t('space.l'));
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--oss-navy);
-				color: var(--oss-ink);
+				background: var(--_navy);
+				color: var(--_ink);
 			}
 
 			& svg {
@@ -78,7 +74,7 @@
 
 			/* The Allons-y Studio name is signed. */
 			& [data-signature] {
-				font-family: var(--oss-signature);
+				font-family: var(--_signature);
 				font-size: 1.3em;
 				font-weight: 400;
 				line-height: 1;
@@ -104,7 +100,7 @@
 			}
 
 			& :focus-visible {
-				outline-color: var(--oss-link);
+				outline-color: var(--_link);
 			}
 
 			@container (max-width: 37.5rem) {

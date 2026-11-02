@@ -77,8 +77,7 @@ preview/           the component preview: an Eleventy site with a page and stori
    component follows. Derived tokens (`text.accent`, `text.on-accent`, `font.heading`) write the token they derive from as
    `var(--norn-ui-accent, {ui.accent})`, so a project value still drives them. A value in `tokens.json` may use `{path}` to
    name another token's default. A component reads the global tokens and private `--_` properties only, and surfaces no
-   custom property of its own. The ones some components still read are listed in `scripts/owned-custom-properties.json`,
-   which only shrinks: `components.test.js` fails on a new one, and on a listed one the code no longer reads.
+   custom property of its own: `components.test.js` fails on one.
    `components.test.js` checks the paths, the names, and the compiled values.
 5. Print rules live in the component's own `@media print` block.
    The reset (`css/reset.css`) is optional, and nothing in Norn relies on it: a component that sets a size with padding or a

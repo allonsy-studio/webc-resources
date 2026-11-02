@@ -562,20 +562,6 @@ export const sourceFiles = () =>
 				.map((file) => path.join(dir, file)),
 		);
 
-/**
- * The component-owned custom properties read in the sources that the allowlist does not hold, and the allowlist entries the code no longer reads.
- *
- * @param {Record<string, string[]>} found - Component to the owned properties it reads
- * @param {Record<string, string[]>} allowed - The allowlist
- * @returns {{ added: string[], stale: string[] }} Each as `component name`
- */
-export function compareOwned(found, allowed) {
-	const pairs = (map) => Object.entries(map).flatMap(([component, names]) => names.map((name) => `${component} ${name}`));
-	const have = new Set(pairs(found));
-	const listed = new Set(pairs(allowed));
-	return { added: [...have].filter((pair) => !listed.has(pair)), stale: [...listed].filter((pair) => !have.has(pair)) };
-}
-
 if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) {
 	const tokens = readTokens();
 	const helpers = helperNames();

@@ -7,8 +7,7 @@
 
 // Compare what the analyzer derives from each source with what its docs say: the CSF file where there is one,
 // else the JSDoc. Prints a Markdown table of every difference. Run `node scripts/calibrate-webc.js`.
-// A custom property a component owns is checked against `owned-custom-properties.json` by components.test.js, so only a
-// documented one the code does not read is listed here.
+// A custom property a component owns is a failure in components.test.js, so only a documented one the code does not read is listed here.
 
 import fs from "node:fs";
 import path from "node:path";

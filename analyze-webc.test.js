@@ -11,7 +11,7 @@ import assert from "node:assert/strict";
 import path from "node:path";
 import test from "node:test";
 
-import { analyzeFile, analyzeWebc, compareOwned, derivedArgTypes, helperNames, kebab } from "./scripts/analyze-webc.js";
+import { analyzeFile, analyzeWebc, derivedArgTypes, helperNames, kebab } from "./scripts/analyze-webc.js";
 import { PACKAGES } from "./scripts/build-components.js";
 
 const TOKENS = [
@@ -174,11 +174,6 @@ test("the argTypes an analysis gives: props with their facts, then slots, and no
 	});
 });
 
-test("the owned custom properties against an allowlist: one added, and one the code no longer reads", () => {
-	assert.deepEqual(compareOwned({ "x-a": ["--x-a-bg"] }, { "x-a": ["--x-a-bg"] }), { added: [], stale: [] });
-	assert.deepEqual(compareOwned({ "x-a": ["--x-a-bg", "--x-a-fg"] }, { "x-a": ["--x-a-bg", "--x-a-gap"] }), { added: ["x-a --x-a-fg"], stale: ["x-a --x-a-gap"] });
-});
-
 /** A source file of a package. */
 const source = (...parts) => path.join(PACKAGES, ...parts);
 
@@ -194,7 +189,7 @@ test("real components: norn-callout's variant through a setup function and a tab
 
 test("real components: norn-code-block's code and language, norn-icon's required name, norn-head's camel-cased props", () => {
 	const block = analyzeFile(source("webc-code-sample", "src", "norn-code-block.webc"));
-	assert.deepEqual(names(block).sort(), ["caption", "code", "language"]);
+	assert.deepEqual(names(block).sort(), ["caption", "chrome", "code", "language"]);
 	assert.equal(propOf(block, "language").default, undefined, "a `''` fallback is no default");
 	assert.deepEqual(block.slots.map(({ name }) => name), ["copy-label", "copy", "copied", "failed", "label"]);
 	assert.ok(block.tokens.some(({ name }) => name === "--norn-code-comment"), "the syntax colors are global tokens");

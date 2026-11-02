@@ -20,7 +20,7 @@ import { headings } from "./packages/webc-patterns/markdown.js";
 import { adjacent, componentStrings, defaultStrings } from "./packages/webc-patterns/index.js";
 import { compiles, HOOKS, LAYOUTS } from "./packages/webc-patterns/plugin.js";
 import { csfDoc, csfFile, effectiveArgTypes, readCsf } from "./preview/lib/catalog.js";
-import { analyzeFile, analyzeWebc, compareOwned, derivedArgTypes, helperNames, sourceFiles } from "./scripts/analyze-webc.js";
+import { analyzeFile, analyzeWebc, derivedArgTypes, helperNames, sourceFiles } from "./scripts/analyze-webc.js";
 import { readTokens, TOKENS_FILE } from "./scripts/build-components.js";
 
 const PACKAGES = path.join(import.meta.dirname, "packages");
@@ -1382,21 +1382,15 @@ test("norn-toc emits its escaped outline as it is, and heading text with markup 
 	assert.match(html, /<li><a href="#a">[^]*<ol><li><a href="#b">The (?:"|&quot;)quoted(?:"|&quot;) part<\/a><\/li><\/ol><\/li>/, "nested by level");
 });
 
-/** The component-owned custom properties still read, which a refactor removes: one line per property, and the list only shrinks. */
-const OWNED = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, "scripts", "owned-custom-properties.json"), "utf8"));
-
-test("a source reads global tokens and private --_ properties only, apart from the allowlist of owned ones still to remove", () => {
+test("a source reads global tokens and private --_ properties only: no custom property of its own", () => {
 	const analyzer = { tokens, helpers: helperNames() };
 	const found = {};
 	for (const file of sourceFiles()) {
 		const owned = analyzeFile(file, analyzer).owned.map(({ name }) => name);
 		if (owned.length) found[`${/\/fallback\//.test(file) ? "fallback/" : ""}${path.basename(file, ".webc")}`] = owned;
 	}
-	const { added, stale } = compareOwned(found, OWNED);
-	assert.deepEqual(added, [], "a component reads a custom property of its own: read a global token from tokens.json, or a private --_ one");
-	assert.deepEqual(stale, [], "the code no longer reads these: remove them from scripts/owned-custom-properties.json");
-	// The same check on a source that adds an owned property, and on a list that holds one the code dropped.
+	assert.deepEqual(found, {}, "a component reads a custom property of its own: read a global token from tokens.json, or a private --_ one");
+	// The same check catches a source that adds one.
 	const bad = analyzeWebc("<p></p><style>x-a { --_c: var(--norn-text-base, red); color: var(--x-a-fg, var(--_c)); }</style>", analyzer).owned.map(({ name }) => name);
-	assert.deepEqual(compareOwned({ ...found, "x-a": bad }, OWNED).added, ["x-a --x-a-fg"]);
-	assert.deepEqual(compareOwned(found, { ...OWNED, "x-a": ["--x-a-gap"] }).stale, ["x-a --x-a-gap"]);
+	assert.deepEqual(bad, ["--x-a-fg"]);
 });
