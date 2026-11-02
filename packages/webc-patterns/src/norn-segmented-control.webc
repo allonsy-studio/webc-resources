@@ -5,20 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value.
- * Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon` with `@size="m"`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden.
- * The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths.
- * A component that builds one from its own props passes `@legend`, `@name`, and `:@options` instead, since its props don't reach slot content.
- * @prop {boolean} [icon-only] - Hides the option text visually; it stays the radio's name. On for `@icon-only`, `@icon-only="true"`, or `:@icon-only="true"`.
- * @prop {string} [legend] - The group's name, when the `legend` slot is empty.
- * @prop {string} [name] - The radios' shared name. Required with `options`: the build fails without it.
- * @prop {{ value: string, label: string, icon?: string, checked?: boolean }[]} [options] - The options, in place of the default slot. Each label is also its `title`.
- * @slot legend - The group's name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden.
- * @slot - The option labels, when there are no `options`.
- * @category component
- */
 --->
 <script webc:setup>
 /** The options, after checking they come with the name that makes their radios one group. */
