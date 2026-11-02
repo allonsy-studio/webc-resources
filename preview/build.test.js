@@ -767,7 +767,7 @@ describe("the preview in a browser", () => {
 
 	test("the tokens table holds the overrides: name, type, default, and the field with its reset", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-link-button/");
+		await page.goto(server.url + "/components/patterns/norn-card/");
 		assert.equal(await page.locator("preview-canvas details").count(), 0, "no panel in the canvas");
 		const table = page.locator("preview-props");
 		assert.deepEqual(await table.locator("thead th").allTextContents(), ["Token", "Type", "Default", "Override"]);
@@ -781,7 +781,7 @@ describe("the preview in a browser", () => {
 		assert.equal(await color.locator('[data-col="type"]').textContent(), "<color>");
 		assert.equal((await color.locator("td").nth(1).textContent()).trim(), "light-dark(hsl(40, 14%, 96%), #242932)");
 		const card = catalog.components.find(({ name }) => name === "norn-card");
-		assert.equal(await table.locator("tbody tr").count(), 1 + card.tokens.length, "the shared accent, then each token the card reads");
+		assert.equal(await table.locator("tbody tr").count(), 1 + card.tokens.filter(({ name }) => name !== "--norn-ui-accent").length, "the shared accent once, then each other token the card reads");
 		assert.equal(await table.locator('input[data-prop="--norn-card-bg"]').count(), 0, "no custom property of the card's own");
 		await page.close();
 	});
@@ -826,9 +826,9 @@ describe("the preview in a browser", () => {
 
 	test("an override typed in the table reaches every example, and its reset puts the default back", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-link-button/");
+		await page.goto(server.url + "/components/patterns/norn-card/");
 		const frames = await Promise.all([0, 1].map((index) => frameOf(page, index)));
-		const radius = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-link-button a")).borderTopLeftRadius);
+		const radius = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		const before = await radius(frames[0]);
 		await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').fill("1px");
 		for (const frame of frames) assert.equal(await radius(frame), "1px");
@@ -843,7 +843,7 @@ describe("the preview in a browser", () => {
 
 	test("the accent picker changes the frame's accent, and its reset undoes it", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-link-button/");
+		await page.goto(server.url + "/components/patterns/norn-card/");
 		const frame = await frameOf(page);
 		await page.locator('preview-props input[data-prop="--norn-ui-accent"]').evaluate((input) => {
 			input.value = "#ff0000";
@@ -1024,9 +1024,9 @@ describe("the preview in a browser", () => {
 		const page = await context.newPage();
 		await page.goto(server.url + "/foundations/");
 		await override(page, "--norn-ui-border-radius", "1rem");
-		await page.goto(server.url + "/components/patterns/norn-link-button/");
+		await page.goto(server.url + "/components/patterns/norn-card/");
 		const frame = await frameOf(page);
-		const radius = () => frame.evaluate(() => getComputedStyle(document.querySelector("norn-link-button a")).borderTopLeftRadius);
+		const radius = () => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		assert.equal(await radius(), "16px", "the saved override");
 		await page.locator('preview-props input[data-prop="--norn-ui-border-radius"]').fill("2px");
 		assert.equal(await radius(), "2px", "the table field");
