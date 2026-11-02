@@ -802,6 +802,14 @@ test("norn-code-block takes every string as a slot, and leaves the default mark 
 	assert.ok(!/\b(Copy|Copied|code)\b/.test(html.replace(/<(script|style)[\s\S]*?<\/\1>/g, "").replace(/<[^>]+>/g, " ").replace(/\bx\b/, "")));
 });
 
+test("norn-accordion reads the shared tokens and slides for a fixed 200ms, with no custom property of its own", () => {
+	const css = cssOf("norn-accordion");
+	assert.ok(!/--norn-accordion-/.test(css), "no --norn-accordion-* property");
+	assert.equal((css.match(/1px solid var\(--norn-ui-border-color, t\('ui\.border\.color'\)\)/g) ?? []).length, 2, "the rules above and below from the hairline token");
+	assert.equal((css.match(/2px solid var\(--norn-text-accent, t\('text\.accent'\)\)/g) ?? []).length, 2, "the chevron in the accent text");
+	assert.ok(css.includes("transition: rotate 200ms var(--norn-ui-motion-easing, t('ui.motion.easing'));") && css.includes("transition: block-size 200ms var(--norn-ui-motion-easing, t('ui.motion.easing')), content-visibility 200ms allow-discrete;"), "opening and closing take 200ms, as the baseline sets");
+});
+
 test("norn-fact-list reads the shared tokens and takes its row gap as a prop, with no custom property of its own", async () => {
 	const css = cssOf("norn-fact-list");
 	assert.ok(!/--norn-fact-list-/.test(css), "no --norn-fact-list-* property");
