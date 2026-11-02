@@ -1,9 +1,0 @@
----
-title: Mono titles
-order: 2
-hiddenH2: true
----
-<norn-card-grid>
-	<li><norn-card @title-face="mono"><h3><a href="https://example.com/core">@example/core</a></h3><p>The core package.</p></norn-card></li>
-	<li><norn-card @title-face="mono"><h3><a href="https://example.com/cli">@example/cli</a></h3><p>The command line.</p></norn-card></li>
-</norn-card-grid>
