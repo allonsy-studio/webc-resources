@@ -5,14 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Short facts in a row, such as a license or a runtime: an optional icon and a few words each, with no box. Static text, not controls.
- * Pass each fact as an `<li>`, which may start with a `norn-icon`. The list has `role="list"`, which Safari needs once the markers are gone.
- * @prop {string} [gap] - The space between rows: `xs`, the default, `s`, `m`, or `l`, each a `--norn-space-*` step. The facts in a row are always `m` apart. A hero sets `l`.
- * @slot - The facts, as `<li>` elements.
- * @category component
- */
 --->
 <ul role="list" :data-gap="['s', 'm', 'l'].includes(gap) ? gap : undefined"><slot></slot></ul>
 <style>
