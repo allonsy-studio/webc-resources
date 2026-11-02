@@ -6,5 +6,5 @@ order: 1
 	<norn-notice><p>A new version is out.</p></norn-notice>
 	<norn-notice @severity="success"><p>Saved. The changes apply on the next build.</p></norn-notice>
 	<norn-notice @severity="warning"><p>This page describes the beta.</p></norn-notice>
-	<norn-notice @severity="error"><p>The build failed.</p></norn-notice>
+	<norn-notice @severity="danger"><p>The build failed.</p></norn-notice>
 </div>

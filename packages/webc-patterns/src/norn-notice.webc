@@ -7,13 +7,13 @@
  */
 --->
 <script webc:setup>
-const SEVERITIES = { info: ["Note", "info"], success: ["Success", "success"], warning: ["Warning", "warning"], error: ["Error", "error"] };
+const SEVERITIES = { info: ["Note", "info"], success: ["Success", "success"], warning: ["Warning", "warning"], danger: ["Error", "error"] };
 
 /** A known severity, else `info`. */
 const level = (severity) => (Object.hasOwn(SEVERITIES, severity) ? severity : "info");
 
-/** The live role: `alert` interrupts, for a warning or an error; `status` waits. */
-const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ? "alert" : "status");
+/** The live role: `alert` interrupts, for a warning or a danger; `status` waits. */
+const liveRole = (severity) => (["warning", "danger"].includes(level(severity)) ? "alert" : "status");
 </script>
 <div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
 	<norn-icon :@name="SEVERITIES[level(severity)][1]" @size="m"></norn-icon>
@@ -37,7 +37,7 @@ const liveRole = (severity) => (["warning", "error"].includes(level(severity)) ?
 				--_color: var(--norn-status-warning, t('status.warning'));
 			}
 
-			&:has(> [data-severity="error"]) {
+			&:has(> [data-severity="danger"]) {
 				--_color: var(--norn-status-danger, t('status.danger'));
 			}
 

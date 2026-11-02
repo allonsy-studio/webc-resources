@@ -1031,7 +1031,7 @@ test("a string comes from the slot, else the registry, else the English default"
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings: FRENCH })).includes(">Aller au contenu</a>"), "the registry fills an empty slot");
 	assert.ok((await render("<norn-skip-link></norn-skip-link>")).includes(">Skip to content</a>"), "no helper registered");
 	assert.ok(unid(await render("<norn-breadcrumbs :@items=\"[{ url: '/', title: 'Accueil' }]\"></norn-breadcrumbs>", { strings: FRENCH })).includes("<span data-label>Breadcrumb</span>"), "a string the table leaves out keeps the English default");
-	const notice = await render('<norn-notice @severity="error"><span slot="prefix">Erreur : </span><p>x</p></norn-notice>', { strings: FRENCH });
+	const notice = await render('<norn-notice @severity="danger"><span slot="prefix">Erreur : </span><p>x</p></norn-notice>', { strings: FRENCH });
 	assert.ok(notice.includes("<span data-prefix><span>Erreur : </span></span>"));
 	const callout = await render('<norn-callout @variant="tip"><span slot="heading">Conseil</span><p>x</p></norn-callout>', { strings: FRENCH });
 	assert.ok(callout.includes("<span>Conseil</span></p>") && !callout.includes("Astuce"));
@@ -1039,6 +1039,23 @@ test("a string comes from the slot, else the registry, else the English default"
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings, lang: "fr-CA" })).includes(">Aller au contenu</a>"));
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings, lang: "de" })).includes(">Zum Inhalt</a>"));
 	assert.ok((await render("<norn-skip-link></norn-skip-link>", { strings, lang: "es" })).includes(">Skip ahead</a>"));
+});
+
+test("norn-notice names its severities after the status tokens: danger, not error", async () => {
+	const danger = await render('<norn-notice @severity="danger" :@live="true"><p>x</p></norn-notice>');
+	assert.ok(danger.includes('data-severity="danger"') && danger.includes('role="alert"'), "danger interrupts");
+	assert.ok(danger.includes("<span data-prefix>Error: </span>"), "the visitor still reads Error");
+	const own = await render('<norn-notice @severity="danger"><p>x</p></norn-notice>', { strings: { "norn-notice": { danger: "Erreur : " } } });
+	assert.ok(own.includes("<span data-prefix>Erreur : </span>"), "the registry's danger text");
+	const css = squash(styles(sources.find(({ file }) => file === "webc-patterns/src/norn-notice.webc").text));
+	assert.ok(css.includes("&:has(> [data-severity=\"danger\"]) { --_color: var(--norn-status-danger, t('status.danger'));"), "the danger recipe");
+	assert.ok(!css.includes('[data-severity="error"]'), "no error selector");
+	const unknown = await render('<norn-notice @severity="bogus" :@live="true"><p>x</p></norn-notice>');
+	assert.ok(unknown.includes('data-severity="info"') && unknown.includes('role="status"') && unknown.includes("<span data-prefix>Note: </span>"), "an unknown severity reads as info");
+	assert.equal(await render('<norn-notice @severity="error" :@live="true"><p>x</p></norn-notice>'), unknown, "error is unknown now");
+	assert.equal(defaultStrings["norn-notice"].danger, "Error: ");
+	assert.ok(!Object.hasOwn(defaultStrings["norn-notice"], "error"), "the registry has no error key");
+	assert.throws(() => componentStrings({ "norn-notice": { error: "Erreur : " } }), /norn-notice has no string "error"/);
 });
 
 test("an author's line break inside a tag leaves a named slot's fallback in place", async () => {

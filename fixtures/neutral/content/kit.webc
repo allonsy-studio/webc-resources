@@ -36,7 +36,7 @@ description: The small components, one of each.
 	<p>Saved. The changes apply on the next build.</p>
 	<norn-link-button slot="action" @href="/docs/one/" @variant="quiet" @tone="current">Open the docs</norn-link-button>
 </norn-notice>
-<norn-notice @severity="error" :@live="true">
+<norn-notice @severity="danger" :@live="true">
 	<p>The build failed.</p>
 </norn-notice>
 <h2>Call-outs</h2>
