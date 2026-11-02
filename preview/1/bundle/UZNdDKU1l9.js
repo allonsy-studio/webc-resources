@@ -84,6 +84,26 @@
 		const rangesBySample = new Map();
 		const supported = typeof CSS !== "undefined" && "highlights" in CSS;
 
+		/**
+		 * Read `data-tokens`: `[groups, numbers]`, the group names, then a group index, the gap from the previous range's end, and a length per range.
+		 *
+		 * @param {string} tokens
+		 * @returns {[string, number, number][]}
+		 */
+		const decode = (tokens) => {
+			const [groups, numbers] = JSON.parse(tokens);
+			const ranges = [];
+			let end = 0;
+			for (let at = 0; at < numbers.length; at += 3) {
+				const group = groups[numbers[at]];
+				const start = end + numbers[at + 1];
+				end = start + numbers[at + 2];
+				if (typeof group !== "string" || !Number.isInteger(start) || !(end > start)) throw new TypeError("Unusable data-tokens");
+				ranges.push([group, start, end]);
+			}
+			return ranges;
+		};
+
 		/** Add a sample's ranges to the page's highlights, one group at a time, so each connect costs only its own ranges. */
 		const paint = (sample, found) => {
 			rangesBySample.set(sample, found);
@@ -164,7 +184,7 @@
 					if (text) {
 						paint(
 							this,
-							JSON.parse(code.dataset.tokens).map(([group, start, end]) => {
+							decode(code.dataset.tokens).map(([group, start, end]) => {
 								const range = new Range();
 								range.setStart(text, start);
 								range.setEnd(text, end);
