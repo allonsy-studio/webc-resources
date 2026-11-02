@@ -26,6 +26,10 @@ Start with the [patterns README](packages/webc-patterns#readme): setup, the layo
 
 Supports evergreen browsers from about 2024. Features newer than that degrade gracefully.
 
+## For AI agents
+
+[`llms.txt`](llms.txt) says which package to use. Each package ships its own `llms.txt`: the setup, the data shapes, the rules for calling components and styling them, and a reference of every component's props, slots, and tokens, generated from the sources. Contributors read [`AGENTS.md`](AGENTS.md).
+
 ## Status
 
 Beta. The packages publish as `0.1.0-beta.N`. The plugin, the six layouts and their props, the hooks, and the tokens are in place and documented in each package's README. The API can still change before 1.0.

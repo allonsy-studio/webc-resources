@@ -1,0 +1,709 @@
+# @allons-y/webc-patterns
+
+> Norn: WebC components, Eleventy page layouts, and one Eleventy plugin for docs, landing, and workspace sites. Read this file before you write or change a site that uses it. The reference at the end is generated from the component sources, so every prop, slot, and token in it is real.
+
+## What you are working with
+
+- Every component is a custom tag (`<norn-card>`) that a `.webc` page or layout calls. The plugin registers all of them, so a page needs no import.
+- Page templates are Eleventy layouts named `norn-*.webc`. A page picks one in its front matter: `layout: norn-docs.webc`.
+- The Norn plugin owns the project's one `@11ty/eleventy-plugin-webc` registration. Do not add the WebC plugin as well.
+- Each component carries its own CSS and JS, so a page ships only what it uses. There is no stylesheet to import.
+- Do not copy component files into a project, edit `node_modules`, or write markup that imitates a component. Call the component. To change one, use a prop, a slot, a global token, or CSS against its tag (see Styling).
+
+## Set it up
+
+```js
+import norn from "@allons-y/webc-patterns/plugin";
+
+export default function (config) {
+	config.addPlugin(norn, {
+		props: (data) => ({ title: data.title, name: "My project", nav: [{ href: "/docs/", title: "Docs" }] }),
+	});
+
+	return { markdownTemplateEngine: false };
+}
+```
+
+- `props` maps the project's own page data to the layout props. Without it, each layout prop is read from the same-named page data. It also runs against placeholder data, so it must not throw on missing data.
+- Other options: `layouts`, `components`, `exclude`, `strings`, `markdown`, `defaults`, `icons`. The README lists what each does.
+- The project is an ES module and needs Node 22 or later. `@11ty/eleventy` and `@11ty/eleventy-plugin-webc` are peer dependencies.
+- For the Allons-y Studio brand, use `@allons-y/webc-oss-site` in place of this plugin. It adds this one.
+- Fail-fast rules the plugin enforces: a second plugin registration, a project layout or include named like a shipped layout, and a page that sets the reserved `norn` front matter key all fail the build.
+
+## Pick a layout
+
+| Layout | Use it for |
+| --- | --- |
+| `norn-base.webc` | The frame the others extend: head, skip link, header, `main`, footer. Use it directly for a plain page |
+| `norn-docs.webc` | A docs page: sidebar, search, contents, pager |
+| `norn-docs-home.webc` | The docs landing page |
+| `norn-landing.webc` | A project home page: hero, features, packages |
+| `norn-workspaces-home.webc` | The index of a monorepo's packages |
+| `norn-workspace.webc` | One package's page |
+
+Every layout reads its props from the `norn` data (what `props` returns). Each layout's props are in the reference below. Props that are lists default to `[]`.
+
+## One data shape for items
+
+Every list item that links or describes something has the same keys: `href` (the address), `title` (the label), `description` (the short text), and `icon` where one is drawn. This holds for nav and footer links, docs pages, `prev` and `next`, breadcrumbs, side-nav items (and their `children`), workspaces, package cards, and feature cards. Map Eleventy pages with `href: page.url`. Props that are not items keep their names (`name`, `url`, `license`). There are no aliases for `url`, `name`, or `body`: an item written the old way renders without its link or label.
+
+## Call a component
+
+```html
+<norn-card @accent="info" @title-face="mono">
+	<h3><a href="/docs/start/">Get started</a></h3>
+	<p>Install the plugin and pick a layout.</p>
+</norn-card>
+```
+
+1. **Props** take the `@` prefix and are kebab-case in markup: `@title-face`. A computed value is `:@prop="expression"`. An object literal as the whole expression reads as a block, so wrap it: `:@prev="({ href: '/a/', title: 'A' })"`.
+2. **Content goes in slots, not attributes.** The default slot takes the caller's own markup, so the caller picks heading levels, links, and icons. Name a slot with `slot="name"` on one element. A second element with the same slot name replaces the first, so group several in `<template slot="name" webc:nokeep>`.
+3. **Every string a visitor sees or hears is a slot**, never a prop: labels, accessible names, button texts. An empty slot falls back to the site's `strings` option (`componentStrings`, by language), then to English. Translate by filling the slot or by setting `strings`.
+4. **Booleans** are on for `@x` (bare), `@x="true"`, and `:@x="true"`, and off otherwise. `@x="false"` is off.
+5. **Pick the heading level for the outline.** A card in a section under an `h2` takes an `h3`.
+6. **Do not forward a `<slot>` into another component.** Render `$data.content` in a layout instead.
+7. A component not in the reference does not exist. Do not guess tag names or props: an unknown prop is silently ignored.
+
+## Markdown
+
+With `markdown` on (the default) the plugin adds: component tags with `@` props that stay tags in Markdown, GitHub-style callouts (`> [!NOTE]`) as `norn-callout`, scrolling tables, anchored headings, one title per docs page, and fenced code as `norn-code-block` when the code sample package is installed. A tag with `@` props in a `.md` page works, and so does one inside `<template webc:type="11ty" 11ty:type="md" webc:nokeep>`. A fence or code span stays literal. The README's "Components in Markdown" lists the routes to avoid.
+
+## Styling and theming
+
+- **The global tokens are the whole styling API.** There are about 47, named `--norn-<group>-<name>` (`--norn-ui-accent`, `--norn-surface-raised`, `--norn-space-m`, `--norn-font-body`). Override any of them in the project's own stylesheet, usually `:root { --norn-ui-accent: #1f6f8b; }`, and every component follows. Each component reads a token with its default compiled in, so nothing has to define them.
+- **A component has no custom property of its own.** Never set `--norn-card-bg` or any `--norn-<component>-*`: it does not exist. A per-instance setting is a prop (`@accent`, `@gap`, `@size`, `@chrome`).
+- **To restyle one component**, write CSS against its tag in the project's own unlayered stylesheet. It beats the component's layered CSS. Reach the component's own markup by a child path (`norn-card-grid > ul`), not a descendant path, so slotted content is left alone.
+- **Layers**: `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. A project's unlayered CSS wins over all of them.
+- Do not add classes to components, use `!important`, or restyle with selectors that depend on a component's inner markup beyond a child path.
+- The reset (`css/reset.css`) is optional. Components look the same without it.
+- Browsers: evergreen from about 2024. Newer features, such as `@scope` and the CSS Custom Highlight API, degrade to readable content.
+
+## Accessibility
+
+Components meet WCAG 2.2 AA in light, dark, and forced colors. Keep it that way: give every image an `alt`, every landmark a name (the component's name slot), keep heading levels in order, and do not remove a focus ring. A link inside running text keeps a cue other than color.
+
+## Hooks
+
+`norn-base` has four hooks: `head`, `banner`, `cta`, `credit`. Add markup with `fillHooks(config, { head: "…" })` from `@allons-y/webc-patterns/plugin`. Fills append, an unknown name throws, and page data cannot change a hook.
+
+## Project data
+
+`@allons-y/webc-patterns/project` has builders that read `package.json` and `project.json`: `buildSite`, `buildWorkspaces`, `npmRelease`, `accentHex`. The `project.json` schema is at `@allons-y/webc-patterns/schema/project.schema.json`: features take `title` and `description`, packages take `title` and `description`, both with an optional `href`. A project sets settings such as flavor in `package.json`, not in `project.json`.
+
+## Common mistakes
+
+- Registering `@11ty/eleventy-plugin-webc` yourself. Pass extra component globs as the `components` option.
+- Naming a project layout `norn-*.webc`. Pass `layouts: ["norn-landing"]` to leave a shipped one out, then supply your own.
+- Writing item data with `url`, `name`, or `body`.
+- Putting text in an attribute (such as `@label`) where the component has a slot.
+- Setting a component custom property that does not exist.
+- Using `$data.site` or `$data.project` in a layout. Layouts read `$data.norn` (from `props`), `$data.page`, and `$data.content`.
+- A dynamic `style` or `class` that can be `undefined`: it throws. Return `''`.
+- Putting an HTML comment in a component: it ships to every page.
+
+## Where to look next
+
+- README: install, every layout's props, theming, translating, the exports.
+- Component preview: https://allonsy-studio.github.io/webc-resources/ (every component with its stories and tokens).
+- Working projects: the `fixtures/` folders in the repository (landing, docs, workspaces, neutral).
+
+## Reference
+
+Generated from the component sources and their CSF files. Do not edit by hand: run `yarn llms`.
+
+### Layout components
+
+Arranges other things: page frames.
+
+#### norn-sidebar-layout
+
+Tag: `<norn-sidebar-layout>`.
+
+A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and the body's line length, as `norn-docs` and `norn-workspace` do. Wrap prose in `norn-rich-text`. Pass the navigation as one element in the `nav` slot, such as `<norn-side-nav slot="nav" …>`, and the body, starting with its h1, in the default slot. The navigation stays in view while the page scrolls, and a long list scrolls inside it. When the frame is narrower than 37.5rem the columns stack, and the navigation folds into a closed `<details>` above the body, under the `summary` text. A browser without `::details-content` always shows the fold. Sections and articles inside the body stack with a small gap. The frame is as wide as --norn-layout-width allows. A project sets another width with CSS against the tag, in its own unlayered stylesheet.
+
+Props:
+
+- `nav-width` (string, optional, default `14rem`): The navigation column's width, as a CSS length.
+- `gap` (string, optional, default `l`, one of `s`, `m`, `l`, `xl`): The space between the navigation and the body, a step of --norn-space-*.
+- `columns` (string, optional): The body's grid columns, as a `grid-template-columns` value, to put something beside the prose. Falls back to one column.
+
+Slots:
+
+- `nav`: The navigation, as one element.
+- `summary`: The text of the control that opens the navigation on a narrow frame, as one element. Falls back to the site's `componentStrings`, then "Menu". A layout passes the navigation's own name.
+- `default`: The page body, starting with its h1.
+
+Global tokens it reads: `--norn-ui-radius-s`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-raised`, `--norn-text-accent`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl`, `--norn-layout-width`.
+
+### Landmark components
+
+A page region with a role and a name: header, navigation, footer.
+
+#### norn-breadcrumbs
+
+Tag: `<norn-breadcrumbs>`.
+
+Where the page sits in the site: a trail of links from the top down, ending at the current page, marked with `aria-current="page"`. Data-driven, so the last item is always the current one. The separators are decorative chevrons that point the reading way, so they mirror in right-to-left text.
+
+Props:
+
+- `items` ({ href: string, title: string }[], required): From the top level to the current page.
+
+Slots:
+
+- `label`: The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Breadcrumb".
+
+Global tokens it reads: `--norn-text-base`, `--norn-text-muted`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`.
+
+#### norn-footer
+
+Tag: `<norn-footer>`.
+
+Site footer: a row of columns, and a colophon below them. The default slot holds the columns: a lead `<div>` first (the name in a `<p><strong>`, a tagline, the license), then the links, then anything else, such as a credit. Put the links in one `<nav aria-labelledby="…">`, pointing at a hidden name: a `<p><strong>` heading and a `<ul>`, or for several groups a `<div>` each holding its heading and list. The groups sit side by side and wrap. When the footer is 60rem or wider, the lead column takes up to 25rem, or the width `lead-width` gives, and the others size to their content; narrower, the columns wrap.
+
+Props:
+
+- `width` (string, optional): The content width, as a CSS length. Falls back to --norn-layout-width.
+- `lead-width` (string, optional): The widest the lead column gets on a wide footer, as a CSS length. Falls back to 25rem.
+
+Slots:
+
+- `default`: The columns.
+- `colophon`: Full-width content below the columns, as one element.
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-layout-width`.
+
+#### norn-header
+
+Tag: `<norn-header>`.
+
+Site header: the brand link, then the primary navigation. Pass the brand as one element in the `brand` slot, such as `<a slot="brand" rel="home" href="/">Name</a>`, holding text or an `<img>` logo with alt text. A logo is 2rem tall, or the height `logo-height` gives. The default slot holds the navigation links, each an `<a>` that may start with a `norn-icon`. Without links there is no navigation landmark. The links are quiet until the pointer or focus is on one, and the one marked `aria-current` has the text color and a 2px accent line. When the header is narrower than 40rem, the links fold into a closed `<details>` at the end of the brand's row, under the `summary` text, and the open menu lists them full width. A browser without `::details-content` always shows the control.
+
+Props:
+
+- `logo-height` (string, optional): The logo's height, as a CSS length. Falls back to 2rem.
+
+Slots:
+
+- `brand`: The brand link, as one element.
+- `label`: The navigation landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Primary".
+- `summary`: The text of the control that opens the links on a narrow header, as one element. Falls back to the site's `componentStrings`, then "Menu".
+- `default`: The navigation links.
+
+Global tokens it reads: `--norn-ui-radius-s`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-heading`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-pager
+
+Tag: `<norn-pager>`.
+
+Links to the pages before and after this one. Renders nothing when both are missing. Get the pages from `adjacent`, registered as `nornAdjacent`, at the call site. The arrows are `norn-icon`s, which point the other way in right-to-left text.
+
+Props:
+
+- `prev` ({ href: string, title: string }, optional): The page before this one.
+- `next` ({ href: string, title: string }, optional): The page after this one.
+
+Slots:
+
+- `label`: The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pager".
+
+Global tokens it reads: `--norn-ui-radius-s`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-text-accent`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-side-nav
+
+Tag: `<norn-side-nav>`.
+
+Sidebar navigation from a list of pages. Marks the current page with `aria-current="page"`, and a page holding it with `aria-current="true"`. An item may carry a `norn-icon` name and child pages, which list under it, indented. The current page takes a tint of the accent and the accent as its text color, and the pointer takes a lighter layer. In a sticky `norn-sidebar-layout` column only the list scrolls, so a search field in the `search` slot stays put.
+
+Props:
+
+- `items` ({ href: string, title: string, icon?: string, children?: { href: string, title: string }[] }[], required): The pages, in order.
+
+Slots:
+
+- `label`: The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pages".
+- `search`: A search field above the list, as one element.
+
+Global tokens it reads: `--norn-ui-radius-s`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`.
+
+#### norn-toc
+
+Tag: `<norn-toc>`.
+
+The page's contents: a link to each section heading, as an outline. Each heading sits in a nested list under the nearest heading above it with a lower level, so an h3 is listed inside the h2 it belongs to and a skipped level adds no empty list. The input stays flat. Data-driven, from `headings` (registered as `nornHeadings`), so it stays in step with the page. Its script marks the section in view with `aria-current="location"`. With fewer than two headings it renders nothing. The title is the summary of a `<details>`, shown open and unclickable unless `fold` says otherwise: then the list folds away under the title. `norn-docs` passes `narrow`. A browser without `::details-content` always shows the fold.
+
+Props:
+
+- `items` ({ id: string, text: string, level: number }[], required): The page's headings, in order.
+- `fold` (string, optional, one of `always`, `narrow`): When the list folds under its title: `always`, or `narrow`, while the nearest container is narrower than 60rem. Unset, it never folds.
+
+Slots:
+
+- `label`: The landmark name and visible title, as one element. Falls back to the site's `componentStrings`, then "On this page".
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`.
+
+### Container components
+
+A bounded surface that holds content: a card, a card grid, a section, a hero.
+
+#### norn-accordion
+
+Tag: `<norn-accordion>`.
+
+A stack of disclosures, from native `<details>` elements: the browser handles the keyboard, find-in-page, and links into a closed section. Pass each section as a `<details>` with a `<summary>` in the default slot. Give them one `name` to keep only one open at a time. A section slides open where the browser can animate to an intrinsic size, unless motion is reduced; elsewhere it opens at once.
+
+Slots:
+
+- `default`: The sections, each a `<details>`.
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-text-accent`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`.
+
+#### norn-callout
+
+Tag: `<norn-callout>`.
+
+An aside in long-form text, set apart like a pull quote: a short label with an icon over the body, on a quiet raised panel. Use it for a fun fact, a tip, or a point worth a pause. It is not a status message: use `norn-notice` for one. The kinds match GitHub's alerts and differ only in the label's color, its default text, and its icon. `callouts` in `@allons-y/webc-patterns/markdown` writes the same markup for a Markdown `> [!NOTE]` blockquote. Its role is `note`: it is not a landmark.
+
+Props:
+
+- `variant` (string, optional, default `note`, one of `note`, `tip`, `important`, `warning`, `caution`): The kind of aside.
+
+Slots:
+
+- `heading`: The label over the body, as one element, such as `<span slot="heading">Did you know?</span>`. Falls back to the site's `componentStrings` for the variant, then the variant's name, such as "Note".
+- `default`: The body.
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-accent`, `--norn-font-body`, `--norn-font-heading`, `--norn-font-size-s`, `--norn-font-size-l`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger`.
+
+#### norn-card
+
+Tag: `<norn-card>`.
+
+A card: a heading, then its text, on a raised surface. A heading link makes the whole card a link, and a card with an accent has a 2px line along its top. Pass the heading and body in the default slot, as in `<norn-card><h3><a href="…">Title</a></h3><p>…</p></norn-card>`. Pick the heading level for the outline: h3 under an h2. A link in the heading is stretched over the card, so the card is one target. The pointer over the card takes a hover layer, and focus on the link draws the ring around the card. The link is not underlined until the pointer is over it. In a `norn-card-grid` the cards share their rows: the first child, the second, and the third (a footer, such as a link) each take a row shared with the neighboring cards, so they line up. A card with a fourth child lays out on its own.
+
+Props:
+
+- `accent` (string, optional, one of `accent`, `info`, `success`, `warning`, `danger`): A 2px line along the top, in a global color: `accent` takes --norn-ui-accent, and `info`, `success`, `warning`, and `danger` take the matching --norn-status-* color. `none` draws no line.
+- `title-face` (string, optional, one of `mono`): `mono` sets the heading in the mono face, as for package names.
+
+Slots:
+
+- `default`: The heading, then the body.
+
+Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-surface-raised`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-space-s`, `--norn-space-m`, `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger`.
+
+#### norn-card-grid
+
+Tag: `<norn-card-grid>`.
+
+Responsive grid of cards. Pass each card in an `<li>`, as in `<li><norn-card>…</norn-card></li>`. The list has `role="list"`, which Safari needs once the markers are gone. Each card spans three rows of the grid, with `grid-template-rows: subgrid`, so the headings, the bodies, and the footers of cards in a row line up. A browser without subgrid shows each card as its own box. Settings for a card, such as its title face or its top line, go on the card as props: `<norn-card @title-face="mono">`.
+
+Props:
+
+- `min` (string, optional, default `17rem`): Narrowest card, as a CSS length, such as `12rem`.
+- `gap` (string, optional, default `m`, one of `s`, `m`, `l`): Space between cards: `s`, `m`, or `l`, for --norn-space-s, -m, or -l.
+
+Slots:
+
+- `default`: The cards, each in an `<li>`.
+
+Global tokens it reads: `--norn-space-s`, `--norn-space-m`, `--norn-space-l`.
+
+#### norn-code-tabs
+
+Tag: `<norn-code-tabs>`.
+
+The same thing in a few forms, such as npm, yarn, and pnpm, as tabs over `norn-code-block`s. Without a script every sample shows, stacked. Pass the samples in the default slot. Each tab is named by the sample's `data-tab` attribute, else its caption, else its `label` slot, else its language, all read from the markup. A name two samples share gets a number after the first, such as `sh` and `sh 2`, so every tab name is its own. The tabs follow the ARIA tabs pattern: arrow keys move between them, in the reading direction, and Home and End jump to the ends. Tabs that share a `@group` switch together, and the choice is remembered in this browser.
+
+Props:
+
+- `group` (string, optional): Tabs with the same group, on any page, show the same choice.
+
+Slots:
+
+- `default`: The samples, each a `norn-code-block`. For the terminal frame, give each sample `@chrome="terminal"`: a slot can't take props from the tabs.
+- `label`: The tab list's name, as one element, such as `<span slot="label">Install commands</span>`. Falls back to the site's `componentStrings`, then "Code samples".
+- `sample`: A tab's name when its sample has no `data-tab`, caption, label, or language, with `{n}` for its number. Falls back to the site's `componentStrings`, then "Sample {n}".
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-xs`, `--norn-space-s`.
+
+#### norn-hero
+
+Tag: `<norn-hero>`.
+
+Page intro, in the default slot: an h1, a lede, the actions, the facts, and anything after, such as an install `norn-code-block`. Write the h1 as one or two `<span>`s: the name, then a tagline in the accent color. The actions are a `<nav aria-labelledby="…">`, pointing at a hidden name, holding a `<ul role="list">` of `norn-link-button`s, and the facts a `norn-fact-list` with `@gap="l"`.
+
+Props:
+
+- `width` (string, optional, default `layout`, one of `layout`, `measure`): Content width: `layout`, --norn-layout-width, or `measure`, the prose line length, --norn-text-measure.
+
+Slots:
+
+- `default`: The h1, lede, actions, facts, and extras, in that order.
+
+Global tokens it reads: `--norn-text-muted`, `--norn-text-accent`, `--norn-text-measure`, `--norn-font-heading`, `--norn-font-size-l`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl`, `--norn-layout-width`.
+
+#### norn-notice
+
+Tag: `<norn-notice>`.
+
+A message about the page or the site: information, success, a warning, or an error, with an icon and an optional action. Color is never the only cue: the icon and a word for the severity, read but not shown, come first. The message goes in the default slot, and an action, such as a `norn-link-button`, in the `action` slot. A notice already on the page when it loads is static. Set `:@live="true"` on one the page adds later, so a screen reader announces it: politely, or at once for a warning or an error.
+
+Props:
+
+- `severity` (string, optional, default `info`, one of `info`, `success`, `warning`, `danger`): How serious the message is.
+- `live` (boolean, optional): Announce the notice when it appears.
+
+Slots:
+
+- `prefix`: The severity word read before the message, with its punctuation, as one element, such as `<span slot="prefix">Remarque : </span>`. Falls back to the site's `componentStrings` for the severity, then "Note: ", "Success: ", "Warning: ", or "Error: ".
+- `default`: The message.
+- `action`: One action, such as a `norn-link-button` with `@variant="quiet"` and `@tone="current"`, so it reads in the text color and doesn't compete with the severity.
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-icon-m`, `--norn-surface-base`, `--norn-space-s`, `--norn-space-m`, `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger`.
+
+#### norn-rich-text
+
+Tag: `<norn-rich-text>`.
+
+Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#`. Wrap the content in it: `<norn-rich-text><template webc:nokeep @html="content"></template></norn-rich-text>`. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.
+
+Props:
+
+- `measure` (string, optional, default `text`, one of `text`, `none`): Line length: `text`, --norn-text-measure, or `none`, the full width, as in a page whose prose holds to the measure child by child.
+
+Slots:
+
+- `default`: The prose, as rendered HTML.
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-surface-code`, `--norn-text-muted`, `--norn-text-measure`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-font-size-xl`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-simple-table
+
+Tag: `<norn-simple-table>`.
+
+A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way. Pass the `<table>` in the default slot, with a `<caption>` when it can have one. Cells and code in them wrap between words, never mid-word. While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables. Row rules take --norn-ui-border-color, and the scroll shadows are drawn against the page surface, --norn-surface-base. The header row has no fill.
+
+Slots:
+
+- `default`: The table.
+- `label`: The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-surface-base`, `--norn-text-base`, `--norn-text-muted`, `--norn-space-xs`, `--norn-space-s`.
+
+### Component components
+
+A self-contained element: a link, a code block, a lockup.
+
+#### norn-copy-button
+
+Tag: `<norn-copy-button>`.
+
+A button that copies text to the clipboard: `@value`, or the text of the element whose id is `@source`. It stays hidden without a script or where the Clipboard API is missing, so it never offers what it can't do. After a click its label reads the `copied` or `failed` text for two seconds, the icon turns to a check tinted in the success color, and a status message says the same to a screen reader. The button keeps its width, since the three texts share one cell. The texts are in the page, hidden, and the script shows them: the button only exists with a script.
+
+Props:
+
+- `value` (string, optional): The text to copy.
+- `source` (string, optional): The id of the element whose text to copy, when there is no `value`.
+- `compact` (boolean, optional): Show only the icon until the pointer or focus is on the button, for a button laid over a corner, as `norn-code-block` does. On for `@compact`, `@compact="true"`, or `:@compact="true"`.
+- `surface` (string, optional, one of `base`, `raised`, `code`): `base`, `raised`, or `code`: fill the button with that surface token, for a button laid over it, as `norn-code-block` does with `code`. Without it the button has no fill and sits on its surroundings.
+- `strings` (string, optional): The id of an element that holds the texts in place of the slots, for a component that wraps the button, as `norn-code-block` does. It holds one element per slot, marked `data-string="label"`, `"copy"`, `"copied"`, and `"failed"`; the `label` one needs an id.
+
+Slots:
+
+- `label`: The button's accessible name, such as "Copy the install command", as one element. Without it, the visible text names the button.
+- `copy`: The visible text, as one element. Falls back to the site's `componentStrings`, then "Copy".
+- `copied`: The text after a copy. Falls back to the site's `componentStrings`, then "Copied".
+- `failed`: The text when the copy fails. Falls back to the site's `componentStrings`, then "Copy failed".
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-surface-code`, `--norn-text-muted`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-status-success`, `--norn-status-danger`.
+
+#### norn-fact-list
+
+Tag: `<norn-fact-list>`.
+
+Short facts in a row, such as a license or a runtime: an optional icon and a few words each, with no box. Static text, not controls. Pass each fact as an `<li>`, which may start with a `norn-icon`. The list has `role="list"`, which Safari needs once the markers are gone.
+
+Props:
+
+- `gap` (string, optional, default `xs`, one of `xs`, `s`, `m`, `l`): The space between rows: `xs`, `s`, `m`, or `l`, each a `--norn-space-*` step. The facts in a row are always `m` apart. A hero sets `l`.
+
+Slots:
+
+- `default`: The facts, as `<li>` elements.
+
+Global tokens it reads: `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`.
+
+#### norn-heading-anchor
+
+Tag: `<norn-heading-anchor>`.
+
+A heading that links to itself, so a reader can copy a link to the section. The heading text is the link, with a `#` before it. Where the pointer can hover and the page is at least 70rem wide, the `#` hangs in the margin and shows while the heading is hovered or has focus. Elsewhere it stays in line: there is no hover to reveal it, or no room in the margin for it. The default slot is the heading text. `headingAnchors` in `@allons-y/webc-patterns/markdown` writes this component for Markdown headings. The `#` takes --norn-text-muted.
+
+Props:
+
+- `slug` (string, required): The heading's id, and the link's fragment.
+- `level` (number, optional, default `2`, one of `2`, `3`, `4`, `5`, `6`): The heading level.
+
+Slots:
+
+- `default`: The heading text.
+
+Global tokens it reads: `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-text-muted`, `--norn-space-2xs`, `--norn-space-m`.
+
+#### norn-icon
+
+Tag: `<norn-icon>`.
+
+Inline SVG icon from a small built-in set or the project's own, drawn in `currentColor` at 1em. Project icons come from the Norn plugin's `icons` option, which registers them through the `nornIcons` helper. A project icon with a built-in's name replaces it. Without the plugin, only the built-in set is available. A project icon keeps its own `viewBox` (else one from a numeric `width` and `height`, else `0 0 24 24`) and paint, so draw it with `currentColor` to follow the text color. A file with no paint at all is filled with `currentColor`. Decorative by default: the drawing is always hidden from assistive tech. When the icon carries meaning on its own, put its name in the `label` slot, as `<span slot="label">Warning</span>`: it renders as visually hidden text beside the drawing, so it is read as text, in a link or button name too. WebC can't tell whether a slot has content, so the drawing stays `aria-hidden` either way and an empty slot adds nothing to read. Directional icons (`arrow-start`, `arrow-end`, `chevron-end`, and a project icon set to `mirror`) mirror in a right-to-left context.
+
+Props:
+
+- `name` (string, required, one of `accessibility`, `arrow-end`, `arrow-start`, `book`, `caution`, `check`, `chevron-down`, `chevron-end`, `copy`, `desktop`, `error`, `external`, `fill`, `hash`, `important`, `info`, `link`, `loading`, `moon`, `phone`, `search`, `success`, `sun`, `system`, `tablet`, `tip`, `warning`): A project icon, or a built-in icon.
+- `size` (string, optional, one of `s`, `m`): `s`, the default, is --norn-ui-icon-s, which is 1em and follows the text. `m` is --norn-ui-icon-m, for an icon beside a heading or a title. Another value fails the build.
+
+Slots:
+
+- `label`: The icon's name, as one element, read but not shown. Leave it out for a decorative icon.
+
+Global tokens it reads: `--norn-ui-icon-s`, `--norn-ui-icon-m`.
+
+#### norn-link-button
+
+Tag: `<norn-link-button>`.
+
+A link styled as a button, for a call to action. It navigates, so it stays a link: use a `<button>` for an action on the page. The default slot is the link text, and may hold a `norn-icon`. A hover and a press take a layer of the text color over the background, and the text is never underlined.
+
+Props:
+
+- `href` (string, required): The link's URL.
+- `variant` (string, optional, default `primary`, one of `primary`, `secondary`, `quiet`): `primary`, a filled accent; `secondary`, a 1px outline; or `quiet`, text with no border.
+- `tone` (string, optional, one of `current`): `accent`, the accent text color; or `current`, the surrounding text color, for a secondary or quiet button inside a colored container such as `norn-notice`. A primary button keeps its fill and text.
+
+Slots:
+
+- `default`: The link text, which may hold a `norn-icon`.
+
+Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-text-accent`, `--norn-text-on-accent`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-m`.
+
+#### norn-search
+
+Tag: `<norn-search>`.
+
+Site search: a search landmark with a field that lists results as the visitor types, from a Pagefind index. Without a script, or before the index is built, it is a plain form that searches the site on the web: `@action` with the query as `q`, limited to `@site`. The field has a magnifier at its start, and its label as the placeholder once the script runs. The results float over the page on a raised surface. The status texts are in the page, hidden, and the script shows them. Each falls back to the site's `componentStrings`, then English. The script picks the status for a count by the plural rules of the nearest `lang`, with `Intl.PluralRules`, and formats the number for it. An empty form falls back to `results-other`. Build the index with Pagefind after Eleventy. Results read their title and excerpt from the index; the excerpt keeps only Pagefind's `<mark>` highlights.
+
+Props:
+
+- `bundle` (string, optional, default `/pagefind/pagefind.js`): Pagefind's script. Pass `url('/pagefind/pagefind.js')` under a path prefix.
+- `action` (string, optional, default `https://duckduckgo.com/`): Where the plain form sends the query.
+- `site` (string, optional): The site's host, sent with the plain form as `sites`, to keep results on the site.
+
+Slots:
+
+- `label`: The field's label, the button's text, and the landmark's name, as one element. Falls back to "Search".
+- `none`: The status when nothing matches. Falls back to "No results".
+- `results-one`: The status for a count in the `one` plural category, with `{count}` for the number. Falls back to "{count} result", or to `results-other` when the site's strings set only that.
+- `results-other`: The status for any other count. Falls back to "{count} results".
+- `results-zero`: The status for the `zero` category.
+- `results-two`: The status for the `two` category.
+- `results-few`: The status for the `few` category.
+- `results-many`: The status for the `many` category.
+
+Global tokens it reads: `--norn-ui-border-strong`, `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-ui-icon-s`, `--norn-ui-shadow`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-muted`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`.
+
+#### norn-segmented-control
+
+Tag: `<norn-segmented-control>`.
+
+A row of mutually exclusive options drawn as one control, from native radio buttons in a fieldset. No script: the browser handles the keyboard and the form value. Each option is a `<label>` holding an `<input type="radio">`, an optional `norn-icon` with `@size="m"`, and its text in a `<span>`. Give the radios one `name`, and the labels a `title` when the text is hidden. The checked option is tinted in the accent, and the others take a hover and a press layer. Options are drawn at equal widths. A component that builds one from its own props passes the `legend` slot, `@name`, and `:@options` instead, since its props don't reach slot content.
+
+Props:
+
+- `icon-only` (boolean, optional): Hides the option text visually; it stays the radio's name.
+- `name` (string, optional): The radios' shared name. Required with `options`: the build fails without it.
+- `options` ({ value: string, label: string, icon?: string, checked?: boolean }[], optional): The options, in place of the default slot. Each label is also its `title`.
+
+Slots:
+
+- `legend`: The group's name, as one element, such as `<span slot="legend">Color scheme</span>`. Visually hidden. Required: the build fails without it.
+- `default`: The option labels, when there are no `options`.
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-raised`, `--norn-text-muted`, `--norn-text-accent`, `--norn-space-2xs`, `--norn-space-s`.
+
+#### norn-skip-link
+
+Tag: `<norn-skip-link>`.
+
+Link that jumps past the page chrome to the main content. Hidden until it has focus. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
+
+Props:
+
+- `href` (string, optional, default `#main`): The target's fragment.
+
+Slots:
+
+- `label`: The link text, as one element, such as `<span slot="label">Aller au contenu</span>`. Falls back to the site's `componentStrings`, then "Skip to content".
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-surface-raised`, `--norn-text-base`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-theme-toggle
+
+Tag: `<norn-theme-toggle>`.
+
+Light, system, or dark: a `norn-segmented-control` that sets the page's `color-scheme` and remembers the choice in `localStorage` under `color-scheme`. System clears the choice, so the visitor's setting decides. Every toggle on the page, and in other tabs, follows the same choice. Without a script it stays hidden and the page follows the system. Pass `:@theme-toggle="true"` to `norn-head` so a saved choice applies before the first paint. The names are in the page, hidden, and the script shows them, since the toggle only exists with a script. Each falls back to the site's `componentStrings`, then English.
+
+Slots:
+
+- `label`: The group's name, as one element. Falls back to "Color scheme".
+- `light`: The light option's name. Falls back to "Light".
+- `system`: The system option's name. Falls back to "System".
+- `dark`: The dark option's name. Falls back to "Dark".
+
+### Template components
+
+An Eleventy layout: a whole page, filled from props.
+
+#### norn-base
+
+Layout: front matter `layout: norn-base.webc`.
+
+The page frame every Norn layout extends: the head, the skip link, `norn-header`, `main`, and `norn-footer`, filled from props. The Norn plugin ships it as an Eleventy layout; use it as `layout: norn-base.webc` for a WebC page, or extend it from a layout of the project's own. Markdown content is compiled once, so the components the Markdown add-ons write render, also through a Nunjucks or Liquid layout of the project's or a layout alias. Content that is already compiled is inserted as it is, because compiling it again would render its kept component tags twice: a WebC page, a `templateEngineOverride` with `webc`, a `{% renderTemplate "webc" %}` block, a page on a WebC layout of the project's own, and a page on a shipped layout, which sets `nornCompiled: true`. The `nornCompiles` helper decides, from `page.templateSyntax`. A Nunjucks, Liquid, or HTML page renders components through `{% renderTemplate "webc" %}`. A WebC layout of the project's own deeper in the chain that compiles the content sets `nornCompiled: true` in its front matter. Props are `$data.norn`: the plugin's `props` mapping, or the same-named page data. Every list defaults to `[]`. The head calls `norn-head`, which declares the cascade layer order first, then embeds the base and print styles: the plugin fills the two style blocks below from `css/base.css` and `css/print.css`. A copy of this file pastes their text in. A `<section>` directly in `main` is a centered column at `--norn-layout-width` with block padding and a gap, and its `h2` takes the section heading size. The `id` on the section is the anchor. The rule is in the `norn.layout` layer under `:where(main)`, so any rule of a project overrides it, and a section anywhere else is left alone. A section is not a landmark: do not name it. Four hooks take markup from `fillHooks`: `head` at the end of the head, `banner` before the header, `cta` at the end of `main`, and `credit` as the footer's last column. The footer's texts ("Licensed under {license}", the navigation's name "Footer") come from `componentStrings` under `norn-base`, then English.
+
+Props:
+
+- `lang` (string, optional): The page language. Falls back to `page.lang`, then `en`.
+- `dir` (string, optional, one of `ltr`, `rtl`, `auto`): The text direction, set on `<html>`. Without it, `rtl` for a right-to-left language (`ar`, `fa`, `he`, `ur`, `ps`, `yi`, `dv`, `ckb`, `sd`, `ug`, matched on the primary subtag of `lang`), else `ltr`.
+- `title` (string, optional): The page title. The document title is the title and the name; a page without one shows the name and the tagline.
+- `name` (string, optional): The site name: the brand link, the footer lead, `og:site_name`.
+- `tagline` (string, optional): A short line after the name.
+- `description` (string, optional): The page description: the meta description and `og:description`.
+- `url` (string, optional): The canonical URL.
+- `ogTitle` (string, optional): Falls back to the document title.
+- `ogImage` ({ src: string, alt?: string }, optional): The share image, or its URL: `og:image`, `og:image:alt`, and `twitter:card` (`summary_large_image`). A relative `src` resolves against `url`, which must then be absolute: with no absolute `url`, the build logs a `norn-head:` warning and `og:image` and `og:image:alt` are left out. Without an image, no image tag renders. Either way the card is `summary`.
+- `locale` (string, optional): `og:locale`, such as `en_US`.
+- `themeColor` (string, optional): One color for both schemes. Without it, the page surface in each scheme.
+- `themeToggle` (boolean, optional): Apply the scheme a `norn-theme-toggle` saved, before the first paint.
+- `icon` ({ href: string, type?: string }, optional): The favicon, or its URL. Without it the page links an empty icon, so browsers skip `/favicon.ico`.
+- `touchIcon` (string, optional): A 180px PNG for home screens.
+- `logo` ({ src: string, alt?: string }, optional): The brand image, or its URL, in place of the name. The brand link renders only with a logo or a name.
+- `nav` ({ href: string, title: string, icon?: string }[], optional): The header links. `icon` names a `norn-icon`.
+- `footer` ({ name?: string, text?: string, license?: { name: string, url: string }, badges?: { href: string, src: string, alt: string, width?: number, height?: number }[], groups?: { heading: string, links: { href: string, title: string }[] }[], colophon?: string }, optional): The footer: the lead column (`name` falls back to the site name, `text` to the tagline), its badges and license, one navigation of grouped links, and a closing line.
+
+Slots:
+
+- `default`: The page content, in `main`, before the `cta` hook.
+
+Global tokens it reads: `--norn-text-measure`, `--norn-font-heading`, `--norn-font-size-xl`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl`, `--norn-layout-width`.
+
+#### norn-docs
+
+Layout: front matter `layout: norn-docs.webc`.
+
+A docs page: the sticky docs sidebar with site search above its list, the page title, its contents when it has two or more sections, the body in `norn-rich-text`, and the pager. Extends `norn-base`. When the page is 60rem wide or more, the contents are a sticky column at the end of the body. Narrower, they fold under their title, and the sidebar folds into a closed `<details>` under the sidebar's name. The search is live from a Pagefind index at `pagefind/`, or a web search of the site's host without one. Only the page body is indexed. The contents list comes from `nornHeadings` over the body: `headingAnchors`, which the plugin adds to Markdown, writes the anchored headings. With fewer than two, the layout leaves `norn-toc` out, so the page ships none of its CSS or JS. The sidebar's name ("Documentation") and the search label ("Search the docs") come from `componentStrings` under `norn-docs`, then English.
+
+Props:
+
+- `docs` ({ href: string, title: string, icon?: string }[], optional): The docs pages, in order. `icon` names a sidebar `norn-icon`.
+- `prev` ({ href: string, title: string }, optional): Falls back to the page before this one in `docs`, by `nornAdjacent`.
+- `next` ({ href: string, title: string }, optional): Falls back to the page after this one in `docs`.
+- `search` ({ bundle?: string, site?: string } | false, optional): Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`; a `url` with a scheme that does not parse fails the build). `false` leaves the search out.
+
+Slots:
+
+- `default`: The page body, in `norn-rich-text`. Its anchored headings make the contents.
+
+Global tokens it reads: `--norn-space-m`.
+
+#### norn-docs-home
+
+Layout: front matter `layout: norn-docs-home.webc`.
+
+A docs site's home page: the hero with the install sample, then the docs pages as a contents list, each title and then its description. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. The install sample is a `norn-code-block`: highlighted with `@allons-y/webc-code-sample`, and a plain `<pre><code>` without it. Its texts ("Get started", "Read the docs", "View on GitHub", "Documentation") come from `componentStrings` under `norn-docs-home`, then English.
+
+Props:
+
+- `lede` (string, optional): The hero paragraph. Falls back to the description.
+- `install` (string, optional): The install command.
+- `repo` (string, optional): The repository's URL.
+- `docs` ({ href: string, title: string, description?: string }[], optional): The docs pages, in order.
+
+Slots:
+
+- `default`: The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section.
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-heading`, `--norn-font-size-m`, `--norn-space-2xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-landing
+
+Layout: front matter `layout: norn-landing.webc`.
+
+A project's landing page: the hero with the usage or install sample, then the install, features, and packages sections. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. Samples are `norn-code-block`s: highlighted with `@allons-y/webc-code-sample`, and plain `<pre><code>` without it. Its texts ("Get started", "View on GitHub", "Free & open source", "License: {license}", "Node {node}", and the section headings) come from `componentStrings` under `norn-landing`, then English.
+
+Props:
+
+- `lede` (string, optional): The hero paragraph. Falls back to the description.
+- `repo` (string, optional): The repository's URL.
+- `license` (string, optional): The license name, for the hero's facts.
+- `node` (string, optional): The lowest Node version, such as `24+`.
+- `install` (string, optional): The install command.
+- `usage` ({ language: string, code: string, caption?: string }, optional): One sample for the hero. With it, the install command gets its own section.
+- `features` ({ title: string, description: string, href?: string }[], optional): Feature cards.
+- `packages` ({ title: string, description: string, href?: string }[], optional): Package cards, titles in the mono face.
+
+Slots:
+
+- `default`: The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section.
+
+#### norn-workspace
+
+Layout: front matter `layout: norn-workspace.webc`.
+
+One workspace's page in the docs frame: the workspaces sidebar, its name, its description, and its page, such as its SKILL.md or README.md rendered to HTML. Extends `norn-base`. The page's own content follows the workspace's, so a pagination template can leave its body empty. The sidebar's name ("Packages") comes from `componentStrings` under `norn-workspace`, then English.
+
+Props:
+
+- `workspaces` ({ href: string, title: string, icon?: string }[], optional): The workspaces, for the sidebar.
+- `workspace` ({ name: string, description?: string, html?: string }, optional): The workspace on this page. Its `html` is compiled as WebC, so it may hold components.
+
+Slots:
+
+- `default`: The page's own content, in `norn-rich-text` after the workspace's page.
+
+#### norn-workspaces-home
+
+Layout: front matter `layout: norn-workspaces-home.webc`.
+
+A monorepo's home page: the hero with the install sample, then an index of the workspaces, titles in the mono face. Extends `norn-base`. The page body follows the sections, in a section of its own, in `norn-rich-text`. Markdown is compiled once, as on `norn-docs`, and a page with no body renders no section. The install sample is a `norn-code-block`: highlighted with `@allons-y/webc-code-sample`, and a plain `<pre><code>` without it. Its texts ("Get started", "Browse packages", "View on GitHub", "Packages") come from `componentStrings` under `norn-workspaces-home`, then English.
+
+Props:
+
+- `lede` (string, optional): The hero paragraph. Falls back to the description.
+- `install` (string, optional): The install command.
+- `repo` (string, optional): The repository's URL.
+- `workspaces` ({ href: string, title: string, description?: string }[], optional): The workspaces, each with its page.
+
+Slots:
+
+- `default`: The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section.
+
+### Document components
+
+The head and the foundation styles, with no body markup.
+
+#### norn-head
+
+Tag: `<norn-head>`.
+
+Head metadata, the cascade layer order, and the page's bundle links. `norn-base` calls it; a layout of the project's own can too. Call it in the head as `<meta webc:is="norn-head" webc:nokeep … />`: a custom tag in the head would close it early. Emits Open Graph tags and `twitter:card`: `summary_large_image` when an image is set, else `summary`. Write extra head tags right after the call: they land after the bundle links. Declares the layer order in an inline style before the bundle links, so it comes first whatever order the page's styles bundle in: `norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print`. A project's unlayered CSS beats every layer without `!important`. The base and print styles are files, `css/base.css` and `css/print.css`: `norn-base` embeds them, and a layout of the project's own adds them itself. Register `dropEmptyBundleTags` as a transform so a page without CSS or JS keeps no empty `<link>` or `<script>`; the Norn plugin does.
+
+Props:
+
+- `title` (string, required): The page title, for `<title>` and `og:title`.
+- `description` (string, optional): The page description, for the `description` meta and `og:description`.
+- `url` (string, optional): The canonical URL. Checked with `typeof`: a missing `url` prop resolves to Eleventy's `url` filter.
+- `theme-color` (string, optional): One color for both schemes. Without it, the page surface in each scheme.
+- `og-title` (string, optional): Falls back to the title.
+- `og-image` (string, optional): The share image, for `og:image`. Open Graph needs an absolute URL, so a relative one resolves against the canonical `url`. When `url` is not absolute, the build logs a warning, and `og:image` and `og:image:alt` are left out, with a `summary` card. Without an image, no image tag renders.
+- `og-image-alt` (string, optional): The image's description, for `og:image:alt`. Ignored without `og-image`.
+- `theme-toggle` (boolean, optional): Adds a small inline script that applies the scheme a `norn-theme-toggle` saved, before the first paint. On for `@theme-toggle`, `@theme-toggle="true"`, or `:@theme-toggle="true"`.

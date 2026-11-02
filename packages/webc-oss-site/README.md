@@ -4,6 +4,8 @@ The OSS site theme for [Norn](https://github.com/allonsy-studio/webc-resources#r
 
 See it in the [component preview](https://allonsy-studio.github.io/webc-resources/).
 
+Using an AI coding agent? Point it at [`llms.txt`](llms.txt): the rules for calling and styling the components, and a reference of every prop, slot, and token.
+
 ## Status
 
 Beta. Versions are `0.1.0-beta.N` until 1.0.
