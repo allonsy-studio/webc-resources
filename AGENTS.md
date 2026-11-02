@@ -245,6 +245,7 @@ the global tokens components read and their fallbacks, cascade layer names and o
 helper names components and layouts call (`nornTokenRanges`, `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`), the `nornCompiled` layout flag, the `norn` layer and `--norn-*` token names (and the paths in `tokens.json` that name them), the `data-tokens` format, exported
 functions and their options, the string keys in `defaultStrings`, the `project.json` schema (patterns), and the `oss-docs`
 schema (OSS site).
+The `data-tokens` format is the compact one `tokenRanges` writes and `decodeRanges` reads, described in the code sample README.
 
 ## Releases
 
