@@ -65,9 +65,10 @@ preview/           the component preview: an Eleventy site with a page and stori
    order the whole package against its own layers or a framework's, and keeps common names such as `base` and `components`
    from merging with theirs. A page renders its content before its layout, so the bundle order can't carry the layer order.
    The base and print styles are files, `css/base.css` and `css/print.css`, which the plugin embeds in `norn-base`.
-4. A component token falls back to the shared one, and the shared one to its default:
-   `var(--component-token, var(--norn-space-m, t('space.m')))`. `tokens.json` at the root is the source of truth for the
-   shared tokens. A token's custom property is `--norn-` plus its path joined with hyphens (`ui.border.color` is
+4. A component exposes props, slots, and the global tokens it reads, and no custom property of its own. It reads a shared
+   token directly, with its default as the fallback: `var(--norn-space-m, t('space.m'))`. A per-instance setting is a prop,
+   mapped to tokens where it can be; a private `--_name` inside one component is fine. `tokens.json` at the root is the
+   source of truth for the shared tokens. A token's custom property is `--norn-` plus its path joined with hyphens (`ui.border.color` is
    `--norn-ui-border-color`). Write the sources in `src/` with `t('<path>')` as the fallback of every shared token you read, and
    never a literal default. `scripts/build-components.js` compiles `src/*.webc` into `components/` (build output, not committed,
    shipped in the package), filling each `t()` from `tokens.json` with `@csstools/postcss-design-tokens`, and fails on an unknown
@@ -243,7 +244,7 @@ Inside running text, a link keeps a cue other than color (WCAG 1.4.1). A link in
 
 Changing any of these is a major version on the package that owns it: component tag names,
 props and slot names, layout names and their props (the `norn` data key), hook names, the plugin's options,
-custom properties and their fallbacks, cascade layer names and order,
+the global tokens components read and their fallbacks, cascade layer names and order,
 helper names components and layouts call (`nornTokenRanges`, `nornAdjacent`, `nornHeadings`, `nornComponentStrings`, `nornHook`, `nornIcons`, `nornCompiles`), the `nornCompiled` layout flag, the `norn` layer and `--norn-*` token names (and the paths in `tokens.json` that name them), the `data-tokens` format, exported
 functions and their options, the string keys in `defaultStrings`, the `project.json` schema (patterns), and the `oss-docs`
 schema (OSS site).
