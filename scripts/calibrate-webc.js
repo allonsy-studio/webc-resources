@@ -44,7 +44,7 @@ async function documented(file, analysis) {
 		return {
 			source: "CSF",
 			props: of("props").map(([prop, argType]) => ({ name: prop, type: coarse(argType.table?.type?.summary ?? argType.type?.name), default: argType.table?.defaultValue?.summary, required: argType.type?.required === true, options: argType.options })),
-			slots: of("slots").map(([slot]) => slot),
+			slots: of("slots").map(([slot, argType]) => argType.name ?? slot),
 			cssprops: of("css custom properties").map(([prop]) => prop),
 		};
 	}
