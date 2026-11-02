@@ -43,16 +43,19 @@
 				"type": "object",
 				"required": [
 					"title",
-					"body"
+					"description"
 				],
 				"properties": {
 					"title": {
 						"type": "string",
 						"minLength": 1
 					},
-					"body": {
+					"description": {
 						"type": "string",
 						"minLength": 1
+					},
+					"href": {
+						"type": "string"
 					}
 				}
 			}

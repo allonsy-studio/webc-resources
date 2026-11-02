@@ -46,7 +46,7 @@ nornCompiled: true
 					<a webc:if="feature.href" :href="feature.href" @text="feature.title"></a>
 					<span webc:else @text="feature.title"></span>
 				</h3>
-				<p @text="feature.body"></p>
+				<p @text="feature.description"></p>
 			</norn-card>
 		</li>
 	</norn-card-grid>

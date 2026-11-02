@@ -7,10 +7,10 @@
 		"code": "import { greet } from \"@example/core\";\n\nconsole.log(greet(\"world\")); // hello, world\n"
 	},
 	"features": [
-		{ "title": "Fast to read", "body": "Each page leads with what the project does for the reader." },
-		{ "title": "Accessible", "body": "WCAG 2.2 AA in light, dark, and forced colors." },
-		{ "title": "Quiet by default", "body": "No script is needed to read any page." },
-		{ "title": "Easy to restyle", "body": "Custom properties and unlayered CSS beat every packaged layer." }
+		{ "title": "Fast to read", "description": "Each page leads with what the project does for the reader." },
+		{ "title": "Accessible", "description": "WCAG 2.2 AA in light, dark, and forced colors." },
+		{ "title": "Quiet by default", "description": "No script is needed to read any page." },
+		{ "title": "Easy to restyle", "description": "Custom properties and unlayered CSS beat every packaged layer." }
 	],
 	"packages": [
 		{ "title": "@example/core", "description": "The core package.", "href": "https://example.com/core" },

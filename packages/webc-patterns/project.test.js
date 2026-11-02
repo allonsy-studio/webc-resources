@@ -302,6 +302,13 @@ test("project.schema.json: a package card is { title, description, href? }, and 
 	assert.equal(SCHEMA.properties.packages.items.additionalProperties, undefined, "other keys stay allowed, as before");
 });
 
+test("project.schema.json: a feature card is { title, description, href? }, and a card with body in place of description fails", () => {
+	assert.deepEqual(errors(SCHEMA, { features: [{ title: "Fast", description: "Quick to read.", href: "/fast/" }] }), []);
+	assert.deepEqual(errors(SCHEMA, { features: [{ title: "Fast", body: "Quick to read." }] }), [".features[0]: has no description"]);
+	assert.deepEqual(errors(SCHEMA, { features: [{ title: "Fast", description: "" }] }), [".features[0].description: is too short"]);
+	assert.equal(SCHEMA.properties.features.items.additionalProperties, undefined, "other keys stay allowed, as before");
+});
+
 test("project.schema.json: the fixtures' and the preview's project data validate", () => {
 	const root = path.resolve(import.meta.dirname, "..", "..");
 	for (const file of ["fixtures/landing/src/_data/project.json", "fixtures/docs/src/_data/project.json", "fixtures/workspaces/src/_data/project.json", "preview/_data/project.json"]) {

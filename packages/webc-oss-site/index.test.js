@@ -54,7 +54,7 @@ test("ossEnabled: on unless package.json sets oss-docs.oss to false", () => {
 });
 
 test("ossProps: the head, header, and footer props from the site facts and project.json", () => {
-	const props = ossProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", body: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ href: "/start/", title: "Start" }], anchors: true });
+	const props = ossProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", description: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ href: "/start/", title: "Start" }], anchors: true });
 	assert.equal(props.ogTitle, "widget: Builds widgets");
 	assert.equal(props.icon, "/assets/img/favicon.svg");
 	assert.deepEqual(props.logo, { src: "/assets/img/logo.svg", alt: "widget" });

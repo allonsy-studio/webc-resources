@@ -9,19 +9,19 @@
 	"features": [
 		{
 			"title": "Fast to read",
-			"body": "Each page leads with what the project does for the reader."
+			"description": "Each page leads with what the project does for the reader."
 		},
 		{
 			"title": "Accessible",
-			"body": "WCAG 2.2 AA in light, dark, and forced colors."
+			"description": "WCAG 2.2 AA in light, dark, and forced colors."
 		},
 		{
 			"title": "Quiet by default",
-			"body": "No script is needed to read any page."
+			"description": "No script is needed to read any page."
 		},
 		{
 			"title": "Easy to restyle",
-			"body": "Custom properties and unlayered CSS beat every packaged layer."
+			"description": "Custom properties and unlayered CSS beat every packaged layer."
 		}
 	],
 	"packages": [

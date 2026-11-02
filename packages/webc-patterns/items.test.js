@@ -138,3 +138,9 @@ test("norn-landing titles its package cards by title, and a card with only name 
 	assert.ok(html.includes('<a href="/core/">@acme/core</a>') && html.includes("The core."), "the new card");
 	assert.ok(!html.includes("@acme/old"), "no label from name");
 });
+
+test("norn-landing gives each feature card its description, and a card with only body shows no text", async () => {
+	const html = await layout("norn-landing", { features: [{ title: "Fast", description: "Quick to read.", href: "/fast/" }, { title: "Old", body: "The old body." }] });
+	assert.ok(html.includes('<a href="/fast/">Fast</a>') && html.includes("<p>Quick to read.</p>"), "the new card");
+	assert.ok(html.includes("Old") && !html.includes("The old body."), "no text from body");
+});

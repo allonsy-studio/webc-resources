@@ -15,7 +15,7 @@ export default {
 		node: { description: "The lowest Node version, such as `24+`." },
 		install: { description: "The install command.", table: { type: { summary: "string" } } },
 		usage: { description: "One sample for the hero. With it, the install command gets its own section.", table: { type: { summary: "{ language: string, code: string, caption?: string }" } } },
-		features: { description: "Feature cards.", table: { type: { summary: "{ title: string, body: string, href?: string }[]" } } },
+		features: { description: "Feature cards.", table: { type: { summary: "{ title: string, description: string, href?: string }[]" } } },
 		packages: { description: "Package cards, titles in the mono face.", table: { type: { summary: "{ title: string, description: string, href?: string }[]" } } },
 		default: { description: "The page body, after the sections: Markdown or WebC, compiled once. A page with no body renders no section." },
 	},
