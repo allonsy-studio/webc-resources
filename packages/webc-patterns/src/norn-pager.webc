@@ -13,7 +13,6 @@
  * @prop {{ url: string, title: string }} [prev]
  * @prop {{ url: string, title: string }} [next]
  * @slot label - The landmark name, read but not shown, as one element. Falls back to the site's `componentStrings`, then "Pager".
- * @cssprop --norn-pager-link - Link color. Falls back to --norn-text-accent.
  * @category landmark
  */
 --->
@@ -50,7 +49,7 @@
 				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
 				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
 				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
-				color: var(--norn-pager-link, var(--norn-text-accent, t('text.accent')));
+				color: var(--norn-text-accent, t('text.accent'));
 				text-decoration: none;
 				overflow-wrap: break-word;
 
