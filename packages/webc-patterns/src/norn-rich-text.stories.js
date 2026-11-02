@@ -25,7 +25,7 @@ export default {
 		},
 		docs: {
 			description: {
-				component: "Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#`. Wrap the content in it: `<norn-rich-text><template webc:nokeep @html=\"content\"></template></norn-rich-text>`. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.",
+				component: "Prose styles for long-form content: headings, paragraphs, lists, quotes, tables, rules, and inline code, all at one line height. A heading that links to itself is a `norn-heading-anchor`, which styles its own `#` and takes the same space above as a plain heading. Wrap the content in it: `<norn-rich-text><template webc:nokeep @html=\"content\"></template></norn-rich-text>`. Rules in tables and dividers and the quote bar take --norn-ui-border-color, and inline code --norn-surface-code.",
 			},
 		},
 	},

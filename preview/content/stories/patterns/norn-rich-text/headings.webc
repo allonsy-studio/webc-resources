@@ -4,7 +4,7 @@ order: 2
 ---
 <norn-rich-text>
 	<norn-heading-anchor @slug="first">A linked second-level heading</norn-heading-anchor>
-	<p>The heading anchor gives its own space above, and prose after it keeps the rhythm.</p>
+	<p>A short line of body text.</p>
 	<norn-heading-anchor @slug="second" :@level="3">A linked third-level heading</norn-heading-anchor>
-	<p>The same space applies to the third level.</p>
+	<p>A short line of body text.</p>
 </norn-rich-text>
