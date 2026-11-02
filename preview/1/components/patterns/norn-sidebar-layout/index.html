@@ -22,7 +22,7 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/1/bundle/NDEmc67Nl_.css">
+<link rel="stylesheet" href="/webc-resources/preview/1/bundle/EcMivNWlC6.css">
 <script src="/webc-resources/preview/1/bundle/xeIp5_Q_Mg.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/1/assets/norn/reset.css">
@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-cB38q"><span data-label="" id="norn-header-webc-cB38q"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-GiHX_"><span data-label="" id="norn-header-webc-GiHX_"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/1/">Components</a>
@@ -218,7 +218,7 @@
 
 </preview-nav>
 			<main id="main" tabindex="-1"><h1>norn-sidebar-layout</h1>
-<p class="lead">A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and sets <code>--norn-rich-text-measure</code>, as <code>norn-docs</code> and <code>norn-workspace</code> do. Wrap prose in <code>norn-rich-text</code>. Pass the navigation as one element in the <code>nav</code> slot, such as <code>&lt;norn-side-nav slot="nav" …&gt;</code>, and the body, starting with its h1, in the default slot. The navigation stays in view while the page scrolls, and a long list scrolls inside it. When the frame is narrower than 37.5rem the columns stack, and the navigation folds into a closed <code>&lt;details&gt;</code> above the body, under the <code>summary</code> text. A browser without <code>::details-content</code> always shows the fold. Sections and articles inside the body stack with a small gap.</p>
+<p class="lead">A navigation column beside the page body. Layout only: it sets no heading style and no line length. A page that uses it directly styles its own h1 and the body's line length, as <code>norn-docs</code> and <code>norn-workspace</code> do. Wrap prose in <code>norn-rich-text</code>. Pass the navigation as one element in the <code>nav</code> slot, such as <code>&lt;norn-side-nav slot="nav" …&gt;</code>, and the body, starting with its h1, in the default slot. The navigation stays in view while the page scrolls, and a long list scrolls inside it. When the frame is narrower than 37.5rem the columns stack, and the navigation folds into a closed <code>&lt;details&gt;</code> above the body, under the <code>summary</code> text. A browser without <code>::details-content</code> always shows the fold. Sections and articles inside the body stack with a small gap. The frame is as wide as --norn-layout-width allows. A project sets another width with CSS against the tag, in its own unlayered stylesheet.</p>
 <p class="meta">
 	<code>&lt;norn-sidebar-layout&gt;</code>
 	a <span>layout</span>, from
@@ -239,14 +239,14 @@
 	
 		
 		<label title="Light"><input type="radio" value="light"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
 </svg>
 
 
 </norn-icon><span>Light</span></label>
 		<label title="System"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
 	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
 </svg>
@@ -254,7 +254,7 @@
 
 </norn-icon><span>System</span></label>
 		<label title="Dark"><input type="radio" value="dark"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
 </svg>
 
@@ -271,28 +271,28 @@
 	
 		
 		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
 </svg>
 
 
 </norn-icon><span>Fill</span></label>
 		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M7 2h10v20H7zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Phone, 320px</span></label>
 		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M4 3h16v18H4zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Tablet, 768px</span></label>
 		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
 </svg>
 
@@ -365,7 +365,7 @@
 		<h2>Install</h2>
 		<p>Prose styles come from <code>norn-rich-text</code>.</p>
 	</norn-rich-text>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc-YrvkM" data-compact=""><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-0dcD2" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -400,8 +400,8 @@
 		&lt;p&gt;Prose styles come from &lt;code&gt;norn-rich-text&lt;/code&gt;.&lt;/p&gt;
 	&lt;/norn-rich-text&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-YrvkM">
-		<span data-string="label" id="norn-code-block-webc-YrvkM-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-0dcD2">
+		<span data-string="label" id="norn-code-block-webc-0dcD2-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -422,14 +422,14 @@
 	
 		
 		<label title="Light"><input type="radio" value="light"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
 </svg>
 
 
 </norn-icon><span>Light</span></label>
 		<label title="System"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
 	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
 </svg>
@@ -437,7 +437,7 @@
 
 </norn-icon><span>System</span></label>
 		<label title="Dark"><input type="radio" value="dark"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
 </svg>
 
@@ -454,28 +454,28 @@
 	
 		
 		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
 </svg>
 
 
 </norn-icon><span>Fill</span></label>
 		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M7 2h10v20H7zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Phone, 320px</span></label>
 		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M4 3h16v18H4zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Tablet, 768px</span></label>
 		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
 </svg>
 
@@ -543,7 +543,7 @@
 	<norn-rich-text>
 		<p>Any one element can fill the nav slot.</p>
 	</norn-rich-text>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc-ArLWR" data-compact=""><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-uw8Dj" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -573,8 +573,8 @@
 		&lt;p&gt;Any one element can fill the nav slot.&lt;/p&gt;
 	&lt;/norn-rich-text&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-ArLWR">
-		<span data-string="label" id="norn-code-block-webc-ArLWR-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-uw8Dj">
+		<span data-string="label" id="norn-code-block-webc-uw8Dj-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -595,14 +595,14 @@
 	
 		
 		<label title="Light"><input type="radio" value="light"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
 </svg>
 
 
 </norn-icon><span>Light</span></label>
 		<label title="System"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
 	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
 </svg>
@@ -610,7 +610,7 @@
 
 </norn-icon><span>System</span></label>
 		<label title="Dark"><input type="radio" value="dark"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
 </svg>
 
@@ -627,28 +627,28 @@
 	
 		
 		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
 </svg>
 
 
 </norn-icon><span>Fill</span></label>
 		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M7 2h10v20H7zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Phone, 320px</span></label>
 		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M4 3h16v18H4zM11 18h2"></path>
 </svg>
 
 
 </norn-icon><span>Tablet, 768px</span></label>
 		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
-<svg viewBox="0 0 24 24" aria-hidden="true">
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
 	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
 </svg>
 
@@ -722,7 +722,7 @@
 		<h2>An article</h2>
 		<p>The gap is the same between a section and an article.</p>
 	</article>
-</norn-sidebar-layout>" data-strings="norn-code-block-webc-6sMKW" data-compact=""><span data-icons=""><norn-icon>
+</norn-sidebar-layout>" data-strings="norn-code-block-webc-OcOZQ" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
 <svg viewBox="0 0 24 24" aria-hidden="true">
 	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
 </svg>
@@ -758,8 +758,8 @@
 		&lt;p&gt;The gap is the same between a section and an article.&lt;/p&gt;
 	&lt;/article&gt;
 &lt;/norn-sidebar-layout&gt;</code></pre>
-	<span hidden="" id="norn-code-block-webc-6sMKW">
-		<span data-string="label" id="norn-code-block-webc-6sMKW-copy">Copy {name} to clipboard</span>
+	<span hidden="" id="norn-code-block-webc-OcOZQ">
+		<span data-string="label" id="norn-code-block-webc-OcOZQ-copy">Copy {name} to clipboard</span>
 		<span data-string="copy">Copy</span>
 		<span data-string="copied">Copied</span>
 		<span data-string="failed">Copy failed</span>
@@ -774,10 +774,42 @@
 
 
 
+	<h2>Props</h2>
+	
+	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-eCCFG"></span>
+<div>
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row"><code>@nav-width</code></th>
+					<td data-label="Type"><code>string</code></td>
+					<td>The navigation column's width, as a CSS length. Falls back to 14rem.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>@gap</code></th>
+					<td data-label="Type"><code>"s" | "m" | "l" | "xl"</code></td>
+					<td>The space between the navigation and the body, a step of --norn-space-*. Falls back to <code>l</code>.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>@columns</code></th>
+					<td data-label="Type"><code>string</code></td>
+					<td>The body's grid columns, as a <code>grid-template-columns</code> value, to put something beside the prose. Falls back to one column.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+
+</norn-simple-table>
+
 
 
 	<h2>Slots</h2>
-	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-irdKw"></span>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-jPOD2"></span>
 <div>
 		<table>
 			<thead>
@@ -805,12 +837,13 @@
 
 
 
-	<h2>Custom properties</h2>
+	<h2>Tokens</h2>
+	<p>The global tokens from <code>tokens.json</code> the component reads. Set one in a project's <code>tokens.css</code> to change it everywhere.</p>
 	<p>Type a value to try it in every example above. Reset puts the default back.</p>
 	<preview-props><table>
 	<thead>
 		<tr>
-			<th scope="col">Property</th>
+			<th scope="col">Token</th>
 			<th scope="col">Type</th>
 			<th scope="col">Default</th>
 			<th scope="col">Override</th>
@@ -829,70 +862,167 @@
 			</td>
 		</tr>
 		<tr>
-			<th scope="row"><code>--norn-sidebar-layout-nav</code><small>Navigation column width.</small></th>
+			<th scope="row"><code>--norn-ui-radius-s</code><small>Corner radius of a part inside a component, and of inline code. A component's own radius is <code>ui.border.radius</code>.</small></th>
 			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>14rem</code>
-					
-				
-				
-			</td>
+			<td data-label="Default"><code>4px</code></td>
 			<td data-label="Override">
 				<span data-field="">
-					<input type="text" data-prop="--norn-sidebar-layout-nav" aria-label="Override --norn-sidebar-layout-nav" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-sidebar-layout-nav" aria-label="Reset --norn-sidebar-layout-nav" disabled="">Reset</button>
+					<input type="text" data-prop="--norn-ui-radius-s" aria-label="Override --norn-ui-radius-s" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-radius-s" aria-label="Reset --norn-ui-radius-s" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-sidebar-layout-width</code><small>Overall width.</small></th>
+			<th scope="row"><code>--norn-ui-focus-offset</code><small>Gap between an element and its focus ring. An element the ring would clip draws it inset, at the negative of this.</small></th>
 			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-layout-width</code>
-					<small>64rem</small>
-				
-				
-			</td>
+			<td data-label="Default"><code>2px</code></td>
 			<td data-label="Override">
 				<span data-field="">
-					<input type="text" data-prop="--norn-sidebar-layout-width" aria-label="Override --norn-sidebar-layout-width" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-sidebar-layout-width" aria-label="Reset --norn-sidebar-layout-width" disabled="">Reset</button>
+					<input type="text" data-prop="--norn-ui-focus-offset" aria-label="Override --norn-ui-focus-offset" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-focus-offset" aria-label="Reset --norn-ui-focus-offset" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-sidebar-layout-gap</code><small>Space between the navigation and the body.</small></th>
-			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
-			<td data-label="Default">
-				
-					<code>--norn-space-l</code>
-					<small>2rem</small>
-				
-				
-			</td>
+			<th scope="row"><code>--norn-ui-state-hover</code><small>Share of the text color mixed into the background while the pointer is over a control.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;percentage&gt;</code></td>
+			<td data-label="Default"><code>8%</code></td>
 			<td data-label="Override">
 				<span data-field="">
-					<input type="text" data-prop="--norn-sidebar-layout-gap" aria-label="Override --norn-sidebar-layout-gap" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-sidebar-layout-gap" aria-label="Reset --norn-sidebar-layout-gap" disabled="">Reset</button>
+					<input type="text" data-prop="--norn-ui-state-hover" aria-label="Override --norn-ui-state-hover" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-state-hover" aria-label="Reset --norn-ui-state-hover" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>
 <tr>
-			<th scope="row"><code>--norn-sidebar-layout-columns</code><small>The body's grid columns.</small></th>
-			<td data-col="type" data-label="Type"><span>none</span></td>
-			<td data-label="Default">
-				
-					<code>one column. A page sets it on the body's `article` to put something beside its prose, as `norn-docs` does with its contents</code>
-					
-				
-				
-			</td>
+			<th scope="row"><code>--norn-ui-state-press</code><small>Share of the text color mixed into the background while a control is pressed, and of the accent on a selected or current item.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;percentage&gt;</code></td>
+			<td data-label="Default"><code>12%</code></td>
 			<td data-label="Override">
 				<span data-field="">
-					<input type="text" data-prop="--norn-sidebar-layout-columns" aria-label="Override --norn-sidebar-layout-columns" autocomplete="off" spellcheck="false">
-					<button type="button" data-action="reset" data-prop="--norn-sidebar-layout-columns" aria-label="Reset --norn-sidebar-layout-columns" disabled="">Reset</button>
+					<input type="text" data-prop="--norn-ui-state-press" aria-label="Override --norn-ui-state-press" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-state-press" aria-label="Reset --norn-ui-state-press" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-ui-motion-duration</code><small>Length of a state change, such as a hover layer.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;time&gt;</code></td>
+			<td data-label="Default"><code>150ms</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-ui-motion-duration" aria-label="Override --norn-ui-motion-duration" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-motion-duration" aria-label="Reset --norn-ui-motion-duration" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-ui-motion-easing</code><small>Easing for every transition.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;easing-function&gt;</code></td>
+			<td data-label="Default"><code>cubic-bezier(0.2, 0, 0, 1)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-ui-motion-easing" aria-label="Override --norn-ui-motion-easing" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-motion-easing" aria-label="Reset --norn-ui-motion-easing" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-ui-control-height</code><small>Height of a button, field, or tab. A component raises it to 2.75rem for a coarse pointer.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>2.25rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-ui-control-height" aria-label="Override --norn-ui-control-height" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-control-height" aria-label="Reset --norn-ui-control-height" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-surface-raised</code><small>Raised surface.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(hsl(40, 14%, 96%), #242932)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-surface-raised" aria-label="Override --norn-surface-raised" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-surface-raised" aria-label="Reset --norn-surface-raised" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-text-accent</code><small>The accent for text and links: darkened in light mode, lightened in dark mode. The lightness caps keep any accent at 4.5:1 or better.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h))</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-text-accent" aria-label="Override --norn-text-accent" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-text-accent" aria-label="Reset --norn-text-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-xs</code><small>Extra small spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>0.5rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-xs" aria-label="Override --norn-space-xs" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-xs" aria-label="Reset --norn-space-xs" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-s</code><small>Small spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>0.75rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-s" aria-label="Override --norn-space-s" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-s" aria-label="Reset --norn-space-s" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-m</code><small>Medium spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>1.25rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-m" aria-label="Override --norn-space-m" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-m" aria-label="Reset --norn-space-m" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-l</code><small>Large spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>2rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-l" aria-label="Override --norn-space-l" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-l" aria-label="Reset --norn-space-l" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-xl</code><small>Extra large spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>4rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-xl" aria-label="Override --norn-space-xl" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-xl" aria-label="Reset --norn-space-xl" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-layout-width</code><small>Width of page content.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>64rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-layout-width" aria-label="Override --norn-layout-width" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-layout-width" aria-label="Reset --norn-layout-width" disabled="">Reset</button>
 				</span>
 			</td>
 		</tr>
