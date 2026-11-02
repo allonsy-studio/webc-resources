@@ -1,0 +1,59 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+/** The default theme colors: `surface.base` from tokens.json, written out because a `<meta>` can't read a custom property. */
+const SURFACE = { light: "#ffffff", dark: "#101216" };
+
+/** Whether the page sets a share image. Checked with `typeof`: a missing `og-image` prop can resolve to page data. */
+function hasImage(src) {
+	return typeof src === "string" && src !== "";
+}
+
+/**
+ * The absolute URL for `og:image`: the image resolved against the canonical URL.
+ * A relative image with no absolute canonical URL logs a warning and returns `''`, because Open Graph readers ignore a relative one.
+ * Call it once per render: it warns each time.
+ */
+function absoluteImage(src, base) {
+	if (!hasImage(src)) return "";
+	try {
+		return new URL(src, typeof base === "string" && base ? base : undefined).href;
+	} catch {
+		console.warn(`norn-head: og-image "${src}" is relative, so the canonical url must be absolute to resolve it against. The og:image and og:image:alt tags are left out. Pass an absolute og-image or url.`);
+		return "";
+	}
+}
+</script>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style webc:keep>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title @text="title"></title>
+<meta webc:if="description" name="description" :content="description" />
+<link webc:if="typeof url === 'string'" rel="canonical" :href="url" />
+<meta name="color-scheme" content="light dark" />
+<script webc:if="themeToggle === true || themeToggle === '' || themeToggle === 'true'" webc:keep>
+	try {
+		const scheme = localStorage.getItem("color-scheme");
+		if (scheme === "light" || scheme === "dark") document.documentElement.style.colorScheme = scheme;
+	} catch {}
+</script>
+<meta webc:if="themeColor" name="theme-color" :content="themeColor" />
+<meta webc:if="!themeColor" name="theme-color" :content="SURFACE.light" media="(prefers-color-scheme: light)" />
+<meta webc:if="!themeColor" name="theme-color" :content="SURFACE.dark" media="(prefers-color-scheme: dark)" />
+<meta property="og:type" content="website" />
+<meta property="og:title" :content="ogTitle || title" />
+<meta webc:if="description" property="og:description" :content="description" />
+<meta webc:if="typeof url === 'string'" property="og:url" :content="url" />
+<template webc:for="image of [absoluteImage(ogImage, url)]" webc:nokeep>
+<meta webc:if="image" property="og:image" :content="image" />
+<meta webc:if="image && typeof ogImageAlt === 'string' && ogImageAlt" property="og:image:alt" :content="ogImageAlt" />
+<meta name="twitter:card" :content="image ? 'summary_large_image' : 'summary'" />
+</template>
+<link rel="stylesheet" :href="getBundleFileUrl('css')" webc:keep />
+<script :src="getBundleFileUrl('js')" defer webc:keep></script>

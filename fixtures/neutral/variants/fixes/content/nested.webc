@@ -1,0 +1,17 @@
+---
+layout: norn-base.webc
+title: Nested
+---
+<h1>Nested</h1>
+<norn-callout id="note-alone"><p>A note.</p></norn-callout>
+<norn-callout @variant="tip" id="tip-alone"><p>A tip.</p></norn-callout>
+<norn-callout id="note-outer">
+	<p>A note around a tip.</p>
+	<norn-callout @variant="tip" id="tip-inner"><p>A tip.</p></norn-callout>
+</norn-callout>
+<norn-notice id="info-alone"><p>Information.</p></norn-notice>
+<norn-notice @severity="warning" id="warning-alone"><p>A warning.</p></norn-notice>
+<norn-notice id="info-outer">
+	<p>Information around a warning.</p>
+	<norn-notice @severity="warning" id="warning-inner"><p>A warning.</p></norn-notice>
+</norn-notice>

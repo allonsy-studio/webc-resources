@@ -6,8 +6,16 @@
  */
 
 // Each story is a page of its own, shown in a frame: /stories/<package>/<component>/<story> becomes /frames/…/.
+// A story page reads its component's CSF file as `$data.csf`, so it can loop over the options instead of listing them.
+
+/** The CSF data of the component a story page belongs to, or undefined outside a story folder. */
+const csf = (data) => {
+	const [, , packageId, name, slug] = data.page.filePathStem.split("/");
+	if (!slug) return undefined;
+	return data.catalog?.components.find((component) => component.slug === `${packageId}/${name}`)?.csfData;
+};
 
 export default {
 	layout: "frame.webc",
-	eleventyComputed: { permalink: (data) => `${data.page.filePathStem.replace(/^\/stories\//, "/frames/")}/index.html` },
+	eleventyComputed: { permalink: (data) => `${data.page.filePathStem.replace(/^\/stories\//, "/frames/")}/index.html`, csf },
 };

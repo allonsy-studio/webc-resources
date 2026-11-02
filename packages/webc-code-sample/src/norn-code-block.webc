@@ -1,0 +1,306 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+/** The code as it should paste: a leading `$ ` prompt comes off each line, and `$HOME` is untouched. */
+const pasteable = (code) =>
+	String(code)
+		.split("\n")
+		.map((line) => line.replace(/^\$\s+/, ""))
+		.join("\n");
+
+/** The code's default name: the label template with the language in it. */
+const nameOf = (language, label) =>
+	(typeof label === "string" && label ? label : "{language} code")
+		.replaceAll("{language}", typeof language === "string" ? language : "")
+		.replace(/\s+/g, " ")
+		.trim();
+</script>
+<figure :data-chrome="chrome === 'terminal' ? 'terminal' : undefined">
+	<figcaption webc:if="caption" @text="caption"></figcaption>
+	<norn-copy-button :@value="pasteable(code)" :@strings="'norn-code-block-' + uid" :@compact="true" @surface="code"></norn-copy-button>
+	<pre dir="ltr" :data-language="typeof language === 'string' && language ? language : undefined"><code :data-tokens="nornTokenRanges(code, language)" @text="code"></code></pre>
+	<span hidden :id="'norn-code-block-' + uid">
+		<span data-string="label" :id="'norn-code-block-' + uid + '-copy'"><slot name="copy-label"><span webc:nokeep @text="nornComponentStrings?.('norn-code-block', 'copy-label', $data.page) || 'Copy {name} to clipboard'"></span></slot></span>
+		<span data-string="copy"><slot name="copy"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copy', $data.page) || 'Copy'"></span></slot></span>
+		<span data-string="copied"><slot name="copied"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copied', $data.page) || 'Copied'"></span></slot></span>
+		<span data-string="failed"><slot name="failed"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'failed', $data.page) || 'Copy failed'"></span></slot></span>
+	</span>
+	<span data-name hidden><slot name="label"><span data-default @text="nameOf(language, nornComponentStrings?.('norn-code-block', 'label', $data.page))"></span></slot></span>
+</figure>
+<style>
+	@layer norn.components {
+		norn-code-block {
+			display: block;
+
+			/* The caption sits above the code. The copy button shares the code's cell, over its top end corner. */
+			& figure {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				margin: 0;
+			}
+
+			& figure:has(> figcaption) {
+				row-gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& figcaption {
+				grid-area: 1 / 1;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-family: var(--norn-font-mono, t('font.mono'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+			}
+
+			& norn-copy-button {
+				grid-area: 2 / 1;
+				z-index: 1;
+				justify-self: end;
+				align-self: start;
+				margin: var(--norn-space-2xs, t('space.2xs'));
+			}
+
+			& pre {
+				box-sizing: border-box;
+				grid-area: 2 / 1;
+				margin: 0;
+				overflow-x: auto;
+				padding: var(--norn-space-m, t('space.m'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-code, t('surface.code'));
+				color: var(--norn-text-base, t('text.base'));
+				font-family: var(--norn-font-mono, t('font.mono'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				line-height: 1.5;
+			}
+
+			/* With the copy button showing, the code's scrolling area stops short of it. A transparent border is outside the scrolling area and under the background, so no code runs beneath the button. The button sits at the figure's end, and the code is always left to right, so a right-to-left page takes the border on the other side. */
+			& figure:has(> norn-copy-button > button:not([hidden])) {
+				--_chip: calc(2 * var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-2xs, t('space.2xs')) + var(--norn-space-xs, t('space.xs')));
+			}
+
+			& figure:has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: var(--_chip) solid transparent;
+			}
+
+			& figure:dir(rtl):has(> norn-copy-button > button:not([hidden])) > pre {
+				border-inline-end: 0;
+				border-inline-start: var(--_chip) solid transparent;
+			}
+
+			& code {
+				padding: 0;
+				background: none;
+				font: inherit;
+			}
+
+			/* A frame with a header bar for the caption, for `@chrome="terminal"`. `:where()` keeps each rule as specific as the plain one it follows, so a container's rules still win. */
+			& figure:where([data-chrome="terminal"]),
+			& figure:where([data-chrome="terminal"]):has(> figcaption) {
+				overflow: hidden;
+				row-gap: 0;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+			}
+
+			& figure:where([data-chrome="terminal"]) > figcaption {
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				block-size: 2rem;
+				padding-inline: var(--norn-space-s, t('space.s'));
+				background: var(--norn-surface-raised, t('surface.raised'));
+			}
+
+			& figure:where([data-chrome="terminal"]) > pre {
+				border-radius: 0;
+			}
+
+			/* Colors for the ranges the script registers, set on `code` as Firefox ignores them on an ancestor. Plain text without Custom Highlight API support. */
+			& code::highlight(tok-comment) {
+				color: var(--norn-code-comment, t('code.comment'));
+			}
+
+			& code::highlight(tok-string) {
+				color: var(--norn-code-string, t('code.string'));
+			}
+
+			& code::highlight(tok-keyword) {
+				color: var(--norn-code-keyword, t('code.keyword'));
+			}
+
+			& code::highlight(tok-function) {
+				color: var(--norn-code-function, t('code.function'));
+			}
+
+			& code::highlight(tok-number) {
+				color: var(--norn-code-number, t('code.number'));
+			}
+
+			& code::highlight(tok-flag) {
+				color: var(--norn-code-flag, t('code.flag'));
+			}
+
+			& code::highlight(tok-punctuation) {
+				color: var(--norn-text-muted, t('text.muted'));
+			}
+
+			@media print {
+				break-inside: avoid;
+
+				& pre {
+					white-space: pre-wrap;
+				}
+			}
+		}
+	}
+</style>
+<script>
+	{
+		/** The ranges of every connected sample, by sample. The Custom Highlight API registry is shared by the page. */
+		const rangesBySample = new Map();
+		const supported = typeof CSS !== "undefined" && "highlights" in CSS;
+
+		/**
+		 * Read `data-tokens`: `[groups, numbers]`, the group names, then a group index, the gap from the previous range's end, and a length per range.
+		 *
+		 * @param {string} tokens
+		 * @returns {[string, number, number][]}
+		 */
+		const decode = (tokens) => {
+			const [groups, numbers] = JSON.parse(tokens);
+			const ranges = [];
+			let end = 0;
+			for (let at = 0; at < numbers.length; at += 3) {
+				const group = groups[numbers[at]];
+				const start = end + numbers[at + 1];
+				end = start + numbers[at + 2];
+				if (typeof group !== "string" || !Number.isInteger(start) || !(end > start)) throw new TypeError("Unusable data-tokens");
+				ranges.push([group, start, end]);
+			}
+			return ranges;
+		};
+
+		/** Add a sample's ranges to the page's highlights, one group at a time, so each connect costs only its own ranges. */
+		const paint = (sample, found) => {
+			rangesBySample.set(sample, found);
+			if (!supported) return;
+			for (const [group, range] of found) {
+				const name = `tok-${group}`;
+				if (!CSS.highlights.has(name)) CSS.highlights.set(name, new Highlight());
+				CSS.highlights.get(name).add(range);
+			}
+		};
+
+		/** Take a sample's ranges back out, and drop a group left empty. */
+		const unpaint = (sample) => {
+			const found = rangesBySample.get(sample);
+			rangesBySample.delete(sample);
+			if (!found || !supported) return;
+			for (const [group, range] of found) {
+				const name = `tok-${group}`;
+				const highlight = CSS.highlights.get(name);
+				highlight?.delete(range);
+				if (highlight?.size === 0) CSS.highlights.delete(name);
+			}
+		};
+
+		/**
+		 * Code sample enhancements. The server-rendered figure, caption, and code are the whole component without a script:
+		 * this adds the highlight colors, the copy button's name, and a tab stop only while the code scrolls.
+		 */
+		class CodeBlock extends HTMLElement {
+			#observer;
+
+			connectedCallback() {
+				if (document.readyState === "loading") {
+					document.addEventListener("DOMContentLoaded", () => this.isConnected && this.#enhance(), { once: true });
+					return;
+				}
+				this.#enhance();
+			}
+
+			disconnectedCallback() {
+				unpaint(this);
+				this.#observer?.disconnect();
+				this.#observer = undefined;
+			}
+
+			/** Safe to run again: a move reconnects the element. */
+			#enhance() {
+				const pre = this.querySelector("pre");
+				if (!pre) return;
+				const name = this.#name();
+				this.#nameCopyButton(name);
+				this.#highlight(pre.querySelector("code[data-tokens]"));
+				this.#watchOverflow(pre, name);
+			}
+
+			/** What names the code: its caption, else the `label` text. Either gets an id from the texts' holder, for `aria-labelledby`. */
+			#name() {
+				const holder = this.querySelector(":scope > figure > span[hidden][id]");
+				const named = this.querySelector(":scope > figure > figcaption") ?? this.querySelector(":scope > figure > [data-name]");
+				if (named && holder) named.id ||= `${holder.id}-name`;
+				return named;
+			}
+
+			/** Put the code's name in the copy button's, where it has `{name}`. Once filled, it has none left. */
+			#nameCopyButton(name) {
+				const label = this.querySelector(':scope > figure > [hidden] > [data-string="label"]');
+				if (!label || !name) return;
+				const walker = document.createTreeWalker(label, NodeFilter.SHOW_TEXT);
+				const words = name.textContent.trim();
+				while (walker.nextNode()) walker.currentNode.data = walker.currentNode.data.replaceAll("{name}", words);
+			}
+
+			/** A sample whose token data is unusable stays plain. */
+			#highlight(code) {
+				unpaint(this);
+				try {
+					const text = code?.firstChild;
+					if (text) {
+						paint(
+							this,
+							decode(code.dataset.tokens).map(([group, start, end]) => {
+								const range = new Range();
+								range.setStart(text, start);
+								range.setEnd(text, end);
+								return [group, range];
+							}),
+						);
+					}
+				} catch {
+					unpaint(this);
+				}
+			}
+
+
+			/** Keep the code a named, focusable region only while it scrolls: a tab stop is for something to scroll. */
+			#watchOverflow(pre, name) {
+				const fit = () => {
+					if (pre.scrollWidth > pre.clientWidth) {
+						pre.setAttribute("tabindex", "0");
+						if (name?.id) {
+							pre.setAttribute("role", "region");
+							pre.setAttribute("aria-labelledby", name.id);
+						}
+					} else {
+						pre.removeAttribute("tabindex");
+						pre.removeAttribute("role");
+						pre.removeAttribute("aria-labelledby");
+					}
+				};
+				document.fonts?.ready.then(fit);
+				this.#observer?.disconnect();
+				if (typeof ResizeObserver === "undefined") return;
+				this.#observer = new ResizeObserver(fit);
+				this.#observer.observe(pre);
+			}
+		}
+
+		if (!customElements.get("norn-code-block")) customElements.define("norn-code-block", CodeBlock);
+	}
+</script>

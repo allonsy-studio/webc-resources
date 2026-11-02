@@ -1,0 +1,143 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<article :data-accent="['accent', 'info', 'success', 'warning', 'danger'].includes(accent) ? accent : undefined" :data-title-face="titleFace === 'mono' ? 'mono' : undefined"><slot></slot></article>
+<style>
+	@layer norn.components {
+		norn-card {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			block-size: 100%;
+
+			/* The article takes the rows the tag has. A norn-card-grid gives the tag three subgrid rows, one each for the heading, the body, and a footer, so they line up across a row. */
+			& > article {
+				--_state: 0%;
+				--_accent: initial;
+				box-sizing: border-box;
+				position: relative;
+				display: grid;
+				grid-row: 1 / -1;
+				grid-template-columns: minmax(0, 1fr);
+				grid-template-rows: inherit;
+				align-content: start;
+				row-gap: 0;
+				block-size: 100%;
+				padding: var(--norn-space-m, t('space.m'));
+				/* Without an accent the declaration is invalid, so there is no line and no space for one. */
+				border-block-start: 2px solid var(--_accent);
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+
+				/* A fourth child has no row to take, so a card with more than a heading, a body, and a footer lays out on its own. */
+				&:has(> :nth-child(4)) {
+					grid-template-rows: none;
+				}
+
+				&[data-accent="accent"] {
+					--_accent: var(--norn-ui-accent, t('ui.accent'));
+				}
+
+				&[data-accent="info"] {
+					--_accent: var(--norn-status-info, t('status.info'));
+				}
+
+				&[data-accent="success"] {
+					--_accent: var(--norn-status-success, t('status.success'));
+				}
+
+				&[data-accent="warning"] {
+					--_accent: var(--norn-status-warning, t('status.warning'));
+				}
+
+				&[data-accent="danger"] {
+					--_accent: var(--norn-status-danger, t('status.danger'));
+				}
+
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring goes around the card, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: var(--norn-ui-focus-offset, t('ui.focus.offset'));
+				}
+			}
+
+			& > article > * {
+				margin: 0;
+			}
+
+			& > article > :not(:last-child) {
+				margin-block-end: var(--norn-space-s, t('space.s'));
+			}
+
+			& > article > :is(h2, h3, h4, h5, h6),
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+				line-height: 1.15;
+				text-wrap: balance;
+			}
+
+			& > article > :is(h2, h3, h4, h5, h6) a,
+			& > article > norn-heading-anchor > :is(h2, h3, h4, h5, h6) a {
+				color: var(--norn-text-accent, t('text.accent'));
+				text-decoration: none;
+				overflow-wrap: anywhere;
+
+				/* The link reaches over the whole card. */
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
+				}
+			}
+
+			& > article > p {
+				color: var(--norn-text-muted, t('text.muted'));
+				text-wrap: pretty;
+			}
+
+			& > article[data-title-face="mono"] > :is(h2, h3, h4, h5, h6),
+			& > article[data-title-face="mono"] > norn-heading-anchor > :is(h2, h3, h4, h5, h6) {
+				font-family: var(--norn-font-mono, t('font.mono'));
+				font-size: var(--norn-font-size-m, t('font.size.m'));
+				font-weight: 700;
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > article {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > article {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				break-inside: avoid;
+			}
+		}
+	}
+</style>

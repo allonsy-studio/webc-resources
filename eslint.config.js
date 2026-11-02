@@ -21,24 +21,29 @@ const header = [
 ];
 
 export default [
-	{ ignores: ["**/_site*/**"] },
 	...js,
 	...json,
 	...md,
+	{ ignores: ["**/_site*/**"] },
+	// GitHub alerts, which `callouts` renders, read as link labels.
+	{ files: ["**/*.md"], rules: { "markdown/no-missing-label-refs": ["error", { allowLabels: ["!NOTE", "!TIP", "!IMPORTANT", "!WARNING", "!CAUTION"] }] } },
+	// Fixture pages are test input: fences without a language are deliberate.
+	{ files: ["fixtures/**/*.md"], rules: { "markdown/fenced-code-language": "off" } },
+	{
+		files: ["fixtures/*/build.test.js", "preview/build.test.js"],
+		languageOptions: { globals: { CSS: "readonly", customElements: "readonly", document: "readonly", getComputedStyle: "readonly", localStorage: "readonly", navigator: "readonly", window: "readonly" } },
+	},
+	{
+		files: ["preview/content/assets/*.js"],
+		languageOptions: { globals: { CSSStyleSheet: "readonly", CustomEvent: "readonly", document: "readonly", localStorage: "readonly", window: "readonly" } },
+	},
+	{
+		files: ["fixtures/lib/browser.js"],
+		languageOptions: { globals: { axe: "readonly", document: "readonly", getComputedStyle: "readonly" } },
+	},
 	{
 		files: ["**/*.js"],
 		plugins: { "license-header": licenseHeader },
 		rules: { "license-header/header": ["error", header] },
 	},
-	// The preview's browser test and its helpers run callbacks inside the page.
-	{
-		files: ["preview/build.test.js"],
-		languageOptions: { globals: { document: "readonly", getComputedStyle: "readonly" } },
-	},
-	{
-		files: ["preview/lib/browser.js"],
-		languageOptions: { globals: { axe: "readonly", document: "readonly" } },
-	},
-	// GitHub alerts read as link labels.
-	{ files: ["**/*.md"], rules: { "markdown/no-missing-label-refs": ["error", { allowLabels: ["!NOTE", "!TIP", "!IMPORTANT", "!WARNING", "!CAUTION"] }] } },
 ];

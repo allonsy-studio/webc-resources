@@ -1,0 +1,12 @@
+---
+title: Fun fact
+order: 1
+---
+<norn-rich-text>
+	<p>A custom element can be defined at any time. The browser upgrades the elements it has already parsed, so a component's markup works before its script has run, and works without it.</p>
+	<norn-callout>
+		<span slot="heading">Did you know?</span>
+		<p>The first web page went live in 1991, and its markup is still valid HTML today.</p>
+	</norn-callout>
+	<p>That is the reason to prefer native elements: a page written for them keeps working as the platform grows, with no rewrite to follow it.</p>
+</norn-rich-text>

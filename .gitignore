@@ -39,6 +39,12 @@ dist
 # generated type declarations (emitted at pack time)
 types
 
+# compiled components, layouts, fallbacks, and stylesheets (built from packages/*/src by scripts/build-components.js)
+packages/*/components/
+packages/*/layouts/
+packages/*/fallback/
+packages/*/css/
+
 .DS_Store
 
 # yarn

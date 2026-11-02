@@ -1,8 +1,8 @@
 {
 	"private": true,
-	"name": "@allons-y/webc",
+	"name": "webc",
 	"version": "0.0.0",
-	"description": "WebC component packages for Eleventy sites: generic patterns, build-time code samples, & the studio open source site layer.",
+	"description": "WebC component packages for Eleventy sites: generic patterns, build-time code samples, & the OSS site theme.",
 	"license": "MPL-2.0",
 	"repository": {
 		"type": "git",
@@ -15,14 +15,15 @@
 		"preview"
 	],
 	"scripts": {
+		"build": "node scripts/build-components.js",
 		"format": "opx lint --fix",
 		"lint": "opx lint",
-		"pack:check": "yarn workspaces foreach --all --no-private pack --dry-run",
+		"pack:check": "yarn build && yarn workspaces foreach --all --no-private pack --dry-run",
 		"prepare": "husky",
-		"docs:start": "yarn workspace webc-preview start",
-		"docs:build": "yarn workspace webc-preview build",
-		"release": "opx release publish",
-		"test": "node --test",
+		"docs:start": "yarn build && yarn workspace webc-preview start",
+		"docs:build": "yarn build && yarn workspace webc-preview build",
+		"release": "yarn build && opx release publish",
+		"test": "yarn build && node --test",
 		"version-packages": "opx release version && yarn install --mode update-lockfile"
 	},
 	"devDependencies": {
@@ -33,14 +34,23 @@
 		"@allons-y/opx-lint-json": "^0.1.0-beta.0",
 		"@allons-y/opx-lint-md": "^0.1.0-beta.0",
 		"@allons-y/opx-release": "^0.1.0-beta.0",
+		"@csstools/postcss-design-tokens": "^5.0.2",
 		"@eslint/css": "^1.4.0",
 		"@eslint/js": "^10.0.1",
 		"@eslint/json": "^2.0.1",
 		"@eslint/markdown": "^8.0.3",
+		"axe-core": "^4.10.2",
+		"css-tree": "^2.3.1",
 		"eslint": "^10.8.0",
 		"eslint-plugin-license-header": "^0.9.0",
+		"eslint-scope": "^9.1.2",
+		"espree": "^10.4.0",
 		"husky": "^9.1.7",
 		"lint-staged": "^17.3.0",
+		"parse5": "^7.1.2",
+		"playwright-core": "^1.56.0",
+		"postcss": "^8.5.31",
+		"postcss-html": "^2.0.0",
 		"typescript": "^6.0.3"
 	},
 	"engines": {

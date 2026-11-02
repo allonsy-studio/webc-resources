@@ -1,0 +1,14 @@
+---
+layout: norn-base.webc
+title: Anchors
+name: Design pass
+---
+<h1>Anchors</h1>
+<section>
+<norn-heading-anchor @slug="alone">A linked heading</norn-heading-anchor>
+<norn-rich-text>
+	<norn-heading-anchor @slug="prose">A linked heading in prose</norn-heading-anchor>
+	<p>Text.</p>
+	<norn-heading-anchor @slug="wrapped" :@level="3">A wrapped heading in prose</norn-heading-anchor>
+</norn-rich-text>
+</section>

@@ -1,0 +1,94 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+const SEVERITIES = { info: ["Note", "info"], success: ["Success", "success"], warning: ["Warning", "warning"], danger: ["Error", "error"] };
+
+/** A known severity, else `info`. */
+const level = (severity) => (Object.hasOwn(SEVERITIES, severity) ? severity : "info");
+
+/** The live role: `alert` interrupts, for a warning or a danger; `status` waits. */
+const liveRole = (severity) => (["warning", "danger"].includes(level(severity)) ? "alert" : "status");
+</script>
+<div :data-severity="level(severity)" :role="live === true || live === '' || live === 'true' ? liveRole(severity) : undefined">
+	<norn-icon :@name="SEVERITIES[level(severity)][1]" @size="m"></norn-icon>
+	<div>
+		<span data-prefix><slot name="prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-notice', level(severity), $data.page) || SEVERITIES[level(severity)][0] + ': '"></span></slot></span>
+		<slot></slot>
+	</div>
+	<div><slot name="action"></slot></div>
+</div>
+<style>
+	@layer norn.components {
+		norn-notice {
+			--_color: var(--norn-status-info, t('status.info'));
+			display: block;
+
+			&:has(> [data-severity="success"]) {
+				--_color: var(--norn-status-success, t('status.success'));
+			}
+
+			&:has(> [data-severity="warning"]) {
+				--_color: var(--norn-status-warning, t('status.warning'));
+			}
+
+			&:has(> [data-severity="danger"]) {
+				--_color: var(--norn-status-danger, t('status.danger'));
+			}
+
+			/* A tint and a bar, as in norn-callout. */
+			& > div {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				overflow-wrap: anywhere;
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				border-inline-start: 3px solid var(--_color);
+				border-start-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				border-end-end-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: color-mix(in oklab, var(--_color) 8%, var(--norn-surface-base, t('surface.base')));
+			}
+
+			& > div > norn-icon {
+				flex: none;
+				align-self: start;
+				margin-block-start: calc((1lh - var(--norn-ui-icon-m, t('ui.icon.m'))) / 2);
+				color: var(--_color);
+			}
+
+			& > div > div:first-of-type {
+				flex: 1 1 16rem;
+				min-inline-size: 0;
+			}
+
+			& > div > div:first-of-type > :is(p, ul, ol) {
+				margin: 0;
+			}
+
+			& > div > div:last-child:not(:has(*)) {
+				display: none;
+			}
+
+			& > div > div > [data-prefix] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (forced-colors: active) {
+				& > div {
+					border-inline-start-color: CanvasText;
+				}
+			}
+		}
+	}
+</style>

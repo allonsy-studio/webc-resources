@@ -1,0 +1,19 @@
+{
+	"lede": "A sample project, so the OSS site page bodies have something to show.",
+	"install": "npm install @example/core",
+	"usage": {
+		"language": "js",
+		"caption": "example.js",
+		"code": "import { greet } from \"@example/core\";\n\nconsole.log(greet(\"world\")); // hello, world\n"
+	},
+	"features": [
+		{ "title": "Fast to read", "description": "Each page leads with what the project does for the reader." },
+		{ "title": "Accessible", "description": "WCAG 2.2 AA in light, dark, and forced colors." },
+		{ "title": "Quiet by default", "description": "No script is needed to read any page." },
+		{ "title": "Easy to restyle", "description": "Custom properties and unlayered CSS beat every packaged layer." }
+	],
+	"packages": [
+		{ "title": "@example/core", "description": "The core package.", "href": "https://example.com/core" },
+		{ "title": "@example/cli", "description": "The command line.", "href": "https://example.com/cli" }
+	]
+}

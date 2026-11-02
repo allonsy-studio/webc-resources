@@ -1,0 +1,71 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<nav webc:if="items && items.length" :aria-labelledby="'norn-breadcrumbs-' + uid">
+	<span data-label :id="'norn-breadcrumbs-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-breadcrumbs', 'label', $data.page) || 'Breadcrumb'"></span></slot></span>
+	<ol>
+		<li webc:for="(item, index) of items">
+			<norn-icon webc:if="index" @name="chevron-end"></norn-icon>
+			<a :href="item.href" :aria-current="index === items.length - 1 ? 'page' : undefined" @text="item.title"></a>
+		</li>
+	</ol>
+</nav>
+<style>
+	@layer norn.components {
+		norn-breadcrumbs {
+			display: block;
+			font-size: var(--norn-font-size-s, t('font.size.s'));
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > ol {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: center;
+				gap: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& nav > ol > li {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& nav > ol > li > norn-icon {
+				color: var(--norn-text-muted, t('text.muted'));
+			}
+
+			/* The links are quiet until the pointer or focus is on one. */
+			& nav > ol > li > a {
+				padding-block: var(--norn-space-2xs, t('space.2xs'));
+				color: var(--norn-text-muted, t('text.muted'));
+				text-decoration: none;
+
+				&:is(:hover, :focus-visible) {
+					color: var(--norn-text-base, t('text.base'));
+					text-decoration: underline;
+				}
+
+				&[aria-current="page"] {
+					color: var(--norn-text-base, t('text.base'));
+					text-decoration: none;
+				}
+			}
+		}
+	}
+</style>

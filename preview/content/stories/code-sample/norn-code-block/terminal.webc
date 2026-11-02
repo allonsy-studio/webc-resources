@@ -1,0 +1,5 @@
+---
+title: Terminal frame
+order: 3
+---
+<norn-code-block @chrome="terminal" @language="sh" @caption="Terminal" :@code="'$ npm install @example/core\n'"></norn-code-block>

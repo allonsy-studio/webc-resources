@@ -1,0 +1,185 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<div
+	:style="[typeof navWidth === 'string' && navWidth ? '--_nav: ' + navWidth : '', typeof columns === 'string' && columns ? '--_columns: ' + columns : ''].filter(Boolean).join('; ')"
+	:data-gap="['s', 'm', 'l', 'xl'].includes(gap) ? gap : undefined"
+>
+	<details>
+		<summary><slot name="summary"><span webc:nokeep @text="nornComponentStrings?.('norn-sidebar-layout', 'summary', $data.page) || 'Menu'"></span></slot></summary>
+		<slot name="nav"></slot>
+	</details>
+	<article><slot></slot></article>
+</div>
+<style>
+	@layer norn.components {
+		norn-sidebar-layout {
+			display: block;
+			container-type: inline-size;
+			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-layout-width, t('layout.width')));
+			margin-inline: auto;
+			padding-block: var(--norn-space-l, t('space.l'));
+
+			& > div {
+				display: grid;
+				grid-template-columns: var(--_nav, 14rem) minmax(0, 1fr);
+				align-items: start;
+				gap: var(--norn-space-l, t('space.l'));
+
+				&[data-gap="s"] {
+					gap: var(--norn-space-s, t('space.s'));
+				}
+
+				&[data-gap="m"] {
+					gap: var(--norn-space-m, t('space.m'));
+				}
+
+				&[data-gap="xl"] {
+					gap: var(--norn-space-xl, t('space.xl'));
+				}
+			}
+
+			/* The navigation stays in view; the norn-side-nav inside lets only its list scroll. The details is only a column here: its summary is hidden, and its content always shows. */
+			& > div > details {
+				position: sticky;
+				inset-block-start: var(--norn-space-m, t('space.m'));
+				display: flex;
+				flex-direction: column;
+				max-block-size: calc(100dvh - 2 * var(--norn-space-m, t('space.m')));
+
+				&::details-content {
+					content-visibility: visible;
+					display: contents;
+				}
+			}
+
+			& > div > details > summary {
+				display: none;
+			}
+
+			& > div > article {
+				display: grid;
+				grid-template-columns: var(--_columns, minmax(0, 1fr));
+				align-content: start;
+				gap: var(--norn-space-m, t('space.m'));
+				min-inline-size: 0;
+			}
+
+			& > div > article > :is(article, section) {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				align-content: start;
+				gap: var(--norn-space-s, t('space.s'));
+				min-inline-size: 0;
+			}
+
+			/* Narrow, the columns stack and the navigation is a control that opens it. */
+			@container (max-width: 37.5rem) {
+				& > div {
+					grid-template-columns: minmax(0, 1fr);
+				}
+
+				& > div > details {
+					position: static;
+					display: block;
+					max-block-size: none;
+
+					&:not([open])::details-content {
+						content-visibility: hidden;
+					}
+
+					&::details-content {
+						display: block;
+					}
+				}
+
+				& > div > details > summary {
+					--_state: 0%;
+					box-sizing: border-box;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+					gap: var(--norn-space-s, t('space.s'));
+					min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+					margin-block-end: var(--norn-space-xs, t('space.xs'));
+					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+					border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+					font-weight: 600;
+					list-style: none;
+					cursor: pointer;
+
+					&::-webkit-details-marker {
+						display: none;
+					}
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, t('ui.state.press'));
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+					}
+
+					/* A chevron drawn with two borders, pointing down when closed and up when open. */
+					&::after {
+						box-sizing: border-box;
+						content: "";
+						flex: none;
+						inline-size: 0.5em;
+						block-size: 0.5em;
+						border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+						rotate: 45deg;
+					}
+				}
+
+				& > div > details[open] > summary::after {
+					rotate: 225deg;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > div {
+					grid-template-columns: minmax(0, 1fr);
+				}
+
+				& > div > details > summary {
+					display: none;
+				}
+			}
+		}
+
+		/* Without ::details-content a closed details can't show its content, so the control is always there. */
+		@supports not selector(::details-content) {
+			norn-sidebar-layout > div > details > summary {
+				display: flex;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				align-items: center;
+				font-weight: 600;
+				cursor: pointer;
+			}
+		}
+	}
+</style>

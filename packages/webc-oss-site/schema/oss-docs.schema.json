@@ -1,0 +1,44 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://raw.githubusercontent.com/allonsy-studio/webc-resources/main/packages/webc-oss-site/schema/oss-docs.schema.json",
+	"title": "oss-docs settings",
+	"description": "How a project's site is built: the value of the `oss-docs` key in its package.json.",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"site": {
+			"description": "Site directory, relative to the repository root & inside it.",
+			"type": "string",
+			"default": "docs",
+			"pattern": "^(?!\\s*$)(?![/\\\\]|[A-Za-z]:)(?!(?:.*[/\\\\])?\\.\\.(?:[/\\\\].*)?$)."
+		},
+		"flavor": {
+			"description": "The confirmed site flavor, used without asking.",
+			"enum": [
+				"landing",
+				"docs",
+				"workspaces"
+			]
+		},
+		"oss": {
+			"description": "false opts out of the OSS site layer: no banner, call to action, or footer credit.",
+			"type": "boolean",
+			"default": true
+		},
+		"signals": {
+			"description": "The maintainer's answers to the two flavor judgment calls.",
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"nestedDocs": {
+					"description": "Each workspace gets its own docs page.",
+					"type": "boolean"
+				},
+				"singleAction": {
+					"description": "One page covers install & usage.",
+					"type": "boolean"
+				}
+			}
+		}
+	}
+}

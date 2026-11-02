@@ -1,0 +1,124 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<div><slot></slot></div>
+<style>
+	@layer norn.components {
+		norn-accordion {
+			display: block;
+			interpolate-size: allow-keywords;
+			overflow-wrap: anywhere;
+
+			& > div > details {
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+
+				&:first-child {
+					border-block-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				}
+
+				&[open] > summary::after {
+					rotate: 225deg;
+				}
+
+				&::details-content {
+					block-size: 0;
+					overflow: hidden;
+				}
+
+				&[open]::details-content {
+					block-size: auto;
+				}
+			}
+
+			& > div > details > summary {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-s, t('space.s'));
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-xs, t('space.xs'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				font-weight: 600;
+				list-style: none;
+				cursor: pointer;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring sits inside the summary, clear of the rules above and below. */
+				&:focus-visible {
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+				}
+
+				/* A chevron drawn with two borders, pointing down when closed and up when open. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
+					border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					rotate: 45deg;
+				}
+			}
+
+			& > div > details > :not(summary) {
+				margin-block: 0 var(--norn-space-s, t('space.s'));
+				padding-inline: var(--norn-space-xs, t('space.xs'));
+			}
+
+			@media (pointer: coarse) {
+				& > div > details > summary {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > div > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+
+				& > div > details > summary::after {
+					transition: rotate 200ms var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+
+				& > div > details::details-content {
+					transition: block-size 200ms var(--norn-ui-motion-easing, t('ui.motion.easing')),
+						content-visibility 200ms allow-discrete;
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > div > details > summary::after {
+					border-color: CanvasText;
+				}
+			}
+
+			@media print {
+				& > div > details::details-content {
+					block-size: auto;
+					content-visibility: visible;
+				}
+			}
+		}
+	}
+</style>

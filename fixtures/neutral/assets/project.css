@@ -1,0 +1,26 @@
+/* Project styles: unlayered, so they beat every layer in the packages. */
+main {
+	display: grid;
+	gap: var(--norn-space-l, 2rem);
+	inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), 64rem);
+	margin-inline: auto;
+	padding-block: var(--norn-space-l, 2rem);
+}
+
+main:has(> norn-sidebar-layout) {
+	inline-size: 100%;
+	padding-block: 0;
+}
+
+/* The frame is layout only: the project sets the page title. The body's line length is norn-rich-text's measure prop. */
+norn-sidebar-layout {
+	& > div > article > h1 {
+		margin: 0;
+		font-size: clamp(1.9rem, 4vw, 2.5rem);
+		overflow-wrap: anywhere;
+	}
+}
+
+norn-card article {
+	border-radius: 2px;
+}

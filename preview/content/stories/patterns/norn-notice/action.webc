@@ -1,0 +1,8 @@
+---
+title: With an action
+order: 2
+---
+<norn-notice @severity="warning">
+	<p>This page describes version 1, and version 2 is out.</p>
+	<norn-link-button slot="action" @href="#v2" @variant="quiet" @tone="current">Read the version 2 docs</norn-link-button>
+</norn-notice>

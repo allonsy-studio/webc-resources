@@ -1,0 +1,26 @@
+---
+layout: norn-base.webc
+title: Containers
+---
+<h1>Containers</h1>
+<div id="plain">
+	<ul><li><div><ul id="plain-ul"><li id="plain-li"><span id="plain-span">One</span></li><li>Two</li></ul></div></li></ul>
+	<section id="plain-section"><p>A section.</p></section>
+	<article id="plain-article"><p>An article.</p></article>
+	<norn-fact-list id="plain-tags"><li>Node 24+</li><li>MIT</li></norn-fact-list>
+</div>
+<norn-card-grid id="grid">
+	<li><div><ul id="grid-ul"><li id="grid-li"><span id="grid-span">One</span></li><li>Two</li></ul></div></li>
+</norn-card-grid>
+<section id="section">
+	<h2>A section</h2>
+	<section id="section-section"><p>A section.</p></section>
+</section>
+<norn-card id="card">
+	<h3>A card</h3>
+	<article id="card-article"><p>An article.</p></article>
+</norn-card>
+<norn-footer id="footer">
+	<div><p><strong>Name</strong></p></div>
+	<norn-fact-list id="footer-tags"><li>Node 24+</li><li>MIT</li></norn-fact-list>
+</norn-footer>

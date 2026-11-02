@@ -1,0 +1,60 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<ul role="list" :data-gap="['s', 'l'].includes(gap) ? gap : undefined" :style="typeof min === 'string' && min ? '--_min: ' + min : ''"><slot></slot></ul>
+<style>
+	@layer norn.components {
+		norn-card-grid {
+			display: block;
+
+			& > ul {
+				--_gap: var(--norn-space-m, t('space.m'));
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--_min, 17rem)), 1fr));
+				gap: var(--_gap);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& > ul[data-gap="s"] {
+				--_gap: var(--norn-space-s, t('space.s'));
+			}
+
+			& > ul[data-gap="l"] {
+				--_gap: var(--norn-space-l, t('space.l'));
+			}
+		}
+
+		/* Each card spans three rows, and its heading, body, and footer take one each, so they line up across a row. The rows have no gap, so a card with no footer leaves no blank space; the space between cards is a margin on each, taken back from the end of the list. */
+		@supports (grid-template-rows: subgrid) {
+			norn-card-grid {
+				& > ul {
+					row-gap: 0;
+					margin-block-end: calc(-1 * var(--_gap));
+				}
+
+				& > ul > li {
+					display: grid;
+					grid-row: span 3;
+					grid-template-rows: subgrid;
+					margin-block-end: var(--_gap);
+				}
+
+				& > ul > li > * {
+					grid-row: 1 / -1;
+				}
+
+				/* A card lays its heading, body, and footer on the rows of its tag. */
+				& > ul > li > norn-card {
+					grid-template-rows: subgrid;
+				}
+			}
+		}
+	}
+</style>

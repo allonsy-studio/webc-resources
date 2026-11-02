@@ -1,0 +1,24 @@
+---
+title: Side navigation
+order: 1
+ownH1: true
+bleed: true
+---
+<norn-sidebar-layout>
+	<norn-side-nav
+		slot="nav"
+		:@items="[
+			{ href: '/frames/patterns/norn-sidebar-layout/default/', title: 'Getting started', icon: 'book' },
+			{ href: '#usage', title: 'Usage' },
+			{ href: '#reference', title: 'Reference' }
+		]"
+	>
+		<span slot="label">Documentation</span>
+	</norn-side-nav>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p>The layout puts a navigation column beside the page. The navigation stays in view as the page scrolls, and the columns stack when the frame is narrow.</p>
+		<h2>Install</h2>
+		<p>Prose styles come from <code>norn-rich-text</code>.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>

@@ -1,0 +1,220 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<span webc:if="!(typeof strings === 'string' && strings)" hidden>
+	<span data-string="label" :id="'norn-copy-button-' + uid"><slot name="label"></slot></span>
+	<span data-string="copy"><slot name="copy"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copy', $data.page) || 'Copy'"></span></slot></span>
+	<span data-string="copied"><slot name="copied"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'copied', $data.page) || 'Copied'"></span></slot></span>
+	<span data-string="failed"><slot name="failed"><span webc:nokeep @text="nornComponentStrings?.('norn-copy-button', 'failed', $data.page) || 'Copy failed'"></span></slot></span>
+</span>
+<button
+	type="button"
+	hidden
+	:data-value="typeof value === 'string' ? value : undefined"
+	:data-source="typeof source === 'string' ? source : undefined"
+	:data-strings="typeof strings === 'string' && strings ? strings : undefined"
+	:data-compact="compact === true || compact === '' || compact === 'true' ? '' : undefined"
+	:data-surface="['base', 'raised', 'code'].includes(surface) ? surface : undefined"
+><span data-icons><norn-icon @name="copy"></norn-icon><norn-icon @name="check"></norn-icon></span><span data-label></span></button>
+<span role="status"></span>
+<style>
+	@layer norn.components {
+		norn-copy-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& button {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				max-inline-size: 100%;
+				padding: 0 var(--norn-space-xs, t('space.xs'));
+				border: 0;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg, transparent));
+				color: var(--norn-text-muted, t('text.muted'));
+				font: inherit;
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				overflow-wrap: anywhere;
+				text-align: start;
+				cursor: pointer;
+
+				&[hidden] {
+					display: none;
+				}
+
+				&[data-surface="base"] {
+					--_bg: var(--norn-surface-base, t('surface.base'));
+				}
+
+				&[data-surface="raised"] {
+					--_bg: var(--norn-surface-raised, t('surface.raised'));
+				}
+
+				&[data-surface="code"] {
+					--_bg: var(--norn-surface-code, t('surface.code'));
+				}
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[data-state="copied"] {
+					color: var(--norn-status-success, t('status.success'));
+				}
+
+				&[data-state="failed"] {
+					color: var(--norn-status-danger, t('status.danger'));
+				}
+			}
+
+			/* The copy icon and the check share a cell, and so do the three texts, so the button is as wide for one as for another. */
+			& [data-icons],
+			& [data-label] {
+				display: inline-grid;
+			}
+
+			& [data-icons] > norn-icon,
+			& [data-label] > span {
+				grid-area: 1 / 1;
+			}
+
+			& [data-label] {
+				margin-inline-start: var(--norn-space-2xs, t('space.2xs'));
+			}
+
+			& button:not([data-state="copied"]) [data-icons] > norn-icon:last-child,
+			& button[data-state="copied"] [data-icons] > norn-icon:first-child,
+			& [data-label] > span:not([data-active]) {
+				visibility: hidden;
+			}
+
+			/* A compact button is only its icon until the pointer or focus is on it, or it has a result to show. */
+			& button[data-compact]:not(:hover, :focus-visible, [data-state]) [data-label] {
+				inline-size: 0;
+				margin: 0;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+
+			& [role="status"] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			@media (pointer: coarse) {
+				& button {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const CONFIRMATION_MS = 2000;
+
+		/** Copies its value, or its target's text, and says how that went, in the texts the page holds. */
+		class CopyButton extends HTMLElement {
+			#wired = false;
+			#timer;
+			#name = "";
+
+			connectedCallback() {
+				const button = this.querySelector("button");
+				if (!button || typeof navigator.clipboard?.writeText !== "function") return;
+				const name = this.#string(button, "label");
+				this.#name = name?.id && name.textContent.trim() ? name.id : "";
+				if (this.#name) button.setAttribute("aria-labelledby", this.#name);
+				this.#build(button);
+				button.hidden = false;
+				if (this.#wired) return;
+				this.#wired = true;
+				button.addEventListener("click", () => this.#copy(button));
+			}
+
+			disconnectedCallback() {
+				clearTimeout(this.#timer);
+			}
+
+			/** The element holding one of the texts: in this component, or in the one `data-strings` names. */
+			#string(button, key) {
+				const holder = button.dataset.strings ? document.getElementById(button.dataset.strings) : this.querySelector(":scope > span[hidden]");
+				return holder?.querySelector(`[data-string="${key}"]`);
+			}
+
+			#text(button, key) {
+				return this.#string(button, key)?.textContent.trim() ?? "";
+			}
+
+			/** The three texts in one cell, so the button is as wide for any of them. Safe to run again. */
+			#build(button) {
+				button.querySelector("[data-label]").replaceChildren(
+					...["copy", "copied", "failed"].map((key) => {
+						const text = document.createElement("span");
+						text.dataset.text = key;
+						text.textContent = this.#text(button, key);
+						return text;
+					}),
+				);
+				this.#show(button, "copy");
+			}
+
+			/** Show one text, and mark the button with the result so the icon and color follow. */
+			#show(button, key) {
+				for (const text of button.querySelectorAll("[data-label] > span")) text.toggleAttribute("data-active", text.dataset.text === key);
+				if (key === "copy") delete button.dataset.state;
+				else button.dataset.state = key;
+			}
+
+			async #copy(button) {
+				const status = this.querySelector('[role="status"]');
+				const { value, source } = button.dataset;
+				let ok = true;
+				try {
+					await navigator.clipboard.writeText(value ?? document.getElementById(source)?.textContent ?? "");
+				} catch {
+					ok = false;
+				}
+				const result = ok ? "copied" : "failed";
+				this.#show(button, result);
+				status.textContent = this.#text(button, result);
+				// The visible text is the name while it shows the result, so the name always holds the words on the button.
+				button.removeAttribute("aria-labelledby");
+				clearTimeout(this.#timer);
+				this.#timer = setTimeout(() => {
+					this.#show(button, "copy");
+					status.textContent = "";
+					if (this.#name) button.setAttribute("aria-labelledby", this.#name);
+				}, CONFIRMATION_MS);
+			}
+		}
+
+		if (!customElements.get("norn-copy-button")) customElements.define("norn-copy-button", CopyButton);
+	}
+</script>

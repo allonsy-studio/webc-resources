@@ -1,0 +1,71 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+/** The heading's id, after checking it was passed. An unpassed `slug` resolves to a helper of that name under Eleventy, so a type check comes first. */
+const required = (value) => {
+	if (typeof value !== "string" || !value) throw new Error("norn-heading-anchor: `@slug` is required. It is the heading's id and the link's fragment.");
+	return value;
+};
+</script>
+<h3 webc:if="level == 3" :id="required(slug)"><a :href="'#' + slug"><slot></slot></a></h3>
+<h4 webc:elseif="level == 4" :id="required(slug)"><a :href="'#' + slug"><slot></slot></a></h4>
+<h5 webc:elseif="level == 5" :id="required(slug)"><a :href="'#' + slug"><slot></slot></a></h5>
+<h6 webc:elseif="level == 6" :id="required(slug)"><a :href="'#' + slug"><slot></slot></a></h6>
+<h2 webc:else :id="required(slug)"><a :href="'#' + slug"><slot></slot></a></h2>
+<style>
+	@layer norn.components {
+		norn-heading-anchor {
+			display: block;
+
+			& > :is(h2, h3, h4, h5, h6) {
+				margin: 0;
+				scroll-margin-block-start: var(--norn-space-m, t('space.m'));
+
+				&::before {
+					content: "#" / "";
+					margin-inline-end: var(--norn-space-2xs, t('space.2xs'));
+					color: var(--norn-text-muted, t('text.muted'));
+				}
+			}
+
+			/* At least 24px tall, the WCAG 2.2 target size, even for a short heading. */
+			& a {
+				display: inline-block;
+				min-block-size: 1.5rem;
+				color: inherit;
+				text-decoration: none;
+				text-underline-offset: 0.1em;
+
+				&:is(:hover, :focus-visible) {
+					text-decoration: underline;
+				}
+			}
+
+			/* The page's margin is at least 1rem on a narrow screen and wider past the content width, so the mark hangs only where the margin holds it: 1.15ch is under 20px for a second-level heading. */
+			@media (hover: hover) and (min-width: 70rem) {
+				& > :is(h2, h3, h4, h5, h6)::before {
+					display: inline-block;
+					inline-size: 1ch;
+					margin-inline: -1.15ch 0.15ch;
+					opacity: 0;
+				}
+
+				& > :is(h2, h3, h4, h5, h6):is(:hover, :focus-within)::before {
+					opacity: 1;
+				}
+			}
+
+			@media (hover: hover) and (min-width: 70rem) and (prefers-reduced-motion: no-preference) {
+				& > :is(h2, h3, h4, h5, h6)::before {
+					transition: opacity var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+		}
+	}
+</style>

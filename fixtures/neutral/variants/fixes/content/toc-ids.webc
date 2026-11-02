@@ -1,0 +1,14 @@
+---
+layout: norn-base.webc
+title: Table of contents ids
+---
+<h1>Table of contents ids</h1>
+<norn-toc :@items="[{ id: 'first', text: 'First', level: 2 }, { id: 'über-uns', text: 'Über uns', level: 2 }, { id: '100%-sure', text: 'A literal percent sign', level: 2 }, { id: 'last', text: 'Last', level: 2 }]"></norn-toc>
+<h2 id="first">First</h2>
+<p style="block-size: 1200px">Filler.</p>
+<h2 id="über-uns">Über uns</h2>
+<p style="block-size: 1200px">Filler.</p>
+<h2 id="100%-sure">A literal percent sign</h2>
+<p style="block-size: 1200px">Filler.</p>
+<h2 id="last">Last</h2>
+<p style="block-size: 1200px">Filler.</p>

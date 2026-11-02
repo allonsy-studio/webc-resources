@@ -1,0 +1,33 @@
+---
+title: Every heading level
+order: 2
+ownH1: true
+bleed: true
+---
+<norn-sidebar-layout>
+	<norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'pinned', text: 'Pinned versions', level: 4 },
+			{ id: 'ranges', text: 'Version ranges', level: 5 },
+			{ id: 'carets', text: 'Caret ranges', level: 6 }
+		]"
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p>The list nests one level for each heading level, from the second to the sixth. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug="install">Install</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug="pinned" :@level="4">Pinned versions</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug="ranges" :@level="5">Version ranges</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug="carets" :@level="6">Caret ranges</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>

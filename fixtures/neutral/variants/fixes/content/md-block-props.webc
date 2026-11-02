@@ -1,0 +1,13 @@
+---
+layout: norn-base.webc
+title: Props in a Markdown block
+---
+<template webc:type="11ty" 11ty:type="md" webc:nokeep>
+<norn-callout @variant="warning">
+
+Loose body with **bold** and <norn-icon @name="info"></norn-icon>.
+
+</norn-callout>
+
+Write it as `<norn-icon @name="info">`.
+</template>

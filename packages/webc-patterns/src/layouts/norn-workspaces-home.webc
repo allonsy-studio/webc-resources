@@ -1,0 +1,44 @@
+---
+layout: norn-base.webc
+nornCompiled: true
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<norn-hero>
+	<h1 webc:if="$data.norn.name">
+		<span @text="$data.norn.name"></span>
+		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
+	</h1>
+	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
+	<nav webc:if="$data.norn.workspaces.length || $data.norn.repo" aria-labelledby="norn-workspaces-home-actions">
+		<span id="norn-workspaces-home-actions" hidden @text="nornComponentStrings?.('norn-workspaces-home', 'actions', $data.page) || 'Get started'"></span>
+		<ul role="list">
+			<li webc:if="$data.norn.workspaces.length"><norn-link-button @href="#packages"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces-home', 'browse', $data.page) || 'Browse packages'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.workspaces.length ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-workspaces-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-code-block webc:if="$data.norn.install" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+</norn-hero>
+<section webc:if="$data.norn.workspaces.length" id="packages">
+	<h2 @text="nornComponentStrings?.('norn-workspaces-home', 'packages', $data.page) || 'Packages'"></h2>
+	<norn-card-grid>
+		<li webc:for="workspace of $data.norn.workspaces">
+			<norn-card @title-face="mono">
+				<h3><a :href="workspace.href" @text="workspace.title"></a></h3>
+				<p webc:if="workspace.description" @text="workspace.description"></p>
+			</norn-card>
+		</li>
+	</norn-card-grid>
+</section>
+<section webc:if="String($data.content ?? '').trim()">
+	<norn-rich-text
+		><template webc:if="nornCompiles($data, 'norn-workspaces-home')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
+</section>

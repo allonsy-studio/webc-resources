@@ -8,25 +8,31 @@
 
 /**
  * A story in a frame, with the controls to look at it differently: color scheme, width, and an accessibility check.
- * Without a script it is the frame and a link to open it on its own.
+ * Applies the overrides from the page's `preview-props` table. Without a script it is the frame and a link to open it on its own.
  * @prop {{ title: string, frameUrl: string }} story
  */
 --->
 <div data-js>
-	<fieldset data-group="scheme">
-		<legend>Color scheme</legend>
-		<label><input type="radio" value="light" />Light</label>
-		<label><input type="radio" value="" checked />System</label>
-		<label><input type="radio" value="dark" />Dark</label>
-	</fieldset>
-	<fieldset data-group="width">
-		<legend>Width</legend>
-		<label><input type="radio" value="" checked />Fill</label>
-		<label><input type="radio" value="320px" />Phone, 320px</label>
-		<label><input type="radio" value="768px" />Tablet, 768px</label>
-		<label><input type="radio" value="1024px" />Desktop, 1024px</label>
-	</fieldset>
-	<button type="button" data-action="axe" data-state="idle" :data-axe="url('/assets/axe.min.js')">Check accessibility</button>
+	<norn-segmented-control data-group="scheme" :@icon-only="true">
+		<span slot="legend">Color scheme</span>
+		<label title="Light"><input type="radio" value="light" /><norn-icon @name="sun" @size="m"></norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked /><norn-icon @name="system" @size="m"></norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark" /><norn-icon @name="moon" @size="m"></norn-icon><span>Dark</span></label>
+	</norn-segmented-control>
+	<norn-segmented-control data-group="width" :@icon-only="true">
+		<span slot="legend">Width</span>
+		<label title="Fill"><input type="radio" value="" checked /><norn-icon @name="fill" @size="m"></norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px" /><norn-icon @name="phone" @size="m"></norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px" /><norn-icon @name="tablet" @size="m"></norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px" /><norn-icon @name="desktop" @size="m"></norn-icon><span>Desktop, 1024px</span></label>
+	</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" :data-axe="url('/assets/axe.min.js')">
+		<norn-icon @name="accessibility" data-for="idle"></norn-icon>
+		<norn-icon @name="loading" data-for="running"></norn-icon>
+		<norn-icon @name="success" data-for="pass"></norn-icon>
+		<norn-icon @name="error" data-for="fail"></norn-icon>
+		Check accessibility
+	</button>
 </div>
 <div data-stage>
 	<iframe :src="story.frameUrl" :title="story.title + ' preview'" loading="lazy"></iframe>
@@ -34,106 +40,136 @@
 <p><a :href="story.frameUrl">Open on its own</a></p>
 <div data-results role="status"></div>
 <style>
-	preview-canvas {
-		display: grid;
-		gap: var(--preview-space-s);
+	@layer norn.components {
+		preview-canvas {
+			display: grid;
+			gap: var(--norn-space-s);
+		}
 
-		&:not(:defined) [data-js] {
+		preview-canvas:not(:defined) [data-js] {
 			display: none;
 		}
 
-		& > div:first-child {
+		preview-canvas > div:first-child {
 			display: flex;
 			flex-wrap: wrap;
 			align-items: center;
-			gap: var(--preview-space-s) var(--preview-space-m);
+			gap: var(--norn-space-s) var(--norn-space-m);
 			font-size: 0.9rem;
 		}
 
-		& fieldset {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 0.25rem var(--preview-space-s);
-			min-inline-size: 0;
-			margin: 0;
-			padding: 0;
-			border: 0;
-		}
-
-		& legend {
-			float: inline-start;
-			margin-inline-end: var(--preview-space-s);
-			padding: 0;
-			font-weight: 700;
-		}
-
-		& label {
+		preview-canvas button {
 			display: inline-flex;
 			align-items: center;
-			gap: 0.3em;
-			min-block-size: 1.5rem;
-		}
-
-		& button {
+			gap: 0.4em;
 			min-block-size: 2.25rem;
 			padding: 0.25rem 0.7rem;
-			border: 2px solid var(--preview-border);
-			border-radius: 0.25rem;
-			background: var(--preview-bg);
-			color: var(--preview-text);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-base);
+			color: var(--norn-text-base);
 			font: inherit;
 			cursor: pointer;
+		}
 
-			&[data-state="pass"] {
-				border-color: var(--preview-ok);
-			}
+		preview-canvas button norn-icon svg {
+			inline-size: 1.15rem;
+			block-size: 1.15rem;
+		}
 
-			&[data-state="fail"] {
-				border-color: var(--preview-bad);
+		/* One icon per state: idle, running, pass, fail. */
+		preview-canvas button:not([data-state="idle"]) [data-for="idle"],
+		preview-canvas button:not([data-state="running"]) [data-for="running"],
+		preview-canvas button:not([data-state="pass"]) [data-for="pass"],
+		preview-canvas button:not([data-state="fail"]) [data-for="fail"] {
+			display: none;
+		}
+
+		preview-canvas [data-for="pass"] {
+			color: light-dark(#0b6b3a, #7ed6a1);
+		}
+
+		preview-canvas [data-for="fail"] {
+			color: light-dark(#b42318, #ff8a80);
+		}
+
+		@media (prefers-reduced-motion: no-preference) {
+			preview-canvas [data-for="running"] svg {
+				animation: preview-spin 0.8s linear infinite;
 			}
 		}
 
-		& p {
+		@keyframes preview-spin {
+			to {
+				rotate: 1turn;
+			}
+		}
+
+		preview-canvas p {
 			margin: 0;
 			font-size: 0.9rem;
 		}
 
-		& [data-stage] {
+		preview-canvas [data-stage] {
 			overflow-x: auto;
-			padding: var(--preview-space-s);
-			border: 1px dashed var(--preview-border);
-			border-radius: 0.25rem;
-			background: var(--preview-raised);
+			padding: var(--norn-space-s);
+			border: 1px dashed var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-raised);
 		}
 
-		& iframe {
+		preview-canvas iframe {
 			display: block;
 			inline-size: var(--canvas-width, 100%);
 			max-inline-size: none;
 			min-block-size: 4rem;
 			margin-inline: auto;
 			border: 0;
-			background: var(--preview-bg);
+			background: var(--norn-surface-base);
 		}
 
-		& [data-results] {
-			padding: var(--preview-space-s) var(--preview-space-m);
-			border: 1px solid var(--preview-border);
-			border-radius: 0.25rem;
-			font-size: 0.9rem;
+		preview-canvas [data-results]:empty {
+			display: none;
+		}
 
-			&:empty {
+		preview-canvas [data-results] {
+			padding: var(--norn-space-s) var(--norn-space-m);
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			font-size: 0.9rem;
+		}
+
+		preview-canvas [data-results] ul {
+			margin: 0.25rem 0 0;
+			padding-inline-start: 1.25rem;
+		}
+
+		/* A phone has no use for fixed widths: the frame always fills its box, whatever width was chosen on a wide screen. */
+		@media (max-width: 40rem) {
+			preview-canvas norn-segmented-control[data-group="width"] {
 				display: none;
 			}
 
-			& ul {
-				margin: 0.25rem 0 0;
-				padding-inline-start: 1.25rem;
+			preview-canvas iframe {
+				inline-size: 100%;
+			}
+		}
+
+		/* A touch screen gets a 44px target. */
+		@media (pointer: coarse) {
+			preview-canvas :is(button, norn-segmented-control label) {
+				min-block-size: 2.75rem;
+			}
+
+			preview-canvas p a {
+				display: inline-flex;
+				align-items: center;
+				min-block-size: 2.75rem;
 			}
 		}
 
 		@media print {
-			& [data-js] {
+			preview-canvas [data-js] {
 				display: none;
 			}
 		}
@@ -148,8 +184,10 @@
 		class PreviewCanvas extends HTMLElement {
 			#wired = false;
 			#observer;
+			#onProps = () => this.#apply(this.querySelector("iframe"));
 
 			connectedCallback() {
+				document.addEventListener("previewpropschange", this.#onProps);
 				if (this.#wired) return;
 				this.#wired = true;
 				const frame = this.querySelector("iframe");
@@ -175,8 +213,9 @@
 			}
 
 			disconnectedCallback() {
+				document.removeEventListener("previewpropschange", this.#onProps);
+				// The listeners stay on the elements they were added to. A move reloads the frame, and its `load` listener puts the observer back.
 				this.#observer?.disconnect();
-				this.#wired = false;
 			}
 
 			/** Follow the frame's height, and carry the controls into a fresh document. */
@@ -195,15 +234,20 @@
 				if (doc) frame.style.blockSize = `${doc.documentElement.scrollHeight}px`;
 			}
 
-			/** Write the chosen scheme into the frame's root element. */
+			/** Write the scheme and the page's property overrides into the frame's root element. */
 			#apply(frame) {
 				const root = frame?.contentDocument?.documentElement;
 				if (!root) return;
 				root.style.colorScheme = this.querySelector('[data-group="scheme"] input:checked')?.value ?? "";
+				const overrides = document.querySelector("preview-props")?.values ?? new Map();
+				for (const name of [...root.style].filter((name) => name.startsWith("--"))) {
+					if (!overrides.has(name)) root.style.removeProperty(name);
+				}
+				for (const [name, value] of overrides) root.style.setProperty(name, value);
 				this.#fit(frame);
 			}
 
-			/** Run axe in the frame and list what it finds. The button's state shows the result. */
+			/** Run axe in the frame and list what it finds. The button's icon shows the state. */
 			async #check(frame) {
 				const button = this.querySelector('[data-action="axe"]');
 				const results = this.querySelector("[data-results]");

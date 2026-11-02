@@ -1,0 +1,29 @@
+---
+layout: norn-base.webc
+title: Controls
+themeToggle: true
+---
+<h1>Controls</h1>
+<norn-theme-toggle id="toggle"></norn-theme-toggle>
+<norn-segmented-control id="control" @name="size" :@options="[{ value: 's', label: 'Small' }, { value: 'm', label: 'Medium', checked: true }, { value: 'l', label: 'Large' }]"><span slot="legend">Size</span></norn-segmented-control>
+<p>
+	<norn-link-button id="primary" @href="/docs/">Primary</norn-link-button>
+	<norn-link-button id="secondary" @href="/docs/" @variant="secondary">Secondary</norn-link-button>
+	<norn-link-button id="quiet" @href="/docs/" @variant="quiet">Quiet</norn-link-button>
+</p>
+<p><norn-copy-button id="copy" @value="npm install @example/project"></norn-copy-button></p>
+<norn-search id="search"></norn-search>
+<norn-accordion id="faq">
+	<details name="faq">
+		<summary>Does it need a script?</summary>
+		<p>No. The browser opens and closes each section.</p>
+	</details>
+	<details name="faq">
+		<summary>Can two be open?</summary>
+		<p>Not when they share a name.</p>
+	</details>
+</norn-accordion>
+<norn-code-tabs id="shells">
+	<norn-code-block @language="sh" data-tab="npm" @code="npm install one"></norn-code-block>
+	<norn-code-block @language="sh" data-tab="yarn" @code="yarn add one"></norn-code-block>
+</norn-code-tabs>

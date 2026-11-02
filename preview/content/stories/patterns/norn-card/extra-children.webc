@@ -1,0 +1,22 @@
+---
+title: More than three children
+order: 4
+hiddenH2: true
+---
+<norn-card-grid>
+	<li>
+		<norn-card>
+			<h3>Three children</h3>
+			<p>A heading, a body, and a footer share rows with the neighboring cards.</p>
+			<p><a href="https://example.com/">Read more</a></p>
+		</norn-card>
+	</li>
+	<li>
+		<norn-card>
+			<h3>Four children</h3>
+			<p>A card with a fourth child has no row to put it in, so it lays out on its own.</p>
+			<p>A second paragraph.</p>
+			<p><a href="https://example.com/">Read more</a></p>
+		</norn-card>
+	</li>
+</norn-card-grid>

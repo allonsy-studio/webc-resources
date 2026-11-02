@@ -1,0 +1,19 @@
+---
+title: With an accent line
+order: 5
+hiddenH2: true
+---
+<norn-card-grid>
+	<li>
+		<norn-card @accent="accent">
+			<h3><a href="https://example.com/">An accent line</a></h3>
+			<p>Set the accent prop on the card to draw a 2px line along the top.</p>
+		</norn-card>
+	</li>
+	<li>
+		<norn-card>
+			<h3><a href="https://example.com/">No accent</a></h3>
+			<p>Unset, the card has only its fill.</p>
+		</norn-card>
+	</li>
+</norn-card-grid>

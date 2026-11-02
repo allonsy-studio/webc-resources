@@ -1,0 +1,9 @@
+---
+title: Name only
+order: 2
+ownH1: true
+bleed: true
+---
+<norn-hero>
+	<h1><span>Example project</span></h1>
+</norn-hero>

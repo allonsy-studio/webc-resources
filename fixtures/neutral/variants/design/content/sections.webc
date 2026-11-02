@@ -1,0 +1,11 @@
+---
+layout: norn-base.webc
+title: Sections
+name: Design pass
+---
+<style>
+	#overridden { padding-block: 5px; }
+</style>
+<section id="first"><h2>First</h2><p>A section directly in main.</p></section>
+<section id="overridden"><h2>Overridden</h2><p>A project rule wins without !important.</p></section>
+<norn-card id="card"><section id="nested"><h2>Nested</h2><p>A section inside a card.</p></section></norn-card>

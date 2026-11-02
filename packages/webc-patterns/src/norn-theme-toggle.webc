@@ -1,0 +1,127 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<norn-segmented-control
+	:@icon-only="true"
+	@name="color-scheme"
+	:@options="[
+		{ value: 'light', label: '', icon: 'sun' },
+		{ value: '', label: '', icon: 'system', checked: true },
+		{ value: 'dark', label: '', icon: 'moon' }
+	]"
+>
+	<span slot="legend" @text="nornComponentStrings?.('norn-theme-toggle', 'label', $data.page) || 'Color scheme'"></span>
+</norn-segmented-control>
+<span hidden>
+	<span data-string="label"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'label', $data.page) || 'Color scheme'"></span></slot></span>
+	<span data-string="light"><slot name="light"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'light', $data.page) || 'Light'"></span></slot></span>
+	<span data-string="system"><slot name="system"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'system', $data.page) || 'System'"></span></slot></span>
+	<span data-string="dark"><slot name="dark"><span webc:nokeep @text="nornComponentStrings?.('norn-theme-toggle', 'dark', $data.page) || 'Dark'"></span></slot></span>
+</span>
+<style>
+	@layer norn.components {
+		norn-theme-toggle {
+			display: inline-flex;
+
+			&:not(:defined) {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const KEY = "color-scheme";
+		const SCHEMES = ["light", "dark"];
+		let toggles = 0;
+
+		/** The saved choice, or "" for the system. Storage can be blocked: then there is no saved choice. */
+		const saved = () => {
+			try {
+				const value = localStorage.getItem(KEY);
+				return SCHEMES.includes(value) ? value : "";
+			} catch {
+				return "";
+			}
+		};
+
+		const save = (value) => {
+			try {
+				if (value) localStorage.setItem(KEY, value);
+				else localStorage.removeItem(KEY);
+			} catch {
+				// Not saved: the choice holds for this page only.
+			}
+		};
+
+		const apply = (value) => {
+			if (value) document.documentElement.style.colorScheme = value;
+			else document.documentElement.style.removeProperty("color-scheme");
+		};
+
+		/** The option each input stands for, by value. */
+		const OPTIONS = { light: "light", "": "system", dark: "dark" };
+
+		/** Keeps the page's color scheme and every toggle in step with the visitor's choice. */
+		class ThemeToggle extends HTMLElement {
+			#wired = false;
+			#sync = () => this.#show(saved());
+			#onStorage = (event) => {
+				if (event.key !== KEY && event.key !== null) return;
+				apply(saved());
+				this.#show(saved());
+			};
+
+			connectedCallback() {
+				document.addEventListener("themetogglechange", this.#sync);
+				window.addEventListener("storage", this.#onStorage);
+				if (!this.#wired) {
+					this.#wired = true;
+					// A radio group is shared by name across the page, so each toggle names its own.
+					const name = `${KEY}-${++toggles}`;
+					for (const input of this.querySelectorAll("input")) input.name = name;
+					this.#name();
+					this.addEventListener("change", (event) => {
+						const value = SCHEMES.includes(event.target.value) ? event.target.value : "";
+						save(value);
+						apply(value);
+						document.dispatchEvent(new CustomEvent("themetogglechange"));
+					});
+				}
+				apply(saved());
+				this.#show(saved());
+			}
+
+			disconnectedCallback() {
+				document.removeEventListener("themetogglechange", this.#sync);
+				window.removeEventListener("storage", this.#onStorage);
+			}
+
+			/** Show the names the page holds: the group's in the legend, each option's as its text and title. */
+			#name() {
+				const text = (key) => this.querySelector(`:scope > [hidden] > [data-string="${key}"]`)?.textContent.trim() ?? "";
+				const legend = this.querySelector("legend");
+				if (legend) legend.textContent = text("label");
+				for (const input of this.querySelectorAll("input")) {
+					const label = input.closest("label");
+					const words = text(OPTIONS[input.value]);
+					if (!label || !words) continue;
+					label.title = words;
+					const span = label.querySelector(":scope > span");
+					if (span) span.textContent = words;
+				}
+			}
+
+			#show(value) {
+				for (const input of this.querySelectorAll("input")) input.checked = input.value === value;
+			}
+		}
+
+		if (!customElements.get("norn-theme-toggle")) customElements.define("norn-theme-toggle", ThemeToggle);
+	}
+</script>

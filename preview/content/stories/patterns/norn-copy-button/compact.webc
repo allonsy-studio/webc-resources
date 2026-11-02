@@ -1,0 +1,5 @@
+---
+title: Compact
+order: 3
+---
+<norn-copy-button @value="npm install @example/core" @compact="true"></norn-copy-button>

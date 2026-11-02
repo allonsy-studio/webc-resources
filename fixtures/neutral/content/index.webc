@@ -1,0 +1,69 @@
+---
+layout: norn-base.webc
+title: Neutral fixture
+description: A fixture site built from the generic patterns.
+features:
+  - title: Plain card
+    body: A card with no link.
+  - title: Linked card
+    body: A card whose title links to the docs.
+    href: /docs/one/
+  - title: Third card
+    body: Cards take the next accent in turn.
+  - title: Fourth card
+    body: The fourth accent, then the cycle repeats.
+  - title: Fifth card
+    body: Back to the first accent.
+packages:
+  - title: "@example/first"
+    body: A package card with the title in the mono face.
+    href: /docs/one/
+  - title: "@example/second"
+    body: Another package card.
+    href: /docs/two/
+actions:
+  - href: "#features"
+    text: Get started
+  - href: https://example.com/source
+    text: View the source
+facts:
+  - Free & open source
+  - "License: MPL-2.0"
+---
+<norn-hero>
+	<h1><span>Neutral fixture</span> <span>Generic patterns only</span></h1>
+	<p>A page frame and content components.</p>
+	<nav aria-label="Get started">
+		<ul role="list">
+			<li webc:for="(action, index) of actions"><norn-link-button :@href="action.href" :@variant="index ? 'secondary' : 'primary'" @text="action.text"></norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-fact-list @gap="l">
+		<li webc:for="fact of facts" @text="fact"></li>
+	</norn-fact-list>
+</norn-hero>
+<section id="features">
+	<h2>Features</h2>
+	<norn-card-grid>
+		<li webc:for="item of features">
+			<norn-card>
+				<h3>
+					<a webc:if="item.href" :href="item.href" @text="item.title"></a>
+					<span webc:else @text="item.title"></span>
+				</h3>
+				<p @text="item.body"></p>
+			</norn-card>
+		</li>
+	</norn-card-grid>
+</section>
+<section id="packages">
+	<h2>Packages</h2>
+	<norn-card-grid>
+		<li webc:for="item of packages">
+			<norn-card @title-face="mono">
+				<h3><a :href="item.href" @text="item.title"></a></h3>
+				<p @text="item.body"></p>
+			</norn-card>
+		</li>
+	</norn-card-grid>
+</section>

@@ -1,0 +1,52 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<ul role="list" :data-gap="['s', 'm', 'l'].includes(gap) ? gap : undefined"><slot></slot></ul>
+<style>
+	@layer norn.components {
+		norn-fact-list {
+			display: block;
+
+			& ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-xs, t('space.xs')) var(--norn-space-m, t('space.m'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+
+				&[data-gap="s"] {
+					row-gap: var(--norn-space-s, t('space.s'));
+				}
+
+				&[data-gap="m"] {
+					row-gap: var(--norn-space-m, t('space.m'));
+				}
+
+				&[data-gap="l"] {
+					row-gap: var(--norn-space-l, t('space.l'));
+				}
+			}
+
+			& li {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				max-inline-size: 100%;
+				line-height: 1.5;
+				overflow-wrap: anywhere;
+			}
+
+			& norn-icon {
+				color: var(--norn-text-accent, t('text.accent'));
+			}
+		}
+	}
+</style>

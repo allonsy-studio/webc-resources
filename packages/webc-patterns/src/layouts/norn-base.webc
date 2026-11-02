@@ -1,0 +1,137 @@
+<!doctype html>
+<html
+	:lang="$data.norn.lang"
+	:dir="['ltr', 'rtl', 'auto'].includes($data.norn.dir) ? $data.norn.dir : /^(ar|fa|he|iw|ur|ps|yi|ji|dv|ckb|sd|ug)$/i.test(String($data.norn.lang).split(/[-_]/)[0]) ? 'rtl' : 'ltr'"
+>
+	<head>
+		<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+		<meta
+			webc:is="norn-head"
+			webc:nokeep
+			:@title="$data.norn.title ? ($data.norn.name && $data.norn.title !== $data.norn.name ? $data.norn.title + ': ' + $data.norn.name : $data.norn.title) : $data.norn.tagline ? ($data.norn.name ? $data.norn.name + ': ' + $data.norn.tagline : $data.norn.tagline) : $data.norn.name || ''"
+			:@description="$data.norn.description || ''"
+			:@url="typeof $data.norn.url === 'string' ? $data.norn.url : false"
+			:@theme-color="$data.norn.themeColor || ''"
+			:@og-title="$data.norn.ogTitle || ''"
+			:@og-image="$data.norn.ogImage ? $data.norn.ogImage.src : ''"
+			:@og-image-alt="$data.norn.ogImage ? $data.norn.ogImage.alt || '' : ''"
+			:@theme-toggle="$data.norn.themeToggle ?? false"
+		/>
+		<meta webc:if="$data.norn.name" property="og:site_name" :content="$data.norn.name" />
+		<meta webc:if="$data.norn.locale" property="og:locale" :content="$data.norn.locale" />
+		<link webc:if="$data.norn.icon" rel="icon" :href="$data.norn.icon.href" :type="$data.norn.icon.type" />
+		<link webc:if="!$data.norn.icon" rel="icon" href="data:," />
+		<link webc:if="$data.norn.touchIcon" rel="apple-touch-icon" :href="$data.norn.touchIcon" />
+		<template webc:nokeep @html="nornHook('head')"></template>
+		<style>/* norn: css/base.css */</style>
+		<style>/* norn: css/print.css */</style>
+		<style>
+			@layer norn.layout {
+				/* A section directly in main is a centered column at the page width, its heading the second level. A section anywhere else is left alone. The :where() keeps the rule easy for a project to override. */
+				:where(main) > section {
+					display: grid;
+					grid-template-columns: minmax(0, 1fr);
+					align-content: start;
+					gap: var(--norn-space-m, t('space.m'));
+					inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--norn-layout-width, t('layout.width')));
+					margin-inline: auto;
+					padding-block: var(--norn-space-l, t('space.l'));
+					scroll-margin-block-start: var(--norn-space-m, t('space.m'));
+				}
+
+				:where(main) > section > h2,
+				:where(main) > section > norn-heading-anchor > h2 {
+					margin: 0;
+					font-family: var(--norn-font-heading, t('font.heading'));
+					font-size: var(--norn-font-size-xl, t('font.size.xl'));
+					line-height: 1.15;
+					text-wrap: balance;
+				}
+
+				@media print {
+					:where(main) > section {
+						gap: var(--norn-space-s, t('space.s'));
+						padding-block: var(--norn-space-m, t('space.m'));
+					}
+				}
+
+				/* The page title and the body's line length in a page with a navigation column, for norn-docs and norn-workspace. The base styles set the title's face and wrapping. */
+				norn-sidebar-layout {
+					& > div > article > h1 {
+						margin: 0;
+						font-size: clamp(1.9rem, 4vw, 2.5rem);
+						overflow-wrap: anywhere;
+					}
+
+					/* Prose holds to the measure, and code, tables, and callouts take the width. */
+					& > div > article > norn-rich-text > :is(p, ul, ol, blockquote, h2, h3, h4, h5, h6, norn-heading-anchor) {
+						max-inline-size: var(--norn-text-measure, t('text.measure'));
+					}
+				}
+
+				/* The space above the footer is the page's, not the footer's. */
+				norn-footer {
+					margin-block-start: var(--norn-space-xl, t('space.xl'));
+
+					& [data-badges] {
+						display: flex;
+						flex-wrap: wrap;
+						gap: var(--norn-space-xs, t('space.xs'));
+					}
+
+					& [data-badges] img {
+						display: block;
+						inline-size: auto;
+						block-size: 20px;
+					}
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<norn-skip-link></norn-skip-link>
+		<template webc:nokeep @html="nornHook('banner')"></template>
+		<norn-header>
+			<a webc:if="$data.norn.logo || $data.norn.name" slot="brand" rel="home" href="/">
+				<img webc:if="$data.norn.logo" :src="$data.norn.logo.src" :alt="$data.norn.logo.alt || $data.norn.name || ''" />
+				<span webc:else @text="$data.norn.name || ''"></span>
+			</a>
+			<a webc:for="link of $data.norn.nav" :href="link.href" :aria-current="link.href === $data.page.url ? 'page' : undefined"><norn-icon webc:if="link.icon" :@name="link.icon"></norn-icon><span webc:nokeep @text="link.title"></span></a>
+		</norn-header>
+		<main id="main" tabindex="-1"><template webc:if="nornCompiles($data, 'norn-base')" webc:nokeep @html="content"></template><template webc:else webc:nokeep @raw="content"></template><template webc:nokeep @html="nornHook('cta')"></template></main>
+		<norn-footer>
+			<div>
+				<p webc:if="$data.norn.footer.name || $data.norn.name"><strong @text="$data.norn.footer.name || $data.norn.name"></strong></p>
+				<p webc:if="$data.norn.footer.text || $data.norn.tagline" @text="$data.norn.footer.text || $data.norn.tagline"></p>
+				<p webc:if="$data.norn.footer.badges.length" data-badges>
+					<a webc:for="badge of $data.norn.footer.badges" :href="badge.href"><img :alt="badge.alt || ''" :src="badge.src" :width="badge.width || false" :height="badge.height || false" loading="lazy" /></a>
+				</p>
+				<p webc:if="$data.norn.footer.license">
+					<small
+						><span webc:nokeep @text="(nornComponentStrings?.('norn-base', 'license', $data.page) || 'Licensed under {license}').split('{license}')[0]"></span
+						><a :href="$data.norn.footer.license.url" @text="$data.norn.footer.license.name"></a
+						><span webc:nokeep @text="(nornComponentStrings?.('norn-base', 'license', $data.page) || 'Licensed under {license}').split('{license}').slice(1).join('')"></span
+					></small>
+				</p>
+			</div>
+			<nav webc:if="$data.norn.footer.groups.length" aria-labelledby="norn-base-footer">
+				<span id="norn-base-footer" hidden @text="nornComponentStrings?.('norn-base', 'footer', $data.page) || 'Footer'"></span>
+				<div webc:for="group of $data.norn.footer.groups">
+					<p><strong @text="group.heading"></strong></p>
+					<ul>
+						<li webc:for="link of group.links"><a :href="link.href" @text="link.title"></a></li>
+					</ul>
+				</div>
+			</nav>
+			<template webc:nokeep @html="nornHook('credit')"></template>
+			<p webc:if="$data.norn.footer.colophon" slot="colophon"><small @text="$data.norn.footer.colophon"></small></p>
+		</norn-footer>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+---
+title: Images and pictures
+order: 3
+---
+<norn-rich-text>
+	<p>A picture never overflows the column.</p>
+	<picture>
+		<source media="(min-width: 600px)" srcset="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" />
+		<img alt="A wide gray bar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='200'%3E%3Crect width='1200' height='200' fill='%23888'/%3E%3C/svg%3E" />
+	</picture>
+</norn-rich-text>

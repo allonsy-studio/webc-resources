@@ -1,0 +1,25 @@
+{
+	"private": true,
+	"name": "fixture-landing",
+	"version": "0.0.0",
+	"description": "A fixture landing site for the OSS WebC packages. It exercises every page section.",
+	"license": "MPL-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/allonsy-studio/webc-resources.git"
+	},
+	"type": "module",
+	"scripts": {
+		"build": "eleventy --config=src/eleventy.config.js"
+	},
+	"devDependencies": {
+		"@11ty/eleventy": "^3.1.6",
+		"@11ty/eleventy-plugin-webc": "^0.11.2",
+		"@allons-y/webc-code-sample": "workspace:*",
+		"@allons-y/webc-oss-site": "workspace:*",
+		"@allons-y/webc-patterns": "workspace:*"
+	},
+	"engines": {
+		"node": ">=22"
+	}
+}

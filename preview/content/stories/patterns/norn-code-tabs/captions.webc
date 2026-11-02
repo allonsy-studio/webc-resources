@@ -1,0 +1,9 @@
+---
+title: Tabs named by captions
+order: 2
+---
+<norn-code-tabs>
+	<span slot="label">Config files</span>
+	<norn-code-block @language="js" @caption="eleventy.config.js" :@code="'export default function (config) {\n\treturn {};\n}\n'"></norn-code-block>
+	<norn-code-block @language="js" @caption="index.js" :@code="'import config from \'./eleventy.config.js\';\n'"></norn-code-block>
+</norn-code-tabs>

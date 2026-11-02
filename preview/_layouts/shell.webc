@@ -1,34 +1,30 @@
 <!doctype html>
 <html lang="en">
 	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="color-scheme" content="light dark" />
-		<title @text="title ? title + ': Norn' : 'Norn'"></title>
-		<meta name="description" :content="description" webc:if="description" />
+		<meta webc:is="norn-head" webc:nokeep :@title="title ? title + ': Norn' : 'Norn'" :@description="description" />
+		<link rel="stylesheet" href="/assets/norn/reset.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/base.css" webc:keep />
+		<link rel="stylesheet" href="/assets/norn/print.css" webc:keep />
 		<link rel="icon" href="/assets/norn-favicon.svg" type="image/svg+xml" />
-		<link rel="stylesheet" href="/assets/styles/base.css" webc:keep />
+		<script src="/assets/tokens.js" webc:keep></script>
+		<link rel="stylesheet" href="/assets/styles/tokens.css" webc:keep />
 		<link rel="stylesheet" href="/assets/styles/shell.css" webc:keep />
-		<style @raw="getBundle('css')" webc:keep></style>
 	</head>
 	<body>
-		<a class="skip-link" href="#main">Skip to content</a>
-		<header>
-			<a rel="home" href="/">
-				<svg class="mark" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z" /></svg>
+		<norn-skip-link></norn-skip-link>
+		<norn-header>
+			<span slot="label">Preview</span>
+			<a slot="brand" rel="home" href="/">
+				<svg class="norn-mark" viewBox="0 0 100 100" fill="currentColor" aria-hidden="true"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z" /></svg>
 				Norn
 			</a>
-			<nav aria-label="Preview">
-				<a href="/" :aria-current="$data.page.url === '/' ? 'page' : undefined">Components</a>
-			</nav>
-		</header>
+			<a href="/">Components</a>
+			<a href="/foundations/">Foundations</a>
+		</norn-header>
+		<preview-overrides></preview-overrides>
 		<div class="app">
-			<preview-nav webc:if="$data.catalog.components.length" :@categories="$data.catalog.categories"></preview-nav>
+			<preview-nav :@categories="$data.catalog.categories"></preview-nav>
 			<main id="main" tabindex="-1"><template webc:nokeep @raw="content"></template></main>
 		</div>
-		<footer>
-			<p>Preview of <a href="https://github.com/allonsy-studio/webc-resources">allonsy-studio/webc-resources</a>, licensed MPL-2.0.</p>
-		</footer>
-		<script @raw="getBundle('js')" webc:keep></script>
 	</body>
 </html>

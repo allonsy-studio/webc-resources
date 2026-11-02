@@ -1,0 +1,14 @@
+---
+layout: norn-base.webc
+title: Markdown blocks
+---
+<template webc:type="11ty" 11ty:type="md" webc:nokeep>
+## مرحبا بالعالم
+
+## Same
+</template>
+<template webc:type="11ty" 11ty:type="md" webc:nokeep>
+## 日本語の見出し
+
+## Same
+</template>

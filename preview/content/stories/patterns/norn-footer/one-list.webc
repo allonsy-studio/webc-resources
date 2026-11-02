@@ -1,0 +1,20 @@
+---
+title: One list of links
+order: 3
+bleed: true
+---
+<div style="padding-block-start: 4rem">
+	<norn-footer>
+		<div>
+			<p><strong>Example project</strong></p>
+			<p>A short tagline.</p>
+		</div>
+		<nav aria-label="Project links">
+			<p><strong>Project</strong></p>
+			<ul>
+				<li><a href="https://example.com/source">Source</a></li>
+				<li><a href="https://example.com/changelog">Changelog</a></li>
+			</ul>
+		</nav>
+	</norn-footer>
+</div>

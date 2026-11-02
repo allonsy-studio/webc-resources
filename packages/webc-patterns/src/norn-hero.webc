@@ -1,0 +1,81 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<header :data-width="width === 'measure' ? 'measure' : undefined"><slot></slot></header>
+<style>
+	@layer norn.components {
+		norn-hero {
+			display: block;
+
+			& > header {
+				--_width: var(--norn-layout-width, t('layout.width'));
+				display: grid;
+				grid-auto-flow: row;
+				align-content: start;
+				gap: var(--norn-space-m, t('space.m'));
+				inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), var(--_width));
+				margin-inline: auto;
+				padding-block: var(--norn-space-xl, t('space.xl')) var(--norn-space-l, t('space.l'));
+			}
+
+			& > header[data-width="measure"] {
+				--_width: var(--norn-text-measure, t('text.measure'));
+			}
+
+			& > header > h1 {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: clamp(2rem, 5vw, 3.25rem);
+				line-height: 1.15;
+				overflow-wrap: anywhere;
+				text-wrap: balance;
+			}
+
+			& > header > h1 > :first-child {
+				font-size: 1.15em;
+			}
+
+			& > header > h1 > :last-child:not(:first-child) {
+				color: var(--norn-text-accent, t('text.accent'));
+				font-size: 0.55em;
+				font-weight: 400;
+			}
+
+			& > header > p {
+				max-inline-size: var(--norn-text-measure, t('text.measure'));
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+				text-wrap: pretty;
+			}
+
+			& > header > nav ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, t('space.s'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@media print {
+				& > header > nav {
+					display: none;
+				}
+
+				& > header {
+					gap: var(--norn-space-s, t('space.s'));
+					padding-block: var(--norn-space-m, t('space.m'));
+				}
+			}
+		}
+	}
+</style>

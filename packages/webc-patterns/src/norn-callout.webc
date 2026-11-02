@@ -1,0 +1,97 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+const VARIANTS = { note: ["Note", "info"], tip: ["Tip", "tip"], important: ["Important", "important"], warning: ["Warning", "warning"], caution: ["Caution", "caution"] };
+
+/** A known variant, else `note`. */
+const kind = (variant) => (Object.hasOwn(VARIANTS, variant) ? variant : "note");
+</script>
+<div role="note" :data-variant="kind(variant)">
+	<p><norn-icon :@name="VARIANTS[kind(variant)][1]"></norn-icon><slot name="heading"><span @text="nornComponentStrings?.('norn-callout', kind(variant), $data.page) || VARIANTS[kind(variant)][0]"></span></slot></p>
+	<slot></slot>
+</div>
+<style>
+	@layer norn.components {
+		norn-callout {
+			--_color: var(--norn-text-accent, t('text.accent'));
+			display: block;
+
+			&:has(> [data-variant="tip"]) {
+				--_color: var(--norn-status-success, t('status.success'));
+			}
+
+			&:has(> [data-variant="warning"]) {
+				--_color: var(--norn-status-warning, t('status.warning'));
+			}
+
+			&:has(> [data-variant="caution"]) {
+				--_color: var(--norn-status-danger, t('status.danger'));
+			}
+
+			/* A quiet raised panel: a short rule, a small label, then the body set like a pull quote. */
+			& > div {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-s, t('space.s'));
+				padding: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
+				overflow-wrap: anywhere;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-raised, t('surface.raised'));
+				color: var(--norn-text-base, t('text.base'));
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+				line-height: 1.4;
+				text-wrap: pretty;
+
+				&::before {
+					content: "";
+					inline-size: 2rem;
+					block-size: 2px;
+					background: var(--_color);
+				}
+			}
+
+			& > div > p:first-child {
+				display: flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+				color: var(--_color);
+				font-family: var(--norn-font-body, t('font.body'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				font-weight: 600;
+				letter-spacing: 0.08em;
+				line-height: 1.15;
+				text-transform: uppercase;
+			}
+
+			& > div > p:first-child > norn-icon {
+				flex: none;
+			}
+
+			& > div > :not(:first-child) {
+				margin: 0;
+			}
+
+			/* A fill that forced colors replaces still shows as a border. */
+			@media (forced-colors: active) {
+				& > div {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				& > div {
+					border: 1px solid currentcolor;
+					background: none;
+				}
+			}
+		}
+	}
+</style>

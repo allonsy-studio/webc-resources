@@ -1,0 +1,4 @@
+---
+layout: norn-base.webc
+---
+<div data-own><template webc:nokeep @html="content"></template></div>

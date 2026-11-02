@@ -1,13 +1,11 @@
 # Component preview
 
-A Storybook-style preview of the components and layouts in the three packages, built with Eleventy and WebC. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`.
-
-The preview reads each package's components and layouts from their JSDoc and joins them to their stories. While the packages hold no components, the components page says so.
+A Storybook-style preview of every Norn component and layout in the three packages, built with Eleventy and WebC. It uses the packages the way a project does, through the Norn plugin, so what it shows is what a consumer's build produces. The layouts render without the OSS site theme; the OSS components have stories of their own. The published preview is at <https://allonsy-studio.github.io/webc-resources/>, deployed from `main`. Each pull request from this repository gets its own preview under `preview/<number>/`, linked in a comment on the pull request and removed when it closes.
 
 ## Run it
 
 ```sh
-yarn docs:start        # serve at http://localhost:8080, rebuilt as the packages or the preview change
+yarn docs:start        # compile the components, then serve at http://localhost:8080, rebuilt as `src/` (the CSF files included) or `tokens.json` change
 yarn docs:build        # build into preview/_site
 ```
 
@@ -17,36 +15,78 @@ Set `PATH_PREFIX=/webc-resources/` to build for a site served from a subpath. Th
 
 | Part | Comes from |
 | --- | --- |
-| Description, props, slots, custom properties | The JSDoc in the `<!--- … --->` comment at the top of the component file, read at build time |
-| Examples | The stories in `content/stories/<package>/<component>/`, each rendered in its own frame |
-| Source | The story file |
+| Props and slots | Derived from the component's source by `scripts/analyze-webc.js`, with the descriptions and the few overrides of its CSF file, `src/<name>.stories.js` in its package, merged over them. A component or layout without a CSF file fails the build |
+| Description | The CSF file's `parameters.docs.description.component` |
+| Tokens | The global tokens from `tokens.json` the component's CSS reads, derived by the analyzer, with each one's type and default |
+| Examples | The CSF stories, in export order, then the story pages in `content/stories/<package>/<component>/`, then the matrix, each rendered in its own frame |
+| Source | The markup the default renderer writes from a CSF story's args, or the story page's file, shown with `norn-code-block` |
 | Canvas controls | The `preview-canvas` component, below |
 
-The navigation and the components page group the components by the `@category` each declares in its JSDoc.
+Head components (`norn-head`, `oss-head`) have no canvas, since every frame renders them. A layout's story is a whole page on that layout, in a frame of its own.
+
+The navigation and the index group the components by category: the first part of the CSF title (`Container/norn-card`). The categories are layout, landmark, container, component, template, and document. The OSS site package is the exception: its components keep their category, but are listed together, by name, in a last group, "OSS site".
+
+On a phone (48rem and narrower) the navigation is one closed disclosure, "Components" with the count, above the page. On a wide screen the groups are the sidebar, and the disclosure's bar is hidden where the browser supports `::details-content`. A touch screen gets 44px targets for the navigation and the canvas controls.
 
 ### Canvas controls
 
 | Control | Does |
 | --- | --- |
-| Color scheme | Light, System, and Dark radio buttons. System leaves the frame to the reader's setting. |
-| Width | Fill, phone (320px), tablet (768px), and desktop (1024px) radio buttons |
-| Check accessibility | Loads axe-core into the frame and runs the WCAG 2.0, 2.1, and 2.2 A and AA rules and axe's best practices on the frame as it is now. It lists each violation with its rule, impact, and how many elements fail, or says there are none. |
+| Color scheme | Three icon buttons, a sun for light, a half-filled circle for the system setting, and a moon for dark. They are radio buttons, so one is on at a time. |
+| Width | Device icons for fill, phone (320px), tablet (768px), and desktop (1024px), also radio buttons. Hidden on a phone (40rem and narrower), where the frame always fills its box |
+| Check accessibility | Loads axe-core into the frame and runs the WCAG 2.0, 2.1, and 2.2 A and AA rules and axe's best practices on the frame as it is now: the scheme, the width, and any overrides. It lists each violation with its rule, impact, and how many elements fail, or says there are none. |
+| Tokens | A table of the global tokens the component reads: name, type, default, and an override field in the same row, applied to every frame on the page. On a narrow screen each token stacks as a block |
+
+## Try the tokens
+
+The Foundations page lists every shared `--norn-` token in `tokens.json` with its group, default, comment, a preview, and an Override column. A space is drawn as a rule as wide as the token with a mark at each end.
+
+- A color token has a Light picker and a Dark picker, both `type="color"`, that start at what the token resolves to in each scheme, and a Reset. Setting either saves `light-dark(light, dark)`, so the other keeps its value. Every other token has a text field that takes any CSS value, such as `1.5rem`.
+- A value is saved in `localStorage` (key `norn-preview-tokens`) and applied to every preview page, frames and the preview's own pages alike, before the page first paints.
+- Other open tabs update when a value changes, through the `storage` event.
+- A bar under the header shows how many overrides apply, with a Reset.
+- A field in a component page's Tokens table wins over a saved override, and clearing it hands the value back.
+- With storage blocked, an override lasts for the page it was set on.
+
+`assets/tokens.js` does the loading. It sets values through the CSSOM, so a stored value can't break out of its rule.
+
+The component frames define no token, so they show the defaults compiled into each component. The preview's own pages read the tokens in their CSS, so they load `assets/styles/tokens.css`, a `:root` rule the build writes from `tokens.json` (`content/tokens.11ty.js`).
 
 ## Add a story
 
-Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding or `ownH1: true` when the component renders the page's h1. The file's body is the story: write the component the way a page would.
+A single instance of a component, with props and slots, is a CSF story: a named export in the component's `.stories.js` with its `args`.
 
-A component or layout with no story fails `yarn test`. A page can only use a component the build registers: add the packages' components to the WebC plugin in `eleventy.config.js` when the first story needs one.
+```js
+export const Linked = { name: "Linked heading", args: { default: '<h3><a href="https://example.com/">Linked card</a></h3>' } };
+```
+
+`lib/render-story.js` writes it as WebC: a string prop as `@name="…"`, `true` as a bare `@name`, any other value as a `:@name` expression, each named slot as a `<template slot="name" webc:nokeep>`, and the `default` slot as the children. One virtual template per package builds the frames at `/frames/<package>/<component>/<kebab export name>/`, with the layout and data a story page there has. `parameters.webc.hiddenH2` and `parameters.webc.ownH1` set the frame data a page sets in its front matter. The renderer, the matrix, and the page read the effective argTypes: the ones the analyzer derives, with the CSF file's over them. A component with `options` or boolean props also gets `/frames/<package>/<component>/matrix/`: each value of one prop at a time, over the meta's and the `Default` story's args, each cell labeled `prop = value`.
+
+Anything more, such as a composition, Markdown, or a whole page on a layout, is a story page. Add a `.webc` or `.md` file to `content/stories/<package>/<component>/`. Its front matter takes a `title` and an `order`, and a story can set `bleed: true` for no padding, `ownH1: true` when the component renders the page's h1, or `hiddenH2: true` for a component that starts at a third-level heading, which adds a hidden h2 after the frame's hidden h1. The file's body is the story: write the component the way a page would. The page reads its component's CSF file as `$data.csf`: `title`, `component`, the baseline `args`, the effective `argTypes` by category (`props`, `slots`), and the `stories` with their resolved args. Loop over a prop's options from there instead of listing them, as the `norn-callout` Variants page does.
+
+```webc
+---
+title: Linked heading
+order: 2
+---
+<h2>Cards</h2>
+<norn-card>
+	<h3><a href="https://example.com/">Linked card</a></h3>
+	<p>Put a link in the heading to link the card.</p>
+</norn-card>
+```
+
+A new component or layout with no story fails `yarn test`. For a layout, the story's front matter names it (`layout: norn-landing.webc`), and the page's props come from the sample `site` and `project` data in `_data/`, mapped in `eleventy.config.js`.
 
 ## Layout
 
 | Path | Holds |
 | --- | --- |
-| `eleventy.config.js` | The WebC plugin for the preview's own components, the path prefix, the passthrough copies, and the watch targets |
-| `lib/catalog.js` | The JSDoc parser and the component and story catalog |
-| `lib/browser.js` | The browser test's helpers: a static server, a launcher, and the axe audit |
-| `_data/` | The catalog |
-| `_includes/` | The preview's own components: `preview-nav` and `preview-canvas` |
-| `_layouts/` | The page shell and the story frame |
-| `content/` | The components page, `stories/`, and `assets/` (the preview's CSS, brand, and font) |
+| `eleventy.config.js` | The Norn plugin with the props mapping the layout stories use, the compile step, the virtual templates for the CSF frames, and the watch targets |
+| `lib/catalog.js` | The CSF reader and the component and story catalog |
+| `lib/render-story.js` | The default renderer, which writes a CSF story's args as WebC, and the matrix |
+| `_data/` | The catalog, the foundations tokens, and the sample site, project, and workspace data |
+| `_includes/` | The preview's own components: `preview-nav`, `preview-canvas`, `preview-props`, `preview-tokens`, and `preview-overrides` |
+| `_layouts/` | The page shell, and the plain and OSS story frames: layouts of the preview's own, which call `norn-head` and link the reset, base, and print styles |
+| `content/` | The index, foundations, and component pages, `stories/`, and `assets/` (the token loader and the preview CSS) |
 | `build.test.js` | Builds the preview and audits its pages |

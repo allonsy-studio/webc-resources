@@ -1,0 +1,25 @@
+---
+layout: norn-base.webc
+nornCompiled: true
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<norn-sidebar-layout>
+	<span slot="summary" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span>
+	<norn-side-nav slot="nav" :@items="$data.norn.workspaces.map((workspace) => ({ href: workspace.href, title: workspace.title, icon: workspace.icon }))"
+		><span slot="label" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span
+	></norn-side-nav>
+	<h1 @text="($data.norn.workspace && $data.norn.workspace.name) || $data.norn.title || ''"></h1>
+	<norn-rich-text @measure="none">
+		<p webc:if="$data.norn.workspace && $data.norn.workspace.description" @text="$data.norn.workspace.description"></p>
+		<template webc:nokeep @html="($data.norn.workspace && $data.norn.workspace.html) || ''"></template>
+		<template webc:if="nornCompiles($data, 'norn-workspace')" webc:nokeep @html="$data.content || ''"></template>
+		<template webc:else webc:nokeep @raw="$data.content || ''"></template>
+	</norn-rich-text>
+</norn-sidebar-layout>

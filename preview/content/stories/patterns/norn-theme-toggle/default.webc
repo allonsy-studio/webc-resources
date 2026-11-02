@@ -1,0 +1,6 @@
+---
+title: Default
+order: 1
+---
+<norn-theme-toggle></norn-theme-toggle>
+<p>The choice is saved in this browser and applies to every page that calls <code>norn-head</code> with <code>:@theme-toggle="true"</code>.</p>

@@ -1,7 +1,7 @@
 {
 	"name": "@allons-y/webc-patterns",
 	"version": "0.1.0-beta.0",
-	"description": "Generic WebC page and docs patterns for Eleventy sites: head, header, footer, hero, card, side nav, docs shell, and pager.",
+	"description": "Generic WebC components and Eleventy layouts for page and docs sites, with the Norn plugin that registers them: header, footer, hero, cards, side nav, docs shell, and pager.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
 	"homepage": "https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-patterns#readme",
@@ -20,17 +20,46 @@
 	"type": "module",
 	"exports": {
 		".": "./index.js",
+		"./markdown": "./markdown.js",
+		"./plugin": "./plugin.js",
+		"./project": "./project.js",
+		"./css/reset.css": "./css/reset.css",
+		"./css/base.css": "./css/base.css",
+		"./css/print.css": "./css/print.css",
+		"./schema/project.schema.json": "./schema/project.schema.json",
 		"./package.json": "./package.json"
 	},
 	"files": [
 		"components/",
+		"layouts/",
+		"fallback/",
+		"css/",
+		"lib/",
+		"schema/",
 		"index.js",
+		"markdown.js",
+		"plugin.js",
+		"project.js",
 		"LICENSE",
 		"README.md"
 	],
+	"scripts": {
+		"prepack": "node ../../scripts/build-components.js webc-patterns"
+	},
+	"dependencies": {
+		"hosted-git-info": "^10.1.1",
+		"markdown-it": "^15.0.2",
+		"semver": "^7.8.5"
+	},
 	"peerDependencies": {
 		"@11ty/eleventy": "^3.0.0",
-		"@11ty/eleventy-plugin-webc": "^0.11.0"
+		"@11ty/eleventy-plugin-webc": "^0.11.0",
+		"@allons-y/webc-code-sample": "^0.1.0-beta.0"
+	},
+	"peerDependenciesMeta": {
+		"@allons-y/webc-code-sample": {
+			"optional": true
+		}
 	},
 	"keywords": [
 		"webc",

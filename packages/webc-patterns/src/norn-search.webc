@@ -1,0 +1,303 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<search :aria-labelledby="'norn-search-' + uid" :data-bundle="bundle || '/pagefind/pagefind.js'">
+	<form :action="action || 'https://duckduckgo.com/'" method="get">
+		<label>
+			<span :id="'norn-search-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'label', $data.page) || 'Search'"></span></slot></span>
+			<norn-icon @name="search"></norn-icon>
+			<input type="search" name="q" autocomplete="off" spellcheck="false" />
+		</label>
+		<input webc:if="site" type="hidden" name="sites" :value="site" />
+		<button type="submit"><norn-icon @name="search"></norn-icon><span><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'label', $data.page) || 'Search'"></span></slot></span></button>
+	</form>
+	<p role="status"></p>
+	<ol role="list" hidden></ol>
+	<span hidden>
+		<span data-string="none"><slot name="none"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'none', $data.page) || 'No results'"></span></slot></span>
+		<span data-string="results-zero"><slot name="results-zero"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-zero', $data.page) || ''"></span></slot></span>
+		<span data-string="results-one"><slot name="results-one"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-one', $data.page) || (nornComponentStrings?.('norn-search', 'results-other', $data.page) ? '' : '{count} result')"></span></slot></span>
+		<span data-string="results-two"><slot name="results-two"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-two', $data.page) || ''"></span></slot></span>
+		<span data-string="results-few"><slot name="results-few"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-few', $data.page) || ''"></span></slot></span>
+		<span data-string="results-many"><slot name="results-many"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-many', $data.page) || ''"></span></slot></span>
+		<span data-string="results-other"><slot name="results-other"><span webc:nokeep @text="nornComponentStrings?.('norn-search', 'results-other', $data.page) || '{count} results'"></span></slot></span>
+	</span>
+</search>
+<style>
+	@layer norn.components {
+		norn-search {
+			display: block;
+			container-type: inline-size;
+
+			& search {
+				position: relative;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-xs, t('space.xs'));
+				overflow-wrap: anywhere;
+			}
+
+			& form {
+				display: flex;
+				gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& label {
+				position: relative;
+				display: grid;
+				flex: 1;
+				min-inline-size: 0;
+			}
+
+			& label > span {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			/* The magnifier sits in the field, at its start, and lets a click through to it. */
+			& label > norn-icon {
+				position: absolute;
+				inset-block-start: 50%;
+				inset-inline-start: var(--norn-space-xs, t('space.xs'));
+				translate: 0 -50%;
+				color: var(--norn-text-muted, t('text.muted'));
+				pointer-events: none;
+			}
+
+			& :is(input, button) {
+				box-sizing: border-box;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				border: 0;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				color: var(--norn-text-base, t('text.base'));
+				font: inherit;
+			}
+
+			& input {
+				inline-size: 100%;
+				padding: 0 var(--norn-space-s, t('space.s')) 0 calc(var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-xs, t('space.xs')));
+				border: 1px solid var(--norn-ui-border-strong, t('ui.border.strong'));
+				background: var(--norn-surface-base, t('surface.base'));
+			}
+
+			& input:dir(rtl) {
+				padding: 0 calc(var(--norn-space-xs, t('space.xs')) + var(--norn-ui-icon-s, t('ui.icon.s')) + var(--norn-space-xs, t('space.xs'))) 0 var(--norn-space-s, t('space.s'));
+			}
+
+			& button {
+				--_state: 0%;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding: 0 var(--norn-space-s, t('space.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+				cursor: pointer;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+			}
+
+			/* The button's own icon is for a field too narrow for its text. */
+			& button > norn-icon {
+				display: none;
+			}
+
+			/* With live results, the button is only a fallback. */
+			&[data-live] button {
+				display: none;
+			}
+
+			@container (max-width: 16rem) {
+				& button > norn-icon {
+					display: inline-flex;
+				}
+
+				& button > span {
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+					white-space: nowrap;
+				}
+			}
+
+			& [role="status"] {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+			}
+
+			/* The results float over what is below the field. */
+			& ol {
+				position: absolute;
+				inset-inline: 0;
+				inset-block-start: calc(100% + var(--norn-space-2xs, t('space.2xs')));
+				z-index: 10;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-s, t('space.s'));
+				max-block-size: min(60dvh, 24rem);
+				margin: 0;
+				padding: var(--norn-space-s, t('space.s'));
+				overflow-y: auto;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-raised, t('surface.raised'));
+				box-shadow: var(--norn-ui-shadow, t('ui.shadow'));
+				list-style: none;
+
+				&[hidden] {
+					display: none;
+				}
+			}
+
+			& li {
+				display: grid;
+				grid-template-columns: minmax(0, 1fr);
+				gap: var(--norn-space-2xs, t('space.2xs'));
+			}
+
+			& li p {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+			}
+
+			& mark {
+				background: none;
+				color: var(--norn-text-base, t('text.base'));
+				font-weight: 700;
+			}
+
+			@media (pointer: coarse) {
+				& :is(input, button) {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& button {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& ol {
+					border: 1px solid CanvasText;
+				}
+			}
+		}
+	}
+</style>
+<script>
+	{
+		const LIMIT = 8;
+		const DELAY_MS = 200;
+
+		/** Pagefind's excerpt as nodes: text, and `<mark>` for its highlights. Anything else stays text. */
+		const excerpt = (html) =>
+			html.split(/(<mark>.*?<\/mark>)/).map((part) => {
+				const holder = document.createElement("template");
+				holder.innerHTML = part.replace(/<\/?mark>/g, "");
+				const text = holder.content.textContent;
+				if (!part.startsWith("<mark>")) return document.createTextNode(text);
+				const mark = document.createElement("mark");
+				mark.textContent = text;
+				return mark;
+			});
+
+		/** Live results from a Pagefind index. Without one, the form searches the web. */
+		class SiteSearch extends HTMLElement {
+			#wired = false;
+			#pagefind;
+			#latest = 0;
+
+			async connectedCallback() {
+				if (this.#wired) return;
+				this.#wired = true;
+				// The label names the field, and the placeholder says the same in the field.
+				const input = this.querySelector('input[type="search"]');
+				input.placeholder = this.querySelector("label > span")?.textContent.trim() ?? "";
+				const search = this.querySelector("search");
+				try {
+					this.#pagefind = await import(new URL(search.dataset.bundle, document.baseURI).href);
+					await this.#pagefind.options?.({ excerptLength: 20 });
+				} catch {
+					return;
+				}
+				this.dataset.live = "";
+				input.addEventListener("input", () => this.#search(input.value));
+				this.querySelector("form").addEventListener("submit", (event) => {
+					event.preventDefault();
+					this.querySelector("ol a")?.focus();
+				});
+			}
+
+			async #search(query) {
+				const run = ++this.#latest;
+				const list = this.querySelector("ol");
+				const status = this.querySelector('[role="status"]');
+				if (!query.trim()) {
+					list.hidden = true;
+					list.replaceChildren();
+					status.textContent = "";
+					return;
+				}
+				const found = await this.#pagefind.debouncedSearch(query, {}, DELAY_MS);
+				if (found === null || run !== this.#latest) return;
+				const pages = await Promise.all(found.results.slice(0, LIMIT).map((result) => result.data()));
+				if (run !== this.#latest) return;
+				list.replaceChildren(
+					...pages.map((page) => {
+						const item = document.createElement("li");
+						const link = document.createElement("a");
+						link.href = page.url;
+						link.textContent = page.meta?.title || page.url;
+						const text = document.createElement("p");
+						text.append(...excerpt(page.excerpt ?? ""));
+						item.append(link, text);
+						return item;
+					}),
+				);
+				list.hidden = !pages.length;
+				const total = found.results.length;
+				status.textContent = total ? this.#count(total) : this.#string("none");
+			}
+
+			/** One of the status texts the page holds, or "" when its slot and fallback are empty. */
+			#string(key) {
+				return this.querySelector(`search > [hidden] > [data-string="${key}"]`)?.textContent.trim() ?? "";
+			}
+
+			/** The status for a count, in the plural form and number format of the nearest `lang`. */
+			#count(total) {
+				const lang = this.closest("[lang]")?.lang || undefined;
+				let category = "other";
+				let number = String(total);
+				try {
+					category = new Intl.PluralRules(lang).select(total);
+					number = new Intl.NumberFormat(lang).format(total);
+				} catch {
+					// An invalid lang keeps the defaults.
+				}
+				return (this.#string(`results-${category}`) || this.#string("results-other")).replaceAll("{count}", number);
+			}
+		}
+
+		if (!customElements.get("norn-search")) customElements.define("norn-search", SiteSearch);
+	}
+</script>

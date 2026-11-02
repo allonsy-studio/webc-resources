@@ -1,0 +1,30 @@
+---
+title: Default
+order: 1
+ownH1: true
+bleed: true
+---
+<norn-sidebar-layout>
+	<norn-toc
+		slot="nav"
+		:@items="[
+			{ id: 'install', text: 'Install', level: 2 },
+			{ id: 'with-npm', text: 'With npm', level: 3 },
+			{ id: 'usage', text: 'Usage', level: 2 }
+		]"
+	></norn-toc>
+	<h1>Getting started</h1>
+	<norn-rich-text>
+		<p>A page with a contents list in the navigation column. The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug="install">Install</norn-heading-anchor>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<norn-heading-anchor @slug="with-npm" :@level="3">With npm</norn-heading-anchor>
+		<p>A third-level heading nests one list down. Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<norn-heading-anchor @slug="usage">Usage</norn-heading-anchor>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+		<p>The contents sit in a column beside the page and follow it as it scrolls. The link for the section in view takes the accent, so a reader can tell where they are.</p>
+		<p>Each link points to a heading in this same page, so selecting one scrolls to it. Keep the headings short, and let the list name the sections in the order they appear.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>

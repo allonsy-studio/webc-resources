@@ -1,0 +1,19 @@
+---
+title: Custom navigation
+order: 2
+ownH1: true
+bleed: true
+---
+<norn-sidebar-layout>
+	<nav slot="nav" aria-label="Sections">
+		<p><strong>On this page</strong></p>
+		<ul>
+			<li><a href="#one">One</a></li>
+			<li><a href="#two">Two</a></li>
+		</ul>
+	</nav>
+	<h1>Custom navigation</h1>
+	<norn-rich-text>
+		<p>Any one element can fill the nav slot.</p>
+	</norn-rich-text>
+</norn-sidebar-layout>

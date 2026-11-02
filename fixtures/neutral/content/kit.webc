@@ -1,0 +1,67 @@
+---
+layout: norn-base.webc
+title: Component kit
+description: The small components, one of each.
+---
+<h1>Component kit</h1>
+<norn-breadcrumbs :@items="[{ href: '/', title: 'Home' }, { href: '/docs/one/', title: 'Docs' }, { href: '/kit/', title: 'Component kit' }]"></norn-breadcrumbs>
+<norn-search @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
+<norn-toc :@items="[{ id: 'anchors', text: 'Anchors', level: 2 }, { id: 'deeper', text: 'Deeper', level: 3 }]"></norn-toc>
+<norn-heading-anchor @slug="anchors">Anchors</norn-heading-anchor>
+<norn-heading-anchor @slug="deeper" :@level="3">Deeper</norn-heading-anchor>
+<h2>Color scheme</h2>
+<norn-theme-toggle></norn-theme-toggle>
+<norn-theme-toggle><span slot="label">Scheme, again</span></norn-theme-toggle>
+<h2>Icons</h2>
+<p id="icons"><norn-icon @name="warning"><span slot="label">Warning</span></norn-icon> Labeled. <norn-icon @name="arrow-end"></norn-icon> Decorative.</p>
+<p id="project-icon"><norn-icon @name="badge"><span slot="label">Badge</span></norn-icon> Project icon.</p>
+<p dir="rtl" id="rtl">التالي <norn-icon @name="arrow-end"></norn-icon></p>
+<h2>Link buttons</h2>
+<p>
+	<norn-link-button @href="/docs/one/">Read the docs <norn-icon @name="arrow-end"></norn-icon></norn-link-button>
+	<norn-link-button @href="https://example.com/source" @variant="secondary">Source</norn-link-button>
+</p>
+<h2>Tags</h2>
+<norn-fact-list>
+	<li><norn-icon @name="check"></norn-icon>Node 24+</li>
+	<li>No runtime dependencies</li>
+</norn-fact-list>
+<p><a href="#icons">Jump to icons <span class="visually-hidden">on this page</span></a></p>
+<h2>Nested navigation</h2>
+<norn-side-nav :@items="[{ href: '/docs/one/', title: 'Docs', icon: 'book', children: [{ href: '/kit/', title: 'Kit' }, { href: '/plain/', title: 'Plain' }] }, { href: '/', title: 'Home' }]">
+	<span slot="label">Guides</span>
+</norn-side-nav>
+<h2>Notices</h2>
+<norn-notice @severity="success">
+	<p>Saved. The changes apply on the next build.</p>
+	<norn-link-button slot="action" @href="/docs/one/" @variant="quiet" @tone="current">Open the docs</norn-link-button>
+</norn-notice>
+<norn-notice @severity="danger" :@live="true">
+	<p>The build failed.</p>
+</norn-notice>
+<h2>Call-outs</h2>
+<norn-callout>
+	<p>A note, with the default title.</p>
+</norn-callout>
+<norn-callout @variant="caution">
+	<span slot="heading">Careful</span>
+	<p>A caution with its own title.</p>
+</norn-callout>
+<h2>Questions</h2>
+<norn-accordion>
+	<details name="faq">
+		<summary>Does it need a script?</summary>
+		<p>No. The browser opens and closes each section.</p>
+	</details>
+	<details name="faq">
+		<summary>Can two be open?</summary>
+		<p>Not when they share a name.</p>
+	</details>
+</norn-accordion>
+<h2>Line breaks inside the tags</h2>
+<norn-segmented-control @name="size" :@options="[{ value: 's', label: 'Small', checked: true }, { value: 'l', label: 'Large' }]">
+	<span slot="legend">Size</span>
+</norn-segmented-control>
+<p id="install">npm install @example/project</p>
+<norn-copy-button @source="install">
+</norn-copy-button>

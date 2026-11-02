@@ -1,0 +1,120 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<span hidden :id="'norn-simple-table-' + uid"><slot name="label"></slot></span>
+<div><slot></slot></div>
+<style>
+	@layer norn.components {
+		norn-simple-table {
+			display: block;
+			min-inline-size: 0;
+
+			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
+			& > div {
+				--_bg: var(--norn-surface-base, t('surface.base'));
+				--_shadow: color-mix(in oklab, var(--norn-text-base, t('text.base')) 18%, transparent);
+				overflow-x: auto;
+				background:
+					linear-gradient(to right, var(--_bg) 30%, transparent) local 0 0 / 2rem 100% no-repeat,
+					linear-gradient(to left, var(--_bg) 30%, transparent) local 100% 0 / 2rem 100% no-repeat,
+					radial-gradient(farthest-side at 0 50%, var(--_shadow), transparent) scroll 0 0 / 0.75rem 100% no-repeat,
+					radial-gradient(farthest-side at 100% 50%, var(--_shadow), transparent) scroll 100% 0 / 0.75rem 100% no-repeat;
+			}
+
+			& > div > table {
+				min-inline-size: 100%;
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+			}
+
+			& > div > table > caption {
+				padding-block-end: var(--norn-space-xs, t('space.xs'));
+				color: var(--norn-text-muted, t('text.muted'));
+				text-align: start;
+			}
+
+			& > div > table :is(th, td) {
+				min-inline-size: 7rem;
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				text-align: start;
+				vertical-align: top;
+			}
+
+			/* The last column is usually the one with sentences, so it keeps room to wrap into rather than a column of words. */
+			& > div > table :is(th, td):last-child {
+				min-inline-size: 10rem;
+			}
+
+			/* Wrap between words only: a token split across lines reads as two. */
+			& > div > table :is(th, td, code) {
+				overflow-wrap: normal;
+				word-break: normal;
+			}
+
+			& > div > table code {
+				white-space: nowrap;
+			}
+
+			@media print {
+				& > div {
+					overflow: visible;
+					background: none;
+				}
+			}
+		}
+	}
+</style>
+<script>
+	{
+		/** A table box that is a named tab stop only while it scrolls. */
+		class SimpleTable extends HTMLElement {
+			#observer;
+
+			connectedCallback() {
+				const box = this.querySelector(":scope > div");
+				if (!box || typeof ResizeObserver === "undefined") return;
+				const label = this.querySelector(":scope > span[hidden][id]");
+				const caption = box.querySelector("caption");
+				if (caption && label) caption.id ||= `${label.id}-caption`;
+				const named = label?.textContent.trim() ? label : caption?.textContent.trim() ? caption : undefined;
+				const headings = [...this.querySelectorAll("thead th")].map((cell) => cell.textContent.trim()).filter(Boolean);
+				const fit = () => {
+					if (box.scrollWidth > box.clientWidth) {
+						box.setAttribute("tabindex", "0");
+						if (named) {
+							box.setAttribute("role", "region");
+							box.setAttribute("aria-labelledby", named.id);
+						} else if (headings.length) {
+							box.setAttribute("role", "region");
+							box.setAttribute("aria-label", headings.join(", "));
+						}
+					} else {
+						box.removeAttribute("tabindex");
+						box.removeAttribute("role");
+						box.removeAttribute("aria-labelledby");
+						box.removeAttribute("aria-label");
+					}
+				};
+				this.#observer?.disconnect();
+				// The box keeps its width when the table grows, so watch both.
+				this.#observer = new ResizeObserver(fit);
+				this.#observer.observe(box);
+				const table = box.querySelector("table");
+				if (table) this.#observer.observe(table);
+			}
+
+			disconnectedCallback() {
+				this.#observer?.disconnect();
+				this.#observer = undefined;
+			}
+		}
+
+		if (!customElements.get("norn-simple-table")) customElements.define("norn-simple-table", SimpleTable);
+	}
+</script>

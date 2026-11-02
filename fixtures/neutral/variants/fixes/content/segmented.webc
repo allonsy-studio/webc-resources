@@ -1,0 +1,7 @@
+---
+layout: norn-base.webc
+title: Segmented
+---
+<h1>Segmented</h1>
+<norn-segmented-control id="control" @name="size" :@options="[{ value: 's', label: 'Small', checked: true }, { value: 'm', label: 'Medium' }, { value: 'l', label: 'Large' }]"><span slot="legend">Size</span></norn-segmented-control>
+<norn-theme-toggle id="toggle"></norn-theme-toggle>

@@ -1,0 +1,75 @@
+/*
+ * Base styles for the page, in the norn.base layer: color-scheme and base typography.
+ * It defines no design tokens: every component carries each shared token as the fallback of its custom property, compiled from `tokens.json`.
+ * Adds one utility class, `.visually-hidden`: text that is read but not shown, and shows while it or a child has focus.
+ */
+@layer norn.base {
+	:root {
+		color-scheme: light dark;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		html {
+			scroll-behavior: smooth;
+		}
+	}
+
+	body {
+		min-block-size: 100dvh;
+		margin: 0;
+		background: var(--norn-surface-base, t('surface.base'));
+		color: var(--norn-text-base, t('text.base'));
+		font-family: var(--norn-font-body, t('font.body'));
+		font-size: var(--norn-font-size-m, t('font.size.m'));
+		line-height: 1.5;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		font-family: var(--norn-font-heading, t('font.heading'));
+		line-height: 1.15;
+		text-wrap: balance;
+	}
+
+	p,
+	li {
+		text-wrap: pretty;
+	}
+
+	a {
+		color: var(--norn-text-accent, t('text.accent'));
+		text-decoration: underline dotted;
+		text-decoration-color: currentcolor;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 0.2em;
+		overflow-wrap: break-word;
+
+		&:is(:hover, :focus-visible) {
+			text-decoration-style: solid;
+		}
+	}
+
+	/* The one focus ring. A component that the ring would clip draws it inset, at the negative of the offset. */
+	:focus-visible {
+		outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+		outline-offset: var(--norn-ui-focus-offset, t('ui.focus.offset'));
+	}
+
+	main:focus {
+		outline: none;
+	}
+
+	/* Off screen but still read. Shows while it, or a child, has focus. */
+	.visually-hidden:not(:focus-within, :active) {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+}

@@ -1,0 +1,109 @@
+---
+layout: norn-base.webc
+nornCompiled: true
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<norn-hero>
+	<h1 webc:if="$data.norn.name">
+		<span @text="$data.norn.name"></span>
+		<span webc:if="$data.norn.tagline" @text="$data.norn.tagline"></span>
+	</h1>
+	<p webc:if="$data.norn.lede || $data.norn.description" @text="$data.norn.lede || $data.norn.description"></p>
+	<nav webc:if="$data.norn.docs.length || $data.norn.repo" aria-labelledby="norn-docs-home-actions">
+		<span id="norn-docs-home-actions" hidden @text="nornComponentStrings?.('norn-docs-home', 'actions', $data.page) || 'Get started'"></span>
+		<ul role="list">
+			<li webc:if="$data.norn.docs.length"><norn-link-button :@href="$data.norn.docs[0].href"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'docs', $data.page) || 'Read the docs'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.docs.length ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
+		</ul>
+	</nav>
+	<norn-code-block webc:if="$data.norn.install" id="install" @language="sh" :@code="$data.norn.install"></norn-code-block>
+</norn-hero>
+<section webc:if="$data.norn.docs.length" id="docs">
+	<h2 @text="nornComponentStrings?.('norn-docs-home', 'contents', $data.page) || 'Documentation'"></h2>
+	<dl data-norn-contents>
+		<div webc:for="page of $data.norn.docs">
+			<dt><a :href="page.href" @text="page.title"></a></dt>
+			<dd webc:if="page.description" @text="page.description"></dd>
+		</div>
+	</dl>
+</section>
+<section webc:if="String($data.content ?? '').trim()">
+	<norn-rich-text
+		><template webc:if="nornCompiles($data, 'norn-docs-home')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
+</section>
+<style>
+	@layer norn.layout {
+		/* Contents: a title and its description, in two columns when wide. Each row is one link, with no rules between them. */
+		[data-norn-contents] {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+			gap: var(--norn-space-s, t('space.s'));
+			/* The rows are padded, so the text lines up with the heading above. */
+			margin: 0 calc(-1 * var(--norn-space-m, t('space.m')));
+
+			& > div {
+				--_state: 0%;
+				position: relative;
+				display: grid;
+				align-content: start;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding: var(--norn-space-s, t('space.s')) var(--norn-space-m, t('space.m'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+
+				&:has(a:hover) {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:has(a:active) {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				/* The ring goes around the row, not around the link text. */
+				&:has(a:focus-visible) {
+					outline: var(--norn-ui-focus-width, t('ui.focus.width')) solid var(--norn-text-accent, t('text.accent'));
+					outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+				}
+			}
+
+			& dt {
+				font-family: var(--norn-font-heading, t('font.heading'));
+				font-size: var(--norn-font-size-m, t('font.size.m'));
+				font-weight: 700;
+			}
+
+			/* The link reaches over the whole row. */
+			& dt a {
+				text-decoration: none;
+
+				&::after {
+					content: "";
+					position: absolute;
+					inset: 0;
+				}
+
+				&:hover {
+					text-decoration: underline;
+				}
+
+				&:focus-visible {
+					outline: none;
+				}
+			}
+
+			& dd {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+			}
+		}
+	}
+</style>

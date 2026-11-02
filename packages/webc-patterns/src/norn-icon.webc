@@ -1,0 +1,140 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+const RING = "M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0";
+
+/** Stroke paths on a 24-unit grid, plus an optional filled path. */
+const ICONS = {
+	accessibility: { d: `${RING}M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4` },
+	"arrow-end": { d: "M5 12h14M13 6l6 6l-6 6" },
+	"arrow-start": { d: "M19 12H5M11 6l-6 6l6 6" },
+	book: { d: "M2 5h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H2zM22 5h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z" },
+	caution: { d: "M8 3h8l5 5v8l-5 5H8l-5-5V8zM12 8v5M12 16v.5" },
+	check: { d: "M5 12l5 5L20 7" },
+	"chevron-down": { d: "M6 9l6 6l6-6" },
+	"chevron-end": { d: "M9 6l6 6l-6 6" },
+	copy: { d: "M9 9h11v11H9zM15 9V4H4v11h5" },
+	desktop: { d: "M3 4h18v12H3zM8 20h8M12 16v4" },
+	error: { d: `${RING}M15 9l-6 6M9 9l6 6` },
+	external: { d: "M14 4h6v6M20 4l-9 9M18 14v6H4V6h6" },
+	fill: { d: "M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4" },
+	hash: { d: "M5 9h14M5 15h14M10 4L8 20M16 4l-2 16" },
+	important: { d: "M4 4h16v12H9l-5 4zM12 7v4M12 13.5v.5" },
+	info: { d: `${RING}M12 11v6M12 7.5v.5` },
+	link: { d: "M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1" },
+	loading: { d: "M21 12a9 9 0 1 1-9-9" },
+	moon: { d: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" },
+	phone: { d: "M7 2h10v20H7zM11 18h2" },
+	search: { d: "M18 11a7 7 0 1 1-14 0a7 7 0 1 1 14 0M21 21l-5-5" },
+	success: { d: `${RING}M8 12l3 3l5-6` },
+	sun: { d: "M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4" },
+	system: { d: RING, fill: "M12 3a9 9 0 0 1 0 18z" },
+	tablet: { d: "M4 3h16v18H4zM11 18h2" },
+	tip: { d: "M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.6.6 1 1.5 1 2.5h6c0-1 .4-1.9 1-2.5A6 6 0 0 0 12 3z" },
+	warning: { d: "M12 3L2 21h20zM12 10v5M12 18v.5" },
+};
+
+const MIRROR = ["arrow-end", "arrow-start", "chevron-end"];
+
+/** The sizes, each a shared icon token. */
+const SIZES = ["s", "m"];
+
+/** The project's icons from the Norn plugin, by name. None without the plugin. */
+const project = () => (typeof nornIcons === "function" ? nornIcons() : {});
+
+/**
+ * The icon for a name: a project icon, else a built-in. An unknown name fails the build rather than rendering nothing.
+ * @returns {{ mirror: boolean, viewBox?: string, body?: string, d?: string, fill?: string }}
+ */
+function icon(name) {
+	const own = project();
+	if (Object.hasOwn(own, name)) return own[name];
+	if (!Object.hasOwn(ICONS, name)) {
+		throw new Error(`norn-icon: no icon named "${name}". Built-in: ${Object.keys(ICONS).join(", ")}. Project: ${Object.keys(own).join(", ") || "none"}`);
+	}
+	return { ...ICONS[name], mirror: MIRROR.includes(name) };
+}
+
+/** An attribute value, escaped. */
+const attr = (value) => String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+
+/**
+ * The size attribute: none for the default, `s`. An unknown size fails the build rather than drawing at the wrong size.
+ * @param {string} size
+ */
+function sized(size) {
+	if (!size || size === "s") return "";
+	if (!SIZES.includes(size)) throw new Error(`norn-icon: no size "${size}". Sizes: ${SIZES.join(", ")}`);
+	return ` data-size="${size}"`;
+}
+
+/**
+ * The whole `<svg>` for a name and a size, as markup, so the template has one expression to compile.
+ * A project icon keeps its own `viewBox` and body.
+ */
+function drawing(name, size) {
+	const { viewBox, mirror, body, d, fill } = icon(name);
+	const flip = mirror ? " data-mirror" : "";
+	const scale = sized(size);
+	if (body) return `<svg${viewBox ? ` viewBox="${attr(viewBox)}"` : ""} aria-hidden="true"${flip}${scale} data-project>\n\t${body}\n</svg>`;
+	const extra = fill ? `\n\t<path d="${attr(fill)}" data-fill></path>` : "";
+	return `<svg viewBox="0 0 24 24" aria-hidden="true"${flip}${scale}>\n\t<path d="${attr(d)}"></path>${extra}\n</svg>`;
+}
+</script>
+<template webc:nokeep @raw="drawing(name, typeof size === 'string' ? size : '')"></template>
+<slot name="label"></slot>
+<style>
+	@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-ui-icon-s, t('ui.icon.s'));
+				block-size: var(--norn-ui-icon-s, t('ui.icon.s'));
+
+				&[data-size="m"] {
+					inline-size: var(--norn-ui-icon-m, t('ui.icon.m'));
+					block-size: var(--norn-ui-icon-m, t('ui.icon.m'));
+				}
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: 2;
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+</style>

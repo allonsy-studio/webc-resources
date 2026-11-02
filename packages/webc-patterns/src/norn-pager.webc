@@ -1,0 +1,67 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<nav :aria-labelledby="'norn-pager-' + uid" webc:if="prev || next">
+	<span data-label :id="'norn-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-pager', 'label', $data.page) || 'Pager'"></span></slot></span>
+	<a webc:if="prev" rel="prev" :href="prev.href"><norn-icon @name="arrow-start"></norn-icon><span @text="prev.title"></span></a>
+	<a webc:if="next" rel="next" :href="next.href"><span @text="next.title"></span><norn-icon @name="arrow-end"></norn-icon></a>
+</nav>
+<style>
+	@layer norn.components {
+		norn-pager {
+			display: block;
+
+			& nav {
+				display: flex;
+				justify-content: space-between;
+				gap: var(--norn-space-m, t('space.m'));
+			}
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > a {
+				--_state: 0%;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-text-accent, t('text.accent'));
+				text-decoration: none;
+				overflow-wrap: break-word;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[rel="next"] {
+					margin-inline-start: auto;
+					text-align: end;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& nav > a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+		}
+	}
+</style>

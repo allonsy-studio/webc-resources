@@ -1,0 +1,96 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<a :href="href" :data-variant="variant === 'secondary' || variant === 'quiet' ? variant : 'primary'" :data-tone="tone === 'current' ? 'current' : undefined"><slot></slot></a>
+<style>
+	@layer norn.components {
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& a[data-variant] {
+				--_state: 0%;
+				--_bg: transparent;
+				--_border: transparent;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-m, t('space.m'));
+				border: 1px solid var(--_border);
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg));
+				color: var(--norn-text-accent, t('text.accent'));
+				font-weight: 600;
+				line-height: 1.3;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+			}
+
+			/* The surrounding text color, for a secondary or quiet button. The primary rule below keeps its own. */
+			& a[data-tone="current"] {
+				color: inherit;
+			}
+
+			& a[data-variant="primary"] {
+				--_bg: var(--norn-ui-accent, t('ui.accent'));
+				color: var(--norn-text-on-accent, t('text.on-accent'));
+			}
+
+			& a[data-variant="secondary"] {
+				--_border: var(--norn-text-accent, t('text.accent'));
+			}
+
+			@media (pointer: coarse) {
+				& a[data-variant] {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& a[data-variant] {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* The primary button stays filled, since the browser would turn its fill into the page color. */
+			@media (forced-colors: active) {
+				& a[data-variant="primary"] {
+					border-color: LinkText;
+					background-color: LinkText;
+					color: Canvas;
+					forced-color-adjust: none;
+
+					&:focus-visible {
+						outline-color: CanvasText;
+					}
+				}
+
+				& a[data-variant="secondary"] {
+					border-color: LinkText;
+					color: LinkText;
+				}
+
+				/* A clear border would be drawn in the text color, so the quiet button's takes the page's. */
+				& a[data-variant="quiet"] {
+					border-color: Canvas;
+					color: LinkText;
+				}
+			}
+		}
+	}
+</style>

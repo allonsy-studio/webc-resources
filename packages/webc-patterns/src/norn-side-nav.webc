@@ -1,0 +1,149 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<nav :aria-labelledby="'norn-side-nav-' + uid">
+	<span data-label :id="'norn-side-nav-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-side-nav', 'label', $data.page) || 'Pages'"></span></slot></span>
+	<slot name="search"></slot>
+	<ul>
+		<li webc:for="item of items">
+			<a
+				:href="item.href"
+				:aria-current="item.href === $data.page.url ? 'page' : (item.children || []).some((child) => child.href === $data.page.url) ? 'true' : undefined"
+			><norn-icon webc:if="item.icon" :@name="item.icon"></norn-icon><span @text="item.title"></span></a>
+			<ul webc:if="item.children && item.children.length">
+				<li webc:for="child of item.children">
+					<a :href="child.href" :aria-current="child.href === $data.page.url ? 'page' : undefined"><span @text="child.title"></span></a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</nav>
+<style>
+	@layer norn.components {
+		norn-side-nav {
+			display: flex;
+			flex-direction: column;
+			min-block-size: 0;
+			font-size: var(--norn-font-size-s, t('font.size.s'));
+
+			& nav {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-s, t('space.s'));
+				min-block-size: 0;
+			}
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > ul,
+			& nav > ul ul {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			/* Padding with an equal negative margin keeps focus rings inside the scroll box, which would clip them. */
+			& nav > ul {
+				box-sizing: border-box;
+				min-block-size: 0;
+				margin: -6px;
+				padding: 6px;
+				overflow-y: auto;
+				overscroll-behavior: contain;
+			}
+
+			/* An item with a nested list stacks them with the list's gap, and keeps a little room below. */
+			& nav > ul li:has(> ul) {
+				display: flex;
+				flex-direction: column;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				padding-block-end: var(--norn-space-xs, t('space.xs'));
+			}
+
+			& nav > ul ul {
+				margin-inline: var(--norn-space-s, t('space.s')) 0;
+			}
+
+			& nav > ul a {
+				--_state: 0%;
+				--_tint: transparent;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				gap: var(--norn-space-xs, t('space.xs'));
+				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-xs, t('space.xs'));
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
+				color: var(--norn-text-muted, t('text.muted'));
+				text-decoration: none;
+				overflow-wrap: anywhere;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[aria-current="page"] {
+					--_tint: color-mix(in oklab, var(--norn-text-accent, t('text.accent')) var(--norn-ui-state-press, t('ui.state.press')), transparent);
+					color: var(--norn-text-accent, t('text.accent'));
+				}
+			}
+
+			& nav > ul norn-icon {
+				flex: none;
+				color: var(--norn-text-accent, t('text.accent'));
+			}
+
+			@media (pointer: coarse) {
+				& nav > ul a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& nav > ul a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* The current page fills itself, since the browser replaces the tint. */
+			@media (forced-colors: active) {
+				& nav > ul a[aria-current="page"] {
+					background-color: Highlight;
+					color: HighlightText;
+					forced-color-adjust: none;
+
+					& norn-icon {
+						color: HighlightText;
+					}
+				}
+
+				& nav > ul a:focus-visible {
+					outline-color: CanvasText;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>

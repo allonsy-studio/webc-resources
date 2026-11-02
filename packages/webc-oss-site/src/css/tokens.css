@@ -1,0 +1,10 @@
+/*
+ * The Allons-y Studio brand as Norn tokens, in the norn.oss layer: the OSS site plugin adds it to every page's bundle.
+ * It sets only shared tokens from tokens.json; css/brand.css styles the components. A project's own unlayered tokens.css still wins over it.
+ */
+@layer norn.oss {
+	:root {
+		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
+		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	}
+}

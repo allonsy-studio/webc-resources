@@ -1,0 +1,41 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<a :href="href || '#main'"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-skip-link', 'label', $data.page) || 'Skip to content'"></span></slot></a>
+<style>
+	@layer norn.components {
+		norn-skip-link {
+			display: block;
+
+			& a {
+				position: absolute;
+				inset-block-start: -5rem;
+				inset-inline-start: var(--norn-space-m, t('space.m'));
+				z-index: 10;
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background: var(--norn-surface-raised, t('surface.raised'));
+				color: var(--norn-text-base, t('text.base'));
+
+				&:focus {
+					inset-block-start: var(--norn-space-xs, t('space.xs'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& a {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>

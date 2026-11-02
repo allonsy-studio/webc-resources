@@ -1,0 +1,16 @@
+---
+layout: norn-base.webc
+title: Custom navigation
+description: A docs shell with its own navigation.
+---
+<norn-sidebar-layout>
+	<nav slot="nav" aria-label="Section"><a href="/">Home</a></nav>
+	<h1>Custom navigation</h1>
+	<norn-rich-text @measure="none">
+		<p>The body.</p>
+		<h2>A heading</h2>
+		<ul>
+			<li>An item</li>
+		</ul>
+	</norn-rich-text>
+</norn-sidebar-layout>

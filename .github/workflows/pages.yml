@@ -3,49 +3,19 @@ name: Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
   workflow_dispatch:
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
+permissions:
+  contents: write # push to the gh-pages branch
+  pull-requests: write # comment the preview URL
 
 jobs:
-  publish:
-    name: Build and publish the preview
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Use Node LTS version
-        uses: actions/setup-node@v6
-        with:
-          node-version-file: .nvmrc
-          cache: yarn
-
-      - name: Install Node dependencies
-        run: yarn install --immutable
-
-      - name: Build the preview
-        run: yarn docs:build
-        env:
-          PATH_PREFIX: /webc-resources/
-
-      # Pages serves the gh-pages branch, so no Actions artifact is uploaded.
-      - name: Publish to the gh-pages branch
-        working-directory: preview/_site
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: |
-          touch .nojekyll
-          git init -q -b gh-pages
-          git add -A
-          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -q -m "Publish the preview from ${GITHUB_SHA}"
-          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+  pages:
+    name: Pages
+    uses: allonsy-studio/.github/.github/workflows/pages.yml@main
+    with:
+      build-command: yarn docs:build
+      output-dir: preview/_site
+      node-version-file: .nvmrc

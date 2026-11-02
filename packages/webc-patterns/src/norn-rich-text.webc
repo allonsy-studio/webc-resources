@@ -1,0 +1,105 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<norn-rich-text webc:root="override" :data-measure="measure === 'none' ? 'none' : undefined"><slot></slot></norn-rich-text>
+<style>
+	@layer norn.components {
+		norn-rich-text {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			align-content: start;
+			gap: var(--norn-space-m, t('space.m'));
+			max-inline-size: var(--norn-text-measure, t('text.measure'));
+
+			&[data-measure="none"] {
+				max-inline-size: none;
+			}
+		}
+
+		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
+		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: var(--norn-space-s, t('space.s')) 0 0;
+				font-family: var(--norn-font-heading, t('font.heading'));
+				line-height: 1.15;
+				text-wrap: balance;
+			}
+
+			/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
+			norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6)) {
+				margin-block-start: var(--norn-space-s, t('space.s'));
+			}
+
+			h2 {
+				font-size: var(--norn-font-size-xl, t('font.size.xl'));
+			}
+
+			h3 {
+				font-size: var(--norn-font-size-l, t('font.size.l'));
+			}
+
+			h4,
+			h5,
+			h6 {
+				font-size: var(--norn-font-size-m, t('font.size.m'));
+			}
+
+			p {
+				margin: 0;
+				text-wrap: pretty;
+			}
+
+			ul,
+			ol {
+				display: grid;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+				padding-inline-start: var(--norn-space-m, t('space.m'));
+				list-style: revert;
+			}
+
+			blockquote {
+				margin: 0;
+				padding-inline-start: var(--norn-space-m, t('space.m'));
+				border-inline-start: 3px solid var(--norn-ui-border-color, t('ui.border.color'));
+				color: var(--norn-text-muted, t('text.muted'));
+			}
+
+			table {
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+			}
+
+			th,
+			td {
+				padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+				text-align: start;
+			}
+
+			hr {
+				box-sizing: border-box;
+				width: 100%;
+				border: 0;
+				border-block-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+			}
+
+			:not(pre) > code {
+				padding: 0.1em 0.35em;
+				border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background: var(--norn-surface-code, t('surface.code'));
+				font-family: var(--norn-font-mono, t('font.mono'));
+				font-size: 0.875em;
+			}
+		}
+	}
+</style>

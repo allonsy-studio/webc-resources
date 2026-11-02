@@ -1,0 +1,7 @@
+---
+title: Variants
+order: 2
+---
+<div style="display: grid; gap: 0.75rem">
+	<norn-callout webc:for="(variant, index) of $data.csf.argTypes.props.variant.options" :@variant="variant"><p @text="['Useful information to keep in mind.', 'A faster way to do the same thing.', 'Something a reader needs to succeed.', 'Needs attention right away.', 'Can cause a problem you can\'t undo.'][index] || ''"></p></norn-callout>
+</div>

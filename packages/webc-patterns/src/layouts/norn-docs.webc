@@ -1,0 +1,77 @@
+---
+layout: norn-base.webc
+nornCompiled: true
+---
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+/**
+ * The host the plain search form keeps results on: `search.site`, else the host of an absolute `url`, else none.
+ *
+ * @param {object} norn - The layout props, `$data.norn`
+ * @returns {string}
+ * @throws {Error} When `url` starts with a scheme but does not parse, naming the layout and the prop
+ */
+const searchSite = (norn) => {
+	if (norn.search && norn.search.site) return norn.search.site;
+	if (!/^https?:\/\//.test(typeof norn.url === "string" ? norn.url : "")) return "";
+	try {
+		return new URL(norn.url).host;
+	} catch (cause) {
+		throw new Error(`norn-docs: \`url\` "${norn.url}" is not a valid URL, so the search has no host to keep results on. Fix \`url\`, or set \`search.site\`.`, { cause });
+	}
+};
+</script>
+<norn-sidebar-layout>
+	<span slot="summary" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
+	<norn-side-nav slot="nav" :@items="$data.norn.docs">
+		<span slot="label" @text="nornComponentStrings?.('norn-docs', 'nav', $data.page) || 'Documentation'"></span>
+		<norn-search
+			webc:if="$data.norn.search !== false"
+			slot="search"
+			:@bundle="($data.norn.search && $data.norn.search.bundle) || url('/pagefind/pagefind.js')"
+			:@site="searchSite($data.norn)"
+			><span slot="label" @text="nornComponentStrings?.('norn-docs', 'search', $data.page) || 'Search the docs'"></span
+		></norn-search>
+	</norn-side-nav>
+	<h1 @text="$data.norn.title || ''"></h1>
+	<template webc:nokeep webc:for="toc of [nornHeadings($data.content)]"><norn-toc webc:if="toc.length > 1" :@items="toc" @fold="narrow"></norn-toc></template>
+	<norn-rich-text @measure="none" data-pagefind-body
+		><template webc:if="nornCompiles($data, 'norn-docs')" webc:nokeep @html="$data.content"></template
+		><template webc:else webc:nokeep @raw="$data.content"></template
+	></norn-rich-text>
+	<template webc:nokeep webc:for="pair of [nornAdjacent($data.norn.docs, $data.page)]"
+		><norn-pager :@prev="$data.norn.prev !== undefined ? $data.norn.prev : pair.prev" :@next="$data.norn.next !== undefined ? $data.norn.next : pair.next"></norn-pager
+	></template>
+</norn-sidebar-layout>
+<style>
+	@layer norn.layout {
+		/* The contents sit beside the body once the page is 60rem wide. Narrower, they fold under their title, by norn-toc's fold prop. */
+		@container (width >= 60rem) {
+			/* The contents take a second, implicit column beside the body's one. */
+			norn-sidebar-layout > div > article:has(> norn-toc > nav) {
+				grid-auto-columns: 12rem;
+			}
+
+			norn-sidebar-layout > div > article > * {
+				grid-column: 1;
+			}
+
+			norn-sidebar-layout > div > article > norn-toc {
+				grid-column: 2;
+				grid-row: 1 / span 2;
+				position: sticky;
+				inset-block-start: var(--norn-space-m, t('space.m'));
+				align-self: start;
+				max-block-size: calc(100dvh - 2 * var(--norn-space-m, t('space.m')));
+				overflow-y: auto;
+			}
+		}
+	}
+</style>

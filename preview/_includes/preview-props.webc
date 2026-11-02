@@ -1,0 +1,179 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+/**
+ * The global tokens a component reads, as a table. When the page has examples, each row takes an override that every canvas on the page applies live, with a reset after each field.
+ * @prop {{ name: string, description: string, type: string, value: string }[]} tokens
+ * @prop {boolean} [editable] - Adds the override column and the shared accent row.
+ */
+--->
+<table>
+	<thead>
+		<tr>
+			<th scope="col">Token</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col" webc:if="editable">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr webc:if="editable">
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>#2346d4</code></td>
+			<td data-label="Override">
+				<span data-field>
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent" />
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled>Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr webc:for="token of tokens.filter((token) => !editable || token.name !== '--norn-ui-accent')">
+			<th scope="row"><code @text="token.name"></code><small webc:if="token.description" @html="token.description"></small></th>
+			<td data-col="type" data-label="Type"><code webc:if="token.type" @text="token.type"></code><span webc:else>none</span></td>
+			<td data-label="Default"><code @text="token.value"></code></td>
+			<td webc:if="editable" data-label="Override">
+				<span data-field>
+					<input type="text" :data-prop="token.name" :aria-label="'Override ' + token.name" autocomplete="off" spellcheck="false" />
+					<button type="button" data-action="reset" :data-prop="token.name" :aria-label="'Reset ' + token.name" disabled>Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<style>
+	@layer norn.components {
+		preview-props {
+			display: block;
+			overflow-x: auto;
+		}
+
+		preview-props:not(:defined) :is(thead th:last-child, td:has([data-field])) {
+			display: none;
+		}
+
+		preview-props [data-col="type"] code {
+			overflow-wrap: normal;
+			white-space: nowrap;
+		}
+
+		preview-props th[scope="row"] {
+			font-weight: 400;
+		}
+
+		preview-props td[data-label="Default"] code {
+			overflow-wrap: anywhere;
+		}
+
+		preview-props th[scope="row"] code {
+			font-weight: 700;
+			white-space: nowrap;
+		}
+
+		preview-props :is(th, td) small {
+			display: block;
+			color: var(--norn-text-muted);
+		}
+
+		preview-props [data-field] {
+			display: flex;
+			align-items: center;
+			gap: var(--norn-space-xs);
+		}
+
+		preview-props input[type="text"] {
+			inline-size: 100%;
+			min-inline-size: 8rem;
+			padding: 0.25rem 0.5rem;
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-base);
+			color: var(--norn-text-base);
+			font-family: var(--norn-font-mono);
+			font-size: 0.85rem;
+		}
+
+		preview-props input[type="color"] {
+			inline-size: 2.5rem;
+			block-size: 1.75rem;
+			padding: 0;
+		}
+
+		preview-props button {
+			padding: 0.25rem 0.6rem;
+			border: 1px solid var(--norn-ui-border-color);
+			border-radius: var(--norn-ui-border-radius);
+			background: var(--norn-surface-base);
+			color: var(--norn-text-base);
+			font: inherit;
+			font-size: 0.85rem;
+			cursor: pointer;
+		}
+
+		preview-props button:disabled {
+			color: var(--norn-text-muted);
+			cursor: default;
+		}
+
+		@media (pointer: coarse) {
+			preview-props :is(button, input[type="text"]) {
+				min-block-size: 2.75rem;
+			}
+
+			preview-props input[type="color"] {
+				block-size: 2.75rem;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		/** The overrides table. Holds the values the canvases read, and tells them when one changes. */
+		class PreviewProps extends HTMLElement {
+			#wired = false;
+
+			/** Every filled field, by property name. A color field counts once it has been used. */
+			get values() {
+				const values = new Map();
+				for (const field of this.querySelectorAll("input[data-prop]")) {
+					const value = field.value.trim();
+					if (field.type === "color" ? field.dataset.touched === "true" : value !== "") values.set(field.dataset.prop, value);
+				}
+				return values;
+			}
+
+			connectedCallback() {
+				if (this.#wired) return;
+				this.#wired = true;
+				this.addEventListener("input", (event) => {
+					const field = event.target.closest("input[data-prop]");
+					if (!field) return;
+					if (field.type === "color") field.dataset.touched = "true";
+					this.#changed();
+				});
+				this.addEventListener("click", (event) => {
+					const reset = event.target.closest('[data-action="reset"]');
+					if (!reset) return;
+					const field = this.querySelector(`input[data-prop="${reset.dataset.prop}"]`);
+					field.value = field.type === "color" ? field.defaultValue : "";
+					delete field.dataset.touched;
+					this.#changed();
+					field.focus();
+				});
+			}
+
+			#changed() {
+				const values = this.values;
+				for (const reset of this.querySelectorAll('[data-action="reset"]')) reset.disabled = !values.has(reset.dataset.prop);
+				document.dispatchEvent(new CustomEvent("previewpropschange"));
+			}
+		}
+
+		if (!customElements.get("preview-props")) customElements.define("preview-props", PreviewProps);
+	}
+</script>

@@ -1,0 +1,43 @@
+---
+layout: shell.webc
+title: Foundations
+description: The shared design tokens, from tokens.json.
+---
+<h1>Foundations</h1>
+<p class="lead">
+	The shared tokens in <code>tokens.json</code>. Each component reads a token as the custom property with its default as the fallback, so
+	nothing defines them until a project does. Every one carries the <code>--norn-</code> prefix, so it can sit next to a project's own
+	custom properties, and its name is the path joined with hyphens: <code>ui.border.color</code> is <code>--norn-ui-border-color</code>.
+	Set any of them in unlayered CSS to restyle every component.
+</p>
+<p>
+	Change a token in the Override column to try it. A color has a light and a dark value, each from its own picker. Any other token takes
+	any CSS value, such as <code>1.5rem</code>. Overrides are saved in this browser and apply to every preview page, in this tab and in any
+	other that is open.
+</p>
+<preview-tokens>
+	<norn-simple-table>
+	<table>
+		<thead>
+			<tr><th scope="col">Token</th><th scope="col">Group</th><th scope="col">Preview</th><th scope="col">Default</th><th scope="col">Override</th><th scope="col">Use</th></tr>
+		</thead>
+		<tbody>
+			<tr webc:for="token of $data.foundations">
+				<th scope="row"><code @text="token.name"></code></th>
+				<td @text="token.group"></td>
+				<td class="preview" aria-hidden="true"><span class="sample" :data-kind="token.kind" :style="'--sample: var(' + token.name + ')'"></span></td>
+				<td><code @text="token.value"></code></td>
+				<td>
+					<div webc:if="token.kind === 'color'" data-pair>
+						<label>Light <input type="color" data-scheme="light" :data-token="token.name" :value="token.light || '#000000'" :aria-label="'Override ' + token.name + ', light mode'" /></label>
+						<label>Dark <input type="color" data-scheme="dark" :data-token="token.name" :value="token.dark || '#000000'" :aria-label="'Override ' + token.name + ', dark mode'" /></label>
+						<button type="button" data-action="clear" :data-token="token.name" :aria-label="'Reset ' + token.name" disabled>Reset</button>
+					</div>
+					<input webc:else type="text" :data-token="token.name" :aria-label="'Override ' + token.name" placeholder="Any value" autocomplete="off" spellcheck="false" />
+				</td>
+				<td @html="token.description"></td>
+			</tr>
+		</tbody>
+	</table>
+	</norn-simple-table>
+</preview-tokens>

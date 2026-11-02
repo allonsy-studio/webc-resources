@@ -1,0 +1,260 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<script webc:setup>
+const escape = (text) => String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+/** Renders the flat headings as nested `<li>` elements, one inner `<ol>` per level of depth. */
+function outline(items) {
+	const root = { level: 0, nodes: [] };
+	const trail = [root];
+	for (const item of items) {
+		while (trail.length > 1 && trail.at(-1).level >= item.level) trail.pop();
+		const node = { level: item.level, item, nodes: [] };
+		trail.at(-1).nodes.push(node);
+		trail.push(node);
+	}
+	const list = (nodes) => '<ol>' + nodes.map((node) => '<li><a href="#' + escape(node.item.id) + '">' + escape(node.item.text) + '</a>' + (node.nodes.length ? list(node.nodes) : '') + '</li>').join('') + '</ol>';
+	return list(root.nodes);
+}
+</script>
+<nav webc:if="items && items.length > 1" :aria-labelledby="'norn-toc-' + uid" :data-fold="['always', 'narrow'].includes(fold) ? fold : undefined">
+	<details>
+		<summary><span :id="'norn-toc-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-toc', 'label', $data.page) || 'On this page'"></span></slot></span></summary>
+		<template webc:nokeep @raw="outline(items)"></template>
+	</details>
+</nav>
+<style>
+	@layer norn.components {
+		norn-toc {
+			display: block;
+			font-size: var(--norn-font-size-s, t('font.size.s'));
+
+			& > nav > details > summary {
+				--_state: 0%;
+				--_fold: none;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin-block-end: var(--norn-space-xs, t('space.xs'));
+				color: var(--norn-text-base, t('text.base'));
+				font-weight: 700;
+				list-style: none;
+
+				&::-webkit-details-marker {
+					display: none;
+				}
+
+				/* A chevron drawn with two borders, shown only while the list folds. */
+				&::after {
+					box-sizing: border-box;
+					content: "";
+					display: var(--_fold);
+					flex: none;
+					inline-size: 0.5em;
+					block-size: 0.5em;
+					border-block-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					border-inline-end: 2px solid var(--norn-text-accent, t('text.accent'));
+					rotate: 45deg;
+				}
+			}
+
+			& > nav > details[open] > summary::after {
+				rotate: 225deg;
+			}
+
+			/* Open or not, the list shows, so the title is only a title. */
+			@supports selector(::details-content) {
+				& > nav > details::details-content {
+					content-visibility: visible;
+				}
+			}
+
+			& > nav > details > ol,
+			& > nav > details > ol ol {
+				display: grid;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			& > nav > details > ol {
+				border-inline-start: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+			}
+
+			& > nav > details > ol ol {
+				padding-inline-start: var(--norn-space-s, t('space.s'));
+			}
+
+			& > nav > details > ol li > a {
+				--_state: 0%;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				min-block-size: 1.5rem;
+				margin-inline-start: -1px;
+				padding: var(--norn-space-2xs, t('space.2xs')) var(--norn-space-s, t('space.s'));
+				border-inline-start: 2px solid transparent;
+				border-start-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				border-end-end-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-text-muted, t('text.muted'));
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					color: var(--norn-text-base, t('text.base'));
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&[aria-current] {
+					border-inline-start-color: var(--norn-text-accent, t('text.accent'));
+					color: var(--norn-text-accent, t('text.accent'));
+				}
+			}
+
+			/* The fold prop turns the fold on, always or while the nearest container is narrow. */
+			& > nav[data-fold="always"] {
+				--_folded: on;
+			}
+
+			@container (width < 60rem) {
+				& > nav[data-fold="narrow"] {
+					--_folded: on;
+				}
+			}
+
+			/* Folded, the title is a control that opens the list. */
+			@container style(--_folded: on) {
+				& > nav > details > summary {
+					--_fold: block;
+					padding: var(--norn-space-xs, t('space.xs')) var(--norn-space-s, t('space.s'));
+					border-radius: var(--norn-ui-radius-s, t('ui.radius.s'));
+					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
+					cursor: pointer;
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, t('ui.state.press'));
+					}
+
+					&:focus-visible {
+						outline-offset: calc(-1 * var(--norn-ui-focus-offset, t('ui.focus.offset')));
+					}
+				}
+
+				@supports selector(::details-content) {
+					& > nav > details:not([open])::details-content {
+						content-visibility: hidden;
+					}
+				}
+			}
+
+			/* Without ::details-content a closed fold can't show its list, so the title always works as a control. */
+			@supports not selector(::details-content) {
+				& > nav > details > summary {
+					--_fold: block;
+					cursor: pointer;
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > nav > details > ol li > a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > nav > details > ol li > a,
+				& > nav > details > summary {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > nav > details > summary::after {
+					border-color: CanvasText;
+				}
+
+				/* A clear border would be drawn in the text color, so only the current link has one. */
+				& > nav > details > ol li > a {
+					border-inline-start-width: 0;
+					padding-inline-start: calc(var(--norn-space-s, t('space.s')) + 2px);
+				}
+
+				& > nav > details > ol li > a[aria-current] {
+					border-inline-start-width: 2px;
+					border-inline-start-color: Highlight;
+					padding-inline-start: var(--norn-space-s, t('space.s'));
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+</style>
+<script>
+	{
+		/** Marks the link to the last section heading scrolled past, or the first one. */
+		class Toc extends HTMLElement {
+			#observer;
+			#onScroll;
+
+			connectedCallback() {
+				const links = [...this.querySelectorAll('a[href^="#"]')];
+				// A link's hash is percent-encoded and an id is not, but an id may hold a literal `%`: try the decoded hash, then the hash as written.
+				const heading = (link) => {
+					const hash = link.hash.slice(1);
+					try {
+						return document.getElementById(decodeURIComponent(hash)) ?? document.getElementById(hash);
+					} catch {
+						return document.getElementById(hash);
+					}
+				};
+				const sections = links.map((link) => [link, heading(link)]).filter(([, target]) => target);
+				if (!sections.length) return;
+				const mark = () => {
+					const line = innerHeight * 0.25;
+					const [current] = sections.findLast(([, target]) => target.getBoundingClientRect().top <= line) ?? sections[0];
+					for (const link of links) {
+						if (link === current) link.setAttribute("aria-current", "location");
+						else link.removeAttribute("aria-current");
+					}
+				};
+				this.#teardown();
+				this.#onScroll = () => requestAnimationFrame(mark);
+				addEventListener("scroll", this.#onScroll, { passive: true });
+				this.#observer = new ResizeObserver(this.#onScroll);
+				this.#observer.observe(document.documentElement);
+				mark();
+			}
+
+			disconnectedCallback() {
+				this.#teardown();
+			}
+
+			#teardown() {
+				if (this.#onScroll) removeEventListener("scroll", this.#onScroll);
+				this.#observer?.disconnect();
+			}
+		}
+
+		if (!customElements.get("norn-toc")) customElements.define("norn-toc", Toc);
+	}
+</script>

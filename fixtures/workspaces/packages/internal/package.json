@@ -1,0 +1,6 @@
+{
+	"private": true,
+	"name": "@example/internal",
+	"version": "0.0.0",
+	"description": "Excluded by a negated workspace pattern."
+}
