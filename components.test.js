@@ -345,12 +345,14 @@ test("norn-notice keeps the status recipe, a tint and a 3px bar, while norn-call
 const cssOf = (name) => squash(styles(sources.find(({ file }) => file.endsWith(`/${name}.webc`)).text));
 
 test("a component that exposes no custom property of its own reads only global tokens and private --_ names", () => {
-	for (const name of ["norn-pager"]) {
+	for (const name of ["norn-pager", "norn-skip-link"]) {
 		const css = cssOf(name);
 		assert.ok(!css.includes(`--${name}-`), `${name}: no --${name}-* property`);
 		for (const [, property] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(byName.has(property), `${name}: ${property} is a global token`);
 	}
 	assert.ok(cssOf("norn-pager").includes("color: var(--norn-text-accent, t('text.accent'))"), "norn-pager: links in the accent text color");
+	const skip = cssOf("norn-skip-link");
+	assert.ok(skip.includes("border-radius: var(--norn-ui-border-radius, t('ui.border.radius'))") && skip.includes("background: var(--norn-surface-raised, t('surface.raised'))") && skip.includes("color: var(--norn-text-base, t('text.base'))"), "norn-skip-link: the radius, the raised fill, and the base text");
 });
 
 test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
