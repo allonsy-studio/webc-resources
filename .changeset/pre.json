@@ -4,7 +4,16 @@
   "initialVersions": {
     "@allons-y/webc-code-sample": "0.1.0-beta.0",
     "@allons-y/webc-oss-site": "0.1.0-beta.0",
-    "@allons-y/webc-patterns": "0.1.0-beta.0"
+    "@allons-y/webc-patterns": "0.1.0-beta.0",
+    "fixture-docs": "0.0.0",
+    "fixture-landing": "0.0.0",
+    "fixture-neutral": "0.0.0",
+    "fixture-workspaces": "0.0.0",
+    "webc-preview": "0.0.0"
   },
-  "changesets": []
+  "changesets": [
+    "code-sample-first-beta",
+    "oss-site-first-beta",
+    "patterns-first-beta"
+  ]
 }
