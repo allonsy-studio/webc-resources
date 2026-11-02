@@ -53,8 +53,7 @@ describe("the catalog", () => {
 		assert.ok(button.tokens.every(({ name }) => !name.startsWith("--norn-link-button-")), "never a custom property of its own");
 		assert.ok(button.props.some(({ name }) => name === "tone"), "the tone prop");
 		const footer = catalog.components.find(({ name }) => name === "norn-footer");
-		assert.ok(footer.tokens.some(({ name }) => name === "--norn-text-muted"), "a component without a CSF file lists its tokens too");
-		assert.equal(footer.csf, undefined, "norn-footer still has its JSDoc");
+		assert.ok(footer.tokens.some(({ name }) => name === "--norn-text-muted"), "the tokens it reads");
 		assert.deepEqual(footer.slots.map(({ name }) => name), ["default", "colophon"], "an unnamed slot is the default one");
 	});
 

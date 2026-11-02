@@ -5,18 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * Site footer: a row of columns, and a colophon below them.
- * The default slot holds the columns: a lead `<div>` first (the name in a `<p><strong>`, a tagline, the license), then the links, then anything else, such as a credit.
- * Put the links in one `<nav aria-labelledby="…">`, pointing at a hidden name: a `<p><strong>` heading and a `<ul>`, or for several groups a `<div>` each holding its heading and list. The groups sit side by side and wrap.
- * When the footer is 60rem or wider, the lead column takes up to 25rem, or the width `lead-width` gives, and the others size to their content; narrower, the columns wrap.
- * @prop {string} [width] - The content width, as a CSS length. Falls back to --norn-layout-width.
- * @prop {string} [lead-width] - The widest the lead column gets on a wide footer, as a CSS length. Falls back to 25rem.
- * @slot - The columns.
- * @slot colophon - Full-width content below the columns, as one element.
- * @category landmark
- */
 --->
 <footer :style="[typeof width === 'string' && width ? '--_width: ' + width : '', typeof leadWidth === 'string' && leadWidth ? '--_lead: ' + leadWidth : ''].filter(Boolean).join('; ')">
 	<div><slot></slot></div>
