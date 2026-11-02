@@ -5,18 +5,6 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
-
-/**
- * A message about the page or the site: information, success, a warning, or an error, with an icon and an optional action.
- * Color is never the only cue: the icon and a word for the severity, read but not shown, come first. The message goes in the default slot, and an action, such as a `norn-link-button`, in the `action` slot.
- * A notice already on the page when it loads is static. Set `:@live="true"` on one the page adds later, so a screen reader announces it: politely, or at once for a warning or an error.
- * @prop {string} [severity] - `info`, `success`, `warning`, or `error`. Falls back to `info`.
- * @prop {boolean} [live] - Announce the notice when it appears. On for `@live`, `@live="true"`, or `:@live="true"`.
- * @slot prefix - The severity word read before the message, with its punctuation, as one element, such as `<span slot="prefix">Remarque : </span>`. Falls back to the site's `componentStrings` for the severity, then "Note: ", "Success: ", "Warning: ", or "Error: ".
- * @slot - The message.
- * @slot action - One action, such as a `norn-link-button` with `@variant="quiet"` and `@tone="current"`, so it reads in the text color and doesn't compete with the severity.
- * @category container
- */
 --->
 <script webc:setup>
 const SEVERITIES = { info: ["Note", "info"], success: ["Success", "success"], warning: ["Warning", "warning"], error: ["Error", "error"] };
