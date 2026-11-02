@@ -26,7 +26,7 @@ neither of them knows the OSS site theme exists.
 ```text
 packages/<name>/   src/*.webc, src/layouts/*.webc, src/fallback/*.webc, src/css/*.css (the sources); src/**/*.stories.js (each component's CSF file, not shipped); components/, layouts/, fallback/, css/ (compiled from src, not committed); index.js, README.md
 tokens.json        the shared design tokens, Style Dictionary 3 format (not published)
-scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json
+scripts/           build-components.js: compiles src/ into components/, layouts/, and css/, filling each t() from tokens.json; analyze-webc.js: derives a source's props, slots, and tokens; calibrate-webc.js: compares that with the docs
 fixtures/<name>/   one Eleventy site per flavor (landing, docs, workspaces, each in its src/) plus neutral
 preview/           the component preview: an Eleventy site with a page and stories per component (private)
 ```
@@ -75,8 +75,10 @@ preview/           the component preview: an Eleventy site with a page and stori
    `@property` for one. A project overrides a token with its own `tokens.css` (`:root { --norn-ui-accent: #1f6f8b; }`) and every
    component follows. Derived tokens (`text.accent`, `text.on-accent`, `font.heading`) write the token they derive from as
    `var(--norn-ui-accent, {ui.accent})`, so a project value still drives them. A value in `tokens.json` may use `{path}` to
-   name another token's default. A component's own custom properties (`--norn-toc-link`) keep their names and may register
-   with `@property`, typed as the component likes. `components.test.js` checks the paths, the names, and the compiled values.
+   name another token's default. A component reads the global tokens and private `--_` properties only, and surfaces no
+   custom property of its own. The ones some components still read are listed in `scripts/owned-custom-properties.json`,
+   which only shrinks: `components.test.js` fails on a new one, and on a listed one the code no longer reads.
+   `components.test.js` checks the paths, the names, and the compiled values.
 5. Print rules live in the component's own `@media print` block.
    The reset (`css/reset.css`) is optional, and nothing in Norn relies on it: a component that sets a size with padding or a
    border also sets `box-sizing: border-box`, zeroes the margins and list styles of its own markup, and sizes its own media.
@@ -127,18 +129,23 @@ preview/           the component preview: an Eleventy site with a page and stori
 15. A component's API is documented in its CSF file, `src/<name>.stories.js` beside it (`src/layouts/<name>.stories.js` for a
     layout), in strict CSF 3: a default export with `title`, `component`, `args`, `argTypes`, `parameters`, and `tags`, and stories
     as named exports of data (`name`, `args`, `argTypes`, `parameters`, `tags`). No `render`, `play`, `decorators`, or `loaders`.
-    Each prop, slot, and custom property is an argType with a `description` and a `table.category` of `props`, `slots`, or
-    `css custom properties`. A prop with a fixed set of values has `control: "select"` and `options`, a default goes in
-    `table.defaultValue.summary` once, and a required prop has `type: { name: "string", required: true }`. The component
-    description is `parameters.docs.description.component`. A fact lives in one place: the CSF file, not also a comment or a
-    story page. Phase A moved `norn-callout`, `norn-card`, `norn-link-button`, `norn-code-block`, `oss-bar`, and `norn-landing`;
-    the rest still use JSDoc until they move. `stories.test.js` checks the shape, the slots against the markup, and the custom
-    properties against the CSS.
+    `scripts/analyze-webc.js` derives the argTypes from the source in `src/`: each prop (a free name in the markup's
+    expressions, kebab-cased, or a `$data.norn` member in a layout) with its type, its default (`x || 'a'`, `x ?? 'a'`, a
+    conditional), its options (comparisons, `.includes()`, a setup table's keys, attribute selectors the prop sets), whether it
+    is a boolean (the boolean rule) or required (a setup function throws without it), and each slot (`<slot>`, a layout's
+    `$data.content`). The CSF file gives each derived prop and slot a `description`, and nothing the code already says. Where
+    the code cannot say a fact, such as a required prop or an object's shape, the entry overrides it, with a reason in
+    `OVERRIDES` in `stories.test.js`. There is no custom property argType: the preview lists the global tokens the CSS reads.
+    The component description is `parameters.docs.description.component`. A fact lives in one place. Phase A moved
+    `norn-callout`, `norn-card`, `norn-link-button`, `norn-code-block`, `oss-bar`, and `norn-landing`; the rest still use JSDoc
+    until they move. `stories.test.js` checks the shape, an undocumented derived arg, a stale argType, a restated fact, an
+    override without a reason, and a custom property entry. `node scripts/calibrate-webc.js` prints where the analysis and the
+    docs differ.
     Every component outside the document head, and every layout, has at least one story: a CSF story, or a page in
     `preview/content/stories/<package>/<name>/`. A CSF story is a single instance from its args, rendered in a frame by the
     default renderer; a page is for anything more, such as a composition, Markdown, or a whole page on a layout
-    (`layout: norn-landing.webc`). A page reads its component's CSF as `$data.csf` (the meta, the argTypes by category, and the
-    stories with their args), and loops over options from there instead of listing them:
+    (`layout: norn-landing.webc`). A page reads its component's CSF as `$data.csf` (the meta, the effective argTypes by category,
+    and the stories with their args), and loops over options from there instead of listing them:
     `<norn-callout webc:for="variant of $data.csf.argTypes.props.variant.options" :@variant="variant">`. A component with
     options or boolean props also gets a matrix frame, one cell per value. Head components and layouts have meta only.
 16. Content goes in slots, not attributes, wherever it can: always for layouts, landmarks, and containers.

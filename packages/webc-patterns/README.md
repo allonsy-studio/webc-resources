@@ -427,7 +427,7 @@ The `project.json` schema is `@allons-y/webc-patterns/schema/project.schema.json
 | `norn-search` | `@bundle`, `@action`, `@site`, slots `label`, `none`, `results-one`, `results-other` (and `-zero`, `-two`, `-few`, `-many`) | Live results from a Pagefind index; a plain web search form without one |
 | `norn-icon` | `@name`, slot `label` | An inline icon from a built-in set or the plugin's `icons` option. Decorative unless it has a label; directional icons mirror in right-to-left text |
 
-Each component documents its custom properties in its CSF file, `src/<name>.stories.js` in the repository, or, for a component not moved yet, in JSDoc in the comment at the top of its file. The component preview lists them. Every property falls back to a shared token (`--norn-ui-accent`, `--norn-ui-border-color`, `--norn-space-m`, and so on), and the shared token falls back to its default, compiled into the component. A component renders the same with no tokens set, and no stylesheet defines them.
+A component is styled through the shared tokens in `tokens.json` (`--norn-ui-accent`, `--norn-ui-border-color`, `--norn-space-m`, and so on). The component preview lists the tokens each one reads, from its source. Each token falls back to its default, compiled into the component, so a component renders the same with no tokens set, and no stylesheet defines them. A custom property of a component's own is not part of its documented API.
 
 ### Pager
 
