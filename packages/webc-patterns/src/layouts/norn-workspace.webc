@@ -12,7 +12,7 @@ nornCompiled: true
 --->
 <norn-sidebar-layout>
 	<span slot="summary" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span>
-	<norn-side-nav slot="nav" :@items="$data.norn.workspaces.map((workspace) => ({ url: workspace.url, title: workspace.title || workspace.name, icon: workspace.icon }))"
+	<norn-side-nav slot="nav" :@items="$data.norn.workspaces.map((workspace) => ({ href: workspace.url, title: workspace.title || workspace.name, icon: workspace.icon }))"
 		><span slot="label" @text="nornComponentStrings?.('norn-workspace', 'nav', $data.page) || 'Packages'"></span
 	></norn-side-nav>
 	<h1 @text="($data.norn.workspace && $data.norn.workspace.name) || $data.norn.title || ''"></h1>

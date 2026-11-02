@@ -20,7 +20,7 @@ const packagePath = process.env.SITE_PACKAGE_JSON ?? path.resolve(import.meta.di
 const withOss = ossEnabled({ packagePath }) && process.env.NORN_OSS !== "off";
 
 /** The docs pages, in order, for the sidebar, the pager, and the home page's contents. */
-const docsOf = (data) => (data.collections?.docs ?? []).map((page) => ({ url: page.url, title: page.data.title, description: page.data.description, icon: page.data.icon }));
+const docsOf = (data) => (data.collections?.docs ?? []).map((page) => ({ href: page.url, title: page.data.title, description: page.data.description, icon: page.data.icon }));
 
 /** @param {import("@11ty/eleventy").UserConfig} config */
 export default function (config) {

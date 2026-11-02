@@ -54,7 +54,7 @@ test("ossEnabled: on unless package.json sets oss-docs.oss to false", () => {
 });
 
 test("ossProps: the head, header, and footer props from the site facts and project.json", () => {
-	const props = ossProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", body: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ url: "/start/", title: "Start" }], anchors: true });
+	const props = ossProps(SITE, { favicon: "favicon.svg", logo: "logo.svg", features: [{ title: "Fast", body: "Quick." }], usage: { language: "js", code: "x" } }, { docs: [{ href: "/start/", title: "Start" }], anchors: true });
 	assert.equal(props.ogTitle, "widget: Builds widgets");
 	assert.equal(props.icon, "/assets/img/favicon.svg");
 	assert.deepEqual(props.logo, { src: "/assets/img/logo.svg", alt: "widget" });
@@ -73,11 +73,11 @@ test("ossProps: the head, header, and footer props from the site facts and proje
 });
 
 test("ossProps: every header and footer link is an item, { href, title }", () => {
-	const props = ossProps(SITE, { usage: { language: "js", code: "x" }, features: [{ title: "Fast", description: "Quick." }] }, { anchors: true });
+	const props = ossProps(SITE, { usage: { language: "js", code: "x" }, features: [{ title: "Fast", description: "Quick." }] }, { docs: [{ href: "/start/", title: "Start" }], anchors: true });
 	const links = [...props.nav, ...props.footer.groups.flatMap((group) => group.links)];
 	assert.ok(links.length > 0);
 	for (const link of links) assert.deepEqual(Object.keys(link).filter((key) => key !== "icon").sort(), ["href", "title"], JSON.stringify(link));
-	assert.deepEqual(props.nav.map(({ href }) => href), ["#install", "#usage", "#features", SITE.repo, SITE.npm]);
+	assert.deepEqual(props.nav.map(({ href }) => href), ["#install", "#usage", "#features", "/start/", SITE.repo, SITE.npm]);
 });
 
 test("ossProps: a tagline that already ends in a period is not given a second one", () => {

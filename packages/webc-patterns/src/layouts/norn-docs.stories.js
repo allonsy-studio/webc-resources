@@ -9,9 +9,9 @@ export default {
 	title: "Template/norn-docs",
 	component: "norn-docs",
 	argTypes: {
-		docs: { description: "The docs pages, in order. `icon` names a sidebar `norn-icon`.", table: { type: { summary: "{ url: string, title: string, icon?: string }[]" } } },
-		prev: { description: "Falls back to the page before this one in `docs`, by `nornAdjacent`.", table: { type: { summary: "{ url: string, title: string }" } } },
-		next: { description: "Falls back to the page after this one in `docs`.", table: { type: { summary: "{ url: string, title: string }" } } },
+		docs: { description: "The docs pages, in order. `icon` names a sidebar `norn-icon`.", table: { type: { summary: "{ href: string, title: string, icon?: string }[]" } } },
+		prev: { description: "Falls back to the page before this one in `docs`, by `nornAdjacent`.", table: { type: { summary: "{ href: string, title: string }" } } },
+		next: { description: "Falls back to the page after this one in `docs`.", table: { type: { summary: "{ href: string, title: string }" } } },
 		search: {
 			description: "Pagefind's script (falls back to `/pagefind/pagefind.js`) and the host the plain form searches (falls back to the host of `url`; a `url` with a scheme that does not parse fails the build). `false` leaves the search out.",
 			table: { type: { summary: "{ bundle?: string, site?: string } | false" } },

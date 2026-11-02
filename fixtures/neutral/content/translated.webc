@@ -18,5 +18,5 @@ description: Every string a visitor sees or hears, in another language.
 	</table>
 </norn-simple-table>
 <div dir="rtl" lang="ar">
-	<norn-pager :@prev="({ url: '/docs/one/', title: 'السابق' })" :@next="({ url: '/docs/two/', title: 'التالي' })"><span slot="label">الصفحات</span></norn-pager>
+	<norn-pager :@prev="({ href: '/docs/one/', title: 'السابق' })" :@next="({ href: '/docs/two/', title: 'التالي' })"><span slot="label">الصفحات</span></norn-pager>
 </div>

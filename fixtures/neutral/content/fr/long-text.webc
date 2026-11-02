@@ -24,8 +24,8 @@ frame:
 	<norn-side-nav
 		slot="nav"
 		:@items="[
-			{ url: '/fr/long-text/', title: 'Une très longue entrée de navigation latérale qui doit passer à la ligne', icon: 'book', children: [{ url: '/docs/one/', title: 'Une sous-page dont le titre est lui aussi beaucoup trop long' }, { url: '/docs/two/', title: 'Électroencéphalographiquement' }] },
-			{ url: '/docs/one/', title: 'Anticonstitutionnellement' }
+			{ href: '/fr/long-text/', title: 'Une très longue entrée de navigation latérale qui doit passer à la ligne', icon: 'book', children: [{ href: '/docs/one/', title: 'Une sous-page dont le titre est lui aussi beaucoup trop long' }, { href: '/docs/two/', title: 'Électroencéphalographiquement' }] },
+			{ href: '/docs/one/', title: 'Anticonstitutionnellement' }
 		]"
 	>
 		<span slot="label">Navigation latérale de la documentation, avec un nom très long</span>
@@ -138,8 +138,8 @@ frame:
 		</norn-theme-toggle>
 	</section>
 	<norn-pager
-		:@prev="({ url: '/docs/one/', title: 'Une page précédente dont le titre est vraiment très long, avec des accents' })"
-		:@next="({ url: '/docs/two/', title: 'Une page suivante dont le titre est lui aussi beaucoup trop long pour une ligne' })"
+		:@prev="({ href: '/docs/one/', title: 'Une page précédente dont le titre est vraiment très long, avec des accents' })"
+		:@next="({ href: '/docs/two/', title: 'Une page suivante dont le titre est lui aussi beaucoup trop long pour une ligne' })"
 	>
 		<span slot="label">Pages voisines dans la documentation, précédente et suivante</span>
 	</norn-pager>

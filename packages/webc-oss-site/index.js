@@ -63,7 +63,7 @@ const iconOf = (file) => (typeof file === "string" && file ? `/assets/img/${file
  *
  * @param {object} [site] - What `buildSite` returns, with `npmRelease` and `badgeColor` for the badges
  * @param {object} [project] - The project's `project.json`
- * @param {{ docs?: { url: string, title: string }[], anchors?: boolean, oss?: boolean }} [options] - The docs pages, for the Docs link; whether the header links the page's sections; and whether the OSS site layer is on
+ * @param {{ docs?: { href: string, title: string }[], anchors?: boolean, oss?: boolean }} [options] - The docs pages, for the Docs link; whether the header links the page's sections; and whether the OSS site layer is on
  * @returns {object} Props for `norn-base` and the layouts. A mapping adds the page's own, such as `title` and `docs`.
  */
 export function ossProps(site, project, { docs = [], anchors = false, oss = true } = {}) {
@@ -89,7 +89,7 @@ export function ossProps(site, project, { docs = [], anchors = false, oss = true
 			...(anchors ? [{ href: "#install", title: "Install" }] : []),
 			...(anchors && own.usage ? [{ href: "#usage", title: "Usage" }] : []),
 			...(anchors && features.length ? [{ href: "#features", title: "Features" }] : []),
-			...(pages.length ? [{ href: pages[0].url, title: "Docs", icon: "book" }] : []),
+			...(pages.length ? [{ href: pages[0].href, title: "Docs", icon: "book" }] : []),
 			...(facts.repo ? [{ href: facts.repo, title: "GitHub" }] : []),
 			...(facts.npm ? [{ href: facts.npm, title: "npm" }] : []),
 		],

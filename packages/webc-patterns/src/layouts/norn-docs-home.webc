@@ -19,7 +19,7 @@ nornCompiled: true
 	<nav webc:if="$data.norn.docs.length || $data.norn.repo" aria-labelledby="norn-docs-home-actions">
 		<span id="norn-docs-home-actions" hidden @text="nornComponentStrings?.('norn-docs-home', 'actions', $data.page) || 'Get started'"></span>
 		<ul role="list">
-			<li webc:if="$data.norn.docs.length"><norn-link-button :@href="$data.norn.docs[0].url"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'docs', $data.page) || 'Read the docs'"></span></norn-link-button></li>
+			<li webc:if="$data.norn.docs.length"><norn-link-button :@href="$data.norn.docs[0].href"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'docs', $data.page) || 'Read the docs'"></span></norn-link-button></li>
 			<li webc:if="$data.norn.repo"><norn-link-button :@href="$data.norn.repo" :@variant="$data.norn.docs.length ? 'secondary' : 'primary'"><span webc:nokeep @text="nornComponentStrings?.('norn-docs-home', 'repo', $data.page) || 'View on GitHub'"></span></norn-link-button></li>
 		</ul>
 	</nav>
@@ -29,7 +29,7 @@ nornCompiled: true
 	<h2 @text="nornComponentStrings?.('norn-docs-home', 'contents', $data.page) || 'Documentation'"></h2>
 	<dl data-norn-contents>
 		<div webc:for="page of $data.norn.docs">
-			<dt><a :href="page.url" @text="page.title"></a></dt>
+			<dt><a :href="page.href" @text="page.title"></a></dt>
 			<dd webc:if="page.description" @text="page.description"></dd>
 		</div>
 	</dl>

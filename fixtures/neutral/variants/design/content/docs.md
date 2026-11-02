@@ -10,15 +10,15 @@ nav:
   - href: https://example.com/source
     title: Source
 docs:
-  - url: /docs/
+  - href: /docs/
     title: Design pass
-  - url: /docs/next/
+  - href: /docs/next/
     title: The next page
 prev:
-  url: /docs/before/
+  href: /docs/before/
   title: The page before
 next:
-  url: /docs/next/
+  href: /docs/next/
   title: The next page
 footer:
   text: Patterns only.

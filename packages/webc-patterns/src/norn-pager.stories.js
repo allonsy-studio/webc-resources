@@ -9,8 +9,8 @@ export default {
 	title: "Landmark/norn-pager",
 	component: "norn-pager",
 	argTypes: {
-		prev: { description: "The page before this one.", table: { type: { summary: "{ url: string, title: string }" } } },
-		next: { description: "The page after this one.", table: { type: { summary: "{ url: string, title: string }" } } },
+		prev: { description: "The page before this one.", table: { type: { summary: "{ href: string, title: string }" } } },
+		next: { description: "The page after this one.", table: { type: { summary: "{ href: string, title: string }" } } },
 		label: { description: 'The landmark name, read but not shown, as one element. Falls back to the site\'s `componentStrings`, then "Pager".' },
 	},
 	parameters: {
@@ -28,6 +28,6 @@ export default {
 	},
 };
 
-export const Both = { name: "Both neighbors", args: { prev: { url: "#previous", title: "Getting started" }, next: { url: "#next", title: "Reference" } } };
+export const Both = { name: "Both neighbors", args: { prev: { href: "#previous", title: "Getting started" }, next: { href: "#next", title: "Reference" } } };
 
-export const Next = { name: "Next only", args: { next: { url: "#next", title: "Usage" } } };
+export const Next = { name: "Next only", args: { next: { href: "#next", title: "Usage" } } };

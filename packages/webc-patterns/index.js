@@ -47,12 +47,12 @@ export function patterns({ exclude = [] } = {}) {
 /**
  * The pages before and after one in a collection, for `norn-pager`.
  *
- * @param {{ url: string }[]} pages - A collection, in order
- * @param {{ url: string }} page - The current page
- * @returns {{ prev?: object, next?: object }} Both undefined when the page is not in the collection
+ * @param {{ href: string, title: string }[]} pages - The items, in order
+ * @param {{ url: string }} page - The current page, as Eleventy's `page`
+ * @returns {{ prev?: object, next?: object }} The items before and after the one whose `href` is the page's `url`; both undefined when none is
  */
 export function adjacent(pages, page) {
-	const index = pages.findIndex((candidate) => candidate.url === page.url);
+	const index = pages.findIndex((candidate) => candidate.href === page.url);
 	if (index === -1) return { prev: undefined, next: undefined };
 	return { prev: pages[index - 1], next: pages[index + 1] };
 }

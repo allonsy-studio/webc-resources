@@ -61,26 +61,32 @@ test("patterns: ships the content components and the page frame, and no foundati
 	assert.ok(!components.includes("norn-page-styles"), "the base styles are files, embedded by norn-base");
 });
 
-const pages = [{ url: "/a/" }, { url: "/b/" }, { url: "/c/" }];
+const pages = [{ href: "/a/", title: "A" }, { href: "/b/", title: "B" }, { href: "/c/", title: "C" }];
 
 test("adjacent: the first page has only a next", () => {
-	assert.deepEqual(adjacent(pages, pages[0]), { prev: undefined, next: pages[1] });
+	assert.deepEqual(adjacent(pages, { url: pages[0].href }), { prev: undefined, next: pages[1] });
 });
 
 test("adjacent: a middle page has both", () => {
-	assert.deepEqual(adjacent(pages, pages[1]), { prev: pages[0], next: pages[2] });
+	assert.deepEqual(adjacent(pages, { url: pages[1].href }), { prev: pages[0], next: pages[2] });
 });
 
 test("adjacent: the last page has only a prev", () => {
-	assert.deepEqual(adjacent(pages, pages[2]), { prev: pages[1], next: undefined });
+	assert.deepEqual(adjacent(pages, { url: pages[2].href }), { prev: pages[1], next: undefined });
 });
 
 test("adjacent: a page outside the collection has neither", () => {
 	assert.deepEqual(adjacent(pages, { url: "/z/" }), { prev: undefined, next: undefined });
 });
 
-test("adjacent: matches by url, not identity", () => {
+test("adjacent: matches an item's href to the page's url, not identity", () => {
 	assert.equal(adjacent(pages, { url: "/b/" }).next, pages[2]);
+});
+
+test("adjacent: the neighbors are items that carry href, and items with only url match nothing", () => {
+	const { prev, next } = adjacent(pages, { url: "/b/" });
+	assert.deepEqual([prev, next], [{ href: "/a/", title: "A" }, { href: "/c/", title: "C" }]);
+	assert.deepEqual(adjacent([{ url: "/a/" }, { url: "/b/" }], { url: "/a/" }), { prev: undefined, next: undefined });
 });
 
 test("dropEmptyBundleTags: removes empty bundle tags, including the dot HtmlBasePlugin writes", () => {

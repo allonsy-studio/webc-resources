@@ -1351,7 +1351,7 @@ test("the hero layouts leave out an empty h1 and an empty action navigation when
 });
 
 test("norn-docs calls norn-toc only with two or more headings, and looks up the pager's neighbors once", async () => {
-	const docs = [{ url: "/a/", title: "A" }, { url: "/b/", title: "B" }, { url: "/c/", title: "C" }];
+	const docs = [{ href: "/a/", title: "A" }, { href: "/b/", title: "B" }, { href: "/c/", title: "C" }];
 	let lookups = 0;
 	const helpers = { nornHeadings: headings, nornAdjacent: (...args) => (lookups++, adjacent(...args)), url: (value) => value };
 	const page = (content) => render(layoutText("norn-docs"), { helpers, data: { content, page: { url: "/b/" }, norn: { ...LANDING, title: "B", docs } } });

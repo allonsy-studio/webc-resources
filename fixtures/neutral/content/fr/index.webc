@@ -13,4 +13,4 @@ description: Les chaînes viennent de componentStrings, sans prop sur les balise
 <p id="commande">npm install @example/project</p>
 <norn-copy-button @source="commande"></norn-copy-button>
 <norn-theme-toggle></norn-theme-toggle>
-<norn-pager :@prev="({ url: '/docs/one/', title: 'Précédente' })" :@next="({ url: '/docs/two/', title: 'Suivante' })"></norn-pager>
+<norn-pager :@prev="({ href: '/docs/one/', title: 'Précédente' })" :@next="({ href: '/docs/two/', title: 'Suivante' })"></norn-pager>

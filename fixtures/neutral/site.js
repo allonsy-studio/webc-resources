@@ -57,7 +57,7 @@ const props = (data) => ({
 	description: data.description,
 	url: "https://example.com/",
 	themeToggle: true,
-	docs: (data.collections?.docs ?? []).map((page) => ({ url: page.url, title: page.data.title })),
+	docs: (data.collections?.docs ?? []).map((page) => ({ href: page.url, title: page.data.title })),
 	...data.frame,
 });
 

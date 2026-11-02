@@ -62,8 +62,8 @@ const LISTS = { lang: "en", nav: [], features: [], packages: [], docs: [], works
  */
 const layout = (name, norn, data = {}) => render(fs.readFileSync(layouts[name], "utf8").replace(/^---\n[\s\S]*?\n---\n/, ""), { content: "", norn: { ...LISTS, ...norn }, ...data });
 
-/** A WebC attribute value holding a JSON expression. */
-const attr = (value) => JSON.stringify(value).replaceAll('"', "&quot;");
+/** A WebC attribute value holding a JSON expression, in parentheses so an object does not read as a block. */
+const attr = (value) => `(${JSON.stringify(value).replaceAll('"', "&quot;")})`;
 
 test("norn-breadcrumbs links an item by its href, and an item with only url gets no link", async () => {
 	const html = await render(`<norn-breadcrumbs :@items="${attr([{ href: "/new/", title: "New" }, { url: "/old/", title: "Old" }])}"></norn-breadcrumbs>`);
@@ -80,4 +80,41 @@ test("norn-base links its header and footer items by href, and an item with only
 	assert.match(html, /<a href="\/foot-new\/">Foot new<\/a>/);
 	assert.ok(!html.includes('href="/nav-old/"') && !html.includes('href="/foot-old/"'), "no link from url");
 	assert.ok(html.includes("Nav old") && html.includes("Foot old"), "the titles still show");
+});
+
+test("norn-side-nav links an item and its children by href, marks the current one, and an item with only url gets no link", async () => {
+	const items = [
+		{ href: "/here/", title: "New", children: [{ href: "/child-new/", title: "Child new" }, { url: "/child-old/", title: "Child old" }] },
+		{ url: "/old/", title: "Old", children: [{ url: "/here/", title: "Old child" }] },
+	];
+	const html = await render(`<norn-side-nav :@items="${attr(items)}"></norn-side-nav>`);
+	assert.match(html, /<a href="\/here\/" aria-current="page">/);
+	assert.match(html, /<a href="\/child-new\/">/);
+	for (const old of ["/old/", "/child-old/"]) assert.ok(!html.includes(`href="${old}"`), old);
+	assert.equal(html.match(/aria-current=/g).length, 1, "an old child with the page's url marks nothing");
+});
+
+test("norn-pager links prev and next by href, and a neighbor with only url gets no link", async () => {
+	const html = await render(`<norn-pager :@prev="${attr({ href: "/prev/", title: "Prev" })}" :@next="${attr({ href: "/next/", title: "Next" })}"></norn-pager>`);
+	assert.ok(html.includes('<a rel="prev" href="/prev/">') && html.includes('<a rel="next" href="/next/">'), html);
+	const old = await render(`<norn-pager :@prev="${attr({ url: "/prev/", title: "Prev" })}" :@next="${attr({ url: "/next/", title: "Next" })}"></norn-pager>`);
+	assert.ok(old.includes('<a rel="prev">') && old.includes('<a rel="next">') && !old.includes("href="), old);
+});
+
+test("norn-docs links its docs, prev, and next by href, and nornAdjacent finds the neighbors by href", async () => {
+	const docs = [{ href: "/a/", title: "A" }, { href: "/here/", title: "Here" }, { href: "/c/", title: "C" }];
+	const html = await layout("norn-docs", { title: "Here", docs }, { page: { url: "/here/" } });
+	assert.match(html, /<a href="\/here\/" aria-current="page">/, "the sidebar marks the page");
+	assert.ok(html.includes('rel="prev" href="/a/"') && html.includes('rel="next" href="/c/"'), "the neighbors from docs");
+	const given = await layout("norn-docs", { title: "Here", docs, prev: { href: "/p/", title: "P" }, next: { href: "/n/", title: "N" } }, { page: { url: "/here/" } });
+	assert.ok(given.includes('rel="prev" href="/p/"') && given.includes('rel="next" href="/n/"'), "prev and next given");
+	const old = await layout("norn-docs", { title: "Here", docs: docs.map(({ href: url, title }) => ({ url, title })) }, { page: { url: "/here/" } });
+	assert.ok(!old.includes('href="/a/"') && !old.includes('href="/c/"') && !old.includes('rel="prev"') && !old.includes("aria-current"), "url items link nothing and have no neighbors");
+});
+
+test("norn-docs-home links its docs by href, and a page with only url gets no link", async () => {
+	const html = await layout("norn-docs-home", { docs: [{ href: "/start/", title: "Start", description: "Begin." }, { url: "/old/", title: "Old" }] });
+	assert.match(html, /<a href="\/start\/"[^>]*>[\s\S]*?Read the docs/, "the first page is the docs action");
+	assert.ok(html.includes('<a href="/start/">Start</a>') && html.includes("<dd>Begin.</dd>"), "the contents list");
+	assert.ok(!html.includes('href="/old/"'), "no link from url");
 });

@@ -12,7 +12,7 @@ export default {
 		items: {
 			description: "The pages, in order.",
 			type: { name: "array", required: true },
-			table: { type: { summary: "{ url: string, title: string, icon?: string, children?: { url: string, title: string }[] }[]" } },
+			table: { type: { summary: "{ href: string, title: string, icon?: string, children?: { href: string, title: string }[] }[]" } },
 		},
 		label: { description: 'The landmark name, read but not shown, as one element. Falls back to the site\'s `componentStrings`, then "Pages".' },
 		search: { description: "A search field above the list, as one element." },
@@ -35,9 +35,9 @@ export default {
 export const Default = {
 	args: {
 		items: [
-			{ url: "/frames/patterns/norn-side-nav/default/", title: "Getting started" },
-			{ url: "#usage", title: "Usage" },
-			{ url: "#reference", title: "Reference" },
+			{ href: "/frames/patterns/norn-side-nav/default/", title: "Getting started" },
+			{ href: "#usage", title: "Usage" },
+			{ href: "#reference", title: "Reference" },
 		],
 	},
 };

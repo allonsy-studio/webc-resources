@@ -12,12 +12,12 @@
 	<ul>
 		<li webc:for="item of items">
 			<a
-				:href="item.url"
-				:aria-current="item.url === $data.page.url ? 'page' : (item.children || []).some((child) => child.url === $data.page.url) ? 'true' : undefined"
+				:href="item.href"
+				:aria-current="item.href === $data.page.url ? 'page' : (item.children || []).some((child) => child.href === $data.page.url) ? 'true' : undefined"
 			><norn-icon webc:if="item.icon" :@name="item.icon"></norn-icon><span @text="item.title"></span></a>
 			<ul webc:if="item.children && item.children.length">
 				<li webc:for="child of item.children">
-					<a :href="child.url" :aria-current="child.url === $data.page.url ? 'page' : undefined"><span @text="child.title"></span></a>
+					<a :href="child.href" :aria-current="child.href === $data.page.url ? 'page' : undefined"><span @text="child.title"></span></a>
 				</li>
 			</ul>
 		</li>

@@ -28,7 +28,7 @@ description: The small components, one of each.
 </norn-fact-list>
 <p><a href="#icons">Jump to icons <span class="visually-hidden">on this page</span></a></p>
 <h2>Nested navigation</h2>
-<norn-side-nav :@items="[{ url: '/docs/one/', title: 'Docs', icon: 'book', children: [{ url: '/kit/', title: 'Kit' }, { url: '/plain/', title: 'Plain' }] }, { url: '/', title: 'Home' }]">
+<norn-side-nav :@items="[{ href: '/docs/one/', title: 'Docs', icon: 'book', children: [{ href: '/kit/', title: 'Kit' }, { href: '/plain/', title: 'Plain' }] }, { href: '/', title: 'Home' }]">
 	<span slot="label">Guides</span>
 </norn-side-nav>
 <h2>Notices</h2>

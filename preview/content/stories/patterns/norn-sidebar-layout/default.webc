@@ -8,9 +8,9 @@ bleed: true
 	<norn-side-nav
 		slot="nav"
 		:@items="[
-			{ url: '/frames/patterns/norn-sidebar-layout/default/', title: 'Getting started', icon: 'book' },
-			{ url: '#usage', title: 'Usage' },
-			{ url: '#reference', title: 'Reference' }
+			{ href: '/frames/patterns/norn-sidebar-layout/default/', title: 'Getting started', icon: 'book' },
+			{ href: '#usage', title: 'Usage' },
+			{ href: '#reference', title: 'Reference' }
 		]"
 	>
 		<span slot="label">Documentation</span>

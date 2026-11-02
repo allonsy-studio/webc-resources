@@ -5,9 +5,9 @@ name: Plain name
 nav:
   links: an object where a list goes
 docs:
-  - url: /
+  - href: /
     title: Plain home
-  - url: /docs/
+  - href: /docs/
     title: A docs page
 ---
 ## One

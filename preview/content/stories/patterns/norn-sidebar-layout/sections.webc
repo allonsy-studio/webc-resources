@@ -9,8 +9,8 @@ bleed: true
 		slot="nav"
 		@label="Documentation"
 		:@items="[
-			{ url: '/frames/patterns/norn-sidebar-layout/sections/', title: 'Overview' },
-			{ url: '#details', title: 'Details' }
+			{ href: '/frames/patterns/norn-sidebar-layout/sections/', title: 'Overview' },
+			{ href: '#details', title: 'Details' }
 		]"
 	></norn-side-nav>
 	<h1>Overview</h1>

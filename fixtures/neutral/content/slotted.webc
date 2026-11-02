@@ -14,7 +14,7 @@ description: Components inside containers keep their own styles.
 		<norn-fact-list id="in-footer"><li>One</li><li>Two</li></norn-fact-list>
 	</div>
 </norn-footer>
-<norn-side-nav :@items="[{ url: '/', title: 'Home', icon: 'book' }]">
+<norn-side-nav :@items="[{ href: '/', title: 'Home', icon: 'book' }]">
 	<span slot="label">Sections</span>
 	<norn-search slot="search" @bundle="/assets/pagefind/pagefind.js" @site="example.com"></norn-search>
 </norn-side-nav>

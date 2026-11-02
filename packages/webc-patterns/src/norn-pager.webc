@@ -8,8 +8,8 @@
 --->
 <nav :aria-labelledby="'norn-pager-' + uid" webc:if="prev || next">
 	<span data-label :id="'norn-pager-' + uid"><slot name="label"><span webc:nokeep @text="nornComponentStrings?.('norn-pager', 'label', $data.page) || 'Pager'"></span></slot></span>
-	<a webc:if="prev" rel="prev" :href="prev.url"><norn-icon @name="arrow-start"></norn-icon><span @text="prev.title"></span></a>
-	<a webc:if="next" rel="next" :href="next.url"><span @text="next.title"></span><norn-icon @name="arrow-end"></norn-icon></a>
+	<a webc:if="prev" rel="prev" :href="prev.href"><norn-icon @name="arrow-start"></norn-icon><span @text="prev.title"></span></a>
+	<a webc:if="next" rel="next" :href="next.href"><span @text="next.title"></span><norn-icon @name="arrow-end"></norn-icon></a>
 </nav>
 <style>
 	@layer norn.components {
