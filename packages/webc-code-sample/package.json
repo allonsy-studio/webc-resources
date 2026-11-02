@@ -27,6 +27,7 @@
 		"components/",
 		"index.js",
 		"markdown.js",
+		"tokenize.js",
 		"LICENSE",
 		"README.md"
 	],
