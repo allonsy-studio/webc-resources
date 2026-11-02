@@ -24,6 +24,6 @@ export const Exclusive = {
 	name: "One open at a time",
 	args: {
 		default:
-			'<details name="faq" open>\n\t<summary>Does it need a script?</summary>\n\t<p>No. The browser opens and closes each section, and find-in-page opens a closed one.</p>\n</details>\n<details name="faq">\n\t<summary>Can two be open?</summary>\n\t<p>Not when they share a name. Leave the name off to let them open together.</p>\n</details>\n<details name="faq">\n\t<summary>Does it animate?</summary>\n\t<p>Where the browser can animate to an intrinsic size, unless motion is reduced.</p>\n</details>',
+			'<details name="faq" open>\n\t<summary>Is it free to use?</summary>\n\t<p>Yes. The project is open source under the MPL-2.0 license.</p>\n</details>\n<details name="faq">\n\t<summary>Which Node version does it need?</summary>\n\t<p>Node 24 or later.</p>\n</details>\n<details name="faq">\n\t<summary>Where are bugs reported?</summary>\n\t<p>In the issue tracker on GitHub.</p>\n</details>',
 	},
 };
