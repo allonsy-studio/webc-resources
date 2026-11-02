@@ -535,7 +535,7 @@ Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--n
 
 Tag: `<norn-skip-link>`.
 
-Link that jumps past the page chrome to the main content. Hidden until it has focus. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
+Link that jumps past the page chrome to the main content. Hidden until it has focus: press Tab from the top of the page to show it. Give the target `tabindex="-1"`, as in `<main id="main" tabindex="-1">`.
 
 Props:
 
