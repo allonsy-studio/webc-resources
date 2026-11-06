@@ -1,6 +1,6 @@
 {
 	"name": "@allons-y/webc-oss-site",
-	"version": "0.1.0-beta.2",
+	"version": "0.1.0-beta.3",
 	"description": "The OSS site theme for Norn sites: Allons-y Studio brand tokens, self-hosted fonts, and the locked OSS banner, call to action, and footer credit.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",

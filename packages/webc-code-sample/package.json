@@ -1,6 +1,6 @@
 {
 	"name": "@allons-y/webc-code-sample",
-	"version": "0.1.0-beta.2",
+	"version": "0.1.0-beta.3",
 	"description": "WebC code sample component with build-time syntax highlighting and no highlighter shipped to the browser.",
 	"license": "MPL-2.0",
 	"author": "Cassondra Roberts <castastrophe@users.noreply.github.com> (https://allons-y.studio)",
