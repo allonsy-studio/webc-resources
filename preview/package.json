@@ -15,12 +15,12 @@
 		"start": "eleventy --config=eleventy.config.js --serve"
 	},
 	"devDependencies": {
-		"@11ty/eleventy": "^3.1.6",
+		"@11ty/eleventy": "^3.1.8",
 		"@11ty/eleventy-plugin-webc": "^0.11.2",
 		"@allons-y/webc-code-sample": "workspace:*",
 		"@allons-y/webc-oss-site": "workspace:*",
 		"@allons-y/webc-patterns": "workspace:*",
-		"axe-core": "^4.10.2"
+		"axe-core": "^4.14.0"
 	},
 	"engines": {
 		"node": ">=22"

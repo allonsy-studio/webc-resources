@@ -49,8 +49,8 @@
 	},
 	"dependencies": {
 		"hosted-git-info": "^10.1.1",
-		"markdown-it": "^15.0.2",
-		"semver": "^7.8.5"
+		"markdown-it": "^15.0.3",
+		"semver": "^7.8.6"
 	},
 	"peerDependencies": {
 		"@11ty/eleventy": "^3.0.0",
