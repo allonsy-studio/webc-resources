@@ -1,0 +1,99 @@
+@layer norn.components {
+		norn-icon {
+			display: inline-flex;
+			flex: none;
+			vertical-align: -0.125em;
+
+			& svg {
+				inline-size: var(--norn-ui-icon-s, 1em);
+				block-size: var(--norn-ui-icon-s, 1em);
+
+				&[data-size="m"] {
+					inline-size: var(--norn-ui-icon-m, 1.25rem);
+					block-size: var(--norn-ui-icon-m, 1.25rem);
+				}
+
+				&:not([data-project]) {
+					fill: none;
+					stroke: currentcolor;
+					stroke-linecap: round;
+					stroke-linejoin: round;
+					stroke-width: 2;
+				}
+
+				&[data-project] {
+					fill: currentcolor;
+				}
+			}
+
+			& > :not(svg) {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& [data-fill] {
+				fill: currentcolor;
+				stroke: none;
+			}
+
+			&:dir(rtl) [data-mirror] {
+				transform: scaleX(-1);
+			}
+		}
+	}
+@layer norn.components {
+		norn-pager {
+			display: block;
+
+			& nav {
+				display: flex;
+				justify-content: space-between;
+				gap: var(--norn-space-m, 1.25rem);
+			}
+
+			& nav > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& nav > a {
+				--_state: 0%;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-radius: var(--norn-ui-radius-s, 4px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
+				color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+				text-decoration: none;
+				overflow-wrap: break-word;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+
+				&[rel="next"] {
+					margin-inline-start: auto;
+					text-align: end;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& nav > a {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+		}
+	}
