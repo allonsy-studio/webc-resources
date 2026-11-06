@@ -1,5 +1,11 @@
 # @allons-y/webc-code-sample
 
+## 0.1.0-beta.3
+
+### Patch Changes
+
+-   b9bbb60: Minor dependency updates
+
 ## 0.1.0-beta.2
 
 ### Patch Changes
