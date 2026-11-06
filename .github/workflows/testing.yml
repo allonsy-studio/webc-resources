@@ -12,12 +12,12 @@ concurrency:
 
 jobs:
   test:
-    name: Lint, test, pack (Node ${{ matrix.node }})
+    name: CI (node${{ matrix.node }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        node: [22, 24]
+        node: [26, 24]
     permissions:
       contents: read
     steps:
