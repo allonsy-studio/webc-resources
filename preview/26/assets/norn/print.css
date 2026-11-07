@@ -1,8 +1,0 @@
-/* Print rules for the page, in the norn.print layer. Each component keeps its own in its `@media print` block. */
-@layer norn.print {
-	@media print {
-		html {
-			font-size: 12px;
-		}
-	}
-}
