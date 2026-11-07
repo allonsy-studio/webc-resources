@@ -23,7 +23,7 @@
 		"axe-core": "^4.14.0"
 	},
 	"engines": {
-		"node": ">=22"
+		"node": ">=24"
 	},
 	"homepage": "https://github.com/allonsy-studio/webc-resources"
 }

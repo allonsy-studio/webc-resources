@@ -49,7 +49,7 @@
 		"11ty"
 	],
 	"engines": {
-		"node": ">=22"
+		"node": ">=24"
 	},
 	"dependencies": {
 		"@shikijs/langs": "^4.6.0",
