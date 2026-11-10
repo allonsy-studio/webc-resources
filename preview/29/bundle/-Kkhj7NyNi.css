@@ -1,0 +1,112 @@
+@layer norn.components {
+		norn-field {
+			display: grid;
+			gap: var(--norn-space-2xs, 0.25rem);
+			min-inline-size: 0;
+
+			& > label {
+				font-weight: 600;
+
+				/* The caller's required marker, hidden from assistive tech since the control says `required`. */
+				& > [aria-hidden="true"] {
+					color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+				}
+			}
+
+			& > :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), textarea, select) {
+				--_state: 0%;
+				box-sizing: border-box;
+				inline-size: 100%;
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				margin: 0;
+				padding-block: var(--norn-space-2xs, 0.25rem);
+				padding-inline: var(--norn-space-s, 0.75rem);
+				border: 1px solid var(--norn-ui-border-strong, light-dark(#7a8194, #6f7789));
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-base, light-dark(#ffffff, #101216)));
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				font: inherit;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&[readonly] {
+					border-style: dashed;
+				}
+
+				&:disabled {
+					--_state: 0%;
+					border-color: var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+					background-color: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+					color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+					cursor: not-allowed;
+				}
+
+				&:is(:user-invalid, [aria-invalid="true"]) {
+					border-color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+				}
+			}
+
+			& > textarea {
+				min-block-size: calc(3 * var(--norn-ui-control-height, 2.25rem));
+				resize: vertical;
+			}
+
+			/* An error in the slot marks the control too, even before the visitor touches it. */
+			&:has(> [data-error] > :not([data-prefix])) > :is(input, textarea, select) {
+				border-color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+			}
+
+			& > :is([data-hint], [data-error]) {
+				font-size: var(--norn-font-size-s, 0.875rem);
+			}
+
+			& > [data-hint] {
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+
+				&:not(:has(*)) {
+					display: none;
+				}
+			}
+
+			& > [data-error] {
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+
+				&:not(:has(> :not([data-prefix]))) {
+					display: none;
+				}
+
+				& > [data-prefix] {
+					color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+					font-weight: 700;
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > :is(input, select) {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > :is(input, textarea, select) {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			/* The browser repaints the edge, so an invalid control draws a thicker one. */
+			@media (forced-colors: active) {
+				& > :is(input, textarea, select):is(:user-invalid, [aria-invalid="true"]),
+				&:has(> [data-error] > :not([data-prefix])) > :is(input, textarea, select) {
+					border-width: 2px;
+				}
+			}
+
+			@media print {
+				& > :is(input, textarea, select) {
+					background: none;
+				}
+			}
+		}
+	}

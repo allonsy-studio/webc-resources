@@ -1,0 +1,113 @@
+@layer norn.components {
+		norn-rich-text {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			align-content: start;
+			gap: var(--norn-space-m, 1.25rem);
+			max-inline-size: var(--norn-text-measure, 40em);
+
+			&[data-measure="none"] {
+				max-inline-size: none;
+			}
+		}
+
+		/* Prose styles stop at the components that style all their own markup. A callout, a notice, a card, or a table holds prose of its own (a list, a code span), so it stays in scope. */
+		@scope (norn-rich-text) to (norn-code-block, norn-code-tabs, norn-fact-list) {
+			h2,
+			h3,
+			h4,
+			h5,
+			h6 {
+				margin: var(--norn-space-s, 0.75rem) 0 0;
+				font-family: var(--norn-font-heading, var(--norn-font-body, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif));
+				line-height: 1.15;
+				text-wrap: balance;
+			}
+
+			/* norn-heading-anchor zeroes its heading's margin, so the space goes on its tag. */
+			norn-heading-anchor:has(> :is(h2, h3, h4, h5, h6)) {
+				margin-block-start: var(--norn-space-s, 0.75rem);
+			}
+
+			h2 {
+				font-size: var(--norn-font-size-xl, 1.5rem);
+			}
+
+			h3 {
+				font-size: var(--norn-font-size-l, 1.25rem);
+			}
+
+			h4,
+			h5,
+			h6 {
+				font-size: var(--norn-font-size-m, 1rem);
+			}
+
+			p {
+				margin: 0;
+				text-wrap: pretty;
+			}
+
+			ul,
+			ol {
+				display: grid;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				padding-inline-start: var(--norn-space-m, 1.25rem);
+				list-style: revert;
+			}
+
+			blockquote {
+				margin: 0;
+				padding-inline-start: var(--norn-space-m, 1.25rem);
+				border-inline-start: 3px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+			}
+
+			/* A sourced quote: a cite line inside the quote, or a figcaption under it. */
+			blockquote:has(> cite) {
+				display: grid;
+				gap: var(--norn-space-xs, 0.5rem);
+			}
+
+			figure:has(> blockquote) {
+				display: grid;
+				gap: var(--norn-space-xs, 0.5rem);
+				margin: 0;
+			}
+
+			blockquote > cite,
+			figure:has(> blockquote) > figcaption {
+				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				font-size: var(--norn-font-size-s, 0.875rem);
+				font-style: normal;
+			}
+
+			table {
+				border-collapse: collapse;
+				border-block-end: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+			}
+
+			th,
+			td {
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-block-end: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+				text-align: start;
+			}
+
+			hr {
+				box-sizing: border-box;
+				width: 100%;
+				border: 0;
+				border-block-start: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+			}
+
+			:not(pre) > code {
+				padding: 0.1em 0.35em;
+				border-radius: var(--norn-ui-radius-s, 4px);
+				background: var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b));
+				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+				font-size: 0.875em;
+			}
+		}
+	}
