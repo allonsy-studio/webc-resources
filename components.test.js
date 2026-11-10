@@ -364,11 +364,14 @@ test("a component that exposes no custom property of its own reads only global t
 
 test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
 	const css = cssOf("norn-segmented-control");
-	assert.ok(!/::before|::after/.test(css), "no pseudo-element");
+	assert.ok(!/::after/.test(css) && [...css.matchAll(/::before/g)].length === 3, "one pseudo-element: the sliding fill, its off switch, and its forced colors rule");
+	const slide = css.slice(css.indexOf("@media (prefers-reduced-motion: no-preference) { @supports (anchor-name: --a)"), css.indexOf("@media (forced-colors: active)"));
+	assert.ok(slide.includes("fieldset::before") && slide.includes("position-anchor: --norn-segment") && slide.includes("anchor-scope: --norn-segment"), "the fill slides only with motion allowed and anchor positioning, scoped to its control");
 	assert.ok(!/--_(index|count)|translate|nth-of-type/.test(css), "no thumb math, so no cap on the options");
 	assert.ok(!/outline: 3px/.test(css) && css.includes("outline: var(--norn-ui-focus-width,"), "the one ring, inset");
 	const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
 	assert.match(forced, /label:has\(input:checked\) \{ background-color: Highlight; color: HighlightText; forced-color-adjust: none;/, "the label itself is filled");
+	assert.match(forced, /fieldset::before \{ display: none;/, "and the sliding fill is off");
 	assert.ok(css.includes("--_current: var(--norn-text-accent, t('text.accent'))") && !/thumb|--norn-segmented-control-/.test(css), "the accent tint replaces the thumb and the border");
 });
 
