@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>Contact form</title>
+
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Contact form">
+
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/28/bundle/hGp5Z4VH4D.css">
+<script src="/webc-resources/preview/28/bundle/4EHPmlxE1Y.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/28/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/28/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/28/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/28/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/28/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/28/assets/styles/project.css">
+	</head>
+	<body>
+		<main id="main" tabindex="-1">
+			<h1 class="sr-only">Contact form</h1>
+			
+			<form action="#" method="post" style="display: grid; gap: 1.5rem; max-inline-size: 32rem">
+	<norn-field>
+		<label for="contact-name">Name <span aria-hidden="true">*</span></label>
+		<input id="contact-name" name="name" type="text" autocomplete="name" required="">
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="contact-email">Email <span aria-hidden="true">*</span></label>
+		<input id="contact-email" name="email" type="email" autocomplete="email" required="" aria-invalid="true" value="cassondra">
+		
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span><span>Add the part after the @.</span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="contact-topic">Topic</label>
+		<select id="contact-topic" name="topic">
+			<option>Speaking</option>
+			<option>Consulting</option>
+			<option>Something else</option>
+		</select>
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="contact-message">Message</label>
+		<textarea id="contact-message" name="message"></textarea>
+		
+	
+<span data-hint=""><span>Links are fine; attachments aren't.</span></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-choice>
+<fieldset>
+	<legend><span>Reply by</span></legend>
+	<div>
+		
+		<label><input type="radio" name="reply" value="email" checked=""> Email</label>
+		<label><input type="radio" name="reply" value="none"> No reply needed</label>
+	</div>
+</fieldset>
+
+</norn-choice>
+	<norn-choice>
+<fieldset>
+	<legend><span>Extras</span></legend>
+	<div>
+		
+		<label><input type="checkbox" name="newsletter" value="yes"> Send me the newsletter</label>
+	</div>
+</fieldset>
+
+</norn-choice>
+	<div>
+		<button type="submit">Send message</button>
+	</div>
+</form>
+
+		</main>
+	
+
+</body>
+</html>
