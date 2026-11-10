@@ -358,6 +358,38 @@
 				}
 			}
 
+			/* One underline slides to the selected tab: the start edge leads and the end edge trails. Without anchor positioning, or with less motion, the selected tab draws its own. */
+			@media (prefers-reduced-motion: no-preference) {
+				@supports (anchor-name: --a) {
+					anchor-scope: --norn-tab;
+
+					& > div > [role="tablist"] {
+						position: relative;
+					}
+
+					& > div > [role="tablist"]::after {
+						content: "";
+						position: absolute;
+						position-anchor: --norn-tab;
+						inset-block-end: anchor(end);
+						inset-inline: anchor(start) anchor(end);
+						block-size: 2px;
+						background-color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+						transition: inset-inline-start var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)),
+							inset-inline-end var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)) var(--norn-ui-motion-trail, 90ms);
+					}
+
+					& > div > [role="tablist"]:not(:has([aria-selected="true"]))::after {
+						display: none;
+					}
+
+					& > div > [role="tablist"] > [role="tab"][aria-selected="true"] {
+						border-block-end-color: transparent;
+						anchor-name: --norn-tab;
+					}
+				}
+			}
+
 			/* A clear border would be drawn in the text color, so only the selected tab has one. */
 			@media (forced-colors: active) {
 				& > div > [role="tablist"] > [role="tab"] {
@@ -369,6 +401,10 @@
 					border-block-end-width: 2px;
 					border-block-end-color: Highlight;
 					padding-block-end: 0;
+				}
+
+				& > div > [role="tablist"]::after {
+					display: none;
 				}
 			}
 

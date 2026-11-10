@@ -141,6 +141,40 @@
 				}
 			}
 
+			/* One fill slides to the checked option: the start edge leads and the end edge trails. Without anchor positioning, or with less motion, the checked option fills itself. */
+			@media (prefers-reduced-motion: no-preference) {
+				@supports (anchor-name: --a) {
+					anchor-scope: --norn-segment;
+
+					& fieldset {
+						position: relative;
+						isolation: isolate;
+					}
+
+					& fieldset::before {
+						content: "";
+						position: absolute;
+						position-anchor: --norn-segment;
+						z-index: 0;
+						inset-block: anchor(start) anchor(end);
+						inset-inline: anchor(start) anchor(end);
+						border-radius: calc(var(--norn-ui-border-radius, 6px) - var(--_gap));
+						background-color: color-mix(in oklab, var(--_current) 14%, transparent);
+						transition: inset-inline-start var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)),
+							inset-inline-end var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)) var(--norn-ui-motion-trail, 90ms);
+					}
+
+					& fieldset:not(:has(input:checked))::before {
+						display: none;
+					}
+
+					& label:has(input:checked) {
+						--_tint: transparent;
+						anchor-name: --norn-segment;
+					}
+				}
+			}
+
 			/* The checked option fills itself, since the browser replaces the tint. */
 			@media (forced-colors: active) {
 				& label:has(input:checked) {
@@ -152,6 +186,19 @@
 				& label:has(input:focus-visible) {
 					outline-color: CanvasText;
 				}
+
+				& fieldset::before {
+					display: none;
+				}
+			}
+		}
+	}
+@layer norn.components {
+		norn-theme-toggle {
+			display: inline-flex;
+
+			&:not(:defined) {
+				display: none;
 			}
 		}
 	}

@@ -1,51 +1,4 @@
 @layer norn.components {
-		norn-icon {
-			display: inline-flex;
-			flex: none;
-			vertical-align: -0.125em;
-
-			& svg {
-				inline-size: var(--norn-ui-icon-s, 1em);
-				block-size: var(--norn-ui-icon-s, 1em);
-
-				&[data-size="m"] {
-					inline-size: var(--norn-ui-icon-m, 1.25rem);
-					block-size: var(--norn-ui-icon-m, 1.25rem);
-				}
-
-				&:not([data-project]) {
-					fill: none;
-					stroke: currentcolor;
-					stroke-linecap: round;
-					stroke-linejoin: round;
-					stroke-width: 2;
-				}
-
-				&[data-project] {
-					fill: currentcolor;
-				}
-			}
-
-			& > :not(svg) {
-				position: absolute;
-				inline-size: 1px;
-				block-size: 1px;
-				overflow: hidden;
-				clip-path: inset(50%);
-				white-space: nowrap;
-			}
-
-			& [data-fill] {
-				fill: currentcolor;
-				stroke: none;
-			}
-
-			&:dir(rtl) [data-mirror] {
-				transform: scaleX(-1);
-			}
-		}
-	}
-@layer norn.components {
 		norn-segmented-control {
 			--_gap: 2px;
 			--_current: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
@@ -141,6 +94,40 @@
 				}
 			}
 
+			/* One fill slides to the checked option: the start edge leads and the end edge trails. Without anchor positioning, or with less motion, the checked option fills itself. */
+			@media (prefers-reduced-motion: no-preference) {
+				@supports (anchor-name: --a) {
+					anchor-scope: --norn-segment;
+
+					& fieldset {
+						position: relative;
+						isolation: isolate;
+					}
+
+					& fieldset::before {
+						content: "";
+						position: absolute;
+						position-anchor: --norn-segment;
+						z-index: 0;
+						inset-block: anchor(start) anchor(end);
+						inset-inline: anchor(start) anchor(end);
+						border-radius: calc(var(--norn-ui-border-radius, 6px) - var(--_gap));
+						background-color: color-mix(in oklab, var(--_current) 14%, transparent);
+						transition: inset-inline-start var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)),
+							inset-inline-end var(--norn-ui-motion-slide, 200ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1)) var(--norn-ui-motion-trail, 90ms);
+					}
+
+					& fieldset:not(:has(input:checked))::before {
+						display: none;
+					}
+
+					& label:has(input:checked) {
+						--_tint: transparent;
+						anchor-name: --norn-segment;
+					}
+				}
+			}
+
 			/* The checked option fills itself, since the browser replaces the tint. */
 			@media (forced-colors: active) {
 				& label:has(input:checked) {
@@ -152,15 +139,10 @@
 				& label:has(input:focus-visible) {
 					outline-color: CanvasText;
 				}
-			}
-		}
-	}
-@layer norn.components {
-		norn-theme-toggle {
-			display: inline-flex;
 
-			&:not(:defined) {
-				display: none;
+				& fieldset::before {
+					display: none;
+				}
 			}
 		}
 	}
