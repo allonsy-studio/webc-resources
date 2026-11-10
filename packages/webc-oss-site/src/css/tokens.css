@@ -1,10 +1,30 @@
 /*
  * The Allons-y Studio brand as Norn tokens, in the norn.oss layer: the OSS site plugin adds it to every page's bundle.
  * It sets only shared tokens from tokens.json; css/brand.css styles the components. A project's own unlayered tokens.css still wins over it.
+ * Values follow the Allons-y Studio design system: ink, slate, latte, cream, and paper, with magenta as the one accent.
  */
 @layer norn.oss {
 	:root {
-		/* PT Mono, Allons-y Studio's locked monospace, which oss-head declares. */
+		/* Magenta, the studio accent, until the project sets its own. Text and on-accent colors derive from it. */
+		--norn-ui-accent: #c92c6b;
+
+		/* Latte hairlines; a control edge at 3:1 or better on paper and on the dark page. */
+		--norn-ui-border-color: light-dark(#c2b1a6, #464b5d);
+		--norn-ui-border-strong: light-dark(#9c806d, #69708c);
+		--norn-ui-motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+		--norn-ui-shadow: 0 10px 15px -10px light-dark(rgb(153 153 153 / 0.6), rgb(76 76 76 / 0.6));
+
+		/* Paper and cream in light; the navy elevation ladder in dark. */
+		--norn-surface-base: light-dark(#fbf9f3, #181b25);
+		--norn-surface-raised: light-dark(#efebdf, #242733);
+		--norn-surface-code: light-dark(#f6f2e8, #272b38);
+
+		/* Ink on paper (10.9:1) and paper on the dark page (16.3:1); slate and latte for secondary text (5.1:1 or better on cream). */
+		--norn-text-base: light-dark(#33394e, #fbf9f3);
+		--norn-text-muted: light-dark(#5e6273, #c2b1a6);
+
+		/* Instrument Sans for everything, and PT Mono for code, both declared by oss-head with metric-matched fallbacks. */
+		--norn-font-body: "Instrument Sans", "Instrument Sans Fallback", system-ui, "Helvetica Neue", helvetica, arial, sans-serif;
 		--norn-font-mono: "PT Mono", "PT Mono Fallback", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 	}
 }

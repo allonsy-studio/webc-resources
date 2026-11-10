@@ -12,11 +12,11 @@
 
 - **Never add the Norn plugin as well.** The OSS plugin adds it, and a second registration fails the build.
 - **`oss-bar`, `oss-cta`, `oss-credit` are locked.** A project file with one of those names fails the build. A project opts out of the whole studio layer with `"oss-docs": { "oss": false }` in `package.json`. Do not edit, copy, or hide them with CSS.
-- The brand lives in the `norn.oss` layer: `css/tokens.css` sets the mono font token and `css/brand.css` styles the header strip and footer name with rules on the component tags. To change the look, override global tokens in the project's own stylesheet. Components have no theme hooks.
+- The brand lives in the `norn.oss` layer: `css/tokens.css` sets the brand tokens (ink, slate, latte, cream, and paper surfaces and text, magenta as the default accent, Instrument Sans and PT Mono) and `css/brand.css` styles the header, the hero (an uppercase eyebrow, an accent underline, the mark's four arcs), one bright per home page section, the docs title, and the raised footer with rules on the component tags. To change the look, override global tokens in the project's own stylesheet, such as `--norn-ui-accent` for the project's own accent. Components have no theme hooks.
 - Project-specific head markup goes through `fillHooks(config, { head: "…" })` from `@allons-y/webc-patterns/plugin`. The project's fills append after the theme's.
 - Item data uses `href`, `title`, `description` like every Norn layout. `ossProps` returns it that way, and the `docs` you pass in must too.
 - Site data comes from the patterns package's builders (`buildSite`, with `host` from this package). The `fixtures/landing`, `fixtures/docs`, and `fixtures/workspaces` folders are complete working projects.
-- The package needs network access once at pack time to inline the org's SVGs. Set `OSS_ASSETS` to a local `assets` folder to pack offline.
+- The package needs network access once at pack time to inline the org's mark into the call to action. Set `OSS_ASSETS` to a local `assets` folder to pack offline.
 
 ## Where to look next
 
@@ -41,7 +41,7 @@ Props:
 
 - `level` (number, optional, default `2`, one of `2`, `3`, `4`): The heading level, to fit the page outline. Any other value gives the default.
 
-Global tokens it reads: `--norn-ui-border-radius`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl`.
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-surface-raised`, `--norn-text-base`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`, `--norn-space-xl`.
 
 ### Component components
 
@@ -51,13 +51,17 @@ A self-contained element: a link, a code block, a lockup.
 
 Tag: `<oss-bar>`.
 
-OSS banner, shown before the page's header. Locked: it takes no props or slots. The SVG is inlined from the org's assets by `scripts/inline-svg.js`, cropped to the lockup. It shows at full size from 31.25rem up and scales down below that, so the text stays readable on a phone and grows with the text size.
+OSS banner, shown before the page's header: "Brought to you by" and the Allons-y Studio wordmark, live text on ink. Locked: it takes no props or slots. The wordmark sets "Allons-y" in Yellowtail with the magenta dash, then "Studio" in uppercase caps, and links to the studio. It wraps onto two lines on a narrow screen and grows with the text size.
+
+Global tokens it reads: `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-m`.
 
 #### oss-credit
 
 Tag: `<oss-credit>`.
 
-OSS credit lockup for the footer, light or dark by the scheme the page uses. Locked: it takes no props or slots. One SVG, inlined from the org's light and dark assets by `scripts/inline-svg.js` and cropped to the art. The two assets differ only in paint, so the script merges them: each changed `fill` and `stroke` reads `light-dark(light, dark)`, which follows the page's `color-scheme`, set by the visitor's preference or by CSS.
+OSS credit for the footer's last column: "Built & maintained by Allons-y Studio", linked to the studio, over the "Allons-y!" sign-off in Yellowtail. Locked: it takes no props or slots. Live text in the footer's colors, so it follows the page's color scheme.
+
+Global tokens it reads: `--norn-text-base`, `--norn-font-size-xl`, `--norn-space-2xs`.
 
 ### Document components
 
@@ -67,4 +71,4 @@ The head and the foundation styles, with no body markup.
 
 Tag: `<oss-head>`.
 
-The OSS site head: the PT Mono preload and the self-hosted `@font-face` rules for PT Mono, Instrument Sans, and Yellowtail, each with a fallback matched to its metrics. The OSS site plugin puts it in `norn-base`'s head hook, followed by the brand tokens from `css/tokens.css`. Call it elsewhere as `<meta webc:is="oss-head" webc:nokeep />`. The `@font-face` rules look for the fonts at `assets/fonts`, one level up from the bundle: the OSS site plugin copies the package's `fonts` folder there. The brand tokens it goes with, in `css/tokens.css` and the `norn.oss` layer, are below. The brand rules in `css/brand.css` follow them in the same layer, such as the four-color strip along the header bar and the footer's project name in the accent color and the mono face, at 1.2rem. A project's unlayered CSS still wins over both.
+The OSS site head: the Instrument Sans and PT Mono preloads and the self-hosted `@font-face` rules for PT Mono, Instrument Sans, and Yellowtail, each with a fallback matched to its metrics. The OSS site plugin puts it in `norn-base`'s head hook, followed by the brand tokens from `css/tokens.css`. Call it elsewhere as `<meta webc:is="oss-head" webc:nokeep />`. The `@font-face` rules look for the fonts at `assets/fonts`, one level up from the bundle: the OSS site plugin copies the package's `fonts` folder there. The brand tokens it goes with, in `css/tokens.css` and the `norn.oss` layer, are below. The brand rules in `css/brand.css` follow them in the same layer, such as the hero's eyebrow, accent underline, and the mark's four arcs, and the raised footer led by the project name in the mono face. A project's unlayered CSS still wins over both.

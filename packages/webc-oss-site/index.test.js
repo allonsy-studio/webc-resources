@@ -126,7 +126,7 @@ test("the brand tokens set only shared tokens from tokens.json, in the norn.oss 
 	const shared = new Set(readTokens().map(({ name }) => name));
 	const declarations = [...css.matchAll(/^\s*([\w-]+)\s*:/gm)].map(([, name]) => name);
 	assert.ok(declarations.length > 0 && declarations.every((name) => shared.has(name)), declarations.join(", "));
-	assert.ok(declarations.includes("--norn-font-mono"));
+	for (const name of ["--norn-ui-accent", "--norn-surface-base", "--norn-text-base", "--norn-font-body", "--norn-font-mono"]) assert.ok(declarations.includes(name), name);
 });
 
 test("the brand rules style the Norn components by their tags in the norn.oss layer, and set no custom property", () => {
@@ -136,9 +136,9 @@ test("the brand rules style the Norn components by their tags in the norn.oss la
 	assert.ok(!/^\s*--[\w-]+\s*:/m.test(css), "sets no custom property");
 	for (const [, name] of css.matchAll(/var\((--norn-[\w-]+)/g)) assert.ok(shared.has(name), `${name} is a shared token`);
 	const rules = [...css.matchAll(/^\t(\S[^{\n]*?)\s*\{/gm)].map(([, selector]) => selector);
-	assert.ok(rules.length > 0 && rules.every((selector) => /^norn-[a-z-]+ > /.test(selector)), rules.join(", "));
-	assert.match(css, /norn-header > header \{[\s\S]*?&::after \{[\s\S]*?block-size: 3px;[\s\S]*?background: linear-gradient\(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%\);/, "the header strip");
-	assert.match(css, /norn-footer > footer > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-accent, [^;]+\);\s*font-family: var\(--norn-font-mono, [^;]+\);\s*font-size: 1\.2rem;/, "the footer name");
+	assert.ok(rules.length > 0 && rules.filter((selector) => !selector.startsWith("@")).every((selector) => /^norn-[a-z-]+ [>~] /.test(selector)), rules.join(", "));
+	assert.match(css, /norn-hero > header \{[\s\S]*?&::after \{[\s\S]*?background: linear-gradient\(90deg, #ff9a56 /, "the mark's arcs under the hero");
+	assert.match(css, /& > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-base, [^;]+\);\s*font-family: var\(--norn-font-mono, [^;]+\);/, "the footer name");
 });
 
 test("fonts: a forward-slash folder holding the four woff2 files", () => {
@@ -150,14 +150,11 @@ test("the package ships the four OSS components, and no page body or generic chr
 	assert.deepEqual(components, ["oss-bar", "oss-credit", "oss-cta", "oss-head"]);
 });
 
-test("each OSS component inlines its SVGs with an accessible name or a decorative mark", () => {
+test("the call to action inlines the decorative mark, and the banner and credit are live text", () => {
 	const read = (name) => fs.readFileSync(path.join(COMPONENTS, `${name}.webc`), "utf8");
-	const label = 'role="img" aria-label="Brought to you by Allons-y Studio"';
-	assert.equal((read("oss-bar").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1);
-	assert.equal((read("oss-credit").match(new RegExp(`<svg ${label}`, "g")) ?? []).length, 1, "one lockup that follows the scheme");
-	assert.ok(/style="fill:light-dark\(#EFEBDF,#33394E\);stroke:light-dark\(#33394E,#FBF9F3\)"/.test(read("oss-credit")), "its paint reads the scheme");
 	assert.equal((read("oss-cta").match(/<svg aria-hidden="true" width="72" height="72"/g) ?? []).length, 1);
-	for (const name of ["oss-bar", "oss-cta", "oss-credit"]) assert.ok(!/<svg[^>]*>\s*<\/svg>/.test(read(name)), `${name} has no empty placeholder`);
+	assert.ok(!/<svg[^>]*>\s*<\/svg>/.test(read("oss-cta")), "no empty placeholder");
+	for (const name of ["oss-bar", "oss-credit"]) assert.ok(!read(name).includes("<svg") && read(name).includes(">Allons"), name);
 });
 
 test("the Allons-y Studio contact address lives only in oss-cta, and no component carries an HTML comment", () => {

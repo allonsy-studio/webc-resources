@@ -23,13 +23,12 @@
 <style>
 	@layer norn.oss {
 		oss-cta {
-			--_navy: #33394e;
-			--_ink: #ffffff;
-			--_link: #ffd36b;
+			/* Yellow is the section's one accent: an ink-on-yellow primary action, and a darkened yellow for the secondary's text on cream. */
+			--_yellow: light-dark(#ffd36c, #ffc53d);
 			--_signature: "Yellowtail", "Yellowtail Fallback", cursive;
-			--norn-ui-accent: var(--_link);
-			--norn-text-accent: var(--_link);
-			--norn-text-on-accent: var(--_navy);
+			--norn-ui-accent: var(--_yellow);
+			--norn-text-accent: light-dark(#7d5208, #ffd147);
+			--norn-text-on-accent: #33394e;
 			display: block;
 			container-type: inline-size;
 			inline-size: min(100% - 2 * var(--norn-space-m, t('space.m')), 64rem);
@@ -42,8 +41,8 @@
 				gap: var(--norn-space-m, t('space.m')) var(--norn-space-l, t('space.l'));
 				padding: var(--norn-space-l, t('space.l'));
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
-				background: var(--_navy);
-				color: var(--_ink);
+				background: var(--norn-surface-raised, t('surface.raised'));
+				color: var(--norn-text-base, t('text.base'));
 			}
 
 			& svg {
@@ -89,10 +88,6 @@
 				margin: 0;
 				padding: 0;
 				list-style: none;
-			}
-
-			& :focus-visible {
-				outline-color: var(--_link);
 			}
 
 			@container (max-width: 37.5rem) {

@@ -73,25 +73,38 @@ For the npm badges in the footer, add `npmRelease` & `badgeColor` to the site da
 
 | Component | Locked | What it does |
 | --- | --- | --- |
-| `oss-bar` | Yes | The banner, in the `banner` hook before the header |
+| `oss-bar` | Yes | The ink banner, in the `banner` hook before the header: "Brought to you by" & the live-text wordmark, Yellowtail "Allons-y" with the magenta dash & "Studio" in caps, in a named `aside` |
 | `oss-cta` | Yes | The call to action that closes `main`, in the `cta` hook, with the Allons-y Studio name signed in Yellowtail. The only place Allons-y Studio's contact address appears |
-| `oss-credit` | Yes | The footer credit, in the `credit` hook, light or dark by the visitor's scheme, cropped to the art |
-| `oss-head` | No | The `head` hook: the PT Mono preload & the self-hosted `@font-face` rules, with a fallback matched to each font's metrics |
+| `oss-credit` | Yes | The footer credit, in the `credit` hook: "Built & maintained by Allons-y Studio" & the "Allons-y!" sign-off in Yellowtail, in the footer's colors |
+| `oss-head` | No | The `head` hook: the Instrument Sans & PT Mono preloads & the self-hosted `@font-face` rules, with a fallback matched to each font's metrics |
 
-The Allons-y Studio SVGs are inlined into the three locked components when the package is packed, from the org's `.github` repository, so the package exports no asset folder for them. Each has an accessible name, or is marked decorative. A packed install needs network access once, at pack time; set `OSS_ASSETS` to a local checkout's `assets` folder to pack offline.
+The Allons-y Studio mark is inlined into `oss-cta`, marked decorative, when the package is packed, from the org's `.github` repository, so the package exports no asset folder for it. A packed install needs network access once, at pack time; set `OSS_ASSETS` to a local checkout's `assets` folder to pack offline.
 
 ## The brand
 
 The theme is two files in the `norn.oss` layer, which the plugin embeds in every page's bundle: `css/tokens.css` sets shared tokens, & `css/brand.css` styles the Norn components by their tags. A project's unlayered CSS still wins over each of them.
 
+The values follow the Allons-y Studio design system: ink, slate, latte, cream, & paper, the four brights of the mark, & magenta as the one accent.
+
 | Token | Allons-y Studio value |
 | --- | --- |
+| `--norn-ui-accent` | Magenta, `#c92c6b`, until the project sets its own; the text & on-accent colors derive from it |
+| `--norn-surface-base`, `--norn-surface-raised`, `--norn-surface-code` | Paper, cream, & a warm code fill in light; the navy ladder from `#181b25` in dark |
+| `--norn-text-base`, `--norn-text-muted` | Ink & slate in light; paper & latte in dark |
+| `--norn-ui-border-color`, `--norn-ui-border-strong` | Latte hairlines, & a control edge at 3:1 or better |
+| `--norn-ui-motion-easing`, `--norn-ui-shadow` | The studio's easing & soft shadow |
+| `--norn-font-body` | Instrument Sans, with a metric-matched fallback |
 | `--norn-font-mono` | PT Mono, Allons-y Studio's locked monospace |
 
 | Rule in `css/brand.css` | Allons-y Studio look |
 | --- | --- |
-| `norn-header > header::after` | The four-color strip along the header bar |
-| `norn-footer > footer > div:first-child > :first-child strong:first-of-type` | The footer's project name in the accent color & the mono face, at 1.2rem |
+| `norn-header > header` | A paper header on a latte hairline, the project name in the mono face |
+| `norn-hero > header` | The project name as the uppercase eyebrow, the tagline as the headline under an accent underline, & the mark's four arcs below |
+| `norn-hero ~ section` | One bright per home page section, cycling cyan, orange, & yellow, as a short bar over a semibold heading |
+| `norn-sidebar-layout > div > article > h1` | A docs or package title in the mono face, under a short bar in the accent |
+| `norn-footer > footer` | A raised footer, led by the project name in the mono face |
+
+Yellowtail is kept for the wordmark & the sign-off, & for the studio name `oss-cta` signs. The call to action is a raised panel with yellow as its one accent.
 
 The plugin also sets the theme color, `#33394e`, & `og:locale`, `en_US`, as prop defaults under the project's mapping.
 
@@ -120,7 +133,7 @@ A project component named `oss-bar.webc`, `oss-cta.webc`, or `oss-credit.webc` c
 - **Icons come from `norn-icon`.** The Docs link carries a book, the hero facts a check, & a docs page may name a sidebar icon. Footer links & card badges have none, & `features[].icon` is not in the schema.
 - **Conduct & security links** use the project's own `CODE_OF_CONDUCT.md` & `SECURITY.md` when it keeps them, & show Allons-y Studio's only when the OSS site layer is on.
 - **The workspaces sidebar** is labeled "Packages", not "Documentation".
-- **The OSS credit & call to action** are inline SVGs, not image files.
+- **The banner & the credit** are live text; the call to action's mark is an inline SVG, not an image file.
 
 ## License
 

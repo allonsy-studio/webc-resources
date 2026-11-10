@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 --->
+<link rel="preload" href="/assets/fonts/instrument-sans-var.woff2" as="font" type="font/woff2" crossorigin />
 <link rel="preload" href="/assets/fonts/pt-mono.woff2" as="font" type="font/woff2" crossorigin />
 <style>
 	/* The fonts sit at assets/fonts: from the bundle, one level up. Each fallback matches its font's metrics. */
