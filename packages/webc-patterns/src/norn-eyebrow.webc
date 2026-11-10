@@ -1,0 +1,26 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<p><slot></slot></p>
+<style>
+	@layer norn.components {
+		norn-eyebrow {
+			display: block;
+
+			& > p {
+				margin: 0;
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				font-weight: 600;
+				line-height: 1.5;
+				letter-spacing: 0.08em;
+				text-transform: uppercase;
+			}
+		}
+	}
+</style>

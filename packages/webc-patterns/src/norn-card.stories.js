@@ -10,6 +10,7 @@ export default {
 	component: "norn-card",
 	argTypes: {
 		default: { description: "The heading, then the body." },
+		image: { description: "An image across the top of the card, cropped to 16:9, such as `<img slot=\"image\" src=\"…\" alt=\"\">`. A card with an image lays out on its own, so keep image cards in a row of their own." },
 		accent: { description: "A 2px line along the top, in a global color: `accent` takes --norn-ui-accent, and `info`, `success`, `warning`, and `danger` take the matching --norn-status-* color. `none` draws no line." },
 		"title-face": { description: "`mono` sets the heading in the mono face, as for package names." },
 	},
@@ -31,4 +32,17 @@ export const Linked = { name: "Linked heading", args: { default: '<h3><a href="h
 export const Long = {
 	name: "Long text",
 	args: { default: "<h3>Configure the build for a project with several workspaces and a shared theme</h3>\n<p>Each workspace keeps its own pages and data. The shared theme sets the colors, the type, and the spacing once, and every workspace follows it.</p>" },
+};
+
+export const Image = {
+	name: "With an image",
+	args: {
+		default: '<h3><a href="https://example.com/">Card with an image</a></h3>\n<p>A short line of body text.</p>',
+		image: '<img src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 16 9%22%3E%3Crect width=%2216%22 height=%229%22 fill=%22%23c9ced8%22/%3E%3C/svg%3E" alt="">',
+	},
+};
+
+export const ArrowLink = {
+	name: "Footer link",
+	args: { default: '<h3>Card with a footer link</h3>\n<p>A short line of body text.</p>\n<p><a href="https://example.com/">Read the post</a></p>' },
 };

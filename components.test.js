@@ -267,6 +267,7 @@ const BLOCK_MARGINS = {
 	"webc-patterns/src/norn-accordion.webc|margin-block": "the space below a panel inside a native details, whose content has no box a gap could belong to without ::details-content",
 	"webc-patterns/src/norn-card-grid.webc|margin-block-end": "the subgrid rows have no gap, so a card with no footer leaves no blank space, and the space between cards is a margin taken back from the end of the list",
 	"webc-patterns/src/norn-card.webc|margin-block-end": "the same subgrid rows: a gap would leave blank space under a card with no footer",
+	"webc-patterns/src/norn-card.webc|margin-block-start": "a negative margin that bleeds the image to the top edge of the card, over its padding",
 	"webc-patterns/src/norn-code-tabs.webc|margin-block-end": "a negative margin that lays the tab's line over the rule below it",
 	"webc-patterns/src/norn-notice.webc|margin-block-start": "centers the icon on the first line of text",
 	"webc-patterns/src/norn-rich-text.webc|margin": "headings in arbitrary Markdown HTML take space above, on top of the flow's gap",

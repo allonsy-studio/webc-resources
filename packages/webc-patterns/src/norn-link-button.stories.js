@@ -12,7 +12,9 @@ export default {
 		href: { description: "The link's URL.", type: { name: "string", required: true } },
 		variant: { description: "`primary`, a filled accent; `secondary`, a 1px outline; or `quiet`, text with no border." },
 		tone: { description: "`accent`, the accent text color; or `current`, the surrounding text color, for a secondary or quiet button inside a colored container such as `norn-notice`. A primary button keeps its fill and text." },
+		"icon-only": { description: "Show only the icon, in a square at the control height. The default slot holds the `norn-icon`, and the `label` slot the link's name, read but not shown." },
 		default: { description: "The link text, which may hold a `norn-icon`." },
+		label: { description: 'The link\'s name for `@icon-only`, such as `<span slot="label">Subscribe by RSS</span>`.' },
 	},
 	parameters: {
 		webc: {
@@ -31,3 +33,7 @@ export default {
 export const Default = { args: { href: "#start", default: "Get started" } };
 
 export const Icon = { name: "With an icon", args: { href: "#next", default: 'Next step <norn-icon @name="arrow-end"></norn-icon>' } };
+
+export const Secondary = { name: "Secondary", args: { href: "#sponsor", variant: "secondary", default: "Sponsor" } };
+
+export const IconOnly = { name: "Icon only", args: { href: "#feed", "icon-only": true, default: '<norn-icon @name="arrow-end"></norn-icon>', label: "Next step" } };

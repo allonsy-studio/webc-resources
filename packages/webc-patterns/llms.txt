@@ -290,6 +290,7 @@ Props:
 Slots:
 
 - `default`: The heading, then the body.
+- `image`: An image across the top of the card, cropped to 16:9, such as `<img slot="image" src="…" alt="">`. A card with an image lays out on its own, so keep image cards in a row of their own.
 
 Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-radius`, `--norn-ui-focus-width`, `--norn-ui-focus-offset`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-surface-raised`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-space-s`, `--norn-space-m`, `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger`.
 
@@ -377,7 +378,7 @@ Slots:
 
 - `default`: The prose, as rendered HTML.
 
-Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-surface-code`, `--norn-text-muted`, `--norn-text-measure`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-font-size-xl`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-radius-s`, `--norn-surface-code`, `--norn-text-muted`, `--norn-text-measure`, `--norn-font-heading`, `--norn-font-mono`, `--norn-font-size-s`, `--norn-font-size-m`, `--norn-font-size-l`, `--norn-font-size-xl`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
 
 #### norn-simple-table
 
@@ -385,16 +386,58 @@ Tag: `<norn-simple-table>`.
 
 A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way. Pass the `<table>` in the default slot, with a `<caption>` when it can have one. Cells and code in them wrap between words, never mid-word. While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. `scrollTables` in `@allons-y/webc-patterns/markdown` writes the same markup for Markdown tables. Row rules take --norn-ui-border-color, and the scroll shadows are drawn against the page surface, --norn-surface-base. The header row has no fill.
 
+Props:
+
+- `striped` (boolean, optional): Tint every even body row with the raised surface, for a long table read across.
+- `numeric` (string, optional): The columns that hold numbers, by position from 1 to 8, separated by spaces, such as `"2 3"`. They align at the end, with figures of one width.
+
 Slots:
 
 - `default`: The table.
+- `note`: A short note under the table, such as its source, in muted text. Phrasing content only: it renders in a paragraph.
 - `label`: The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.
 
-Global tokens it reads: `--norn-ui-border-color`, `--norn-surface-base`, `--norn-text-base`, `--norn-text-muted`, `--norn-space-xs`, `--norn-space-s`.
+Global tokens it reads: `--norn-ui-border-color`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-muted`, `--norn-font-size-s`, `--norn-space-xs`, `--norn-space-s`.
+
+#### norn-tag-filter
+
+Tag: `<norn-tag-filter>`.
+
+Filters a list by its tags. Without a script the tags stay links, such as to each tag's page. With one, every `norn-tag` inside that has `@tag` becomes a toggle button. Several can be on at once, and an item shows when it carries any active tag. Nothing on shows everything, so there is no "All" tag. While any filter is on, a button turns them all off, and after each change a status message says how many items show, by the plural rules of the nearest `lang`. The texts are in the page, hidden, and the script reads them.
+
+Slots:
+
+- `default`: The tags and the items they filter: `norn-tag`s with `@href` and `@tag`, and elements with `data-tags`, a space-separated list such as `data-tags="css html"`. Often a list of tags, then a list of items.
+- `clear`: The text of the button that turns every filter off, as one element. Falls back to the site's `componentStrings`, then "Clear filters".
+- `shown-one`: The status after a change, for a count in the `one` plural category, with `{count}` for the number of items shown. Falls back to "{count} item shown", or to `shown-other` when the site's strings set only that.
+- `shown-other`: The status for any other count. Falls back to "{count} items shown".
+- `shown-zero`: The status for the `zero` category.
+- `shown-two`: The status for the `two` category.
+- `shown-few`: The status for the `few` category.
+- `shown-many`: The status for the `many` category.
+
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-s`.
 
 ### Component components
 
 A self-contained element: a link, a code block, a lockup.
+
+#### norn-choice
+
+Tag: `<norn-choice>`.
+
+Checkboxes or radios in a fieldset, named by its legend. Each option is a `<label>` holding its native input, then its text, so a click anywhere on the label sets it. The boxes are drawn at 1.25em with a strong edge and a hover layer; a checked one fills with the accent and shows a tick or a dot. Give a radio group one `name`. In forced colors the native controls return. For one choice from a few drawn as a single control, use `norn-segmented-control`.
+
+Props:
+
+- `inline` (boolean, optional): Sets the options in a wrapping row instead of a column.
+
+Slots:
+
+- `legend`: The group's name, as one element, such as `<span slot="legend">Reply by</span>`. Required: the build fails without it.
+- `default`: The options: each a `<label>` holding an `<input type="checkbox">` or `<input type="radio">`, then its text.
+
+Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-color`, `--norn-ui-border-strong`, `--norn-ui-radius-s`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-text-muted`, `--norn-text-on-accent`, `--norn-space-xs`, `--norn-space-m`, `--norn-status-danger`.
 
 #### norn-copy-button
 
@@ -419,6 +462,18 @@ Slots:
 
 Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-surface-code`, `--norn-text-muted`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-status-success`, `--norn-status-danger`.
 
+#### norn-eyebrow
+
+Tag: `<norn-eyebrow>`.
+
+The small kicker above a title: one label in muted text, set uppercase by CSS with a little tracking. Write the label in sentence case, so a screen reader reads a word and not letters. Put it before the heading it introduces; a date goes on its own line after the heading.
+
+Slots:
+
+- `default`: One short label, such as a category or a status, in sentence case. No dates and no separators.
+
+Global tokens it reads: `--norn-text-muted`, `--norn-font-size-s`.
+
 #### norn-fact-list
 
 Tag: `<norn-fact-list>`.
@@ -434,6 +489,21 @@ Slots:
 - `default`: The facts, as `<li>` elements.
 
 Global tokens it reads: `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`, `--norn-space-l`.
+
+#### norn-field
+
+Tag: `<norn-field>`.
+
+A labeled text control: a `<label>` and an `<input>`, `<textarea>`, or `<select>`, with an optional hint and error message under it. The control takes the control height, a strong edge, and a hover layer; `readonly` draws a dashed edge, `disabled` a raised fill. After the visitor touches it, an invalid control (`:user-invalid`, or `aria-invalid="true"`) takes the danger edge, as does any control with an error in its slot. A script points the control's `aria-describedby` at the hint and the error; without it, give them an id and link them yourself. Mark a required field with the `required` attribute, and a visible asterisk in the label inside `aria-hidden="true"`. Group checkboxes and radios with `norn-choice`.
+
+Slots:
+
+- `default`: A `<label>` and the control it names: an `<input>`, a `<textarea>`, or a `<select>`.
+- `hint`: Help shown under the control, such as `<span slot="hint">As on your ID</span>`.
+- `error`: The error message, without its prefix, such as `<span slot="error">Add the part after the @.</span>`. Hidden while empty; filled, it also marks the control.
+- `error-prefix`: The word read before the error message.
+
+Global tokens it reads: `--norn-ui-border-color`, `--norn-ui-border-strong`, `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-surface-base`, `--norn-surface-raised`, `--norn-text-base`, `--norn-text-muted`, `--norn-text-accent`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-s`, `--norn-status-danger`.
 
 #### norn-heading-anchor
 
@@ -480,10 +550,12 @@ Props:
 - `href` (string, required): The link's URL.
 - `variant` (string, optional, default `primary`, one of `primary`, `secondary`, `quiet`): `primary`, a filled accent; `secondary`, a 1px outline; or `quiet`, text with no border.
 - `tone` (string, optional, one of `current`): `accent`, the accent text color; or `current`, the surrounding text color, for a secondary or quiet button inside a colored container such as `norn-notice`. A primary button keeps its fill and text.
+- `icon-only` (boolean, optional): Show only the icon, in a square at the control height. The default slot holds the `norn-icon`, and the `label` slot the link's name, read but not shown.
 
 Slots:
 
 - `default`: The link text, which may hold a `norn-icon`.
+- `label`: The link's name for `@icon-only`, such as `<span slot="label">Subscribe by RSS</span>`.
 
 Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-ui-control-height`, `--norn-text-accent`, `--norn-text-on-accent`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-m`.
 
@@ -546,6 +618,25 @@ Slots:
 - `label`: The link text, as one element, such as `<span slot="label">Aller au contenu</span>`. Falls back to the site's `componentStrings`, then "Skip to content".
 
 Global tokens it reads: `--norn-ui-border-radius`, `--norn-surface-raised`, `--norn-text-base`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+
+#### norn-tag
+
+Tag: `<norn-tag>`.
+
+A topic label. With `@href` it is a link: a hairline edge at control contrast, a state layer and an underline on hover and focus, and a heavier edge and label when it is the current page or an active filter. Without `@href` it is a static tint with no edge, and not focusable. Inside `norn-tag-filter`, a tag with `@tag` becomes a toggle.
+
+Props:
+
+- `href` (string, optional): Where the tag links, such as the tag's page. With it the tag is a link with the edge of a control; without it, a static label.
+- `color` (string, optional, one of `accent`, `info`, `success`, `warning`, `danger`): A tint from a shared color token: `accent`, or a status color. Without it the tint is the text color. The label stays in the text color, so the word carries the meaning.
+- `current` (boolean, optional): Mark the tag of the page the visitor is on, with `aria-current="true"`. Only on a tag with `href`.
+- `tag` (string, optional): The key `norn-tag-filter` matches against each item's `data-tags`, such as `css`. Only on a tag with `href`.
+
+Slots:
+
+- `default`: The label, in sentence case.
+
+Global tokens it reads: `--norn-ui-accent`, `--norn-ui-border-strong`, `--norn-ui-border-radius`, `--norn-ui-state-hover`, `--norn-ui-state-press`, `--norn-ui-motion-duration`, `--norn-ui-motion-easing`, `--norn-text-base`, `--norn-font-size-s`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger`.
 
 #### norn-theme-toggle
 

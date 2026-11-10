@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 --->
-<a :href="href" :data-variant="variant === 'secondary' || variant === 'quiet' ? variant : 'primary'" :data-tone="tone === 'current' ? 'current' : undefined"><slot></slot></a>
+<a :href="href" :data-variant="variant === 'secondary' || variant === 'quiet' ? variant : 'primary'" :data-tone="tone === 'current' ? 'current' : undefined" :data-icon-only="iconOnly === true || iconOnly === '' || iconOnly === 'true' ? '' : undefined"><slot></slot><span webc:if="iconOnly === true || iconOnly === '' || iconOnly === 'true'" data-label><slot name="label"></slot></span></a>
 <style>
 	@layer norn.components {
 		norn-link-button {
@@ -46,6 +46,22 @@
 				color: inherit;
 			}
 
+			/* A square at the control height: the icon alone shows, and the label is read but not shown. */
+			& a[data-icon-only] {
+				justify-content: center;
+				inline-size: var(--norn-ui-control-height, t('ui.control.height'));
+				padding: 0;
+			}
+
+			& a > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
 			& a[data-variant="primary"] {
 				--_bg: var(--norn-ui-accent, t('ui.accent'));
 				color: var(--norn-text-on-accent, t('text.on-accent'));
@@ -58,6 +74,10 @@
 			@media (pointer: coarse) {
 				& a[data-variant] {
 					min-block-size: 2.75rem;
+				}
+
+				& a[data-icon-only] {
+					inline-size: 2.75rem;
 				}
 			}
 
