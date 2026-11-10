@@ -433,7 +433,7 @@ test("norn-code-block overlays a compact copy button, and its terminal frame is 
 test("norn-code-block reads the shared tokens, and its terminal frame is a prop, not an inherited custom property", async () => {
 	const css = cssOf("norn-code-block");
 	assert.ok(!/--norn-code-block-|--norn-chrome|@container style/.test(css), "no --norn-code-block-* property and no mode flag");
-	for (const read of ["background: var(--norn-surface-code, t('surface.code'));", "color: var(--norn-text-base, t('text.base'));", "font-family: var(--norn-font-mono, t('font.mono'));", "padding: var(--norn-space-m, t('space.m'));", "border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));"]) assert.ok(css.includes(read), read);
+	for (const read of ["background: var(--norn-surface-code, t('surface.code'));", "color: var(--norn-code-text, t('code.text'));", "font-family: var(--norn-font-mono, t('font.mono'));", "padding: var(--norn-space-m, t('space.m'));", "border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));"]) assert.ok(css.includes(read), read);
 	assert.ok((await render('<norn-code-block @chrome="terminal" @language="sh" @code="x"></norn-code-block>')).includes('<figure data-chrome="terminal">'), "the prop marks the frame");
 	assert.ok(!(await render('<norn-code-block @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "no frame by default");
 	assert.ok(!(await render('<norn-code-block @chrome="window" @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "nor for an unknown value");

@@ -72,7 +72,7 @@ const nameOf = (language, label) =>
 				padding: var(--norn-space-m, t('space.m'));
 				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
 				background: var(--norn-surface-code, t('surface.code'));
-				color: var(--norn-text-base, t('text.base'));
+				color: var(--norn-code-text, t('code.text'));
 				font-family: var(--norn-font-mono, t('font.mono'));
 				font-size: var(--norn-font-size-s, t('font.size.s'));
 				line-height: 1.5;
@@ -145,7 +145,7 @@ const nameOf = (language, label) =>
 			}
 
 			& code::highlight(tok-punctuation) {
-				color: var(--norn-text-muted, t('text.muted'));
+				color: var(--norn-code-punctuation, t('code.punctuation'));
 			}
 
 			@media print {

@@ -67,4 +67,4 @@ Slots:
 - `copied`: The copy button's text after a copy. Falls back to "Copied".
 - `failed`: The copy button's text when the copy fails. Falls back to "Copy failed".
 
-Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-icon-s`, `--norn-surface-raised`, `--norn-surface-code`, `--norn-text-base`, `--norn-text-muted`, `--norn-font-mono`, `--norn-font-size-s`, `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number`, `--norn-code-flag`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
+Global tokens it reads: `--norn-ui-border-radius`, `--norn-ui-icon-s`, `--norn-surface-raised`, `--norn-surface-code`, `--norn-text-muted`, `--norn-font-mono`, `--norn-font-size-s`, `--norn-code-text`, `--norn-code-punctuation`, `--norn-code-comment`, `--norn-code-string`, `--norn-code-keyword`, `--norn-code-function`, `--norn-code-number`, `--norn-code-flag`, `--norn-space-2xs`, `--norn-space-xs`, `--norn-space-s`, `--norn-space-m`.
