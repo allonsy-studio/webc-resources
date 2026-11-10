@@ -299,7 +299,7 @@
 				padding: var(--norn-space-m, 1.25rem);
 				border-radius: var(--norn-ui-border-radius, 6px);
 				background: var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b));
-				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				color: var(--norn-code-text, var(--norn-text-base, light-dark(#16181d, #eceef3)));
 				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 				font-size: var(--norn-font-size-s, 0.875rem);
 				line-height: 1.5;
@@ -372,7 +372,7 @@
 			}
 
 			& code::highlight(tok-punctuation) {
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				color: var(--norn-code-punctuation, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
 			}
 
 			@media print {

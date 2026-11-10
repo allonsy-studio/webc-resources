@@ -194,7 +194,7 @@
 				padding: var(--norn-space-m, 1.25rem);
 				border-radius: var(--norn-ui-border-radius, 6px);
 				background: var(--norn-surface-code, light-dark(hsl(40, 14%, 94%), #2c313b));
-				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				color: var(--norn-code-text, var(--norn-text-base, light-dark(#16181d, #eceef3)));
 				font-family: var(--norn-font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 				font-size: var(--norn-font-size-s, 0.875rem);
 				line-height: 1.5;
@@ -267,7 +267,7 @@
 			}
 
 			& code::highlight(tok-punctuation) {
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+				color: var(--norn-code-punctuation, var(--norn-text-muted, light-dark(#4b5160, #a4abba)));
 			}
 
 			@media print {
@@ -275,110 +275,6 @@
 
 				& pre {
 					white-space: pre-wrap;
-				}
-			}
-		}
-	}
-@layer norn.components {
-		norn-code-tabs {
-			display: block;
-
-			& > div {
-				display: grid;
-				gap: var(--norn-space-s, 0.75rem);
-			}
-
-			& > div > [role="tablist"] {
-				display: flex;
-				flex-wrap: wrap;
-				gap: var(--norn-space-xs, 0.5rem);
-				border-block-end: 1px solid var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
-			}
-
-			& > div > [role="tablist"] > [role="tab"] {
-				--_state: 0%;
-				box-sizing: border-box;
-				min-block-size: var(--norn-ui-control-height, 2.25rem);
-				margin-block-end: -1px;
-				padding: 0 var(--norn-space-s, 0.75rem);
-				border: 0;
-				border-block-end: 2px solid transparent;
-				border-start-start-radius: var(--norn-ui-radius-s, 4px);
-				border-start-end-radius: var(--norn-ui-radius-s, 4px);
-				background-color: color-mix(in oklab, currentcolor var(--_state), transparent);
-				color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
-				font: inherit;
-				font-size: var(--norn-font-size-s, 0.875rem);
-				overflow-wrap: anywhere;
-				cursor: pointer;
-
-				&:hover {
-					--_state: var(--norn-ui-state-hover, 8%);
-					color: var(--norn-text-base, light-dark(#16181d, #eceef3));
-				}
-
-				&:active {
-					--_state: var(--norn-ui-state-press, 12%);
-				}
-
-				/* The ring sits inside the tab, clear of the underline. */
-				&:focus-visible {
-					outline-offset: calc(-1 * var(--norn-ui-focus-offset, 2px));
-				}
-
-				&[aria-selected="true"] {
-					border-block-end-color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-					color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
-					font-weight: 600;
-				}
-			}
-
-			& > div > [role="tabpanel"][hidden] {
-				display: none;
-			}
-
-			/* The tab names the sample, so the caption would repeat it. */
-			& > div > [role="tabpanel"] figcaption {
-				display: none;
-			}
-
-			& > div > [role="tabpanel"] figure:has(> figcaption) {
-				row-gap: 0;
-			}
-
-			@media (pointer: coarse) {
-				& > div > [role="tablist"] > [role="tab"] {
-					min-block-size: 2.75rem;
-				}
-			}
-
-			@media (prefers-reduced-motion: no-preference) {
-				& > div > [role="tablist"] > [role="tab"] {
-					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
-				}
-			}
-
-			/* A clear border would be drawn in the text color, so only the selected tab has one. */
-			@media (forced-colors: active) {
-				& > div > [role="tablist"] > [role="tab"] {
-					border-block-end-width: 0;
-					padding-block-end: 2px;
-				}
-
-				& > div > [role="tablist"] > [role="tab"][aria-selected="true"] {
-					border-block-end-width: 2px;
-					border-block-end-color: Highlight;
-					padding-block-end: 0;
-				}
-			}
-
-			@media print {
-				& > div > [role="tablist"] {
-					display: none;
-				}
-
-				& > div > [role="tabpanel"][hidden] {
-					display: block;
 				}
 			}
 		}
