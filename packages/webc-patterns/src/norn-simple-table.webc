@@ -7,7 +7,8 @@
  */
 --->
 <span hidden :id="'norn-simple-table-' + uid"><slot name="label"></slot></span>
-<div><slot></slot></div>
+<div :data-striped="striped === true || striped === '' || striped === 'true' ? '' : undefined" :data-numeric="typeof numeric === 'string' && numeric.trim() ? numeric.trim() : undefined"><slot></slot></div>
+<p data-note><slot name="note"></slot></p>
 <style>
 	@layer norn.components {
 		norn-simple-table {
@@ -15,7 +16,7 @@
 			min-inline-size: 0;
 
 			/* Shadows at the edges that have more to scroll to: the first two are the page's color and scroll with the content, so they cover the shadows underneath until the content has moved. */
-			& > div {
+			& > div:first-of-type {
 				--_bg: var(--norn-surface-base, t('surface.base'));
 				--_shadow: color-mix(in oklab, var(--norn-text-base, t('text.base')) 18%, transparent);
 				overflow-x: auto;
@@ -61,8 +62,37 @@
 				white-space: nowrap;
 			}
 
+			/* An even body row takes the raised surface, for a long table read across. */
+			& > div[data-striped] > table > tbody > tr:nth-child(even) {
+				background-color: var(--norn-surface-raised, t('surface.raised'));
+			}
+
+			/* A numeric column, named by its position, lines up at the end with figures of one width. */
+			& > div[data-numeric~="1"] > table :is(th, td):nth-child(1),
+			& > div[data-numeric~="2"] > table :is(th, td):nth-child(2),
+			& > div[data-numeric~="3"] > table :is(th, td):nth-child(3),
+			& > div[data-numeric~="4"] > table :is(th, td):nth-child(4),
+			& > div[data-numeric~="5"] > table :is(th, td):nth-child(5),
+			& > div[data-numeric~="6"] > table :is(th, td):nth-child(6),
+			& > div[data-numeric~="7"] > table :is(th, td):nth-child(7),
+			& > div[data-numeric~="8"] > table :is(th, td):nth-child(8) {
+				font-variant-numeric: tabular-nums;
+				text-align: end;
+			}
+
+			& > [data-note] {
+				margin: 0;
+				padding-block-start: var(--norn-space-xs, t('space.xs'));
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+			}
+
+			& > [data-note]:empty {
+				display: none;
+			}
+
 			@media print {
-				& > div {
+				& > div:first-of-type {
 					overflow: visible;
 					background: none;
 				}

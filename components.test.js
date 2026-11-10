@@ -267,6 +267,7 @@ const BLOCK_MARGINS = {
 	"webc-patterns/src/norn-accordion.webc|margin-block": "the space below a panel inside a native details, whose content has no box a gap could belong to without ::details-content",
 	"webc-patterns/src/norn-card-grid.webc|margin-block-end": "the subgrid rows have no gap, so a card with no footer leaves no blank space, and the space between cards is a margin taken back from the end of the list",
 	"webc-patterns/src/norn-card.webc|margin-block-end": "the same subgrid rows: a gap would leave blank space under a card with no footer",
+	"webc-patterns/src/norn-card.webc|margin-block-start": "a negative margin that bleeds the image to the top edge of the card, over its padding",
 	"webc-patterns/src/norn-code-tabs.webc|margin-block-end": "a negative margin that lays the tab's line over the rule below it",
 	"webc-patterns/src/norn-notice.webc|margin-block-start": "centers the icon on the first line of text",
 	"webc-patterns/src/norn-rich-text.webc|margin": "headings in arbitrary Markdown HTML take space above, on top of the flow's gap",
@@ -363,11 +364,14 @@ test("a component that exposes no custom property of its own reads only global t
 
 test("norn-segmented-control draws no thumb, counts no options, and fills its checked option itself in forced colors", () => {
 	const css = cssOf("norn-segmented-control");
-	assert.ok(!/::before|::after/.test(css), "no pseudo-element");
+	assert.ok(!/::after/.test(css) && [...css.matchAll(/::before/g)].length === 3, "one pseudo-element: the sliding fill, its off switch, and its forced colors rule");
+	const slide = css.slice(css.indexOf("@media (prefers-reduced-motion: no-preference) { @supports (anchor-name: --a)"), css.indexOf("@media (forced-colors: active)"));
+	assert.ok(slide.includes("fieldset::before") && slide.includes("position-anchor: --norn-segment") && slide.includes("anchor-scope: --norn-segment"), "the fill slides only with motion allowed and anchor positioning, scoped to its control");
 	assert.ok(!/--_(index|count)|translate|nth-of-type/.test(css), "no thumb math, so no cap on the options");
 	assert.ok(!/outline: 3px/.test(css) && css.includes("outline: var(--norn-ui-focus-width,"), "the one ring, inset");
 	const forced = css.slice(css.indexOf("@media (forced-colors: active)"));
 	assert.match(forced, /label:has\(input:checked\) \{ background-color: Highlight; color: HighlightText; forced-color-adjust: none;/, "the label itself is filled");
+	assert.match(forced, /fieldset::before \{ display: none;/, "and the sliding fill is off");
 	assert.ok(css.includes("--_current: var(--norn-text-accent, t('text.accent'))") && !/thumb|--norn-segmented-control-/.test(css), "the accent tint replaces the thumb and the border");
 });
 
@@ -432,7 +436,7 @@ test("norn-code-block overlays a compact copy button, and its terminal frame is 
 test("norn-code-block reads the shared tokens, and its terminal frame is a prop, not an inherited custom property", async () => {
 	const css = cssOf("norn-code-block");
 	assert.ok(!/--norn-code-block-|--norn-chrome|@container style/.test(css), "no --norn-code-block-* property and no mode flag");
-	for (const read of ["background: var(--norn-surface-code, t('surface.code'));", "color: var(--norn-text-base, t('text.base'));", "font-family: var(--norn-font-mono, t('font.mono'));", "padding: var(--norn-space-m, t('space.m'));", "border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));"]) assert.ok(css.includes(read), read);
+	for (const read of ["background: var(--norn-surface-code, t('surface.code'));", "color: var(--norn-code-text, t('code.text'));", "font-family: var(--norn-font-mono, t('font.mono'));", "padding: var(--norn-space-m, t('space.m'));", "border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));"]) assert.ok(css.includes(read), read);
 	assert.ok((await render('<norn-code-block @chrome="terminal" @language="sh" @code="x"></norn-code-block>')).includes('<figure data-chrome="terminal">'), "the prop marks the frame");
 	assert.ok(!(await render('<norn-code-block @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "no frame by default");
 	assert.ok(!(await render('<norn-code-block @chrome="window" @language="sh" @code="x"></norn-code-block>')).includes("data-chrome"), "nor for an unknown value");

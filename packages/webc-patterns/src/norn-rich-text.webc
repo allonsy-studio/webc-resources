@@ -74,6 +74,25 @@
 				color: var(--norn-text-muted, t('text.muted'));
 			}
 
+			/* A sourced quote: a cite line inside the quote, or a figcaption under it. */
+			blockquote:has(> cite) {
+				display: grid;
+				gap: var(--norn-space-xs, t('space.xs'));
+			}
+
+			figure:has(> blockquote) {
+				display: grid;
+				gap: var(--norn-space-xs, t('space.xs'));
+				margin: 0;
+			}
+
+			blockquote > cite,
+			figure:has(> blockquote) > figcaption {
+				color: var(--norn-text-muted, t('text.muted'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				font-style: normal;
+			}
+
 			table {
 				border-collapse: collapse;
 				border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));

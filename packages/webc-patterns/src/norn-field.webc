@@ -1,0 +1,176 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<slot></slot>
+<span data-hint><slot name="hint"></slot></span>
+<span data-error><span data-prefix><slot name="error-prefix"><span webc:nokeep @text="nornComponentStrings?.('norn-field', 'error-prefix', $data.page) || 'Error: '"></span></slot></span><slot name="error"></slot></span>
+<style>
+	@layer norn.components {
+		norn-field {
+			display: grid;
+			gap: var(--norn-space-2xs, t('space.2xs'));
+			min-inline-size: 0;
+
+			& > label {
+				font-weight: 600;
+
+				/* The caller's required marker, hidden from assistive tech since the control says `required`. */
+				& > [aria-hidden="true"] {
+					color: var(--norn-text-accent, t('text.accent'));
+				}
+			}
+
+			& > :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), textarea, select) {
+				--_state: 0%;
+				box-sizing: border-box;
+				inline-size: 100%;
+				min-block-size: var(--norn-ui-control-height, t('ui.control.height'));
+				margin: 0;
+				padding-block: var(--norn-space-2xs, t('space.2xs'));
+				padding-inline: var(--norn-space-s, t('space.s'));
+				border: 1px solid var(--norn-ui-border-strong, t('ui.border.strong'));
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-base, t('surface.base')));
+				color: var(--norn-text-base, t('text.base'));
+				font: inherit;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+				}
+
+				&[readonly] {
+					border-style: dashed;
+				}
+
+				&:disabled {
+					--_state: 0%;
+					border-color: var(--norn-ui-border-color, t('ui.border.color'));
+					background-color: var(--norn-surface-raised, t('surface.raised'));
+					color: var(--norn-text-muted, t('text.muted'));
+					cursor: not-allowed;
+				}
+
+				&:is(:user-invalid, [aria-invalid="true"]) {
+					border-color: var(--norn-status-danger, t('status.danger'));
+				}
+			}
+
+			& > textarea {
+				min-block-size: calc(3 * var(--norn-ui-control-height, t('ui.control.height')));
+				resize: vertical;
+			}
+
+			/* An error in the slot marks the control too, even before the visitor touches it. */
+			&:has(> [data-error] > :not([data-prefix])) > :is(input, textarea, select) {
+				border-color: var(--norn-status-danger, t('status.danger'));
+			}
+
+			& > :is([data-hint], [data-error]) {
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+			}
+
+			& > [data-hint] {
+				color: var(--norn-text-muted, t('text.muted'));
+
+				&:not(:has(*)) {
+					display: none;
+				}
+			}
+
+			& > [data-error] {
+				color: var(--norn-text-base, t('text.base'));
+
+				&:not(:has(> :not([data-prefix]))) {
+					display: none;
+				}
+
+				& > [data-prefix] {
+					color: var(--norn-status-danger, t('status.danger'));
+					font-weight: 700;
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > :is(input, select) {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > :is(input, textarea, select) {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			/* The browser repaints the edge, so an invalid control draws a thicker one. */
+			@media (forced-colors: active) {
+				& > :is(input, textarea, select):is(:user-invalid, [aria-invalid="true"]),
+				&:has(> [data-error] > :not([data-prefix])) > :is(input, textarea, select) {
+					border-width: 2px;
+				}
+			}
+
+			@media print {
+				& > :is(input, textarea, select) {
+					background: none;
+				}
+			}
+		}
+	}
+</style>
+<script>
+	{
+		let count = 0;
+
+		/** Points the control's `aria-describedby` at the hint and the error that hold content, and takes the links back on removal. */
+		class NornField extends HTMLElement {
+			#added = [];
+
+			connectedCallback() {
+				if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => this.#link(), { once: true });
+				else this.#link();
+			}
+
+			disconnectedCallback() {
+				this.#unlink();
+			}
+
+			#control() {
+				return this.querySelector(":scope > :is(input, textarea, select)");
+			}
+
+			#link() {
+				const control = this.#control();
+				if (!control || !this.isConnected) return;
+				this.#unlink();
+				const ids = (control.getAttribute("aria-describedby") ?? "").split(/\s+/).filter(Boolean);
+				for (const holder of this.querySelectorAll(":scope > :is([data-hint], [data-error])")) {
+					const filled = holder.matches("[data-hint]") ? holder.children.length > 0 : holder.querySelector(":scope > :not([data-prefix])");
+					if (!filled) continue;
+					holder.id ||= `norn-field-${(count += 1)}`;
+					if (ids.includes(holder.id)) continue;
+					ids.push(holder.id);
+					this.#added.push(holder.id);
+				}
+				if (ids.length) control.setAttribute("aria-describedby", ids.join(" "));
+			}
+
+			#unlink() {
+				const control = this.#control();
+				if (control && this.#added.length) {
+					const ids = (control.getAttribute("aria-describedby") ?? "").split(/\s+/).filter((id) => id && !this.#added.includes(id));
+					if (ids.length) control.setAttribute("aria-describedby", ids.join(" "));
+					else control.removeAttribute("aria-describedby");
+				}
+				this.#added = [];
+			}
+		}
+
+		if (!customElements.get("norn-field")) customElements.define("norn-field", NornField);
+	}
+</script>

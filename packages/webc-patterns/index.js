@@ -95,6 +95,7 @@ const STRINGS = {
 	"norn-code-block": { label: "{language} code", "copy-label": "Copy {name} to clipboard" },
 	"norn-code-tabs": { label: "Code samples", sample: "Sample {n}" },
 	"norn-copy-button": { copy: "Copy", copied: "Copied", failed: "Copy failed" },
+	"norn-field": { "error-prefix": "Error: " },
 	"norn-header": { label: "Primary", summary: "Menu" },
 	"norn-notice": { info: "Note: ", success: "Success: ", warning: "Warning: ", danger: "Error: " },
 	"norn-pager": { label: "Pager" },
@@ -112,6 +113,15 @@ const STRINGS = {
 	"norn-side-nav": { label: "Pages" },
 	"norn-sidebar-layout": { summary: "Menu" },
 	"norn-skip-link": { label: "Skip to content" },
+	"norn-tag-filter": {
+		clear: "Clear filters",
+		"shown-zero": null,
+		"shown-one": "{count} item shown",
+		"shown-two": null,
+		"shown-few": null,
+		"shown-many": null,
+		"shown-other": "{count} items shown",
+	},
 	"norn-theme-toggle": { label: "Color scheme", light: "Light", system: "System", dark: "Dark" },
 };
 

@@ -706,8 +706,8 @@ describe("the preview in a browser", () => {
 		await page.close();
 	});
 
-	test("the scheme control tints the selected option and follows the selection, with no thumb", async () => {
-		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+	test("with reduced motion the scheme control tints the selected option and follows the selection, with no thumb", async () => {
+		const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
 		await page.goto(server.url + "/components/patterns/norn-card/");
 		const canvas = page.locator("preview-canvas").first();
 		assert.ok(["none", "normal"].includes(await canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => getComputedStyle(fieldset, "::before").content)), "no thumb");

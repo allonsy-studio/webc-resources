@@ -1,0 +1,24 @@
+---
+title: States
+order: 2
+---
+<div style="display: grid; gap: 1.5rem; max-inline-size: 32rem;">
+	<norn-field>
+		<label for="state-default">Default</label>
+		<input id="state-default" type="text" />
+	</norn-field>
+	<norn-field>
+		<label for="state-readonly">Read-only</label>
+		<input id="state-readonly" type="text" value="A-1024" readonly />
+	</norn-field>
+	<norn-field>
+		<label for="state-disabled">Disabled</label>
+		<input id="state-disabled" type="text" value="Not now" disabled />
+	</norn-field>
+	<norn-field>
+		<label for="state-invalid">Invalid</label>
+		<input id="state-invalid" type="url" value="example" aria-invalid="true" />
+		<span slot="hint">The whole address, from https://.</span>
+		<span slot="error">Add the scheme, such as https://.</span>
+	</norn-field>
+</div>

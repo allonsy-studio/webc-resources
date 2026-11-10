@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 --->
-<article :data-accent="['accent', 'info', 'success', 'warning', 'danger'].includes(accent) ? accent : undefined" :data-title-face="titleFace === 'mono' ? 'mono' : undefined"><slot></slot></article>
+<article :data-accent="['accent', 'info', 'success', 'warning', 'danger'].includes(accent) ? accent : undefined" :data-title-face="titleFace === 'mono' ? 'mono' : undefined"><slot></slot><div data-media><slot name="image"></slot></div></article>
 <style>
 	@layer norn.components {
 		norn-card {
@@ -34,7 +34,7 @@
 				background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-raised, t('surface.raised')));
 
 				/* A fourth child has no row to take, so a card with more than a heading, a body, and a footer lays out on its own. */
-				&:has(> :nth-child(4)) {
+				&:has(> :nth-child(4 of :not([data-media]:empty))) {
 					grid-template-rows: none;
 				}
 
@@ -77,7 +77,7 @@
 				margin: 0;
 			}
 
-			& > article > :not(:last-child) {
+			& > article > :not(:last-child, :has(+ [data-media]:last-child)) {
 				margin-block-end: var(--norn-space-s, t('space.s'));
 			}
 
@@ -109,6 +109,29 @@
 				&:focus-visible {
 					outline: none;
 				}
+			}
+
+			/* The image sits at the top, edge to edge. Its wrapper comes last in the source, so the heading stays the card's first content. */
+			& > article > [data-media] {
+				order: -1;
+				margin-block-start: calc(-1 * var(--norn-space-m, t('space.m')));
+				margin-inline: calc(-1 * var(--norn-space-m, t('space.m')));
+				margin-block-end: var(--norn-space-s, t('space.s'));
+				overflow: hidden;
+				border-start-start-radius: inherit;
+				border-start-end-radius: inherit;
+			}
+
+			& > article > [data-media]:empty {
+				display: none;
+			}
+
+			& > article > [data-media] > :is(img, picture, svg, video) {
+				display: block;
+				inline-size: 100%;
+				block-size: auto;
+				aspect-ratio: 16 / 9;
+				object-fit: cover;
 			}
 
 			& > article > p {

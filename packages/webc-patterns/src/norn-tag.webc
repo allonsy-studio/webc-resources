@@ -1,0 +1,125 @@
+<!---
+/*
+ * SPDX-License-Identifier: MPL-2.0
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+--->
+<a
+	webc:if="typeof href === 'string' && href"
+	:href="href"
+	:aria-current="current === true || current === '' || current === 'true' ? 'true' : undefined"
+	:data-color="['accent', 'info', 'success', 'warning', 'danger'].includes(color) ? color : undefined"
+	:data-tag="typeof tag === 'string' && tag ? tag : undefined"
+><slot></slot></a>
+<span
+	webc:else
+	:data-color="['accent', 'info', 'success', 'warning', 'danger'].includes(color) ? color : undefined"
+><slot></slot></span>
+<style>
+	@layer norn.components {
+		norn-tag {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& > :is(a, span) {
+				--_color: currentcolor;
+				--_tint: color-mix(in oklab, var(--_color) 10%, transparent);
+				--_state: 0%;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-2xs, t('space.2xs'));
+				min-block-size: 1.5rem;
+				max-inline-size: 100%;
+				padding: 0 var(--norn-space-xs, t('space.xs'));
+				border: 1px solid transparent;
+				border-radius: var(--norn-ui-border-radius, t('ui.border.radius'));
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_tint));
+				color: var(--norn-text-base, t('text.base'));
+				font-size: var(--norn-font-size-s, t('font.size.s'));
+				line-height: 1.5;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&[data-color="accent"] {
+					--_color: var(--norn-ui-accent, t('ui.accent'));
+				}
+
+				&[data-color="info"] {
+					--_color: var(--norn-status-info, t('status.info'));
+				}
+
+				&[data-color="success"] {
+					--_color: var(--norn-status-success, t('status.success'));
+				}
+
+				&[data-color="warning"] {
+					--_color: var(--norn-status-warning, t('status.warning'));
+				}
+
+				&[data-color="danger"] {
+					--_color: var(--norn-status-danger, t('status.danger'));
+				}
+			}
+
+			/* A clickable tag has the edge of a control; a static one is only its tint. */
+			& > a {
+				border-color: var(--norn-ui-border-strong, t('ui.border.strong'));
+				cursor: pointer;
+
+				&:hover,
+				&:focus-visible {
+					--_state: var(--norn-ui-state-hover, t('ui.state.hover'));
+					text-decoration: underline;
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, t('ui.state.press'));
+				}
+
+				&:is([aria-current="true"], [aria-pressed="true"]) {
+					border-color: var(--norn-text-base, t('text.base'));
+					box-shadow: inset 0 0 0 1px var(--norn-text-base, t('text.base'));
+					font-weight: 600;
+				}
+
+				/* An active filter shows a remove mark; the pressed state already says it to a screen reader. */
+				&[aria-pressed="true"]::after {
+					content: "\00d7" / "";
+				}
+			}
+
+			@media (pointer: coarse) {
+				& > a {
+					min-block-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > a {
+					transition: background-color var(--norn-ui-motion-duration, t('ui.motion.duration')) var(--norn-ui-motion-easing, t('ui.motion.easing'));
+				}
+			}
+
+			@media (forced-colors: active) {
+				& > :is(a, span) {
+					border-color: CanvasText;
+				}
+
+				& > a:is([aria-current="true"], [aria-pressed="true"]) {
+					border-color: Highlight;
+					text-decoration: underline;
+				}
+			}
+
+			@media print {
+				& > :is(a, span) {
+					border-color: currentcolor;
+					background: none;
+				}
+			}
+		}
+	}
+</style>

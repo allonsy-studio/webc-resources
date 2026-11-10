@@ -150,7 +150,7 @@ describe("the design pass, built from content with only the data a page names", 
 		);
 	});
 
-	test("a segmented control has no thumb and no border, and tints its checked option in the accent", async () => {
+	test("with reduced motion a segmented control has no thumb and no border, and tints its checked option in the accent", async () => {
 		await onPage("/controls/", async (page) => {
 			const fieldset = await page.locator("#control fieldset").evaluate((element) => ({ before: getComputedStyle(element, "::before").content, border: getComputedStyle(element).borderTopWidth, background: getComputedStyle(element).backgroundColor }));
 			assert.notEqual(fieldset.before, '""', "no sliding thumb");
@@ -161,6 +161,27 @@ describe("the design pass, built from content with only the data a page names", 
 			assert.equal(checked.color, await resolveColor(page, token("text.accent")), "accent text");
 			assert.notEqual(checked.background, unchecked.background, "a tint");
 			assert.match(unchecked.background, /(, 0|\/ 0)\)$/, "and nothing on the others");
+		}, { reducedMotion: "reduce" });
+	});
+
+	test("with motion allowed, one fill sits on the checked option of a segmented control and follows the selection", async () => {
+		await onPage("/controls/", async (page) => {
+			if (!(await page.evaluate(() => globalThis.CSS.supports("anchor-name: --a")))) return;
+			/** The fill's box against the checked option's, in page pixels. */
+			const boxes = () =>
+				page.locator("#control fieldset").evaluate((fieldset) => {
+					const fill = getComputedStyle(fieldset, "::before");
+					const host = fieldset.getBoundingClientRect();
+					const label = fieldset.querySelector("label:has(input:checked)").getBoundingClientRect();
+					return { fill: [Math.round(host.left + parseFloat(fill.left)), Math.round(parseFloat(fill.width))], label: [Math.round(label.left), Math.round(label.width)] };
+				});
+			const first = await boxes();
+			assert.deepEqual(first.fill, first.label, "the fill covers the checked option");
+			await page.locator("#control label:has(input:not(:checked))").last().click();
+			await page.waitForTimeout(500);
+			const second = await boxes();
+			assert.deepEqual(second.fill, second.label, "and moves with the selection");
+			assert.notDeepEqual(second.label, first.label, "which changed");
 		});
 	});
 

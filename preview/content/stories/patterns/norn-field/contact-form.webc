@@ -1,0 +1,40 @@
+---
+title: Contact form
+order: 1
+---
+<form action="#" method="post" style="display: grid; gap: 1.5rem; max-inline-size: 32rem;">
+	<norn-field>
+		<label for="contact-name">Name <span aria-hidden="true">*</span></label>
+		<input id="contact-name" name="name" type="text" autocomplete="name" required />
+	</norn-field>
+	<norn-field>
+		<label for="contact-email">Email <span aria-hidden="true">*</span></label>
+		<input id="contact-email" name="email" type="email" autocomplete="email" required aria-invalid="true" value="cassondra" />
+		<span slot="error">Add the part after the @.</span>
+	</norn-field>
+	<norn-field>
+		<label for="contact-topic">Topic</label>
+		<select id="contact-topic" name="topic">
+			<option>Speaking</option>
+			<option>Consulting</option>
+			<option>Something else</option>
+		</select>
+	</norn-field>
+	<norn-field>
+		<label for="contact-message">Message</label>
+		<textarea id="contact-message" name="message"></textarea>
+		<span slot="hint">Links are fine; attachments aren't.</span>
+	</norn-field>
+	<norn-choice>
+		<span slot="legend">Reply by</span>
+		<label><input type="radio" name="reply" value="email" checked /> Email</label>
+		<label><input type="radio" name="reply" value="none" /> No reply needed</label>
+	</norn-choice>
+	<norn-choice>
+		<span slot="legend">Extras</span>
+		<label><input type="checkbox" name="newsletter" value="yes" /> Send me the newsletter</label>
+	</norn-choice>
+	<div>
+		<button type="submit">Send message</button>
+	</div>
+</form>
