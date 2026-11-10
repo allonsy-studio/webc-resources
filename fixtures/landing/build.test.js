@@ -74,6 +74,7 @@ describe("landing fixture with the OSS site layer", () => {
 			'<meta property="og:locale" content="en_US">',
 			'<meta property="og:title" content="fixture-landing: A fixture landing site for the OSS WebC packages">',
 			'<link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">',
+			'<link rel="preload" href="/assets/fonts/instrument-sans-var.woff2" as="font" type="font/woff2" crossorigin>',
 			'<link rel="preload" href="/assets/fonts/pt-mono.woff2" as="font" type="font/woff2" crossorigin>',
 		]) {
 			assert.ok(head.includes(expected), expected);
@@ -94,11 +95,11 @@ describe("landing fixture with the OSS site layer", () => {
 		}
 	});
 
-	test("the stripe and the footer name are brand rules in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
+	test("the arcs and the footer name are brand rules in the OSS site layer, and the fonts ship as files the bundle can reach", () => {
 		const css = allCss(output, pages["/"]);
-		assert.match(css, /@layer norn\.oss \{\s*(\/\*[^*]*\*\/\s*)?norn-header > header \{[^}]*&::after \{[^}]*background: linear-gradient\(90deg, #d22d6f/);
+		assert.match(css, /@layer norn\.oss \{[\s\S]*?norn-hero > header \{[\s\S]*?&::after \{[^}]*background: linear-gradient\(90deg, #ff9a56/);
 		assert.ok(!css.includes("--norn-header-stripe") && !pages["/"].includes("--norn-header-stripe"), "no component custom property, in the theme or on the tag");
-		assert.match(css, /norn-footer > footer > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-accent,[^;]*;\s*font-family: var\(--norn-font-mono,[^;]*;\s*font-size: 1\.2rem;/, "the footer name, in the theme");
+		assert.match(css, /& > div:first-child > :first-child strong:first-of-type \{\s*color: var\(--norn-text-base,[^;]*;\s*font-family: var\(--norn-font-mono,[^;]*;/, "the footer name, in the theme");
 		assert.ok(!/--norn-footer-name/.test(css), "no footer hook");
 		assert.ok(css.includes('src: url("../assets/fonts/pt-mono.woff2")'));
 		assert.deepEqual(fs.readdirSync(path.join(output, "assets", "fonts")).sort(), ["instrument-sans-italic-var.woff2", "instrument-sans-var.woff2", "pt-mono.woff2", "yellowtail.woff2"]);
@@ -239,12 +240,13 @@ describe("landing fixture in a browser", () => {
 		}
 	});
 
-	test("the banner lockup stays readable: full size on a wide screen, scaled to fit on a phone", async () => {
-		for (const [width, expected] of [[1280, 500], [375, 375]]) {
+	test("the banner stays in the viewport on a phone, with the wordmark in Yellowtail", async () => {
+		for (const width of [1280, 320]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
 			await page.goto(server.url + "/");
-			const box = await page.locator("oss-bar svg").boundingBox();
-			assert.ok(Math.abs(box.width - expected) < 1, `${width}px wide viewport: ${box.width}`);
+			const box = await page.locator("oss-bar p").boundingBox();
+			assert.ok(box.width <= width, `${width}px wide viewport: ${box.width}`);
+			assert.match(await page.$eval("oss-bar [data-script]", (element) => getComputedStyle(element).fontFamily), /^"?Yellowtail/);
 			await page.close();
 		}
 	});
@@ -272,62 +274,49 @@ describe("landing fixture in a browser", () => {
 		page.on("response", (response) => response.url().endsWith(".woff2") && fonts.push([path.basename(response.url()), response.status()]));
 		await page.goto(server.url + "/");
 		await page.evaluate(() => document.fonts.ready);
-		assert.deepEqual(fonts.sort(), [["pt-mono.woff2", 200], ["yellowtail.woff2", 200]], "the mono face, and the signature face the call to action signs with");
+		assert.deepEqual(fonts.sort(), [["instrument-sans-var.woff2", 200], ["pt-mono.woff2", 200], ["yellowtail.woff2", 200]], "the body face, the mono face, and the signature face of the wordmark and the sign-off");
 		const groups = await page.evaluate(() => [...CSS.highlights.keys()]);
 		for (const group of ["tok-comment", "tok-function", "tok-keyword", "tok-punctuation", "tok-string"]) assert.ok(groups.includes(group), group);
 		await page.close();
 	});
 
-	test("the four-color stripe runs under the header bar", async () => {
+	test("the mark's four arcs run under the hero, and the header sits on a hairline", async () => {
 		const page = await browser.newPage();
 		await page.goto(server.url + "/");
-		const stripe = await page.$eval("norn-header header", (header) => {
+		const arcs = await page.$eval("norn-hero > header", (header) => {
 			const style = getComputedStyle(header, "::after");
-			return { content: style.content, height: style.height, image: style.backgroundImage };
+			return { height: style.height, image: style.backgroundImage };
 		});
-		assert.equal(stripe.height, "3px");
-		assert.ok(stripe.image.startsWith("linear-gradient(") && ["210, 45, 111", "255, 148, 77", "255, 211, 107", "31, 145, 173"].every((color) => stripe.image.includes(color)));
+		assert.ok(arcs.image.startsWith("linear-gradient(") && parseFloat(arcs.height) > 6, arcs.height);
+		assert.ok(arcs.image.startsWith("linear-gradient(") && ["255, 154, 86", "255, 211, 108", "201, 44, 107", "123, 209, 230"].every((color) => arcs.image.includes(color)));
+		assert.equal(await page.$eval("norn-header > header", (header) => getComputedStyle(header).borderBottomWidth), "1px");
 		await page.close();
 	});
 
-	test("the oss-off page has no stripe", async () => {
+	test("the oss-off page has no arcs", async () => {
 		const off = buildFixture(here, { output: "_site-oss-off", env: { SITE_PACKAGE_JSON: path.join(here, "package.oss-off.json") } });
 		const offServer = await serve(off);
 		const page = await browser.newPage();
 		try {
 			await page.goto(offServer.url + "/");
-			assert.equal(await page.$eval("norn-header header", (header) => getComputedStyle(header, "::after").backgroundImage), "none");
+			assert.equal(await page.$eval("norn-hero > header", (header) => getComputedStyle(header, "::after").backgroundImage), "none");
 		} finally {
 			await page.close();
 			await offServer.close();
 		}
 	});
 
-	/** The paint of the credit's circle, which is a light fill in a light scheme and a dark one in a dark scheme. */
-	const circle = (page) => page.$eval("oss-credit svg circle[style]", (element) => [getComputedStyle(element).fill, getComputedStyle(element).stroke]);
-
-	test("the credit follows the scheme the page uses, even when CSS overrides the visitor's", async () => {
+	test("the sign-off follows the scheme the page uses, even when CSS overrides the visitor's", async () => {
 		const colors = {};
 		for (const [forced, visitor] of [["light", "dark"], ["dark", "light"]]) {
 			const context = await browser.newContext({ colorScheme: visitor });
 			const page = await context.newPage();
 			await page.goto(server.url + "/");
 			await page.addStyleTag({ content: `html { color-scheme: ${forced}; }` });
-			colors[forced] = await circle(page);
+			colors[forced] = await page.$eval("oss-credit [data-signoff]", (element) => getComputedStyle(element).color);
 			await context.close();
 		}
-		assert.deepEqual(colors.light, ["rgb(239, 235, 223)", "rgb(51, 57, 78)"], "light forced over a dark preference");
-		assert.deepEqual(colors.dark, ["rgb(51, 57, 78)", "rgb(251, 249, 243)"], "dark forced over a light preference");
-	});
-
-	test("the credit shows the dark lockup under a dark scheme and the light one otherwise, and holds one SVG", async () => {
-		for (const [colorScheme, fill] of [["light", "rgb(239, 235, 223)"], ["dark", "rgb(51, 57, 78)"]]) {
-			const context = await browser.newContext({ colorScheme });
-			const page = await context.newPage();
-			await page.goto(server.url + "/");
-			assert.equal(await page.locator("oss-credit svg").count(), 1);
-			assert.equal((await circle(page))[0], fill, colorScheme);
-			await context.close();
-		}
+		assert.equal(colors.light, "rgb(51, 57, 78)", "ink, light forced over a dark preference");
+		assert.equal(colors.dark, "rgb(251, 249, 243)", "paper, dark forced over a light preference");
 	});
 });
