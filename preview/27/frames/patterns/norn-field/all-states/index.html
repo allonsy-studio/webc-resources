@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>States</title>
+
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="States">
+
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/27/bundle/-Kkhj7NyNi.css">
+<script src="/webc-resources/preview/27/bundle/4EHPmlxE1Y.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/27/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/27/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/27/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/27/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/27/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/27/assets/styles/project.css">
+	</head>
+	<body>
+		<main id="main" tabindex="-1">
+			<h1 class="sr-only">States</h1>
+			
+			<div style="display: grid; gap: 1.5rem; max-inline-size: 32rem">
+	<norn-field>
+		<label for="state-default">Default</label>
+		<input id="state-default" type="text">
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="state-readonly">Read-only</label>
+		<input id="state-readonly" type="text" value="A-1024" readonly="">
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="state-disabled">Disabled</label>
+		<input id="state-disabled" type="text" value="Not now" disabled="">
+	
+<span data-hint=""></span>
+<span data-error=""><span data-prefix="">Error: </span></span>
+
+
+</norn-field>
+	<norn-field>
+		<label for="state-invalid">Invalid</label>
+		<input id="state-invalid" type="url" value="example" aria-invalid="true">
+		
+		
+	
+<span data-hint=""><span>The whole address, from https://.</span></span>
+<span data-error=""><span data-prefix="">Error: </span><span>Add the scheme, such as https://.</span></span>
+
+
+</norn-field>
+</div>
+
+		</main>
+	
+
+</body>
+</html>

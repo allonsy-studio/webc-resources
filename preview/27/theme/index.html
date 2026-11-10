@@ -22,7 +22,7 @@
 
 <meta name="twitter:card" content="summary">
 
-<link rel="stylesheet" href="/webc-resources/preview/27/bundle/BeegYtYTdO.css">
+<link rel="stylesheet" href="/webc-resources/preview/27/bundle/gwttIiNxbx.css">
 <script src="/webc-resources/preview/27/bundle/z8Br_2oX0k.js" defer=""></script>
 
 		<link rel="stylesheet" href="/webc-resources/preview/27/assets/norn/reset.css">
@@ -44,7 +44,7 @@
 			</a>
 	<details>
 		<summary>Menu</summary>
-		<nav aria-labelledby="norn-header-webc-yIAVf"><span data-label="" id="norn-header-webc-yIAVf"><span>Preview</span></span>
+		<nav aria-labelledby="norn-header-webc-MjQBv"><span data-label="" id="norn-header-webc-MjQBv"><span>Preview</span></span>
 			
 			
 			<a href="/webc-resources/preview/27/theme/">Theme</a>
@@ -64,7 +64,7 @@
 		<div class="app">
 			<preview-nav><nav aria-label="Components">
 	<details>
-		<summary>Components <span>(37)</span></summary>
+		<summary>Components <span>(42)</span></summary>
 		<details open="">
 			<summary>Layout</summary>
 			<ul role="list">
@@ -126,19 +126,31 @@
 <li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-simple-table/">norn-simple-table</a>
 				</li>
+<li>
+					<a href="/webc-resources/preview/27/components/patterns/norn-tag-filter/">norn-tag-filter</a>
+				</li>
 			</ul>
 		</details>
 <details open="">
 			<summary>Component</summary>
 			<ul role="list">
 				<li>
+					<a href="/webc-resources/preview/27/components/patterns/norn-choice/">norn-choice</a>
+				</li>
+<li>
 					<a href="/webc-resources/preview/27/components/code-sample/norn-code-block/">norn-code-block</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-copy-button/">norn-copy-button</a>
 				</li>
 <li>
+					<a href="/webc-resources/preview/27/components/patterns/norn-eyebrow/">norn-eyebrow</a>
+				</li>
+<li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-fact-list/">norn-fact-list</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/27/components/patterns/norn-field/">norn-field</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
@@ -157,6 +169,9 @@
 				</li>
 <li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-skip-link/">norn-skip-link</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/27/components/patterns/norn-tag/">norn-tag</a>
 				</li>
 <li>
 					<a href="/webc-resources/preview/27/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
@@ -233,7 +248,7 @@
 	<span data-status="" role="status"></span>
 </p>
 
-	<norn-simple-table><span hidden="" id="norn-simple-table-webc-Pfti5"></span>
+	<norn-simple-table><span hidden="" id="norn-simple-table-webc-iS2WD"></span>
 <div>
 	<table>
 		<thead>
@@ -372,6 +387,36 @@
 					<input type="text" data-token="--norn-ui-motion-easing" aria-label="Override --norn-ui-motion-easing" placeholder="Any value" autocomplete="off" spellcheck="false">
 				</td>
 				<td>Easing for every transition.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>--norn-ui-motion-slide</code></th>
+				<td>ui</td>
+				<td aria-hidden="true" class="preview"><span data-kind="color" style="--sample: var(--norn-ui-motion-slide)" class="sample"></span></td>
+				<td><code>200ms</code></td>
+				<td>
+					<div data-pair="">
+						<label>Light <input type="color" data-scheme="light" data-token="--norn-ui-motion-slide" value="#000000" aria-label="Override --norn-ui-motion-slide, light mode"></label>
+						<label>Dark <input type="color" data-scheme="dark" data-token="--norn-ui-motion-slide" value="#000000" aria-label="Override --norn-ui-motion-slide, dark mode"></label>
+						<button type="button" data-action="clear" data-token="--norn-ui-motion-slide" aria-label="Reset --norn-ui-motion-slide" disabled="">Reset</button>
+					</div>
+					
+				</td>
+				<td>Length of a selected state sliding to a new option, such as a checked segment or a selected tab.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>--norn-ui-motion-trail</code></th>
+				<td>ui</td>
+				<td aria-hidden="true" class="preview"><span data-kind="color" style="--sample: var(--norn-ui-motion-trail)" class="sample"></span></td>
+				<td><code>90ms</code></td>
+				<td>
+					<div data-pair="">
+						<label>Light <input type="color" data-scheme="light" data-token="--norn-ui-motion-trail" value="#000000" aria-label="Override --norn-ui-motion-trail, light mode"></label>
+						<label>Dark <input type="color" data-scheme="dark" data-token="--norn-ui-motion-trail" value="#000000" aria-label="Override --norn-ui-motion-trail, dark mode"></label>
+						<button type="button" data-action="clear" data-token="--norn-ui-motion-trail" aria-label="Reset --norn-ui-motion-trail" disabled="">Reset</button>
+					</div>
+					
+				</td>
+				<td>How far the trailing edge of a sliding selected state lags its leading edge, so the shape stretches as it moves.</td>
 			</tr>
 <tr>
 				<th scope="row"><code>--norn-ui-control-height</code></th>
@@ -611,6 +656,36 @@
 				<td>Second-level heading. Larger titles use a clamp.</td>
 			</tr>
 <tr>
+				<th scope="row"><code>--norn-code-text</code></th>
+				<td>code</td>
+				<td aria-hidden="true" class="preview"><span data-kind="color" style="--sample: var(--norn-code-text)" class="sample"></span></td>
+				<td><code>var(--norn-text-base, light-dark(#16181d, #eceef3))</code></td>
+				<td>
+					<div data-pair="">
+						<label>Light <input type="color" data-scheme="light" data-token="--norn-code-text" value="#000000" aria-label="Override --norn-code-text, light mode"></label>
+						<label>Dark <input type="color" data-scheme="dark" data-token="--norn-code-text" value="#000000" aria-label="Override --norn-code-text, dark mode"></label>
+						<button type="button" data-action="clear" data-token="--norn-code-text" aria-label="Reset --norn-code-text" disabled="">Reset</button>
+					</div>
+					
+				</td>
+				<td>Plain code text, on --norn-surface-code. Follows the text color unless a project sets it.</td>
+			</tr>
+<tr>
+				<th scope="row"><code>--norn-code-punctuation</code></th>
+				<td>code</td>
+				<td aria-hidden="true" class="preview"><span data-kind="color" style="--sample: var(--norn-code-punctuation)" class="sample"></span></td>
+				<td><code>var(--norn-text-muted, light-dark(#4b5160, #a4abba))</code></td>
+				<td>
+					<div data-pair="">
+						<label>Light <input type="color" data-scheme="light" data-token="--norn-code-punctuation" value="#000000" aria-label="Override --norn-code-punctuation, light mode"></label>
+						<label>Dark <input type="color" data-scheme="dark" data-token="--norn-code-punctuation" value="#000000" aria-label="Override --norn-code-punctuation, dark mode"></label>
+						<button type="button" data-action="clear" data-token="--norn-code-punctuation" aria-label="Reset --norn-code-punctuation" disabled="">Reset</button>
+					</div>
+					
+				</td>
+				<td>Code punctuation, on --norn-surface-code. Follows the muted text color unless a project sets it.</td>
+			</tr>
+<tr>
 				<th scope="row"><code>--norn-code-comment</code></th>
 				<td>code</td>
 				<td aria-hidden="true" class="preview"><span data-kind="color" style="--sample: var(--norn-code-comment)" class="sample"></span></td>
@@ -840,6 +915,7 @@
 		</tbody>
 	</table>
 	</div>
+<p data-note=""></p>
 
 
 </norn-simple-table>

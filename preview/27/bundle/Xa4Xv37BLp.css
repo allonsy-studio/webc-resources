@@ -1,0 +1,251 @@
+@layer norn.components {
+		norn-link-button {
+			display: inline-flex;
+			max-inline-size: 100%;
+
+			& a[data-variant] {
+				--_state: 0%;
+				--_bg: transparent;
+				--_border: transparent;
+				box-sizing: border-box;
+				display: inline-flex;
+				align-items: center;
+				gap: var(--norn-space-xs, 0.5rem);
+				min-block-size: var(--norn-ui-control-height, 2.25rem);
+				padding: var(--norn-space-2xs, 0.25rem) var(--norn-space-m, 1.25rem);
+				border: 1px solid var(--_border);
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background-color: color-mix(in oklab, currentcolor var(--_state), var(--_bg));
+				color: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+				font-weight: 600;
+				line-height: 1.3;
+				overflow-wrap: anywhere;
+				text-decoration: none;
+
+				&:hover {
+					--_state: var(--norn-ui-state-hover, 8%);
+				}
+
+				&:active {
+					--_state: var(--norn-ui-state-press, 12%);
+				}
+			}
+
+			/* The surrounding text color, for a secondary or quiet button. The primary rule below keeps its own. */
+			& a[data-tone="current"] {
+				color: inherit;
+			}
+
+			/* A square at the control height: the icon alone shows, and the label is read but not shown. */
+			& a[data-icon-only] {
+				justify-content: center;
+				inline-size: var(--norn-ui-control-height, 2.25rem);
+				padding: 0;
+			}
+
+			& a > [data-label] {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			& a[data-variant="primary"] {
+				--_bg: var(--norn-ui-accent, #2346d4);
+				color: var(--norn-text-on-accent, color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1))));
+			}
+
+			& a[data-variant="secondary"] {
+				--_border: var(--norn-text-accent, light-dark(oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 82%, black) min(l, 0.5) c h), oklch(from color-mix(in oklch, var(--norn-ui-accent, #2346d4) 55%, white) max(l, 0.72) c h)));
+			}
+
+			@media (pointer: coarse) {
+				& a[data-variant] {
+					min-block-size: 2.75rem;
+				}
+
+				& a[data-icon-only] {
+					inline-size: 2.75rem;
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& a[data-variant] {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+				}
+			}
+
+			/* The primary button stays filled, since the browser would turn its fill into the page color. */
+			@media (forced-colors: active) {
+				& a[data-variant="primary"] {
+					border-color: LinkText;
+					background-color: LinkText;
+					color: Canvas;
+					forced-color-adjust: none;
+
+					&:focus-visible {
+						outline-color: CanvasText;
+					}
+				}
+
+				& a[data-variant="secondary"] {
+					border-color: LinkText;
+					color: LinkText;
+				}
+
+				/* A clear border would be drawn in the text color, so the quiet button's takes the page's. */
+				& a[data-variant="quiet"] {
+					border-color: Canvas;
+					color: LinkText;
+				}
+			}
+		}
+	}
+@layer norn.oss {
+		oss-cta {
+			/* Yellow is the section's one accent: an ink-on-yellow primary action, and a darkened yellow for the secondary's text on cream. */
+			--_yellow: light-dark(#ffd36c, #ffc53d);
+			--_signature: "Yellowtail", "Yellowtail Fallback", cursive;
+			--norn-ui-accent: var(--_yellow);
+			--norn-text-accent: light-dark(#7d5208, #ffd147);
+			--norn-text-on-accent: #33394e;
+			display: block;
+			container-type: inline-size;
+			inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), 64rem);
+			margin: var(--norn-space-xl, 4rem) auto 0;
+
+			& section {
+				display: grid;
+				grid-template-columns: auto minmax(0, 1fr) auto;
+				align-items: center;
+				gap: var(--norn-space-m, 1.25rem) var(--norn-space-l, 2rem);
+				padding: var(--norn-space-l, 2rem);
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+			}
+
+			& svg {
+				inline-size: 4.5rem;
+				block-size: auto;
+			}
+
+			& section > div {
+				display: grid;
+				gap: 0.4rem;
+			}
+
+			& p {
+				margin: 0;
+			}
+
+			& section > div > p:first-child {
+				font-weight: 600;
+			}
+
+			/* The Allons-y Studio name is signed. */
+			& [data-signature] {
+				font-family: var(--_signature);
+				font-size: 1.3em;
+				font-weight: 400;
+				line-height: 1;
+			}
+
+			& section > div > p:first-child [data-signature] {
+				font-size: 1.5em;
+			}
+
+			& section > div > :is(h2, h3, h4) {
+				margin: 0;
+				font-size: clamp(1.35rem, 3vw, 1.75rem);
+			}
+
+			& ul {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				gap: var(--norn-space-s, 0.75rem);
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+
+			@container (max-width: 37.5rem) {
+				& section {
+					grid-template-columns: minmax(0, 1fr);
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}
+/* The fonts sit at assets/fonts: from the bundle, one level up. Each fallback matches its font's metrics. */
+	@font-face {
+		font-family: "PT Mono";
+		src: url("../assets/fonts/pt-mono.woff2") format("woff2");
+		font-weight: 400;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "PT Mono Fallback";
+		src: local("Courier New"), local("CourierNewPSMT"), local("Liberation Mono"), local("Courier");
+		size-adjust: 100%;
+		ascent-override: 88.5%;
+		descent-override: 23.5%;
+		line-gap-override: 0%;
+	}
+
+	@font-face {
+		font-family: "Instrument Sans";
+		src: url("../assets/fonts/instrument-sans-var.woff2") format("woff2");
+		font-weight: 400 700;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Instrument Sans";
+		src: url("../assets/fonts/instrument-sans-italic-var.woff2") format("woff2");
+		font-style: italic;
+		font-weight: 400 700;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Instrument Sans Fallback";
+		src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");
+		size-adjust: 102.6%;
+		ascent-override: 94.54%;
+		descent-override: 24.37%;
+		line-gap-override: 0%;
+	}
+
+	@font-face {
+		font-family: "Instrument Sans Fallback";
+		src: local("Arial Italic"), local("Arial-ItalicMT"), local("Liberation Sans Italic"), local("Helvetica Oblique");
+		font-style: italic;
+		size-adjust: 102.52%;
+		ascent-override: 94.61%;
+		descent-override: 24.39%;
+		line-gap-override: 0%;
+	}
+
+	@font-face {
+		font-family: "Yellowtail";
+		src: url("../assets/fonts/yellowtail.woff2") format("woff2");
+		font-weight: 400;
+		font-display: swap;
+	}
+
+	@font-face {
+		font-family: "Yellowtail Fallback";
+		src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("Helvetica");
+		size-adjust: 73.65%;
+		ascent-override: 131.93%;
+		descent-override: 40.91%;
+		line-gap-override: 12.2%;
+	}
