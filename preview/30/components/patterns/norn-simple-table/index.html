@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="en">
+<head>
+		
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>@layer norn.reset, norn.base, norn.layout, norn.components, norn.oss, norn.print;</style>
+<title>norn-simple-table: Norn</title>
+<meta name="description" content="A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does.">
+
+<meta name="color-scheme" content="light dark">
+
+
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101216" media="(prefers-color-scheme: dark)">
+<meta property="og:type" content="website">
+<meta property="og:title" content="norn-simple-table: Norn">
+<meta property="og:description" content="A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does.">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<link rel="stylesheet" href="/webc-resources/preview/30/bundle/S_TJuCxazp.css">
+<script src="/webc-resources/preview/30/bundle/0DkE6MTz9s.js" defer=""></script>
+
+		<link rel="stylesheet" href="/webc-resources/preview/30/assets/norn/reset.css">
+		<link rel="stylesheet" href="/webc-resources/preview/30/assets/norn/base.css">
+		<link rel="stylesheet" href="/webc-resources/preview/30/assets/norn/print.css">
+		<link rel="icon" href="/webc-resources/preview/30/assets/norn-favicon.svg" type="image/svg+xml">
+		<script src="/webc-resources/preview/30/assets/tokens.js"></script>
+		<link rel="stylesheet" href="/webc-resources/preview/30/assets/styles/tokens.css">
+		<link rel="stylesheet" href="/webc-resources/preview/30/assets/styles/shell.css">
+	</head>
+	<body>
+		<norn-skip-link><a href="#main">Skip to content</a>
+
+</norn-skip-link>
+		<norn-header><header>
+	<a rel="home" href="/webc-resources/preview/30/">
+				<svg viewBox="0 0 100 100" fill="currentColor" aria-hidden="true" class="norn-mark"><path d="M55.85 4L44.15 4L45.5 16.6L45.5 83.4L44.15 96L55.85 96L54.5 83.4L54.5 16.6ZM29.11 27.05L24.89 34.35L33.23 38.05L63.52 55.56L70.89 60.95L75.11 53.65L66.77 49.95L36.48 32.44Z"></path></svg>
+				Norn
+			</a>
+	<details>
+		<summary>Menu</summary>
+		<nav aria-labelledby="norn-header-webc-MCnk1"><span data-label="" id="norn-header-webc-MCnk1"><span>Preview</span></span>
+			
+			
+			<a href="/webc-resources/preview/30/theme/">Theme</a>
+		</nav>
+	</details>
+</header>
+
+</norn-header>
+		<preview-overrides><p data-js="" hidden="">
+	<span data-count="" role="status"></span>
+	<a href="/webc-resources/preview/30/theme/">Edit in Theme</a>
+	<button type="button" data-action="reset">Reset</button>
+</p>
+
+
+</preview-overrides>
+		<div class="app">
+			<preview-nav><nav aria-label="Components">
+	<details>
+		<summary>Components <span>(42)</span></summary>
+		<details open="">
+			<summary>Layout</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-sidebar-layout/">norn-sidebar-layout</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Landmark</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-breadcrumbs/">norn-breadcrumbs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-footer/">norn-footer</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-header/">norn-header</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-pager/">norn-pager</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-side-nav/">norn-side-nav</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-toc/">norn-toc</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Container</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-accordion/">norn-accordion</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-callout/">norn-callout</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-card/">norn-card</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-card-grid/">norn-card-grid</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-code-tabs/">norn-code-tabs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-hero/">norn-hero</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-notice/">norn-notice</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-rich-text/">norn-rich-text</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-simple-table/" aria-current="page">norn-simple-table</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-tag-filter/">norn-tag-filter</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Component</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-choice/">norn-choice</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/code-sample/norn-code-block/">norn-code-block</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-copy-button/">norn-copy-button</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-eyebrow/">norn-eyebrow</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-fact-list/">norn-fact-list</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-field/">norn-field</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-heading-anchor/">norn-heading-anchor</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-icon/">norn-icon</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-link-button/">norn-link-button</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-search/">norn-search</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-segmented-control/">norn-segmented-control</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-skip-link/">norn-skip-link</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-tag/">norn-tag</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-theme-toggle/">norn-theme-toggle</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Template</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-base/">norn-base</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-docs/">norn-docs</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-docs-home/">norn-docs-home</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-landing/">norn-landing</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-workspace/">norn-workspace</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-workspaces-home/">norn-workspaces-home</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>Document</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/patterns/norn-head/">norn-head</a>
+				</li>
+			</ul>
+		</details>
+<details open="">
+			<summary>OSS site</summary>
+			<ul role="list">
+				<li>
+					<a href="/webc-resources/preview/30/components/oss-site/oss-bar/">oss-bar</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/oss-site/oss-credit/">oss-credit</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/oss-site/oss-cta/">oss-cta</a>
+				</li>
+<li>
+					<a href="/webc-resources/preview/30/components/oss-site/oss-head/">oss-head</a>
+				</li>
+			</ul>
+		</details>
+	</details>
+</nav>
+
+
+</preview-nav>
+			<main id="main" tabindex="-1"><h1>norn-simple-table</h1>
+<p class="lead">A native table that scrolls sideways inside its own box when it is wider than the page, so the page never does. A column keeps a readable width instead of being crushed, so a narrow screen scrolls the table, and a shadow at an edge says there is more that way. Pass the <code>&lt;table&gt;</code> in the default slot, with a <code>&lt;caption&gt;</code> when it can have one. Cells and code in them wrap between words, never mid-word. While the box scrolls, as it does on a narrow screen, its script makes it a tab stop named by the caption, so a keyboard can scroll it. <code>scrollTables</code> in <code>@allons-y/webc-patterns/markdown</code> writes the same markup for Markdown tables. Row rules take --norn-ui-border-color, and the scroll shadows are drawn against the page surface, --norn-surface-base. The header row has no fill.</p>
+<p class="meta">
+	<code>&lt;norn-simple-table&gt;</code>
+	a <span>container</span>, from
+	<code>@allons-y/webc-patterns</code>
+</p>
+
+
+
+
+
+	<h2>Examples</h2>
+	<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/30/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/30/frames/patterns/norn-simple-table/default/" title="Wide table preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/30/frames/patterns/norn-simple-table/default/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-simple-table>
+	<table>
+		<caption>Options</caption>
+		<thead>
+			<tr><th scope=&quot;col&quot;>Option</th><th scope=&quot;col&quot;>Type</th><th scope=&quot;col&quot;>Default</th><th scope=&quot;col&quot;>Description</th></tr>
+		</thead>
+		<tbody>
+			<tr><td><code>outputDirectory</code></td><td><code>string</code></td><td><code>&quot;_site&quot;</code></td><td>Where the build writes its pages.</td></tr>
+			<tr><td><code>pathPrefix</code></td><td><code>string</code></td><td><code>&quot;/&quot;</code></td><td>A path every URL starts with, for a site in a subfolder.</td></tr>
+			<tr><td><code>dropEmptyBundleTags</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes a link or script whose bundle came out empty.</td></tr>
+		</tbody>
+	</table>
+</norn-simple-table>" data-strings="norn-code-block-webc-FxqXo" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,17,0,0,1,0,2,1,1,0,5,0,0,1,0,3,1,1,0,7,0,0,1,0,7,2,1,0,7,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,6,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,4,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,7,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,11,2,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,15,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,33,2,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,10,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,3,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,56,2,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,19,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,4,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,53,2,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,2,2,1,0,5,0,0,1,0,1,2,1,0,17,0,0,1]]">&lt;norn-simple-table&gt;
+	&lt;table&gt;
+		&lt;caption&gt;Options&lt;/caption&gt;
+		&lt;thead&gt;
+			&lt;tr&gt;&lt;th scope="col"&gt;Option&lt;/th&gt;&lt;th scope="col"&gt;Type&lt;/th&gt;&lt;th scope="col"&gt;Default&lt;/th&gt;&lt;th scope="col"&gt;Description&lt;/th&gt;&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;outputDirectory&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"_site"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Where the build writes its pages.&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;pathPrefix&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"/"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;A path every URL starts with, for a site in a subfolder.&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;&lt;code&gt;dropEmptyBundleTags&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Removes a link or script whose bundle came out empty.&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+&lt;/norn-simple-table&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-FxqXo">
+		<span data-string="label" id="norn-code-block-webc-FxqXo-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/30/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/30/frames/patterns/norn-simple-table/striped/" title="Striped, with numbers and a note preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/30/frames/patterns/norn-simple-table/striped/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<norn-simple-table @striped @numeric=&quot;2 3&quot;>
+	<template slot=&quot;note&quot; webc:nokeep>Sizes are before compression.</template>
+	<table>
+		<caption>Table 1. Bundle sizes</caption>
+		<thead>
+			<tr><th scope=&quot;col&quot;>Package</th><th scope=&quot;col&quot;>Files</th><th scope=&quot;col&quot;>Kilobytes</th></tr>
+		</thead>
+		<tbody>
+			<tr><td>Patterns</td><td>42</td><td>118.4</td></tr>
+			<tr><td>Code sample</td><td>6</td><td>9.1</td></tr>
+			<tr><td>OSS site</td><td>12</td><td>31.0</td></tr>
+		</tbody>
+	</table>
+</norn-simple-table>" data-strings="norn-code-block-webc--R5l7" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,17,2,1,8,2,1,8,0,0,1,3,0,5,0,0,1,0,2,1,1,0,8,2,1,4,0,0,1,3,0,6,2,1,11,0,0,1,0,29,2,1,0,8,0,0,1,0,2,1,1,0,5,0,0,1,0,3,1,1,0,7,0,0,1,0,21,2,1,0,7,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,7,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,5,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,9,2,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,3,1,1,0,5,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,1,0,8,2,1,0,2,0,0,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,2,1,0,2,0,0,1,0,5,2,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,1,0,11,2,1,0,2,0,0,2,1,0,2,0,0,1,0,1,2,1,0,2,0,0,2,1,0,2,0,0,1,0,3,2,1,0,2,0,0,3,1,0,2,0,0,1,0,4,1,1,0,2,0,0,2,1,0,2,0,0,1,0,8,2,1,0,2,0,0,2,1,0,2,0,0,1,0,2,2,1,0,2,0,0,2,1,0,2,0,0,1,0,4,2,1,0,2,0,0,3,1,0,2,0,0,1,0,3,2,1,0,5,0,0,1,0,2,2,1,0,5,0,0,1,0,1,2,1,0,17,0,0,1]]">&lt;norn-simple-table @striped @numeric="2 3"&gt;
+	&lt;template slot="note" webc:nokeep&gt;Sizes are before compression.&lt;/template&gt;
+	&lt;table&gt;
+		&lt;caption&gt;Table 1. Bundle sizes&lt;/caption&gt;
+		&lt;thead&gt;
+			&lt;tr&gt;&lt;th scope="col"&gt;Package&lt;/th&gt;&lt;th scope="col"&gt;Files&lt;/th&gt;&lt;th scope="col"&gt;Kilobytes&lt;/th&gt;&lt;/tr&gt;
+		&lt;/thead&gt;
+		&lt;tbody&gt;
+			&lt;tr&gt;&lt;td&gt;Patterns&lt;/td&gt;&lt;td&gt;42&lt;/td&gt;&lt;td&gt;118.4&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;Code sample&lt;/td&gt;&lt;td&gt;6&lt;/td&gt;&lt;td&gt;9.1&lt;/td&gt;&lt;/tr&gt;
+			&lt;tr&gt;&lt;td&gt;OSS site&lt;/td&gt;&lt;td&gt;12&lt;/td&gt;&lt;td&gt;31.0&lt;/td&gt;&lt;/tr&gt;
+		&lt;/tbody&gt;
+	&lt;/table&gt;
+&lt;/norn-simple-table&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc--R5l7">
+		<span data-string="label" id="norn-code-block-webc--R5l7-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+<div class="story">
+		<preview-canvas><div data-js="">
+	<norn-segmented-control data-group="scheme">
+<fieldset data-icon-only="">
+	<legend><span>Color scheme</span></legend>
+	
+	
+		
+		<label title="Light"><input type="radio" value="light"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M16 12a4 4 0 1 1-8 0a4 4 0 1 1 8 0M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"></path>
+</svg>
+
+
+</norn-icon><span>Light</span></label>
+		<label title="System"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0"></path>
+	<path d="M12 3a9 9 0 0 1 0 18z" data-fill=""></path>
+</svg>
+
+
+</norn-icon><span>System</span></label>
+		<label title="Dark"><input type="radio" value="dark"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+</svg>
+
+
+</norn-icon><span>Dark</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<norn-segmented-control data-group="width">
+<fieldset data-icon-only="">
+	<legend><span>Width</span></legend>
+	
+	
+		
+		<label title="Fill"><input type="radio" value="" checked=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 12h18M7 8l-4 4l4 4M17 8l4 4l-4 4"></path>
+</svg>
+
+
+</norn-icon><span>Fill</span></label>
+		<label title="Phone, 320px"><input type="radio" value="320px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M7 2h10v20H7zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Phone, 320px</span></label>
+		<label title="Tablet, 768px"><input type="radio" value="768px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M4 3h16v18H4zM11 18h2"></path>
+</svg>
+
+
+</norn-icon><span>Tablet, 768px</span></label>
+		<label title="Desktop, 1024px"><input type="radio" value="1024px"><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true" data-size="m">
+	<path d="M3 4h18v12H3zM8 20h8M12 16v4"></path>
+</svg>
+
+
+</norn-icon><span>Desktop, 1024px</span></label>
+	
+</fieldset>
+
+</norn-segmented-control>
+	<button type="button" data-action="axe" data-state="idle" data-axe="/webc-resources/preview/30/assets/axe.min.js">
+		<norn-icon data-for="idle">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M12 7v.5M7.5 10l4.5 1l4.5-1M12 11v3M9.5 18l2.5-4l2.5 4"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="running">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-9-9"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="pass">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M8 12l3 3l5-6"></path>
+</svg>
+
+
+</norn-icon>
+		<norn-icon data-for="fail">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M21 12a9 9 0 1 1-18 0a9 9 0 1 1 18 0M15 9l-6 6M9 9l6 6"></path>
+</svg>
+
+
+</norn-icon>
+		Check accessibility
+	</button>
+</div>
+<div data-stage="">
+	<iframe src="/webc-resources/preview/30/frames/patterns/norn-simple-table/matrix/" title="Matrix preview" loading="lazy"></iframe>
+</div>
+<p><a href="/webc-resources/preview/30/frames/patterns/norn-simple-table/matrix/">Open on its own</a></p>
+<div data-results="" role="status"></div>
+
+
+</preview-canvas>
+		<details>
+			<summary>Source</summary>
+			<norn-code-block>
+<figure>
+	
+	<norn-copy-button>
+<button type="button" hidden="" data-value="<div style=&quot;display: grid; gap: 1.5rem&quot;>
+	<div style=&quot;display: grid; gap: 0.5rem&quot;>
+		<p><code>striped = true</code></p>
+		<div>
+			<norn-simple-table @striped>
+				<table>
+					<caption>Options</caption>
+					<thead>
+						<tr><th scope=&quot;col&quot;>Option</th><th scope=&quot;col&quot;>Type</th><th scope=&quot;col&quot;>Default</th><th scope=&quot;col&quot;>Description</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>outputDirectory</code></td><td><code>string</code></td><td><code>&quot;_site&quot;</code></td><td>Where the build writes its pages.</td></tr>
+						<tr><td><code>pathPrefix</code></td><td><code>string</code></td><td><code>&quot;/&quot;</code></td><td>A path every URL starts with, for a site in a subfolder.</td></tr>
+						<tr><td><code>dropEmptyBundleTags</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes a link or script whose bundle came out empty.</td></tr>
+					</tbody>
+				</table>
+			</norn-simple-table>
+		</div>
+	</div>
+	<div style=&quot;display: grid; gap: 0.5rem&quot;>
+		<p><code>striped = false</code></p>
+		<div>
+			<norn-simple-table>
+				<table>
+					<caption>Options</caption>
+					<thead>
+						<tr><th scope=&quot;col&quot;>Option</th><th scope=&quot;col&quot;>Type</th><th scope=&quot;col&quot;>Default</th><th scope=&quot;col&quot;>Description</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><code>outputDirectory</code></td><td><code>string</code></td><td><code>&quot;_site&quot;</code></td><td>Where the build writes its pages.</td></tr>
+						<tr><td><code>pathPrefix</code></td><td><code>string</code></td><td><code>&quot;/&quot;</code></td><td>A path every URL starts with, for a site in a subfolder.</td></tr>
+						<tr><td><code>dropEmptyBundleTags</code></td><td><code>boolean</code></td><td><code>true</code></td><td>Removes a link or script whose bundle came out empty.</td></tr>
+					</tbody>
+				</table>
+			</norn-simple-table>
+		</div>
+	</div>
+</div>" data-strings="norn-code-block-webc-L3Rqo" data-compact="" data-surface="code"><span data-icons=""><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M9 9h11v11H9zM15 9V4H4v11h5"></path>
+</svg>
+
+
+</norn-icon><norn-icon>
+<svg viewBox="0 0 24 24" aria-hidden="true">
+	<path d="M5 12l5 5L20 7"></path>
+</svg>
+
+
+</norn-icon></span><span data-label=""></span></button>
+<span role="status"></span>
+
+
+</norn-copy-button>
+	<pre dir="ltr" data-language="html"><code data-tokens="[[&quot;punctuation&quot;,&quot;keyword&quot;,&quot;function&quot;,&quot;string&quot;],[0,0,1,1,0,3,2,1,5,0,0,1,3,0,28,0,0,1,0,2,1,1,0,3,2,1,5,0,0,1,3,0,28,0,0,1,0,3,1,1,0,1,0,0,2,1,0,4,0,0,1,0,14,2,1,0,4,0,0,3,1,0,1,0,0,1,0,3,1,1,0,3,0,0,1,0,4,1,1,0,17,2,1,8,0,0,1,0,5,1,1,0,5,0,0,1,0,6,1,1,0,7,0,0,1,0,7,2,1,0,7,0,0,1,0,6,1,1,0,5,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,6,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,4,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,7,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,11,2,1,0,2,0,0,3,1,0,2,0,0,1,0,6,2,1,0,5,0,0,1,0,6,1,1,0,5,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,15,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,33,2,1,0,2,0,0,3,1,0,2,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,10,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,3,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,56,2,1,0,2,0,0,3,1,0,2,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,19,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,4,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,53,2,1,0,2,0,0,3,1,0,2,0,0,1,0,6,2,1,0,5,0,0,1,0,5,2,1,0,5,0,0,1,0,4,2,1,0,17,0,0,1,0,3,2,1,0,3,0,0,1,0,2,2,1,0,3,0,0,1,0,2,1,1,0,3,2,1,5,0,0,1,3,0,28,0,0,1,0,3,1,1,0,1,0,0,2,1,0,4,0,0,1,0,15,2,1,0,4,0,0,3,1,0,1,0,0,1,0,3,1,1,0,3,0,0,1,0,4,1,1,0,17,0,0,1,0,5,1,1,0,5,0,0,1,0,6,1,1,0,7,0,0,1,0,7,2,1,0,7,0,0,1,0,6,1,1,0,5,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,6,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,4,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,7,2,1,0,2,0,0,2,1,0,2,2,1,5,0,0,1,3,0,5,0,0,1,0,11,2,1,0,2,0,0,3,1,0,2,0,0,1,0,6,2,1,0,5,0,0,1,0,6,1,1,0,5,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,15,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,33,2,1,0,2,0,0,3,1,0,2,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,10,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,6,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,3,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,56,2,1,0,2,0,0,3,1,0,2,0,0,1,0,7,1,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,19,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,7,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,2,1,0,4,0,0,1,0,4,2,1,0,4,0,0,3,1,0,2,0,0,2,1,0,2,0,0,1,0,53,2,1,0,2,0,0,3,1,0,2,0,0,1,0,6,2,1,0,5,0,0,1,0,5,2,1,0,5,0,0,1,0,4,2,1,0,17,0,0,1,0,3,2,1,0,3,0,0,1,0,2,2,1,0,3,0,0,1,0,1,2,1,0,3,0,0,1]]">&lt;div style="display: grid; gap: 1.5rem"&gt;
+	&lt;div style="display: grid; gap: 0.5rem"&gt;
+		&lt;p&gt;&lt;code&gt;striped = true&lt;/code&gt;&lt;/p&gt;
+		&lt;div&gt;
+			&lt;norn-simple-table @striped&gt;
+				&lt;table&gt;
+					&lt;caption&gt;Options&lt;/caption&gt;
+					&lt;thead&gt;
+						&lt;tr&gt;&lt;th scope="col"&gt;Option&lt;/th&gt;&lt;th scope="col"&gt;Type&lt;/th&gt;&lt;th scope="col"&gt;Default&lt;/th&gt;&lt;th scope="col"&gt;Description&lt;/th&gt;&lt;/tr&gt;
+					&lt;/thead&gt;
+					&lt;tbody&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;outputDirectory&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"_site"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Where the build writes its pages.&lt;/td&gt;&lt;/tr&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;pathPrefix&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"/"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;A path every URL starts with, for a site in a subfolder.&lt;/td&gt;&lt;/tr&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;dropEmptyBundleTags&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Removes a link or script whose bundle came out empty.&lt;/td&gt;&lt;/tr&gt;
+					&lt;/tbody&gt;
+				&lt;/table&gt;
+			&lt;/norn-simple-table&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+	&lt;div style="display: grid; gap: 0.5rem"&gt;
+		&lt;p&gt;&lt;code&gt;striped = false&lt;/code&gt;&lt;/p&gt;
+		&lt;div&gt;
+			&lt;norn-simple-table&gt;
+				&lt;table&gt;
+					&lt;caption&gt;Options&lt;/caption&gt;
+					&lt;thead&gt;
+						&lt;tr&gt;&lt;th scope="col"&gt;Option&lt;/th&gt;&lt;th scope="col"&gt;Type&lt;/th&gt;&lt;th scope="col"&gt;Default&lt;/th&gt;&lt;th scope="col"&gt;Description&lt;/th&gt;&lt;/tr&gt;
+					&lt;/thead&gt;
+					&lt;tbody&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;outputDirectory&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"_site"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Where the build writes its pages.&lt;/td&gt;&lt;/tr&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;pathPrefix&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;string&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;"/"&lt;/code&gt;&lt;/td&gt;&lt;td&gt;A path every URL starts with, for a site in a subfolder.&lt;/td&gt;&lt;/tr&gt;
+						&lt;tr&gt;&lt;td&gt;&lt;code&gt;dropEmptyBundleTags&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;boolean&lt;/code&gt;&lt;/td&gt;&lt;td&gt;&lt;code&gt;true&lt;/code&gt;&lt;/td&gt;&lt;td&gt;Removes a link or script whose bundle came out empty.&lt;/td&gt;&lt;/tr&gt;
+					&lt;/tbody&gt;
+				&lt;/table&gt;
+			&lt;/norn-simple-table&gt;
+		&lt;/div&gt;
+	&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+	<span hidden="" id="norn-code-block-webc-L3Rqo">
+		<span data-string="label" id="norn-code-block-webc-L3Rqo-copy">Copy {name} to clipboard</span>
+		<span data-string="copy">Copy</span>
+		<span data-string="copied">Copied</span>
+		<span data-string="failed">Copy failed</span>
+	</span>
+	<span data-name="" hidden=""><span data-default="">html code</span></span>
+</figure>
+
+
+</norn-code-block>
+		</details>
+	</div>
+
+
+
+	<h2>Props</h2>
+	
+	<p>Write them with the <code>@</code> prefix, and <code>:@</code> for an expression.</p>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-LkkOR"></span>
+<div>
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Type</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row"><code>@striped</code></th>
+					<td data-label="Type"><code>boolean</code></td>
+					<td>Tint every even body row with the raised surface, for a long table read across.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>@numeric</code></th>
+					<td data-label="Type"><code>string</code></td>
+					<td>The columns that hold numbers, by position from 1 to 8, separated by spaces, such as <code>"2 3"</code>. They align at the end, with figures of one width.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+<p data-note=""></p>
+
+
+</norn-simple-table>
+
+
+
+	<h2>Slots</h2>
+	<norn-simple-table class="spec"><span hidden="" id="norn-simple-table-webc-fQL1D"></span>
+<div>
+		<table>
+			<thead>
+				<tr><th scope="col">Name</th><th scope="col">Description</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row"><code>default</code></th>
+					<td>The table.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>note</code></th>
+					<td>A short note under the table, such as its source, in muted text. Phrasing content only: it renders in a paragraph.</td>
+				</tr>
+<tr>
+					<th scope="row"><code>label</code></th>
+					<td>The region's name while it scrolls, as one element, hidden. Falls back to the caption, then the column headings, so the name is always in the page's language.</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+<p data-note=""></p>
+
+
+</norn-simple-table>
+
+
+
+	<h2>Tokens</h2>
+	<p>The global tokens from <code>tokens.json</code> the component reads. Set one in a project's <code>tokens.css</code> to change it everywhere.</p>
+	<p>Type a value to try it in every example above. Reset puts the default back.</p>
+	<preview-props><table>
+	<thead>
+		<tr>
+			<th scope="col">Token</th>
+			<th scope="col">Type</th>
+			<th scope="col">Default</th>
+			<th scope="col">Override</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th scope="row"><code>--norn-ui-accent</code><small>The brand color, shared by every component.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>#2346d4</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="color" data-prop="--norn-ui-accent" value="#2346d4" aria-label="Override --norn-ui-accent">
+					<button type="button" data-action="reset" data-prop="--norn-ui-accent" aria-label="Reset --norn-ui-accent" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<th scope="row"><code>--norn-ui-border-color</code><small>Hairline color.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(#d3d8e2, #2d323e)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-ui-border-color" aria-label="Override --norn-ui-border-color" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-ui-border-color" aria-label="Reset --norn-ui-border-color" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-surface-base</code><small>Page surface. Light and dark values.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(#ffffff, #101216)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-surface-base" aria-label="Override --norn-surface-base" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-surface-base" aria-label="Reset --norn-surface-base" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-surface-raised</code><small>Raised surface.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(hsl(40, 14%, 96%), #242932)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-surface-raised" aria-label="Override --norn-surface-raised" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-surface-raised" aria-label="Reset --norn-surface-raised" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-text-base</code><small>Text color.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(#16181d, #eceef3)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-text-base" aria-label="Override --norn-text-base" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-text-base" aria-label="Reset --norn-text-base" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-text-muted</code><small>Secondary text color.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;color&gt;</code></td>
+			<td data-label="Default"><code>light-dark(#4b5160, #a4abba)</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-text-muted" aria-label="Override --norn-text-muted" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-text-muted" aria-label="Reset --norn-text-muted" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-font-size-s</code><small>Small text: captions, code, navigation, and notes.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>0.875rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-font-size-s" aria-label="Override --norn-font-size-s" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-font-size-s" aria-label="Reset --norn-font-size-s" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-xs</code><small>Extra small spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>0.5rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-xs" aria-label="Override --norn-space-xs" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-xs" aria-label="Reset --norn-space-xs" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+<tr>
+			<th scope="row"><code>--norn-space-s</code><small>Small spacing step.</small></th>
+			<td data-col="type" data-label="Type"><code>&lt;length&gt;</code></td>
+			<td data-label="Default"><code>0.75rem</code></td>
+			<td data-label="Override">
+				<span data-field="">
+					<input type="text" data-prop="--norn-space-s" aria-label="Override --norn-space-s" autocomplete="off" spellcheck="false">
+					<button type="button" data-action="reset" data-prop="--norn-space-s" aria-label="Reset --norn-space-s" disabled="">Reset</button>
+				</span>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+
+</preview-props>
+
+</main>
+		</div>
+	
+
+</body>
+</html>

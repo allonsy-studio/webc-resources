@@ -1,0 +1,138 @@
+@layer norn.components {
+		norn-choice {
+			display: block;
+
+			& > fieldset {
+				min-inline-size: 0;
+				margin: 0;
+				padding: 0;
+				border: 0;
+
+				& > legend {
+					padding: 0;
+					font-weight: 600;
+				}
+
+				& > div {
+					display: grid;
+					justify-items: start;
+					gap: var(--norn-space-xs, 0.5rem);
+					padding-block-start: var(--norn-space-xs, 0.5rem);
+				}
+
+				&[data-inline] > div {
+					display: flex;
+					flex-wrap: wrap;
+					column-gap: var(--norn-space-m, 1.25rem);
+				}
+
+				& > div > label {
+					--_state: 0%;
+					display: inline-flex;
+					align-items: flex-start;
+					gap: var(--norn-space-xs, 0.5rem);
+					cursor: pointer;
+
+					&:hover {
+						--_state: var(--norn-ui-state-hover, 8%);
+					}
+
+					&:active {
+						--_state: var(--norn-ui-state-press, 12%);
+					}
+
+					&:has(> input:disabled) {
+						--_state: 0%;
+						color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+						cursor: not-allowed;
+					}
+				}
+
+				/* Drawn by hand at 1.25em, lowered onto the first line of the label. */
+				& > div > label > input:is([type="checkbox"], [type="radio"]) {
+					appearance: none;
+					box-sizing: border-box;
+					display: grid;
+					place-items: center;
+					flex: none;
+					inline-size: 1.25em;
+					block-size: 1.25em;
+					margin: 0;
+					translate: 0 0.125em;
+					border: 1px solid var(--norn-ui-border-strong, light-dark(#7a8194, #6f7789));
+					border-radius: var(--norn-ui-radius-s, 4px);
+					background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-surface-base, light-dark(#ffffff, #101216)));
+					color: inherit;
+					cursor: inherit;
+
+					&[type="radio"] {
+						border-radius: 50%;
+					}
+
+					&::before {
+						content: "";
+						inline-size: 100%;
+						block-size: 100%;
+						background-color: var(--norn-text-on-accent, color(from var(--norn-ui-accent, #2346d4) xyz-d65 calc(0.95047 * clamp(0, calc((0.1791 - y) * 1000000), 1)) clamp(0, calc((0.1791 - y) * 1000000), 1) calc(1.08883 * clamp(0, calc((0.1791 - y) * 1000000), 1))));
+						scale: 0;
+					}
+
+					&[type="checkbox"]::before {
+						mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.5l3 3 6-7' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+					}
+
+					&[type="radio"]::before {
+						inline-size: 40%;
+						block-size: 40%;
+						border-radius: 50%;
+					}
+
+					&:checked {
+						border-color: var(--norn-ui-accent, #2346d4);
+						background-color: color-mix(in oklab, currentcolor var(--_state), var(--norn-ui-accent, #2346d4));
+
+						&::before {
+							scale: 1;
+						}
+					}
+
+					&:user-invalid {
+						border-color: var(--norn-status-danger, light-dark(#b42318, #ff8a80));
+					}
+
+					&:disabled {
+						border-color: var(--norn-ui-border-color, light-dark(#d3d8e2, #2d323e));
+						background-color: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+
+						&::before {
+							background-color: var(--norn-text-muted, light-dark(#4b5160, #a4abba));
+						}
+					}
+				}
+			}
+
+			@media (prefers-reduced-motion: no-preference) {
+				& > fieldset > div > label > input {
+					transition: background-color var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+
+					&::before {
+						transition: scale var(--norn-ui-motion-duration, 150ms) var(--norn-ui-motion-easing, cubic-bezier(0.2, 0, 0, 1));
+					}
+				}
+			}
+
+			/* The tick is a pseudo-element the browser would repaint, so the native control comes back. */
+			@media (forced-colors: active) {
+				& > fieldset > div > label > input:is([type="checkbox"], [type="radio"]) {
+					appearance: auto;
+					border: 0;
+				}
+			}
+
+			@media print {
+				& > fieldset > div > label > input {
+					print-color-adjust: exact;
+				}
+			}
+		}
+	}
