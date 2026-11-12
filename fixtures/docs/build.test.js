@@ -195,7 +195,7 @@ describe("docs fixture in a browser", () => {
 		const errors = [];
 		page.on("pageerror", (error) => errors.push(error.message));
 		await page.addInitScript(() => Object.defineProperty(navigator, "clipboard", { value: undefined, configurable: true }));
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		assert.ok((await page.locator("norn-code-block").count()) > 0);
 		assert.equal(await page.locator("norn-code-block button:visible").count(), 0);
 		assert.deepEqual(errors, []);
@@ -210,7 +210,7 @@ describe("docs fixture in a browser", () => {
 			const response = await route.fetch();
 			await route.fulfill({ response, body: (await response.text()).replace(/data-tokens="[^"]*"/, 'data-tokens="not json"') });
 		});
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		assert.equal(await page.locator("norn-code-block button:visible").count(), await page.locator("norn-code-block").count());
 		assert.deepEqual(errors, []);
 		await page.close();
@@ -228,7 +228,7 @@ describe("docs fixture in a browser", () => {
 		const unusable = { "not JSON": "not json", empty: "", "the plain range list": '[["function",0,3]]', "a range past the end": '[["function"],[0,0,9999]]', "a missing group": '[["function"],[4,0,3]]', "a short list": '[["function"],[0,0]]', "no list": '[["function"]]' };
 		for (const [label, value] of Object.entries(unusable)) {
 			tokens = value;
-			await page.goto(server.url + "/reference/");
+			await page.goto(`${server.url}/reference/`);
 			await page.waitForFunction(() => CSS.highlights.size > 0);
 			const counts = await page.evaluate(() =>
 				[...document.querySelectorAll("norn-code-block code[data-tokens]")].map((code) => {
@@ -247,7 +247,7 @@ describe("docs fixture in a browser", () => {
 	test("the copy button strips the shell prompt", async () => {
 		const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"] });
 		const page = await context.newPage();
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		const button = page.locator("norn-code-block button").first();
 		await button.click();
 		assert.equal(await page.evaluate(() => navigator.clipboard.readText()), "npm install @allons-y/fixture-docs\n");
@@ -258,7 +258,7 @@ describe("docs fixture in a browser", () => {
 
 	test("a wide Markdown table scrolls in its own named box, and the page never scrolls sideways", async () => {
 		const page = await browser.newPage({ viewport: { width: 320, height: 800 } });
-		await page.goto(server.url + "/reference/");
+		await page.goto(`${server.url}/reference/`);
 		await page.$eval("norn-simple-table table tr", (row) => row.append(...Array.from({ length: 6 }, () => Object.assign(document.createElement("td"), { textContent: "a_long_option_name" }))));
 		await page.waitForFunction(() => document.querySelector("norn-simple-table > div").getAttribute("role") === "region", null, { timeout: 5000 });
 		assert.deepEqual(await page.$eval("norn-simple-table > div", (box) => [box.tabIndex, box.getAttribute("aria-label")]), [0, "Option, Default"]);
@@ -271,7 +271,7 @@ describe("docs fixture in a browser", () => {
 	test("norn-code-tabs: tabs over the samples, moved with the arrow keys, kept in step by group, and remembered", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/reference/");
+		await page.goto(`${server.url}/reference/`);
 		const [install, remove] = [page.locator("norn-code-tabs").nth(0), page.locator("norn-code-tabs").nth(1)];
 		assert.deepEqual(await install.getByRole("tab").allTextContents(), ["npm", "yarn", "pnpm"]);
 		assert.equal(await remove.getByRole("tablist", { name: "Uninstall commands", exact: true }).count(), 1);
@@ -303,7 +303,7 @@ export async function debouncedSearch() {
 }`,
 			}),
 		);
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		await page.waitForFunction(() => document.querySelector("norn-search").hasAttribute("data-live"));
 		await page.getByRole("searchbox", { name: "Search the docs" }).fill("project");
 		await page.locator("norn-search li a").first().waitFor();
@@ -314,7 +314,7 @@ export async function debouncedSearch() {
 
 	test("without an index the docs search stays a plain form", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		await page.waitForTimeout(300);
 		assert.equal(await page.locator("norn-search").getAttribute("data-live"), null);
 		assert.equal(await page.getByRole("button", { name: "Search the docs" }).isVisible(), true);
@@ -324,7 +324,7 @@ export async function debouncedSearch() {
 	test("norn-code-tabs without a script shows every sample, stacked", async () => {
 		const context = await browser.newContext({ javaScriptEnabled: false });
 		const page = await context.newPage();
-		await page.goto(server.url + "/reference/");
+		await page.goto(`${server.url}/reference/`);
 		assert.equal(await page.locator("norn-code-tabs").first().locator("norn-code-block:visible").count(), 3);
 		assert.equal(await page.getByRole("tablist").count(), 0);
 		await context.close();
@@ -333,7 +333,7 @@ export async function debouncedSearch() {
 	test("the copy button sits over the top end corner of the code, on the left in a right-to-left page, and the code reads left to right", async () => {
 		const context = await browser.newContext({ permissions: ["clipboard-read", "clipboard-write"], viewport: { width: 1280, height: 800 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/getting-started/");
+		await page.goto(`${server.url}/getting-started/`);
 		await page.evaluate(() => document.documentElement.setAttribute("dir", "rtl"));
 		for (const sample of await page.locator("norn-code-block").all()) {
 			const [button, pre] = [await sample.locator("button").boundingBox(), await sample.locator("pre").boundingBox()];

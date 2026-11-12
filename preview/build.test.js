@@ -344,7 +344,7 @@ describe("the preview in a browser", () => {
 	test("each sample of the code tabs story is highlighted in at least three groups, with the tokens registered for its own text", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/frames/patterns/norn-code-tabs/default/");
+		await page.goto(`${server.url}/frames/patterns/norn-code-tabs/default/`);
 		await page.waitForFunction(() => CSS.highlights.size > 0);
 		const found = await page.evaluate(() =>
 			[...document.querySelectorAll("norn-code-block code")].map((code) => {
@@ -413,7 +413,7 @@ describe("the preview in a browser", () => {
 				await page.goto(server.url + url);
 				assert.ok(await page.evaluate((limit) => document.documentElement.scrollWidth <= limit, width), `${url} at ${width}`);
 			}
-			await page.goto(server.url + "/theme/");
+			await page.goto(`${server.url}/theme/`);
 			assert.ok(await page.$eval("preview-tokens norn-simple-table > div", (box) => box.scrollWidth > box.clientWidth), `${width}: the table scrolls instead`);
 			await page.close();
 		}
@@ -435,7 +435,7 @@ describe("the preview in a browser", () => {
 			assert.equal(await page.locator("preview-nav a").first().isHidden(), true, `${url}: no link shows while it is closed`);
 			assert.ok((await page.locator("main h1").boundingBox()).y < 844, `${url}: the heading is within the first screen`);
 		}
-		await page.goto(server.url + "/components/patterns/norn-callout/");
+		await page.goto(`${server.url}/components/patterns/norn-callout/`);
 		await page.locator(NAV_BAR).click();
 		assert.equal(await page.locator("preview-nav details details").evaluateAll((groups) => groups.every((group) => group.open)), true, "the groups are open inside it");
 		const current = page.locator('preview-nav a[aria-current="page"]');
@@ -449,7 +449,7 @@ describe("the preview in a browser", () => {
 
 	test("the component list closes when the screen narrows and opens when it widens", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-callout/");
+		await page.goto(`${server.url}/components/patterns/norn-callout/`);
 		const open = () => page.locator("preview-nav > nav > details").evaluate((details) => details.open);
 		/** The disclosure follows a media query listener, which runs after the resize, so wait for it. */
 		const becomes = (state) => page.waitForFunction((want) => document.querySelector("preview-nav > nav > details").open === want, state);
@@ -464,7 +464,7 @@ describe("the preview in a browser", () => {
 	test("without a script the component list is the same disclosure on a phone, and works", async () => {
 		const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/components/patterns/norn-callout/");
+		await page.goto(`${server.url}/components/patterns/norn-callout/`);
 		assert.equal(await page.locator("preview-nav a").first().isHidden(), true);
 		await page.locator(NAV_BAR).click();
 		assert.equal(await page.locator("preview-nav a").first().isVisible(), true);
@@ -475,7 +475,7 @@ describe("the preview in a browser", () => {
 		for (const javaScriptEnabled of [true, false]) {
 			const context = await browser.newContext({ javaScriptEnabled, viewport: { width: 1280, height: 900 } });
 			const page = await context.newPage();
-			await page.goto(server.url + "/components/patterns/norn-callout/");
+			await page.goto(`${server.url}/components/patterns/norn-callout/`);
 			assert.equal(await page.locator(NAV_BAR).isHidden(), true, "no bar");
 			const groups = page.locator("preview-nav details details");
 			assert.equal(await groups.count(), 7, "six categories and the OSS site group");
@@ -515,7 +515,7 @@ describe("the preview in a browser", () => {
 			assert.deepEqual(split, [], `${url}: words split across lines`);
 			assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= 390), `${url}: the page holds still`);
 		}
-		await page.goto(server.url + "/components/patterns/norn-callout/");
+		await page.goto(`${server.url}/components/patterns/norn-callout/`);
 		const type = page.locator(`${SPEC_TABLES} td code`, { hasText: /^string$/ }).first();
 		assert.ok((await type.boundingBox()).height < 30, "string sits on one line");
 		const [name, cell] = await Promise.all(["th", "td"].map((selector) => type.locator("xpath=ancestor::tr").locator(selector).first().boundingBox()));
@@ -525,7 +525,7 @@ describe("the preview in a browser", () => {
 
 	test("on a phone a token is a block: name, type, default, then its field and reset, all inside the screen", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const row = page.locator("preview-props tbody tr", { has: page.locator('input[data-prop="--norn-ui-border-radius"]') });
 		const [name, type, fallback, field] = await Promise.all(["th", "td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"].map((selector) => row.locator(selector).boundingBox()));
 		assert.ok(name.y < type.y && type.y < fallback.y && fallback.y < field.y, "one under the other");
@@ -555,7 +555,7 @@ describe("the preview in a browser", () => {
 
 	test("on a phone the width control is gone, the toolbar is one row, and the frame fills its box", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		assert.equal(await canvas.locator('[data-group="width"]').isHidden(), true);
 		assert.equal(await canvas.locator('[data-group="scheme"]').isVisible(), true);
@@ -566,7 +566,7 @@ describe("the preview in a browser", () => {
 
 	test("a canvas that is moved keeps one set of listeners, and its frame still follows its content", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		const runs = () =>
 			canvas.evaluate(async (element) => {
@@ -595,7 +595,7 @@ describe("the preview in a browser", () => {
 
 	test("a width chosen on a wide screen leaves the frame no wider than its box once the screen is narrow", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		await pick(canvas, "width", "Desktop, 1024px");
 		const widths = () => canvas.evaluate((element) => ({ frame: element.querySelector("iframe").getBoundingClientRect().width, stage: element.querySelector("[data-stage]").clientWidth }));
@@ -612,7 +612,7 @@ describe("the preview in a browser", () => {
 	test("on a touch screen the nav, the toolbar, and the link to open a frame are 44px targets", async () => {
 		const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), true);
 		await page.locator(NAV_BAR).click();
 		const heights = (selector) => page.locator(selector).evaluateAll((elements) => elements.filter((element) => element.getBoundingClientRect().height > 0).map((element) => element.getBoundingClientRect().height));
@@ -632,7 +632,7 @@ describe("the preview in a browser", () => {
 	test("on a touch screen every card on the index is one target at least 44px tall: its center and corners resolve to the heading link", async () => {
 		const context = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), true);
 		const misses = await page.evaluate(() => {
 			const found = [];
@@ -656,7 +656,7 @@ describe("the preview in a browser", () => {
 
 	test("with a mouse the sizes stay as they were", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		assert.equal(await page.evaluate(() => window.matchMedia("(pointer: coarse)").matches), false);
 		const height = (selector) => page.locator(selector).first().evaluate((element) => element.getBoundingClientRect().height);
 		assert.equal(Math.round(await height("preview-nav a")), 29, "nav links");
@@ -686,7 +686,7 @@ describe("the preview in a browser", () => {
 
 	test("the scheme control is a sun, a system mark, and a moon, in that order, with System selected", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		const labels = canvas.locator('[data-group="scheme"] label');
 		assert.deepEqual(await labels.locator("span").allTextContents(), ["Light", "System", "Dark"]);
@@ -700,7 +700,7 @@ describe("the preview in a browser", () => {
 
 	test("every icon option has a title, for a description on hover", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const titles = await page.locator("preview-canvas").first().locator("norn-segmented-control label").evaluateAll((labels) => labels.map((label) => label.title));
 		assert.deepEqual(titles, ["Light", "System", "Dark", "Fill", "Phone, 320px", "Tablet, 768px", "Desktop, 1024px"]);
 		await page.close();
@@ -708,7 +708,7 @@ describe("the preview in a browser", () => {
 
 	test("with reduced motion the scheme control tints the selected option and follows the selection, with no thumb", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 }, reducedMotion: "reduce" });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		assert.ok(["none", "normal"].includes(await canvas.locator('[data-group="scheme"] fieldset').evaluate((fieldset) => getComputedStyle(fieldset, "::before").content)), "no thumb");
 		/** The options that have a tint behind them, by title. */
@@ -730,7 +730,7 @@ describe("the preview in a browser", () => {
 
 	test("the scheme control sets the frame's color scheme, and System clears it", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		const canvas = page.locator("preview-canvas").first();
 		await pick(canvas, "scheme", "Dark");
@@ -746,7 +746,7 @@ describe("the preview in a browser", () => {
 
 	test("the width control is a set of device icons that work as radio buttons", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const canvas = page.locator("preview-canvas").first();
 		const names = ["Fill", "Phone, 320px", "Tablet, 768px", "Desktop, 1024px"];
 		assert.deepEqual(await canvas.locator('[data-group="width"] label span').allTextContents(), names);
@@ -766,7 +766,7 @@ describe("the preview in a browser", () => {
 
 	test("each canvas keeps its own selection", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const [first, second] = [page.locator("preview-canvas").nth(0), page.locator("preview-canvas").nth(1)];
 		await pick(first, "scheme", "Dark");
 		await pick(first, "width", "Phone, 320px");
@@ -779,7 +779,7 @@ describe("the preview in a browser", () => {
 
 	test("the frame grows to its content", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		await page.waitForFunction(() => document.querySelector("preview-canvas iframe").style.blockSize !== "");
 		const [frameHeight, contentHeight] = [await page.locator("preview-canvas iframe").first().evaluate((element) => element.getBoundingClientRect().height), await frame.evaluate(() => document.documentElement.scrollHeight)];
@@ -789,7 +789,7 @@ describe("the preview in a browser", () => {
 
 	test("the tokens table holds the overrides: name, type, default, and the field with its reset", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		assert.equal(await page.locator("preview-canvas details").count(), 0, "no panel in the canvas");
 		const table = page.locator("preview-props");
 		assert.deepEqual(await table.locator("thead th").allTextContents(), ["Token", "Type", "Default", "Override"]);
@@ -810,14 +810,14 @@ describe("the preview in a browser", () => {
 
 	test("a page whose component reads no token has no tokens table", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/oss-site/oss-head/");
+		await page.goto(`${server.url}/components/oss-site/oss-head/`);
 		assert.equal(await page.locator("preview-props").count(), 0);
 		await page.close();
 	});
 
 	test("the accessibility check has no explanation beside it, and its icon shows idle, running, then the result", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		await frameOf(page);
 		const canvas = page.locator("preview-canvas").first();
 		const button = canvas.locator('[data-action="axe"]');
@@ -835,7 +835,7 @@ describe("the preview in a browser", () => {
 
 	test("a failing check shows the red mark", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		await frame.evaluate(() => document.body.append(Object.assign(document.createElement("img"), { src: "data:," })));
 		const button = page.locator('preview-canvas [data-action="axe"]').first();
@@ -848,7 +848,7 @@ describe("the preview in a browser", () => {
 
 	test("an override typed in the table reaches every example, and its reset puts the default back", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frames = await Promise.all([0, 1].map((index) => frameOf(page, index)));
 		const radius = (frame) => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		const before = await radius(frames[0]);
@@ -865,7 +865,7 @@ describe("the preview in a browser", () => {
 
 	test("the accent picker changes the frame's accent, and its reset undoes it", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		await page.locator('preview-props input[data-prop="--norn-ui-accent"]').evaluate((input) => {
 			input.value = "#ff0000";
@@ -906,22 +906,22 @@ describe("the preview in a browser", () => {
 	test("an override set on Theme is saved, and every kind of preview page applies it", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		await overrideColor(page, "--norn-ui-accent", "#c2185b", "#00897b");
 		assert.deepEqual(JSON.parse(await page.evaluate(() => localStorage.getItem("norn-preview-tokens"))), { "--norn-ui-accent": "light-dark(#c2185b, #00897b)" });
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "this page, at once");
 
-		await page.goto(server.url + "/frames/patterns/norn-link-button/default/");
+		await page.goto(`${server.url}/frames/patterns/norn-link-button/default/`);
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a plain frame");
 		assert.ok(near(await accentFill(page), [194, 24, 91]), "the light value, in a light scheme");
 
-		await page.goto(server.url + "/frames/oss-site/oss-cta/default/");
+		await page.goto(`${server.url}/frames/oss-site/oss-cta/default/`);
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "an OSS frame");
 
-		await page.goto(server.url + "/frames/patterns/norn-landing/default/");
+		await page.goto(`${server.url}/frames/patterns/norn-landing/default/`);
 		assert.equal(await rootToken(page, "--norn-ui-accent"), "light-dark(#c2185b, #00897b)", "a layout frame");
 
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		assert.equal(await frame.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim()), "light-dark(#c2185b, #00897b)", "a frame inside a component page");
 		await context.close();
@@ -931,7 +931,7 @@ describe("the preview in a browser", () => {
 		const context = await browser.newContext({ colorScheme: "dark" });
 		const page = await context.newPage();
 		await page.addInitScript(() => localStorage.setItem("norn-preview-tokens", JSON.stringify({ "--norn-ui-accent": "light-dark(#c2185b, #00897b)" })));
-		await page.goto(server.url + "/frames/patterns/norn-link-button/default/");
+		await page.goto(`${server.url}/frames/patterns/norn-link-button/default/`);
 		assert.ok(near(await accentFill(page), [0, 137, 123]), "the dark value");
 		await context.close();
 	});
@@ -939,7 +939,7 @@ describe("the preview in a browser", () => {
 	test("the fields show what is saved when the page loads, and an override survives a reload", async () => {
 		const context = await browser.newContext();
 		const page = await context.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		await override(page, "--norn-ui-border-radius", "1rem");
 		await page.reload();
 		assert.equal(await page.locator('preview-tokens input[type="text"][data-token="--norn-ui-border-radius"]').inputValue(), "1rem");
@@ -951,8 +951,8 @@ describe("the preview in a browser", () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const editor = await context.newPage();
 		const demo = await context.newPage();
-		await demo.goto(server.url + "/frames/patterns/norn-card/default/");
-		await editor.goto(server.url + "/theme/");
+		await demo.goto(`${server.url}/frames/patterns/norn-card/default/`);
+		await editor.goto(`${server.url}/theme/`);
 		await overrideColor(editor, "--norn-ui-accent", "#00897b", "#00897b");
 		await demo.waitForFunction(() => getComputedStyle(document.documentElement).getPropertyValue("--norn-ui-accent").trim() === "light-dark(#00897b, #00897b)");
 		await editor.locator('preview-tokens [data-action="clear"][data-token="--norn-ui-accent"]').click();
@@ -963,12 +963,12 @@ describe("the preview in a browser", () => {
 	test("the shell says when overrides apply, and its reset clears them everywhere", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		assert.equal(await page.locator("preview-overrides p").isHidden(), true);
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		await override(page, "--norn-space-m", "2rem");
 		await override(page, "--norn-ui-border-radius", "0");
-		await page.goto(server.url + "/components/patterns/norn-card-grid/");
+		await page.goto(`${server.url}/components/patterns/norn-card-grid/`);
 		await page.locator("preview-overrides p").waitFor();
 		assert.match(await page.locator("preview-overrides [data-count]").textContent(), /2 token overrides apply to every preview/);
 		await page.locator('preview-overrides [data-action="reset"]').click();
@@ -981,7 +981,7 @@ describe("the preview in a browser", () => {
 	test("a color token has a light and a dark picker that start at what it resolves to, and a reset", async () => {
 		const context = await browser.newContext();
 		const page = await context.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		const pair = (token) => page.locator("preview-tokens [data-pair]", { has: page.locator(`[data-token="${token}"]`) });
 		const value = (token, scheme) => pair(token).locator(`[data-scheme="${scheme}"]`).inputValue();
 		assert.deepEqual([await value("--norn-surface-base", "light"), await value("--norn-surface-base", "dark")], ["#ffffff", "#101216"], "from the default");
@@ -1004,7 +1004,7 @@ describe("the preview in a browser", () => {
 
 	test("only color tokens get color pickers, and every picker is named for its token and scheme", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		assert.equal(await page.locator('preview-tokens [data-token="--norn-space-m"]').evaluate((field) => field.type), "text");
 		assert.equal(await page.locator('preview-tokens [data-token="--norn-font-mono"]').evaluate((field) => field.type), "text");
 		assert.equal(await page.locator('preview-tokens input[type="color"]').count(), 2 * (await page.locator("preview-tokens [data-pair]").count()));
@@ -1014,7 +1014,7 @@ describe("the preview in a browser", () => {
 
 	test("a font sample has no border, and the other samples keep theirs", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		const border = (kind) => page.locator(`.sample[data-kind="${kind}"]`).first().evaluate((element) => getComputedStyle(element).borderTopWidth);
 		assert.equal(await border("font"), "0px");
 		assert.equal(await border("color"), "1px");
@@ -1034,7 +1034,7 @@ describe("the preview in a browser", () => {
 				},
 			});
 		});
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		await override(page, "--norn-ui-border-radius", "1rem");
 		assert.equal(await rootToken(page, "--norn-ui-border-radius"), "1rem");
 		assert.deepEqual(errors, []);
@@ -1044,9 +1044,9 @@ describe("the preview in a browser", () => {
 	test("a table override still wins over a saved one, and clearing it hands back to the saved one", async () => {
 		const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		await override(page, "--norn-ui-border-radius", "1rem");
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		const frame = await frameOf(page);
 		const radius = () => frame.evaluate(() => getComputedStyle(document.querySelector("norn-card article")).borderTopLeftRadius);
 		assert.equal(await radius(), "16px", "the saved override");
@@ -1059,7 +1059,7 @@ describe("the preview in a browser", () => {
 
 	test("a space is a rule as wide as the token, centered, with a mark at each end, in the text color", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/theme/");
+		await page.goto(`${server.url}/theme/`);
 		for (const [token, width] of [["--norn-space-xs", 8], ["--norn-space-m", 20], ["--norn-space-xl", 64]]) {
 			const row = page.locator("tr", { has: page.locator(`th code:text-is("${token}")`) });
 			const sample = row.locator(".sample");
@@ -1081,7 +1081,7 @@ describe("the preview in a browser", () => {
 	test("without a script the canvas is the frame and a link to open it on its own", async () => {
 		const context = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
 		const page = await context.newPage();
-		await page.goto(server.url + "/components/patterns/norn-card/");
+		await page.goto(`${server.url}/components/patterns/norn-card/`);
 		assert.equal(await page.locator("preview-canvas [data-js]").first().isVisible(), false);
 		assert.ok(await page.locator("preview-canvas a", { hasText: "Open on its own" }).first().isVisible());
 		await context.close();

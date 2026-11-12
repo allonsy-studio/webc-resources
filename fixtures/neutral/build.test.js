@@ -349,7 +349,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("project CSS beats the packaged layers, and the layers rank as declared", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		assert.equal(await page.$eval("norn-card article", (element) => getComputedStyle(element).borderTopLeftRadius), "2px", "unlayered project rule wins");
 		const action = page.locator("norn-hero norn-link-button a").first();
 		assert.equal(await action.evaluate((element) => getComputedStyle(element).textDecorationLine), "none", "components outrank base");
@@ -361,7 +361,7 @@ describe("neutral fixture in a browser", () => {
 	test("text on any accent, and links in any accent, keep 4.5:1 in light and dark", async () => {
 		for (const colorScheme of ["light", "dark"]) {
 			const page = await browser.newPage({ colorScheme });
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			const { count, ink, link } = await accentContrast(page);
 			assert.ok(count > 500, "a real sweep");
 			assert.ok(ink >= 4.5, `${colorScheme}: --norn-text-on-accent reached ${ink.toFixed(2)}:1`);
@@ -372,7 +372,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("directional icons mirror in right-to-left text, and visually hidden text is read but not shown", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		assert.equal(await page.$eval("#rtl svg", (svg) => getComputedStyle(svg).transform), "matrix(-1, 0, 0, 1, 0, 0)");
 		assert.equal(await page.$eval("#icons norn-icon:last-child svg", (svg) => getComputedStyle(svg).transform), "none");
 		const project = await page.$eval("#project-icon svg", (svg) => {
@@ -391,7 +391,7 @@ describe("neutral fixture in a browser", () => {
 	test("the docs navigation stays in view on a wide page, and scrolls with the page when narrow", async () => {
 		for (const [width, position] of [[1280, "sticky"], [400, "static"]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
-			await page.goto(server.url + "/docs/one/");
+			await page.goto(`${server.url}/docs/one/`);
 			assert.equal(await page.$eval("norn-sidebar-layout > div > details", (nav) => getComputedStyle(nav).position), position, `${width}px`);
 			await page.close();
 		}
@@ -399,7 +399,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("the footer lead column caps at 25rem on a wide footer, with the link columns in the same row", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		const boxes = await page.$$eval("norn-footer footer > div:first-child > *", (columns) => columns.map((column) => column.getBoundingClientRect()).map(({ y, width }) => ({ y: Math.round(y), width })));
 		assert.ok(boxes[0].width <= 400, `lead is ${boxes[0].width}px`);
 		assert.ok(boxes.every(({ y }) => y === boxes[0].y), "one row");
@@ -409,7 +409,7 @@ describe("neutral fixture in a browser", () => {
 	test("norn-theme-toggle sets and saves the scheme, keeps every toggle in step, and System hands back to the visitor's setting", async () => {
 		const context = await browser.newContext({ colorScheme: "light" });
 		const page = await context.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		const [first, second] = [page.locator("norn-theme-toggle").nth(0), page.locator("norn-theme-toggle").nth(1)];
 		assert.equal(await first.getByRole("radio", { name: "System" }).isChecked(), true);
 		assert.equal(await second.getByRole("group", { name: "Scheme, again" }).count(), 1);
@@ -426,11 +426,11 @@ describe("neutral fixture in a browser", () => {
 		for (const colorScheme of ["light", "dark"]) {
 			const context = await browser.newContext({ colorScheme });
 			const page = await context.newPage();
-			await page.goto(server.url + "/kit/");
+			await page.goto(`${server.url}/kit/`);
 			const [first, second] = [page.locator("norn-theme-toggle").nth(0), page.locator("norn-theme-toggle").nth(1)];
 			assert.equal(await first.getByRole("group", { name: "Color scheme", exact: true }).count(), 1, colorScheme);
 			assert.equal(await second.getByRole("group", { name: "Scheme, again", exact: true }).count(), 1, `${colorScheme}: the label slot wins`);
-			await page.goto(server.url + "/fr/");
+			await page.goto(`${server.url}/fr/`);
 			assert.equal(await page.locator("norn-theme-toggle").getByRole("group", { name: "Thème", exact: true }).count(), 1, `${colorScheme}: from the registry`);
 			await context.close();
 		}
@@ -439,10 +439,10 @@ describe("neutral fixture in a browser", () => {
 	test("a saved scheme applies from the head, before any bundle script runs", async () => {
 		const context = await browser.newContext({ colorScheme: "light" });
 		const page = await context.newPage();
-		await page.goto(server.url + "/plain/");
+		await page.goto(`${server.url}/plain/`);
 		await page.evaluate(() => localStorage.setItem("color-scheme", "dark"));
 		await page.route("**/bundle/*.js", (route) => route.abort());
-		await page.goto(server.url + "/plain/");
+		await page.goto(`${server.url}/plain/`);
 		assert.equal(await page.evaluate(() => document.documentElement.style.colorScheme), "dark");
 		await context.close();
 	});
@@ -450,14 +450,14 @@ describe("neutral fixture in a browser", () => {
 	test("without a script the theme toggle stays hidden", async () => {
 		const context = await browser.newContext({ javaScriptEnabled: false });
 		const page = await context.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		assert.equal(await page.locator("norn-theme-toggle").first().isVisible(), false);
 		await context.close();
 	});
 
 	test("norn-notice names its severity before the message, and only a live one takes a live role", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		const [saved, failed] = [page.locator("norn-notice").nth(0), page.locator("norn-notice").nth(1)];
 		assert.match(await saved.locator("[data-severity]").innerText(), /Open the docs/);
 		assert.equal(await saved.locator("[data-severity]").getAttribute("role"), null);
@@ -472,7 +472,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-callout is a note with its title and icon, and norn-accordion keeps one section open by name", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		assert.deepEqual(await page.getByRole("note").evaluateAll((notes) => notes.map((note) => note.querySelector("p").textContent.trim())), ["Note", "Careful"]);
 		const sections = page.locator("norn-accordion details");
 		await sections.nth(0).locator("summary").click();
@@ -485,7 +485,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-search lists results as the visitor types, keeping only the highlights from the excerpt", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		await page.waitForFunction(() => document.querySelector("norn-search").hasAttribute("data-live"));
 		await page.getByRole("searchbox", { name: "Search" }).fill("first");
 		await page.locator("norn-search li").first().waitFor();
@@ -501,7 +501,7 @@ describe("neutral fixture in a browser", () => {
 	test("norn-search keeps the plain form when there is no index", async () => {
 		const page = await browser.newPage();
 		await page.route("**/assets/pagefind/pagefind.js", (route) => route.abort());
-		await page.goto(server.url + "/kit/");
+		await page.goto(`${server.url}/kit/`);
 		await page.waitForTimeout(300);
 		assert.equal(await page.locator("norn-search").getAttribute("data-live"), null);
 		assert.equal(await page.locator("norn-search button").isVisible(), true);
@@ -510,7 +510,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-toc marks the section in view", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 500 } });
-		await page.goto(server.url + "/docs/one/");
+		await page.goto(`${server.url}/docs/one/`);
 		const current = () => page.locator('norn-toc a[aria-current="location"]').textContent();
 		assert.equal(await current(), "A second-level heading");
 		await page.evaluate(() => document.getElementById("a-third-level-heading").scrollIntoView({ block: "start" }));
@@ -522,7 +522,7 @@ describe("neutral fixture in a browser", () => {
 		for (const [reducedMotion, expected] of [["no-preference", "smooth"], ["reduce", "auto"]]) {
 			const context = await browser.newContext({ reducedMotion });
 			const page = await context.newPage();
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollBehavior), expected, reducedMotion);
 			await context.close();
 		}
@@ -531,7 +531,7 @@ describe("neutral fixture in a browser", () => {
 	test("norn-sidebar-layout stacks its columns when the frame is narrow, not by the viewport", async () => {
 		for (const [width, columns] of [[1280, 2], [600, 1]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
-			await page.goto(server.url + "/docs/one/");
+			await page.goto(`${server.url}/docs/one/`);
 			const count = await page.$eval("norn-sidebar-layout > div", (grid) => getComputedStyle(grid).gridTemplateColumns.split(" ").length);
 			assert.equal(count, columns, `${width}px wide viewport`);
 			await page.close();
@@ -540,7 +540,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("slotted footer content lines up with the columns", async () => {
 		const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		const left = (text) => page.locator("norn-footer", { has: page.locator("p") }).getByText(text, { exact: true }).evaluate((element) => element.getBoundingClientRect().left);
 		assert.equal(await left("Footer closing line."), await left("Patterns only."));
 		await page.close();
@@ -548,7 +548,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-search counts in the page's language, with its plural forms", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/translated/");
+		await page.goto(`${server.url}/translated/`);
 		await page.waitForFunction(() => document.querySelector("norn-search").hasAttribute("data-live"));
 		const status = page.locator("norn-search [role=status]");
 		await page.getByRole("searchbox", { name: "Rechercher" }).fill("plain");
@@ -564,7 +564,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-search counts in French on a page whose strings come from componentStrings", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/fr/");
+		await page.goto(`${server.url}/fr/`);
 		await page.waitForFunction(() => document.querySelector("norn-search").hasAttribute("data-live"));
 		await page.getByRole("searchbox", { name: "Rechercher" }).fill("plain");
 		await page.waitForFunction(() => document.querySelector("norn-search [role=status]").textContent === "1 résultat");
@@ -573,7 +573,7 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-simple-table names its scroll box from its column headings, without a caption or a label", async () => {
 		const page = await browser.newPage({ viewport: { width: 390, height: 800 } });
-		await page.goto(server.url + "/translated/");
+		await page.goto(`${server.url}/translated/`);
 		await page.waitForFunction(() => document.querySelector("#headed > div").hasAttribute("tabindex"));
 		assert.equal(await page.locator("#headed > div").getAttribute("aria-label"), "Nom, Valeur, Description");
 		await page.close();
@@ -581,11 +581,11 @@ describe("neutral fixture in a browser", () => {
 
 	test("norn-pager's arrows point the other way in right-to-left text", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/translated/");
+		await page.goto(`${server.url}/translated/`);
 		const arrow = (rel) => page.$eval(`norn-pager a[rel="${rel}"] svg`, (icon) => getComputedStyle(icon).transform);
 		assert.equal(await arrow("prev"), "matrix(-1, 0, 0, 1, 0, 0)");
 		assert.equal(await arrow("next"), "matrix(-1, 0, 0, 1, 0, 0)");
-		await page.goto(server.url + "/docs/two/");
+		await page.goto(`${server.url}/docs/two/`);
 		assert.equal(await arrow("prev"), "none");
 		await page.close();
 	});
@@ -599,9 +599,9 @@ describe("neutral fixture in a browser", () => {
 			await page.locator("norn-search li a").first().waitFor();
 		};
 		const alone = await browser.newPage();
-		await alone.goto(server.url + "/kit/");
+		await alone.goto(`${server.url}/kit/`);
 		const slotted = await browser.newPage();
-		await slotted.goto(server.url + "/slotted/");
+		await slotted.goto(`${server.url}/slotted/`);
 		for (const selector of ["#in-prose ul", "#in-footer ul", "#in-prose li", "#in-footer li"]) {
 			assert.deepEqual(await styles(slotted, selector), await styles(alone, `norn-fact-list ${selector.split(" ")[1]}`), selector);
 		}

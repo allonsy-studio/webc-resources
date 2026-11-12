@@ -115,7 +115,7 @@ test("tokens.json holds tokens in groups: a leaf has a value and a comment, and 
 	};
 	walk(tree, []);
 	assert.equal(new Set(tokens.map(({ name }) => name)).size, tokens.length, "no two paths share a custom property");
-	for (const { path: tokenPath, name } of tokens) assert.equal(name, "--norn-" + tokenPath.split(".").join("-"), `${tokenPath} names ${name}`);
+	for (const { path: tokenPath, name } of tokens) assert.equal(name, `--norn-${tokenPath.split(".").join("-")}`, `${tokenPath} names ${name}`);
 });
 
 test("a token's references resolve: no {path} is left in a default", () => {

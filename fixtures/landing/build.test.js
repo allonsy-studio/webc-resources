@@ -179,7 +179,7 @@ describe("landing fixture in a browser", () => {
 
 	test("each sample is named by its caption or language, and so is its copy button", async () => {
 		const page = await browser.newPage({ permissions: ["clipboard-read", "clipboard-write"] });
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		for (const name of ["Copy example.js to clipboard", "Copy sh code to clipboard"]) assert.equal(await page.locator("norn-code-block").getByRole("button", { name, exact: true }).count(), 1, name);
 		assert.ok(await page.locator("norn-code-block button").evaluateAll((buttons) => buttons.every((button) => button.hasAttribute("aria-labelledby") && !button.hasAttribute("aria-label"))));
 		await page.close();
@@ -187,7 +187,7 @@ describe("landing fixture in a browser", () => {
 
 	test("a sample added after load is enhanced once, even when moved, and gives its colors back when removed", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		const result = await page.evaluate(() => {
 			const original = document.querySelector("norn-code-block");
 			const [[group]] = JSON.parse(original.querySelector("code").dataset.tokens);
@@ -210,7 +210,7 @@ describe("landing fixture in a browser", () => {
 
 	test("the highlight registry holds each sample's ranges, the ones the plain range list names for its code", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		await page.waitForFunction(() => CSS.highlights.size > 0);
 		const samples = await page.evaluate(() => {
 			const codes = [...document.querySelectorAll("norn-code-block code")];
@@ -229,7 +229,7 @@ describe("landing fixture in a browser", () => {
 	test("code is a tab stop only while it scrolls, and then it has a name", async () => {
 		for (const [width, scrolls] of [[1280, false], [320, true]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			const settled = () => [...document.querySelectorAll("norn-code-block pre")].every((pre) => pre.hasAttribute("tabindex") === pre.scrollWidth > pre.clientWidth);
 			await page.waitForFunction(settled);
 			const stops = await page.locator("norn-code-block pre[tabindex]").evaluateAll((pres) => pres.map((pre) => [pre.getAttribute("role"), document.getElementById(pre.getAttribute("aria-labelledby"))?.textContent.trim()]));
@@ -242,7 +242,7 @@ describe("landing fixture in a browser", () => {
 	test("the banner lockup stays readable: full size on a wide screen, scaled to fit on a phone", async () => {
 		for (const [width, expected] of [[1280, 500], [375, 375]]) {
 			const page = await browser.newPage({ viewport: { width, height: 800 } });
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			const box = await page.locator("oss-bar svg").boundingBox();
 			assert.ok(Math.abs(box.width - expected) < 1, `${width}px wide viewport: ${box.width}`);
 			await page.close();
@@ -251,7 +251,7 @@ describe("landing fixture in a browser", () => {
 
 	test("sections are not region landmarks", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		assert.equal(await page.getByRole("region").count(), 0);
 		await page.close();
 	});
@@ -270,7 +270,7 @@ describe("landing fixture in a browser", () => {
 		const page = await browser.newPage();
 		const fonts = [];
 		page.on("response", (response) => response.url().endsWith(".woff2") && fonts.push([path.basename(response.url()), response.status()]));
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		await page.evaluate(() => document.fonts.ready);
 		assert.deepEqual(fonts.sort(), [["pt-mono.woff2", 200], ["yellowtail.woff2", 200]], "the mono face, and the signature face the call to action signs with");
 		const groups = await page.evaluate(() => [...CSS.highlights.keys()]);
@@ -280,7 +280,7 @@ describe("landing fixture in a browser", () => {
 
 	test("the four-color stripe runs under the header bar", async () => {
 		const page = await browser.newPage();
-		await page.goto(server.url + "/");
+		await page.goto(`${server.url}/`);
 		const stripe = await page.$eval("norn-header header", (header) => {
 			const style = getComputedStyle(header, "::after");
 			return { content: style.content, height: style.height, image: style.backgroundImage };
@@ -295,7 +295,7 @@ describe("landing fixture in a browser", () => {
 		const offServer = await serve(off);
 		const page = await browser.newPage();
 		try {
-			await page.goto(offServer.url + "/");
+			await page.goto(`${offServer.url}/`);
 			assert.equal(await page.$eval("norn-header header", (header) => getComputedStyle(header, "::after").backgroundImage), "none");
 		} finally {
 			await page.close();
@@ -311,7 +311,7 @@ describe("landing fixture in a browser", () => {
 		for (const [forced, visitor] of [["light", "dark"], ["dark", "light"]]) {
 			const context = await browser.newContext({ colorScheme: visitor });
 			const page = await context.newPage();
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			await page.addStyleTag({ content: `html { color-scheme: ${forced}; }` });
 			colors[forced] = await circle(page);
 			await context.close();
@@ -324,7 +324,7 @@ describe("landing fixture in a browser", () => {
 		for (const [colorScheme, fill] of [["light", "rgb(239, 235, 223)"], ["dark", "rgb(51, 57, 78)"]]) {
 			const context = await browser.newContext({ colorScheme });
 			const page = await context.newPage();
-			await page.goto(server.url + "/");
+			await page.goto(`${server.url}/`);
 			assert.equal(await page.locator("oss-credit svg").count(), 1);
 			assert.equal((await circle(page))[0], fill, colorScheme);
 			await context.close();
