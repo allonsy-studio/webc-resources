@@ -140,7 +140,7 @@ function checkStrings(table, where) {
 		if (!Object.hasOwn(defaultStrings, component)) throw new Error(`componentStrings: no component named "${component}"${where}. Available: ${Object.keys(defaultStrings).join(", ")}`);
 		for (const [key, value] of Object.entries(keys ?? {})) {
 			if (!Object.hasOwn(defaultStrings[component], key)) {
-				const hint = /[A-Z]/.test(key) ? `; keys are slot names, as "${key.replace(/[A-Z]/g, (letter) => "-" + letter.toLowerCase())}"` : "";
+				const hint = /[A-Z]/.test(key) ? `; keys are slot names, as "${key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`)}"` : "";
 				throw new Error(`componentStrings: ${component} has no string "${key}"${where}${hint}. Available: ${Object.keys(defaultStrings[component]).join(", ")}`);
 			}
 			if (typeof value !== "string") throw new Error(`componentStrings: ${component}.${key}${where} must be a string`);

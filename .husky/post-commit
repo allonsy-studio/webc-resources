@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
-( npx --no-install opx hook post-commit >/dev/null 2>&1 & ) || true
-npx --no-install opx lint || true
+( if [ -f .pnp.cjs ]; then yarn opx hook post-commit; else PATH="node_modules/.bin:$PATH" opx hook post-commit; fi >/dev/null 2>&1 & ) || true
+( if [ -f .pnp.cjs ]; then yarn opx lint; else PATH="node_modules/.bin:$PATH" opx lint; fi ) || true
 exit 0
