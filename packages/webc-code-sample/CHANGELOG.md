@@ -1,5 +1,11 @@
 # @allons-y/webc-code-sample
 
+## 0.1.0-beta.5
+
+### Minor Changes
+
+-   5a503d2: Adds the `--norn-code-text` and `--norn-code-punctuation` tokens. `norn-code-block` reads them for plain code text and punctuation, and they follow `--norn-text-base` and `--norn-text-muted` until a project sets them.
+
 ## 0.1.0-beta.4
 
 ### Minor Changes

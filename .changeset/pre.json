@@ -13,10 +13,15 @@
   },
   "changesets": [
     "code-sample-first-beta",
+    "code-text-tokens",
     "llms-txt",
     "loud-impalas-shake",
     "node-24",
+    "norn-field-choice",
+    "norn-selection-slide",
+    "norn-tag-eyebrow",
     "oss-site-first-beta",
+    "patterns-castastrophe-options",
     "patterns-first-beta"
   ]
 }
