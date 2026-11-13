@@ -1,5 +1,14 @@
 # @allons-y/webc-patterns
 
+## 0.1.0-beta.5
+
+### Minor Changes
+
+-   5a503d2: Adds `norn-field`, a label and a text control with an optional hint and error, and `norn-choice`, checkboxes or radios in a fieldset named by its legend. The error prefix is the `error-prefix` slot, with a `norn-field` string in `defaultStrings`.
+-   5a503d2: The selected option in `norn-segmented-control` and the selected tab in `norn-code-tabs` now slide to a new choice: one fill or underline, placed by CSS anchor positioning, with its end edge trailing its start edge. Two new tokens set the timing: `ui.motion.slide` (200ms) and `ui.motion.trail` (90ms). Without anchor positioning, with reduced motion, or in forced colors, the selected option draws its own fill as before.
+-   5a503d2: Add `norn-tag`, a topic label that links or stands static, `norn-tag-filter`, which turns tags into multi-select filters over a list, and `norn-eyebrow`, the uppercase kicker above a title.
+-   5a503d2: Add options from the castastrophe components: `@icon-only` and a `label` slot on `norn-link-button`, `@striped`, `@numeric`, and a `note` slot on `norn-simple-table`, an `image` slot on `norn-card`, and a cite line for sourced quotes in `norn-rich-text`.
+
 ## 0.1.0-beta.4
 
 ### Minor Changes
