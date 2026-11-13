@@ -25,7 +25,7 @@
 		"docs:build": "yarn build && yarn workspace webc-preview build",
 		"release": "yarn build && opx release publish",
 		"test": "yarn build && node --test",
-		"version-packages": "opx release version && yarn install --mode update-lockfile"
+		"version": "opx release version && yarn install --mode update-lockfile"
 	},
 	"devDependencies": {
 		"@11ty/eleventy": "^3.1.8",

@@ -28,7 +28,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v7
         with:
-          persist-credentials: false
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Enable Corepack
@@ -46,8 +45,9 @@ jobs:
       - name: Open release pull request or publish
         uses: changesets/action@v1
         with:
-          version: yarn version-packages
+          version: yarn run version
           publish: yarn release
           commitMode: github-api
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
