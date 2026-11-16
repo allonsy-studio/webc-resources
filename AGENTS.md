@@ -267,6 +267,8 @@ Follow the org rules: pronoun-free, short, no em dashes, no AI attribution of an
 commits, PR bodies, changesets, changelogs, release notes, or code comments. Commits are
 authored as Cassondra Roberts `<castastrophe@users.noreply.github.com>`.
 
+Pull requests are squash-merged: the PR title becomes the commit subject & the commit messages its body, so the title must be a valid Conventional Commits subject.
+
 ## Licensing
 
 MPL-2.0 for all three packages.
