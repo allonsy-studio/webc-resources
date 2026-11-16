@@ -3,23 +3,115 @@
  * Each rule starts at a component's tag and reaches its markup by a child path. A project's own unlayered CSS still wins over it.
  */
 @layer norn.oss {
-	/* The four-color strip along the header bar. */
+	/* A paper header over a latte hairline, the project name in the mono face. */
 	norn-header > header {
-		position: relative;
+		border-block-end: 1px solid var(--norn-ui-border-color, t('ui.border.color'));
+		background: var(--norn-surface-base, t('surface.base'));
 
-		&::after {
-			content: "";
-			position: absolute;
-			inset: auto 0 0;
-			block-size: 3px;
-			background: linear-gradient(90deg, #d22d6f 0 25%, #ff944d 25% 50%, #ffd36b 50% 75%, #1f91ad 75%);
+		& > a[rel="home"] {
+			font-family: var(--norn-font-mono, t('font.mono'));
+			font-size: var(--norn-font-size-xl, t('font.size.xl'));
+		}
+
+		& > details > nav > a {
+			color: var(--norn-text-base, t('text.base'));
+			font-weight: 500;
 		}
 	}
 
-	/* The project name leads the footer: the lead column's first strong, in the accent color and the mono face. */
-	norn-footer > footer > div:first-child > :first-child strong:first-of-type {
-		color: var(--norn-text-accent, t('text.accent'));
+	/* The hero: the project name as the uppercase eyebrow, the tagline as the headline under an accent underline, and the four arcs of the mark below. */
+	norn-hero > header {
+		& > h1 {
+			gap: var(--norn-space-s, t('space.s'));
+		}
+
+		& > h1 > :first-child:not(:last-child) {
+			color: var(--norn-text-muted, t('text.muted'));
+			font-family: var(--norn-font-body, t('font.body'));
+			font-size: var(--norn-font-size-s, t('font.size.s'));
+			font-weight: 400;
+			letter-spacing: 0.18em;
+			line-height: 1.15;
+			text-transform: uppercase;
+		}
+
+		& > h1 > :last-child:not(:first-child) {
+			color: var(--norn-text-base, t('text.base'));
+			font-size: 1.15em;
+			font-weight: 600;
+			letter-spacing: -0.022em;
+			line-height: 1.05;
+			text-decoration: underline var(--norn-ui-accent, t('ui.accent'));
+			text-decoration-thickness: 0.08em;
+			text-underline-offset: 0.14em;
+			text-decoration-skip-ink: none;
+		}
+
+		/* The mark's four arcs in their unequal lengths, drawn at the foot of a box that keeps the space above them: decorative, so it has no role and no text. */
+		&::after {
+			content: "";
+			block-size: calc(6px + var(--norn-space-m, t('space.m')));
+			background: linear-gradient(90deg, #ff9a56 0 21%, transparent 0 21.6%, #ffd36c 0 53%, transparent 0 53.6%, #c92c6b 0 70%, transparent 0 70.6%, #7bd1e6 0) bottom / 100% 6px no-repeat;
+		}
+	}
+
+	/* One bright per section on a home page, cycling cyan, orange, and yellow, as a short bar over a semibold, tightly tracked heading. */
+	norn-hero ~ section {
+		&:has(> h2, > norn-heading-anchor > h2)::before {
+			content: "";
+			justify-self: start;
+			inline-size: 3rem;
+			block-size: 6px;
+			border-radius: 3px;
+			background: #7bd1e6;
+		}
+
+		&:nth-of-type(3n - 1)::before {
+			background: #ff9a56;
+		}
+
+		&:nth-of-type(3n)::before {
+			background: light-dark(#ffd36c, #ffc53d);
+		}
+
+		& > h2,
+		& > norn-heading-anchor > h2 {
+			font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
+			font-weight: 600;
+			letter-spacing: -0.015em;
+			line-height: 1.1;
+		}
+	}
+
+	/* A docs or package page: the title in the mono face under a short bar in the accent, drawn at the top of a box that keeps the space below it. */
+	norn-sidebar-layout > div > article > h1 {
 		font-family: var(--norn-font-mono, t('font.mono'));
-		font-size: 1.2rem;
+
+		&::before {
+			content: "";
+			display: block;
+			inline-size: 2.5rem;
+			block-size: calc(6px + var(--norn-space-s, t('space.s')));
+			background: linear-gradient(var(--norn-ui-accent, t('ui.accent')) 0 0) top / 100% 6px no-repeat;
+		}
+	}
+
+	/* A raised footer; the project name leads it in the mono face. */
+	norn-footer > footer {
+		background: var(--norn-surface-raised, t('surface.raised'));
+
+		& > div:first-child > :first-child strong:first-of-type {
+			color: var(--norn-text-base, t('text.base'));
+			font-family: var(--norn-font-mono, t('font.mono'));
+			font-size: var(--norn-font-size-xl, t('font.size.xl'));
+		}
+	}
+
+	@media print {
+		norn-hero > header::after,
+		norn-hero ~ section::before,
+		norn-sidebar-layout > div > article > h1::before {
+			display: none;
+		}
 	}
 }

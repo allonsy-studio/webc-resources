@@ -25,7 +25,7 @@ export const components = `${globPath(path.join(HERE, "components"))}/*.webc`;
 /** Absolute path to the brand tokens, `css/tokens.css`, in the `norn.oss` layer. The OSS site plugin embeds it in every page's bundle. */
 export const tokens = posix(path.join(HERE, "css", "tokens.css"));
 
-/** Absolute path to the brand rules, `css/brand.css`, in the `norn.oss` layer: CSS against the Norn component tags, such as the header's strip. The OSS site plugin embeds it after the tokens. */
+/** Absolute path to the brand rules, `css/brand.css`, in the `norn.oss` layer: CSS against the Norn component tags, such as the hero's eyebrow and arcs. The OSS site plugin embeds it after the tokens. */
 export const brand = posix(path.join(HERE, "css", "brand.css"));
 
 /** The host that serves every Allons-y Studio project site, one path per repository: pass it to `buildSite` as `host`. */
@@ -37,7 +37,7 @@ export const policies = Object.freeze({
 	security: "https://github.com/allonsy-studio/.github/blob/main/SECURITY.md",
 });
 
-/** The theme color the OSS site theme sets for both schemes: the banner's navy. */
+/** The theme color the OSS site theme sets for both schemes: the banner's ink. */
 const THEME_COLOR = "#33394e";
 
 /**

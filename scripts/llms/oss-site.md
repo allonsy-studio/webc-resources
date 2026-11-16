@@ -12,11 +12,11 @@
 
 - **Never add the Norn plugin as well.** The OSS plugin adds it, and a second registration fails the build.
 - **`oss-bar`, `oss-cta`, `oss-credit` are locked.** A project file with one of those names fails the build. A project opts out of the whole studio layer with `"oss-docs": { "oss": false }` in `package.json`. Do not edit, copy, or hide them with CSS.
-- The brand lives in the `norn.oss` layer: `css/tokens.css` sets the mono font token and `css/brand.css` styles the header strip and footer name with rules on the component tags. To change the look, override global tokens in the project's own stylesheet. Components have no theme hooks.
+- The brand lives in the `norn.oss` layer: `css/tokens.css` sets the brand tokens (ink, slate, latte, cream, and paper surfaces and text, magenta as the default accent, Instrument Sans and PT Mono) and `css/brand.css` styles the header, the hero (an uppercase eyebrow, an accent underline, the mark's four arcs), one bright per home page section, the docs title, and the raised footer with rules on the component tags. To change the look, override global tokens in the project's own stylesheet, such as `--norn-ui-accent` for the project's own accent. Components have no theme hooks.
 - Project-specific head markup goes through `fillHooks(config, { head: "…" })` from `@allons-y/webc-patterns/plugin`. The project's fills append after the theme's.
 - Item data uses `href`, `title`, `description` like every Norn layout. `ossProps` returns it that way, and the `docs` you pass in must too.
 - Site data comes from the patterns package's builders (`buildSite`, with `host` from this package). The `fixtures/landing`, `fixtures/docs`, and `fixtures/workspaces` folders are complete working projects.
-- The package needs network access once at pack time to inline the org's SVGs. Set `OSS_ASSETS` to a local `assets` folder to pack offline.
+- The package needs network access once at pack time to inline the org's mark into the call to action. Set `OSS_ASSETS` to a local `assets` folder to pack offline.
 
 ## Where to look next
 

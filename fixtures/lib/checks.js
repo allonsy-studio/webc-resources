@@ -54,8 +54,10 @@ export function sharedChecks({ test, assert, getPages, getOutput }) {
 
 	test("the OSS site layer renders: banner, call to action, and credit, all with accessible names", () => {
 		for (const html of Object.values(getPages())) {
-			assert.ok(html.includes('<svg role="img" aria-label="Brought to you by Allons-y Studio" width="500" height="64"'), "banner");
-			assert.equal((html.match(/<svg role="img" aria-label="Brought to you by Allons-y Studio" width="300" height="135" xmlns="http:\/\/www.w3.org\/2000\/svg" viewBox="273 0 334 150"/g) ?? []).length, 1, "credit, one lockup for both schemes, cropped to the art");
+			const bar = between(html, "<oss-bar>", "</oss-bar>");
+			assert.ok(bar.includes("<span>Brought to you by</span>") && bar.includes('<a href="https://allons-y.studio"><span>Allons<span>-</span>y</span> <span>Studio</span></a>'), "banner, live text with the wordmark");
+			const credit = between(html, "<oss-credit>", "</oss-credit>");
+			assert.ok(credit.includes('Built &amp; maintained by <a href="https://allons-y.studio">Allons-y Studio</a>') && credit.includes("<p>Allons-y!</p>"), "credit and sign-off");
 			assert.ok(html.includes('<svg aria-hidden="true" width="72" height="72"'), "mark");
 			assert.ok(html.includes("Let's build something great together"));
 		}
@@ -73,7 +75,7 @@ export function sharedChecks({ test, assert, getPages, getOutput }) {
 	});
 
 	test("the call to action signs the Allons-y Studio name", () => {
-		for (const html of Object.values(getPages())) assert.ok(between(html, "<oss-cta>", "</oss-cta>").includes("<span data-signature>Allons-y Studio</span>"));
+		for (const html of Object.values(getPages())) assert.match(between(html, "<oss-cta>", "</oss-cta>"), /<div>\s*<p>Allons-y Studio<\/p>/);
 	});
 
 	test("the Allons-y Studio contact address appears only inside the call to action", () => {

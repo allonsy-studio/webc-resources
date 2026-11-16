@@ -263,20 +263,19 @@ The accent drives the link color (`--norn-text-accent`) & the text on an accent 
 | `layout` | `--norn-layout-width` |
 | `status` | `--norn-status-info`, `--norn-status-success`, `--norn-status-warning`, `--norn-status-danger` |
 
-A theme is a file like that, plus the components & hook fills it adds through the plugin's `components` option & `fillHooks`. A theme styles a component with CSS against its tag, in its own layer; no component exposes a custom property of its own. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the mono face, its `css/brand.css` draws the header strip & styles the footer name by the component tags, both in the `norn.oss` layer, & its plugin fills all four hooks:
+A theme is a file like that, plus the components & hook fills it adds through the plugin's `components` option & `fillHooks`. A theme styles a component with CSS against its tag, in its own layer; no component exposes a custom property of its own. [`@allons-y/webc-oss-site`](https://github.com/allonsy-studio/webc-resources/tree/main/packages/webc-oss-site#readme) is a theme. Its `css/tokens.css` sets the brand's shared tokens, its `css/brand.css` styles the hero, the header, & the footer by the component tags, both in the `norn.oss` layer, & its plugin fills all four hooks. A trimmed example:
 
 ```css
 @layer norn.oss {
 	:root {
+		--norn-ui-accent: #c92c6b;
 		--norn-font-mono: "PT Mono", ui-monospace, monospace;
 	}
 
-	norn-header > header::after {
+	norn-hero > header::after {
 		content: "";
-		position: absolute;
-		inset: auto 0 0;
-		block-size: 3px;
-		background: linear-gradient(90deg, #d22d6f, #ff944d);
+		block-size: 6px;
+		background: linear-gradient(90deg, #ff9a56 0 25%, #ffd36c 0 50%, #c92c6b 0 75%, #7bd1e6 0);
 	}
 }
 ```
