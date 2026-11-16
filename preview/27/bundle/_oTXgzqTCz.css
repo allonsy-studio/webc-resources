@@ -116,7 +116,7 @@
 			inline-size: min(100% - 2 * var(--norn-space-m, 1.25rem), 64rem);
 			margin: var(--norn-space-xl, 4rem) auto 0;
 
-			& section {
+			& > section {
 				display: grid;
 				grid-template-columns: auto minmax(0, 1fr) auto;
 				align-items: center;
@@ -127,34 +127,34 @@
 				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
 			}
 
-			& svg {
+			& > section > svg {
 				inline-size: 4.5rem;
 				block-size: auto;
 			}
 
-			& section > div {
+			& > section > div {
 				display: grid;
 				gap: 0.4rem;
 			}
 
-			& p {
+			& > section > div > p {
 				margin: 0;
 			}
 
 			/* The Allons-y Studio name is signed. */
-			& section > div > p:first-child {
+			& > section > div > p:first-child {
 				font-family: var(--_signature);
 				font-size: 1.5em;
 				font-weight: 400;
 				line-height: 1;
 			}
 
-			& section > div > :is(h2, h3, h4) {
+			& > section > div > :is(h2, h3, h4) {
 				margin: 0;
 				font-size: clamp(1.35rem, 3vw, 1.75rem);
 			}
 
-			& ul {
+			& > section > ul {
 				display: flex;
 				flex-direction: row;
 				flex-wrap: wrap;
@@ -165,7 +165,7 @@
 			}
 
 			@container (max-width: 37.5rem) {
-				& section {
+				& > section {
 					grid-template-columns: minmax(0, 1fr);
 				}
 			}
