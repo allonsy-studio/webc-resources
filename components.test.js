@@ -596,7 +596,7 @@ test("norn-header folds its links into a closed details with a summary from the 
 test("norn-header reads the shared tokens and no custom property of its own, and sizes a logo by its logo-height prop", async () => {
 	const css = styles(sources.find(({ file }) => file === "webc-patterns/src/norn-header.webc").text);
 	assert.ok(!/--norn-header-/.test(css), "no --norn-header-* property");
-	assert.ok(!/&::after \{\s*content: "";\s*position: absolute;/.test(css), "no strip: the OSS site theme draws its own");
+	assert.ok(!/&::after \{\s*content: "";\s*position: absolute;/.test(css), "no strip: a theme decorates the header from its own layer");
 	assert.ok(css.includes("background: var(--norn-surface-raised, t('surface.raised'));") && css.includes("block-size: var(--_logo, 2rem);"));
 	assert.match(await render('<norn-header @logo-height="3rem"><a slot="brand" rel="home" href="/"><img src="l.svg" alt="L"></a></norn-header>'), /<header style="--_logo: 3rem">/, "the prop sets the logo height");
 	assert.match(await render('<norn-header><a slot="brand" rel="home" href="/">Home</a></norn-header>'), /<header>/, "without it, no style");

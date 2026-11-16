@@ -11,7 +11,7 @@ export default {
 	parameters: {
 		docs: {
 			description: {
-				component: "OSS banner, shown before the page's header. Locked: it takes no props or slots. The SVG is inlined from the org's assets by `scripts/inline-svg.js`, cropped to the lockup. It shows at full size from 31.25rem up and scales down below that, so the text stays readable on a phone and grows with the text size.",
+				component: "OSS banner, shown before the page's header: \"Brought to you by\" and the Allons-y Studio wordmark, live text on ink. Locked: it takes no props or slots. The wordmark sets \"Allons-y\" in Yellowtail with the magenta dash, then \"Studio\" in uppercase caps, and links to the studio. It fits on one line down to a 320px screen, grows with the text size, and wraps when it runs out of room.",
 			},
 		},
 		// The OSS site group lists its components together, so the category is named here.
