@@ -35,18 +35,18 @@
 				}
 			}
 
-			/* The wordmark: Yellowtail with the magenta dash, over Instrument Sans caps. */
-			& [data-script] {
+			/* The wordmark: "Allons-y" in Yellowtail with the magenta dash, then "Studio" in caps. */
+			& > aside > p > a > [data-script] {
 				font-family: "Yellowtail", "Yellowtail Fallback", cursive;
 				font-size: 1.6em;
 				line-height: 1;
 			}
 
-			& [data-dash] {
+			& > aside > p > a > [data-script] > [data-dash] {
 				color: #c92c6b;
 			}
 
-			& [data-caps] {
+			& > aside > p > a > [data-caps] {
 				font-size: 0.85em;
 				letter-spacing: 0.1em;
 				text-transform: uppercase;
