@@ -1,0 +1,30 @@
+@layer norn.components {
+		norn-skip-link {
+			display: block;
+
+			& a {
+				position: absolute;
+				inset-block-start: -5rem;
+				inset-inline-start: var(--norn-space-m, 1.25rem);
+				z-index: 10;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-s, 0.75rem);
+				border-radius: var(--norn-ui-border-radius, 6px);
+				background: var(--norn-surface-raised, light-dark(hsl(40, 14%, 96%), #242932));
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+
+				&:focus {
+					inset-block-start: var(--norn-space-xs, 0.5rem);
+				}
+			}
+
+			@media (forced-colors: active) {
+				& a {
+					border: 1px solid CanvasText;
+				}
+			}
+
+			@media print {
+				display: none;
+			}
+		}
+	}

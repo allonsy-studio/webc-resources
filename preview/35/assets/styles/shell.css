@@ -1,0 +1,239 @@
+/* The preview's own page: a header, the component list, and the page. Unlayered, so it beats the packaged layers. */
+.app {
+	display: grid;
+	grid-template-columns: 14rem minmax(0, 1fr);
+	gap: var(--norn-space-l);
+	inline-size: min(100% - 2 * var(--norn-space-m), 80rem);
+	margin-inline: auto;
+	padding-block: var(--norn-space-l);
+}
+
+preview-nav {
+	position: sticky;
+	inset-block-start: var(--norn-space-m);
+	align-self: start;
+	max-block-size: calc(100dvh - 2 * var(--norn-space-m));
+	overflow-y: auto;
+}
+
+/* The brand: the Nauthiz mark, and the name in Aubrey (SIL OFL, self-hosted in assets/fonts). */
+@font-face {
+	font-family: "Aubrey";
+	src: url("../fonts/aubrey.woff2") format("woff2");
+	font-weight: 400;
+	font-display: swap;
+}
+
+norn-header a[rel="home"] {
+	--norn-font-heading: "Aubrey", Georgia, serif;
+	font-size: 1.6rem;
+	font-weight: 400;
+}
+
+.norn-mark {
+	inline-size: auto;
+	block-size: 1.9rem;
+}
+
+main {
+	display: grid;
+	gap: var(--norn-space-m);
+	align-content: start;
+	min-inline-size: 0;
+}
+
+main > :is(h1, h2, h3, p) {
+	margin: 0;
+}
+
+main > ul {
+	padding-inline-start: 1.25rem;
+	list-style: revert;
+}
+
+main > h2 {
+	margin-block-start: var(--norn-space-m);
+	font-size: 1.5rem;
+}
+
+.lead {
+	max-inline-size: var(--norn-text-measure);
+	font-size: 1.2rem;
+}
+
+.meta {
+	color: var(--norn-text-muted);
+}
+
+.story {
+	display: grid;
+	gap: var(--norn-space-s);
+}
+
+main table {
+	inline-size: 100%;
+	border-collapse: collapse;
+	border-block: 1px solid var(--norn-ui-border-color);
+	font-size: 0.95rem;
+}
+
+main :is(th, td) {
+	padding: var(--norn-space-xs) var(--norn-space-s);
+	border-block-end: 1px solid var(--norn-ui-border-color);
+	text-align: start;
+	vertical-align: top;
+}
+
+main td code {
+	overflow-wrap: anywhere;
+}
+
+/* The tokens table scrolls in its own box on a narrow screen. On a wide one its values wrap, as in the other tables. */
+main norn-simple-table td code {
+	white-space: normal;
+}
+
+main [data-col="type"] code {
+	overflow-wrap: normal;
+	white-space: nowrap;
+}
+
+main th[scope="row"] code {
+	white-space: nowrap;
+}
+
+/*
+ * Too narrow for the columns, the props, slots, and custom properties tables stack: each row is a block,
+ * the name first, then the type, default, and field under their labels, then the description.
+ * Their code wraps between words, never inside one. A box that still scrolls is norn-simple-table's own.
+ */
+main :is(norn-simple-table.spec, preview-props) {
+	container-type: inline-size;
+}
+
+@container (width < 44rem) {
+	main :is(.spec, preview-props) :is(table, tbody, tr, th, td) {
+		display: block;
+	}
+
+	main :is(.spec, preview-props) thead {
+		position: absolute;
+		inline-size: 1px;
+		block-size: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	main :is(.spec, preview-props) tr {
+		padding-block: var(--norn-space-s);
+		border-block-end: 1px solid var(--norn-ui-border-color);
+	}
+
+	main :is(.spec, preview-props) :is(th, td) {
+		padding: 0;
+		border: 0;
+	}
+
+	main :is(.spec, preview-props) td {
+		margin-block-start: var(--norn-space-xs);
+	}
+
+	main norn-simple-table.spec :is(th, td) code {
+		overflow-wrap: normal;
+	}
+
+	main :is(.spec, preview-props) td[data-label] {
+		display: grid;
+		grid-template-columns: 5rem minmax(0, 1fr);
+		gap: var(--norn-space-xs);
+	}
+
+	main :is(.spec, preview-props) td[data-label]::before {
+		content: attr(data-label);
+		color: var(--norn-text-muted);
+	}
+
+	main :is(.spec, preview-props) td[data-label] > * {
+		grid-column: 2;
+	}
+}
+
+main :not(pre) > code {
+	padding: 0.1em 0.35em;
+	border-radius: 0.25rem;
+	background: var(--norn-surface-code);
+	font-family: var(--norn-font-mono);
+	font-size: 0.9em;
+}
+
+main summary {
+	cursor: pointer;
+}
+
+.sample {
+	display: block;
+	inline-size: 3rem;
+	block-size: 1.5rem;
+	border: 1px solid var(--norn-ui-border-color);
+}
+
+.sample[data-kind="color"] {
+	background: var(--sample);
+}
+
+.sample[data-kind="font"] {
+	border: 0;
+}
+
+.sample[data-kind="font"]::before {
+	content: "Aa";
+	font-family: var(--sample);
+	font-size: 1.2rem;
+}
+
+/* A space is a rule as wide as the token, with a mark at each end, in the text color. */
+.preview {
+	inline-size: 6rem;
+}
+
+.sample[data-kind="space"] {
+	position: relative;
+	inline-size: var(--sample);
+	block-size: 1rem;
+	margin-inline: auto;
+	border: 0;
+	border-inline: 1px solid var(--norn-text-base);
+}
+
+.sample[data-kind="space"]::before {
+	content: "";
+	position: absolute;
+	inset-block-start: 50%;
+	inset-inline: 0;
+	border-block-start: 1px solid var(--norn-text-base);
+}
+
+.sample[data-kind="radius"] {
+	border-radius: var(--sample);
+}
+
+.sample[data-kind="shadow"] {
+	box-shadow: var(--sample);
+}
+
+.sample[data-kind="measure"] {
+	inline-size: min(100%, var(--sample));
+	block-size: 0.5rem;
+	background: var(--norn-ui-accent);
+}
+
+@media (max-width: 48rem) {
+	.app {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	preview-nav {
+		position: static;
+		max-block-size: none;
+	}
+}
