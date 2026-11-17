@@ -1,25 +1,28 @@
 @layer norn.oss {
 		oss-credit {
-			display: block;
-			max-inline-size: min(100%, 20rem);
+			display: grid;
+			justify-items: end;
+			align-content: start;
+			gap: var(--norn-space-2xs, 0.25rem);
+			text-align: end;
 
-			& a {
-				display: block;
-				inline-size: fit-content;
-				max-inline-size: 100%;
-				margin-inline-start: auto;
+			& > p {
+				margin: 0;
 			}
 
-			& svg {
-				display: block;
-				max-inline-size: 100%;
-				block-size: auto;
+			/* The studio signs off in its script face. */
+			& > p:last-child {
+				color: var(--norn-text-base, light-dark(#16181d, #eceef3));
+				font-family: "Yellowtail", "Yellowtail Fallback", cursive;
+				font-size: var(--norn-font-size-xl, 1.5rem);
+				line-height: 1.15;
 			}
-		}
 
-		/* As a footer column. */
-		norn-footer oss-credit {
-			max-inline-size: min(100%, 13.75rem);
+			/* In a narrow footer the columns stack at the start edge, and the credit lines up with them. */
+			@container (max-width: 40rem) {
+				justify-items: start;
+				text-align: start;
+			}
 		}
 	}
 /* The fonts sit at assets/fonts: from the bundle, one level up. Each fallback matches its font's metrics. */

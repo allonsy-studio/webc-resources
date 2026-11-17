@@ -1,24 +1,59 @@
 @layer norn.oss {
 		oss-bar {
-			--_navy: #33394e;
-			--_link: #ffd36b;
+			--_ink: #33394e;
+			--_paper: #fbf9f3;
+			--_focus: #ffd36c;
 			display: block;
-			background: var(--_navy);
+			background: var(--_ink);
+			color: var(--_paper);
+			font-size: var(--norn-font-size-s, 0.875rem);
 
-			& a {
-				display: block;
+			& > aside > p {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: baseline;
+				justify-content: center;
+				gap: var(--norn-space-2xs, 0.25rem) var(--norn-space-xs, 0.5rem);
+				margin: 0;
+				padding: var(--norn-space-xs, 0.5rem) var(--norn-space-m, 1.25rem);
+				line-height: 1.5;
+			}
+
+			& > aside > p > a {
+				display: inline-flex;
+				align-items: baseline;
+				gap: 0.4em;
+				color: inherit;
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
 
 				&:focus-visible {
-					outline-color: var(--_link);
+					outline-color: var(--_focus);
 				}
 			}
 
-			& svg {
-				display: block;
-				inline-size: 100%;
-				max-inline-size: 31.25rem;
-				block-size: auto;
-				margin-inline: auto;
+			/* The wordmark: "Allons-y" in Yellowtail with the magenta dash, then "Studio" in caps. */
+			& > aside > p > a > span:first-child {
+				font-family: "Yellowtail", "Yellowtail Fallback", cursive;
+				font-size: 1.6em;
+				line-height: 1;
+			}
+
+			& > aside > p > a > span:first-child > span {
+				color: #c92c6b;
+			}
+
+			& > aside > p > a > span:last-child {
+				font-size: 0.85em;
+				letter-spacing: 0.1em;
+				text-transform: uppercase;
+			}
+
+			@media print {
+				display: none;
 			}
 		}
 	}
