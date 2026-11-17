@@ -14,7 +14,7 @@ permissions:
 jobs:
   pages:
     name: Pages
-    uses: allonsy-studio/.github/.github/workflows/pages.yml@main
+    uses: allonsy-studio/.github/.github/workflows/pages.yml@e8a12c59a181a3d84f4b9f0776c17f94ac88ff35 # main
     with:
       build-command: yarn docs:build
       output-dir: preview/_site
